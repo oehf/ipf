@@ -20,9 +20,13 @@ import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
-import org.openehealth.ipf.commons.audit.*;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.BalpAuditContext;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,7 +79,7 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
             var baseUrl = String.format(BASE_URL_FORMAT,
                 auditContext.getAuditRepositoryHostName(),
                 auditContext.getAuditRepositoryPort(),
-                (auditContext instanceof BalpAuditContext balpAuditContext)?
+                (auditContext instanceof BalpAuditContext balpAuditContext) ?
                         balpAuditContext.getAuditRepositoryContextPath() : "");
             createClient(clientFactory.getRestfulClientFactory(), baseUrl);
         }

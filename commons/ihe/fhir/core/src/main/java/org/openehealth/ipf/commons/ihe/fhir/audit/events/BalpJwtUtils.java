@@ -98,8 +98,4 @@ public class BalpJwtUtils {
         });
     }
 
-    private BalpAuditContext balpAuditContext(AuditContext auditContext) {
-        return auditContext instanceof BalpAuditContext? (BalpAuditContext) auditContext : null;
-    }
-
 }

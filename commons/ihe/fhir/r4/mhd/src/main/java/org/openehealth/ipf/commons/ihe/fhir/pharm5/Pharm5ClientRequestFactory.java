@@ -50,8 +50,8 @@ public class Pharm5ClientRequestFactory implements ClientRequestFactory<IOperati
             final var searchParameters = (Pharm5SearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
             urlParameters = searchParameters.toParameters();
             operation = searchParameters.getOperation().getOperation();
-        } else if (requestData instanceof Parameters) {
-            urlParameters = (Parameters) requestData;
+        } else if (requestData instanceof Parameters p) {
+            urlParameters = p;
             if (!parameters.containsKey(Constants.FHIR_OPERATION_HEADER)) {
                 throw new IllegalArgumentException("In CMPD PHARM-5, if using Parameters, the operation name shall be" +
                         " set in 'FHIR_OPERATION_HEADER'");

@@ -167,9 +167,9 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
                 continue;
             }
             var value = entry.getValue();
-            if (value instanceof java.lang.String) {
-                exp.bindString(new QName(entry.getKey()), (String) value, null);
-            } else if (value instanceof javax.xml.transform.Source) {
+            if (value instanceof String s) {
+                exp.bindString(new QName(entry.getKey()), s, null);
+            } else if (value instanceof Source) {
                 exp.bindDocument(new QName(entry.getKey()), (Source) entry.getValue(), null);
             } else if (value instanceof Boolean) {
                 exp.bindBoolean(new QName(entry.getKey()), (Boolean) entry.getValue(), null);

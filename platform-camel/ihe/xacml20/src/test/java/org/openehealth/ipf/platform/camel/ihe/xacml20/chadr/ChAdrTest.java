@@ -62,8 +62,8 @@ public class ChAdrTest extends StandardTestContainer {
         var stream = ChAdrTest.class.getClassLoader().getResourceAsStream("messages/chadr/" + fn);
         var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
         var object = unmarshaller.unmarshal(stream);
-        if (object instanceof JAXBElement) {
-            object = ((JAXBElement<?>) object).getValue();
+        if (object instanceof JAXBElement jaxbElement) {
+            object = jaxbElement.getValue();
         }
         return (T) object;
     }

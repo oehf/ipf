@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.audit;
 
+import io.micrometer.context.ContextRegistry;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
@@ -25,6 +26,7 @@ import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 
 import java.net.InetAddress;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -168,6 +170,14 @@ public interface AuditContext {
      * @return true if participant object records shall be added, otherwise false
      */
     boolean isIncludeParticipantsFromResponse();
+
+    /**
+     * Returns a registry of ThreadLocalAccessors that are used to propagate context
+     * when asynchronously queuing audit records.
+     *
+     * @return context registry
+     */
+    ContextRegistry getContextRegistry();
 
     static AuditContext noAudit() {
         return DefaultAuditContext.NO_AUDIT;

@@ -1,5 +1,5 @@
 /*
- * Copyright 2024 the original author or authors.
+ * Copyright 2018 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,24 +13,20 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.openehealth.ipf.commons.audit;
 
-import ca.uhn.fhir.context.FhirContext;
+package org.openehealth.ipf.boot.atna;
 
-public class FhirContextHolder {
+import org.openehealth.ipf.commons.audit.AuditContext;
 
-    private static final ThreadLocal<FhirContext> currentFhirContext = new ThreadLocal<>();
+/**
+ * Customizer that can be used to manipulate auto-configured {@link AuditContext} beans
+ *
+ * @author Christian Ohr
+ */
+public interface AuditContextCustomizer {
 
-    public static void setCurrentContext(FhirContext fhirContext) {
-        currentFhirContext.set(fhirContext);
-    }
+    void customizeAuditContext(AuditContext auditContext);
 
-    public static FhirContext get() {
-        return currentFhirContext.get();
-    }
-
-    public static void remove() {
-        currentFhirContext.remove();
-    }
+    AuditContextCustomizer NOOP = auditContext -> {
+    };
 }
-

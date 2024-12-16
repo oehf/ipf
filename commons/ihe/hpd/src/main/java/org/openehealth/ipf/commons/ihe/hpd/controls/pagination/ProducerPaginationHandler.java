@@ -65,8 +65,8 @@ public class ProducerPaginationHandler extends ProducerHandlerBase<BatchRequest,
 
         for (DsmlMessage request : batchRequest.getBatchRequests()) {
             String requestId = request.getRequestID();
-            if (request instanceof SearchRequest) {
-                requestMap.put(requestId, (SearchRequest) request);
+            if (request instanceof SearchRequest searchRequest) {
+                requestMap.put(requestId, searchRequest);
                 PagedResultsResponseControl pagination = ControlUtils.extractControl(request, PagedResultsResponseControl.OID);
                 if (pagination != null) {
                     paginations.put(requestId, pagination);

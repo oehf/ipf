@@ -110,8 +110,8 @@ public class Pcd01Test extends StandardTestContainer {
         var endpoint = camelContext.getEndpoint(uri);
         Processor processor = endpoint.createProducer();
         processor = ((Interceptor2ProducerAdapter) processor).getProcessor();
-        while (processor instanceof Interceptor) {
-            processor = ((Interceptor) processor).getWrappedProcessor();
+        while (processor instanceof Interceptor interceptor) {
+            processor = interceptor.getWrappedProcessor();
         }
         Exchange exchange = new DefaultExchange(camelContext);
         exchange.getIn().setBody(PCD_01_SPEC_REQUEST.replace("|2.6|", "|2.5|"));

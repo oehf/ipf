@@ -194,9 +194,9 @@ public class Xacml20Utils {
     public static Optional<IdReferenceType> extractPolicyId(XACMLPolicyQueryType request) {
         for (var jaxbElement : request.getRequestOrPolicySetIdReferenceOrPolicyIdReference()) {
             if ((QUERY_POLICY_SET_ID_QNAME.equals(jaxbElement.getName()) || QUERY_POLICY_ID_QNAME.equals(jaxbElement.getName()))
-                    && (jaxbElement.getValue() instanceof IdReferenceType))
+                    && (jaxbElement.getValue() instanceof IdReferenceType idReferenceType))
             {
-                return Optional.of((IdReferenceType) jaxbElement.getValue());
+                return Optional.of(idReferenceType);
             }
         }
         return Optional.empty();
@@ -204,8 +204,8 @@ public class Xacml20Utils {
 
     public static RequestType extractAuthzRequest(XACMLAuthzDecisionQueryType query) {
         for (JAXBElement<?> jaxbElement : query.getRest()) {
-            if (jaxbElement.getValue() instanceof RequestType) {
-                return (RequestType) jaxbElement.getValue();
+            if (jaxbElement.getValue() instanceof RequestType requestType) {
+                return requestType;
             }
         }
         throw new IllegalArgumentException("Could not extract authorization request");
@@ -222,10 +222,10 @@ public class Xacml20Utils {
     public static CV extractCodeAttributeValue(AttributeType attribute) {
         try {
             for (Object o : attribute.getAttributeValues().get(0).getContent()) {
-                if (o instanceof JAXBElement) {
-                    var value = ((JAXBElement<?>) o).getValue();
-                    if (value instanceof CV) {
-                        return (CV) value;
+                if (o instanceof JAXBElement jaxbElement) {
+                    var value = jaxbElement.getValue();
+                    if (value instanceof CV cv) {
+                        return cv;
                     }
                 }
             }

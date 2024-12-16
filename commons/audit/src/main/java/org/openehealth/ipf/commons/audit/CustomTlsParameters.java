@@ -222,8 +222,8 @@ public class CustomTlsParameters implements TlsParameters {
 
             if (keyManagers != null && certAlias != null) {
                 for (var i = 0; i < keyManagers.length; i++) {
-                    if (keyManagers[i] instanceof X509KeyManager) {
-                        keyManagers[i] = new AliasX509ExtendedKeyManager((X509KeyManager) keyManagers[i], certAlias);
+                    if (keyManagers[i] instanceof X509KeyManager x509KeyManager) {
+                        keyManagers[i] = new AliasX509ExtendedKeyManager(x509KeyManager, certAlias);
                     }
                 }
             }

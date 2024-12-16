@@ -210,8 +210,8 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
      */
     private String nak(Exception exception, GPathResult requestXml) {
         Hl7v3Exception hl7v3Exception;
-        if (exception instanceof Hl7v3Exception) {
-            hl7v3Exception = (Hl7v3Exception) exception;
+        if (exception instanceof Hl7v3Exception e) {
+            hl7v3Exception = e;
         } else {
             hl7v3Exception = new Hl7v3Exception(exception.getMessage(), exception);
             hl7v3Exception.setDetectedIssueManagementCode("InternalError");

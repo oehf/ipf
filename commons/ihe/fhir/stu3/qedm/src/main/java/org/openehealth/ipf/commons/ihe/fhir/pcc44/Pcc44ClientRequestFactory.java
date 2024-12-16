@@ -39,14 +39,13 @@ public class Pcc44ClientRequestFactory implements ClientRequestFactory<IQuery<Bu
     public IClientExecutable<IQuery<Bundle>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
         IQuery<IBaseBundle> query;
         var queriedResourceType = (String) parameters.get(Constants.FHIR_RESOURCE_TYPE_HEADER);
-        if (requestData instanceof ICriterion) {
+        if (requestData instanceof ICriterion criterion) {
             query = client.search()
                     .forResource(queriedResourceType)
-                    .where((ICriterion<?>) requestData);
-        } else if (requestData instanceof ICriterion[]) {
+                    .where(criterion);
+        } else if (requestData instanceof ICriterion[] criteria) {
             query = client.search()
                     .forResource(queriedResourceType);
-            var criteria = (ICriterion<?>[]) requestData;
             if (criteria.length > 0) {
                 query = query.where(criteria[0]);
                 if (criteria.length > 1) {

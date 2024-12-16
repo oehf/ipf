@@ -166,12 +166,12 @@ public final class HL7v2 {
         var body = exchange.getIn().getBody();
         Message message;
 
-        if (body instanceof Message) {
-            message = (Message) body;
-        } else if (body instanceof String) {
+        if (body instanceof Message m) {
+            message = m;
+        } else if (body instanceof String s) {
             var context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
             var parser = context != null ? context.getGenericParser() : FALLBACK;
-            message = parser.parse((String) body);
+            message = parser.parse(s);
         } else {
             // try type conversion
             message = exchange.getIn().getBody(Message.class);

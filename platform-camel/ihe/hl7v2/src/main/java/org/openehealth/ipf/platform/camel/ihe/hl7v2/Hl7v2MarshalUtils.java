@@ -101,19 +101,19 @@ public class Hl7v2MarshalUtils {
             throw adaptingException(body);
         }
         String s;
-        if (body instanceof String) {
-            s = (String) body;
-        } else if (body instanceof ca.uhn.hl7v2.model.Message) {
-            s = ((ca.uhn.hl7v2.model.Message) body).encode();
-        } else if (body instanceof byte[]) {
-            s = toString((byte[]) body, charsetName);
-        } else if (body instanceof InputStream) {
-            var bytes = IOConverter.toBytes((InputStream) message.getBody());
+        if (body instanceof String string) {
+            s = string;
+        } else if (body instanceof ca.uhn.hl7v2.model.Message m) {
+            s = m.encode();
+        } else if (body instanceof byte[] bytes) {
+            s = toString(bytes, charsetName);
+        } else if (body instanceof InputStream inputStream) {
+            var bytes = IOConverter.toBytes(inputStream);
             s = toString(bytes, charsetName);
         } else if (body instanceof File) {
             s = readFile(body, charsetName);
-        } else if (body instanceof WrappedFile<?>) {
-            var file = ((WrappedFile<?>) body).getFile();
+        } else if (body instanceof WrappedFile<?> wrappedFile) {
+            var file = wrappedFile.getFile();
             s = readFile(file, charsetName);
         } else {
             var bytes = message.getBody(byte[].class);
@@ -163,14 +163,14 @@ public class Hl7v2MarshalUtils {
     public static byte[] convertBodyToByteArray(
             Object body,
             String charsetName) throws Exception {
-        if (body instanceof String) {
-            return toByteArray((String) body, charsetName);
-        } else if (body instanceof byte[]) {
-            return (byte[]) body;
-        } else if (body instanceof InputStream) {
-            return IOConverter.toBytes((InputStream) body);
-        } else if (body instanceof ca.uhn.hl7v2.model.Message) {
-            return toByteArray(((ca.uhn.hl7v2.model.Message) body).encode(), charsetName);
+        if (body instanceof String string) {
+            return toByteArray(string, charsetName);
+        } else if (body instanceof byte[] bytes) {
+            return bytes;
+        } else if (body instanceof InputStream inputStream) {
+            return IOConverter.toBytes(inputStream);
+        } else if (body instanceof ca.uhn.hl7v2.model.Message message) {
+            return toByteArray(message.encode(), charsetName);
         } else {
             throw adaptingException(body);
         }
@@ -193,8 +193,8 @@ public class Hl7v2MarshalUtils {
             Parser parser) throws Exception {
         var body = message.getBody();
         ca.uhn.hl7v2.model.Message msg = null;
-        if (body instanceof ca.uhn.hl7v2.model.Message) {
-            msg = (ca.uhn.hl7v2.model.Message) body;
+        if (body instanceof ca.uhn.hl7v2.model.Message m) {
+            msg = m;
         } else {
             // process all other types (String, File, InputStream, ByteBuffer, byte[])
             // by means of the standard routine.  An exception here will be o.k.

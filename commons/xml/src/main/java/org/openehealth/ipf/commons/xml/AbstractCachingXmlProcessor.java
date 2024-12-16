@@ -83,10 +83,10 @@ abstract public class AbstractCachingXmlProcessor<T> {
      * @return resource location as a String.
      */
     protected String resourceLocation(Object... params) {
-        if (params[0] instanceof String) {
-            return (String) params[0];
-        } else if (params[0] instanceof Map) {
-            return (String) ((Map<?, ?>) params[0]).get(RESOURCE_LOCATION);
+        if (params[0] instanceof String s) {
+            return s;
+        } else if (params[0] instanceof Map map) {
+            return (String) map.get(RESOURCE_LOCATION);
         } else if (params[0] instanceof SchematronProfile p) {
             return p.getRules();
         }

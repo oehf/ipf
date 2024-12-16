@@ -61,7 +61,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
 
     @Override
     public void register(Object resourceProvider) {
-        if (!(resourceProvider instanceof FhirProvider) || ((FhirProvider)resourceProvider).requiresRegistration()) {
+        if (!(resourceProvider instanceof FhirProvider fhirProvider) || fhirProvider.requiresRegistration()) {
             if (resourceProviders.add(resourceProvider)) {
                 for (var servlet : servlets) {
                     servlet.registerProvider(resourceProvider);
@@ -74,7 +74,7 @@ public class DefaultFhirRegistry implements FhirRegistry {
 
     @Override
     public void unregister(Object resourceProvider) {
-        if (!(resourceProvider instanceof FhirProvider) || ((FhirProvider)resourceProvider).requiresDeregistration()) {
+        if (!(resourceProvider instanceof FhirProvider fhirProvider) || fhirProvider.requiresDeregistration()) {
             if (resourceProviders.remove(resourceProvider)) {
                 for (var provider : servlets) {
                     provider.unregisterProvider(resourceProvider);

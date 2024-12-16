@@ -53,33 +53,27 @@ public class BatchResponseIntermediary {
         batchResponse.setRequestID(requestID);
         if (batchResponses != null) {
             for (Object response : batchResponses) {
-                if (response instanceof ExtendedResponse) {
-                    batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseExtendedResponse((ExtendedResponse) response));
-                } else if (response instanceof SearchResponse) {
-                    batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseSearchResponse((SearchResponse) response));
-                } else if (response instanceof ErrorResponse) {
-                    batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseErrorResponse((ErrorResponse) response));
+                if (response instanceof ExtendedResponse extendedResponse) {
+                    batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseExtendedResponse(extendedResponse));
+                } else if (response instanceof SearchResponse searchResponse) {
+                    batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseSearchResponse(searchResponse));
+                } else if (response instanceof ErrorResponse errorResponse) {
+                    batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseErrorResponse(errorResponse));
                 } else if (response instanceof LDAPResult ldapResult) {
                     switch (ldapResult.getElementName()) {
-                        case "modDNResponse":
+                        case "modDNResponse" ->
                             batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseModDNResponse(ldapResult));
-                            break;
-                        case "compareResponse":
+                        case "compareResponse" ->
                             batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseCompareResponse(ldapResult));
-                            break;
-                        case "delResponse":
+                        case "delResponse" ->
                             batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseDelResponse(ldapResult));
-                            break;
-                        case "modifyResponse":
+                        case "modifyResponse" ->
                             batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseModifyResponse(ldapResult));
-                            break;
-                        case "authResponse":
+                        case "authResponse" ->
                             batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseAuthResponse(ldapResult));
-                            break;
-                        case "addResponse":
+                        case "addResponse" ->
                             batchResponse.getBatchResponses().add(OBJECT_FACTORY.createBatchResponseAddResponse(ldapResult));
-                            break;
-                        default:
+                        default ->
                             throw new IllegalStateException("Cannot handle LDAPResult element name " + ldapResult.getElementName());
                     }
                 } else {

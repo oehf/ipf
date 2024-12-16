@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.audit.queue;
 
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.FhirContextHolder;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import java.util.stream.Stream;
@@ -30,15 +29,14 @@ import java.util.stream.Stream;
  * and send it to an ATNA repository using the configured {@link org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol},
  * </p>
  * <p>
- * There may be other use cases such as forwarding AuditMessages as object into a Camel Route or in-memory storage
- * or convert them into FHIR AuditEvents. In this case, implement your own {@link AuditMessageQueue}.
+ * There may be other use cases such as forwarding AuditMessages as object into a Camel Route or in-memory storage.
+ * In this case, implement your own {@link AuditMessageQueue}.
  * </p>
  *
  * @author Christian Ohr
  * @since 3.5
  */
 public abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
-
 
 
     @Setter
@@ -51,7 +49,6 @@ public abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
                 .map(msg -> auditContext.getSerializationStrategy().marshal(msg, pretty))
                 .forEach(msg -> handle(auditContext, msg));
         }
-        FhirContextHolder.remove();
     }
 
     protected abstract void handle(AuditContext auditContext, String auditRecord);

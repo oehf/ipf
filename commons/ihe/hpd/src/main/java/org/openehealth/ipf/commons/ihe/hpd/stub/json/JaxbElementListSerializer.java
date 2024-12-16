@@ -42,8 +42,8 @@ public class JaxbElementListSerializer extends StdSerializer<List> {
         for (var object : list) {
             var jaxbElement = (JAXBElement<?>) object;
             var value = jaxbElement.getValue();
-            if (value instanceof LDAPResult) {
-                ((LDAPResult) value).setElementName(jaxbElement.getName().getLocalPart());
+            if (value instanceof LDAPResult ldapResult) {
+                ldapResult.setElementName(jaxbElement.getName().getLocalPart());
             }
             var valueSerializer = provider.findValueSerializer(value.getClass());
             var typeSerializer = provider.findTypeSerializer(SimpleType.constructUnsafe(value.getClass()));

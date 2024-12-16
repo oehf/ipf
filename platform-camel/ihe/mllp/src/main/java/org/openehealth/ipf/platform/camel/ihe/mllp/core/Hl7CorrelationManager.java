@@ -65,10 +65,10 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
 
     private Message getMessage(Object request) throws HL7Exception {
         Message message;
-        if (request instanceof Message) {
-            message = (Message) request;
-        } else if (request instanceof byte[]) {
-            message = parser.parse(new String((byte[]) request));
+        if (request instanceof Message m) {
+            message = m;
+        } else if (request instanceof byte[] bytes) {
+            message = parser.parse(new String(bytes));
         } else {
             message = parser.parse(request.toString());
         } return message;

@@ -50,11 +50,11 @@ public class HapiClientAuditInterceptor implements IClientInterceptor {
         var queryPos = requestUri.indexOf("?");
         if (queryPos >= 0) {
             fhirAuditDataset.setDestinationUserId(requestUri.substring(0, queryPos));
-            if (fhirAuditDataset instanceof FhirQueryAuditDataset) {
-                ((FhirQueryAuditDataset) fhirAuditDataset).setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
+            if (fhirAuditDataset instanceof FhirQueryAuditDataset fhirQueryAuditDataset) {
+                fhirQueryAuditDataset.setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
             }
-            if (fhirAuditDataset instanceof GenericFhirAuditDataset) {
-                ((GenericFhirAuditDataset) fhirAuditDataset).setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
+            if (fhirAuditDataset instanceof GenericFhirAuditDataset genericFhirAuditDataset) {
+                genericFhirAuditDataset.setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
             }
         } else {
             fhirAuditDataset.setDestinationUserId(requestUri);

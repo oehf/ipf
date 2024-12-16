@@ -37,8 +37,8 @@ public class Iti83ClientRequestFactory implements ClientRequestFactory<IOperatio
     @Override
     public IClientExecutable<IOperationUntypedWithInput<Parameters>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
 
-        if (requestData instanceof Parameters) {
-            return getClientExecutable(client, (Parameters) requestData);
+        if (requestData instanceof Parameters p) {
+            return getClientExecutable(client, p);
         } else {
             var p = new Parameters();
             parameters.entrySet().stream()

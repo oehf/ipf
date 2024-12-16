@@ -166,8 +166,8 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         var resultMessage = exchange.getMessage();
         if (resultMessage.getBody() instanceof List && IBaseResource.class.isAssignableFrom(resultClass)) {
             var singletonList = (List<T>)resultMessage.getBody();
-            if (singletonList.isEmpty() && payload instanceof IIdType) {
-                throw new ResourceNotFoundException((IIdType)payload);
+            if (singletonList.isEmpty() && payload instanceof IIdType id) {
+                throw new ResourceNotFoundException(id);
             }
             resultMessage.setBody(singletonList.isEmpty() ? null : singletonList.get(0));
         }

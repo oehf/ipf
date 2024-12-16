@@ -61,8 +61,8 @@ public class ChPpq2Test extends StandardTestContainer {
         var stream = ChPpq2Test.class.getClassLoader().getResourceAsStream("messages/chppq2/" + fn);
         var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
         var object = unmarshaller.unmarshal(stream);
-        if (object instanceof JAXBElement) {
-            object = ((JAXBElement) object).getValue();
+        if (object instanceof JAXBElement jaxbElement) {
+            object = jaxbElement.getValue();
         }
         return (T) object;
     }

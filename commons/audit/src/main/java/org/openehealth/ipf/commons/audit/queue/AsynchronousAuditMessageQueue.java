@@ -16,13 +16,12 @@
 
 package org.openehealth.ipf.commons.audit.queue;
 
-import ca.uhn.fhir.context.FhirContext;
+import io.micrometer.context.ContextExecutorService;
+import io.micrometer.context.ContextSnapshotFactory;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.FhirContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -69,9 +68,13 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
     @Override
     protected void handle(AuditContext auditContext, String auditRecord) {
         if (auditRecord != null) {
-            var runnable = runnable(auditContext, auditRecord, FhirContextHolder.get());
+            var runnable = runnable(auditContext, auditRecord);
             if (executorService != null && !executorService.isShutdown()) {
-                CompletableFuture.runAsync(runnable, executorService)
+                var executor = ContextExecutorService.wrap(executorService,
+                    ContextSnapshotFactory.builder()
+                        .contextRegistry(auditContext.getContextRegistry())
+                        .build());
+                CompletableFuture.runAsync(runnable, executor)
                     .exceptionally(e -> {
                         auditContext.getAuditExceptionHandler().handleException(auditContext, e, auditRecord);
                         return null;
@@ -82,20 +85,12 @@ public class AsynchronousAuditMessageQueue extends AbstractAuditMessageQueue {
         }
     }
 
-    private Runnable runnable(AuditContext auditContext, String auditRecord, FhirContext fhirContext) {
-        // Copy the MDC contextMap to re-use it in the worker thread
-        // See this recommendation here: http://logback.qos.ch/manual/mdc.html#managedThreads
-        var mdcContextMap = MDC.getCopyOfContextMap();
+    private Runnable runnable(AuditContext auditContext, String auditRecord) {
         return () -> {
             try {
-                MDC.setContextMap(mdcContextMap);
-                FhirContextHolder.setCurrentContext(fhirContext);
                 auditContext.getAuditTransmissionProtocol().send(auditContext, auditRecord);
             } catch (Exception e) {
                 throw new AuditException(e);
-            } finally {
-                MDC.clear();
-                FhirContextHolder.remove();
             }
         };
     }

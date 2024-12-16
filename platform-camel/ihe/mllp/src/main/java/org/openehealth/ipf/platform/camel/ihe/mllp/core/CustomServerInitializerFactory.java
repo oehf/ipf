@@ -77,9 +77,9 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
         var encoders = consumer.getConfiguration().getEncodersAsList();
         for (var i = 0; i < encoders.size(); i++) {
             var encoder = encoders.get(i);
-            if (encoder instanceof ChannelHandlerFactory) {
+            if (encoder instanceof ChannelHandlerFactory channelHandlerFactory) {
                 // use the factory to create a new instance of the channel as it may not be shareable
-                encoder = ((ChannelHandlerFactory) encoder).newChannelHandler();
+                encoder = channelHandlerFactory.newChannelHandler();
             }
             addToPipeline("encoder-" + i, channelPipeline, encoder);
         }
@@ -87,9 +87,9 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
         var decoders = consumer.getConfiguration().getDecodersAsList();
         for (var i = 0; i < decoders.size(); i++) {
             var decoder = decoders.get(i);
-            if (decoder instanceof ChannelHandlerFactory) {
+            if (decoder instanceof ChannelHandlerFactory channelHandlerFactory) {
                 // use the factory to create a new instance of the channel as it may not be shareable
-                decoder = ((ChannelHandlerFactory) decoder).newChannelHandler();
+                decoder = channelHandlerFactory.newChannelHandler();
             }
             addToPipeline("decoder-" + i, channelPipeline, decoder);
         }

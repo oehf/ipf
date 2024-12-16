@@ -149,12 +149,12 @@ public class HpdValidator {
 
     private static String getRequestId(Object value) {
         String requestId;
-        if (value instanceof LDAPResult) {
-            requestId = ((LDAPResult) value).getRequestID();
-        } else if (value instanceof SearchResponse) {
-            requestId = ((SearchResponse) value).getRequestID();
-        } else if (value instanceof ErrorResponse) {
-            requestId = ((ErrorResponse) value).getRequestID();
+        if (value instanceof LDAPResult ldapResult) {
+            requestId = ldapResult.getRequestID();
+        } else if (value instanceof SearchResponse searchResponse) {
+            requestId = searchResponse.getRequestID();
+        } else if (value instanceof ErrorResponse errorResponse) {
+            requestId = errorResponse.getRequestID();
         } else {
             throw new HpdException("Wrong response element type " + value.getClass().getSimpleName(), ErrorType.MALFORMED_REQUEST);
         }

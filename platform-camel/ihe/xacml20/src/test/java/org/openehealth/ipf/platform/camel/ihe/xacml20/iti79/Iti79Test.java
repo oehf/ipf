@@ -61,8 +61,8 @@ public class Iti79Test extends StandardTestContainer {
         var stream = Iti79Test.class.getClassLoader().getResourceAsStream("messages/iti79/" + fn);
         var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
         var object = unmarshaller.unmarshal(stream);
-        if (object instanceof JAXBElement) {
-            object = ((JAXBElement<?>) object).getValue();
+        if (object instanceof JAXBElement jaxbElement) {
+            object = jaxbElement.getValue();
         }
         return (T) object;
     }

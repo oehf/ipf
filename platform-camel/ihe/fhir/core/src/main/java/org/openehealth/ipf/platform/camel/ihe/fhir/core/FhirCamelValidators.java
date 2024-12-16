@@ -114,8 +114,8 @@ public final class FhirCamelValidators {
         var context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
         if (context != null) {
             var body = exchange.getIn().getBody();
-            if (body instanceof List) {
-                for (var bodyPart : (List<?>) body) {
+            if (body instanceof List list) {
+                for (var bodyPart : list) {
                     validateIfResource(exchange, context, bodyPart, isRequest);
                 }
             } else {

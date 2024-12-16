@@ -32,7 +32,7 @@
         <kotlin-dokka-version>1.9.20</kotlin-dokka-version>
         <kotlin-version>2.1.0</kotlin-version>
         <kotlin-logging-version>7.0.0</kotlin-logging-version>
-        <micrometer-tracing-version>1.4.0</micrometer-tracing-version>
+        <micrometer-tracing-version>1.4.1</micrometer-tracing-version>
         <methanol-version>1.7.0</methanol-version>
         <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
         <ph-schematron-version>7.1.2</ph-schematron-version>

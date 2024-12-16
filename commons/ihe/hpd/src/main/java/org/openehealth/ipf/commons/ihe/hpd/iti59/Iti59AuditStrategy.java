@@ -207,9 +207,9 @@ abstract class Iti59AuditStrategy extends AuditStrategySupport<Iti59AuditDataset
                     ? EventOutcomeIndicator.Success
                     : EventOutcomeIndicator.SeriousFailure);
             requestItem.setOutcomeDescription(ldapResult.getErrorMessage());
-        } else if (value instanceof ErrorResponse) {
+        } else if (value instanceof ErrorResponse errorResponse) {
             requestItem.setOutcomeCode(EventOutcomeIndicator.SeriousFailure);
-            requestItem.setOutcomeDescription(((ErrorResponse)value).getMessage());
+            requestItem.setOutcomeDescription(errorResponse.getMessage());
         } else {
             requestItem.setOutcomeCode(EventOutcomeIndicator.MajorFailure);
             log.debug(failureLogMessage, failureLogArgs);

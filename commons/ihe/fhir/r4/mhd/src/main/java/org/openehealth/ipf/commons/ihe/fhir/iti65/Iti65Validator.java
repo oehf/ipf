@@ -190,7 +190,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                             } catch (Exception ignored) {
                             }
                         }
-                        patientReferences.add(getSubjectReference(resource, r -> dm.getSubject()));
+                        patientReferences.add(getSubjectReference(dm, DocumentManifest::getSubject));
                     } else if (resource instanceof DocumentReference dr) {
                         for (var content : dr.getContent()) {
                             var url = content.getAttachment().getUrl();
@@ -198,9 +198,9 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                                 expectedBinaryFullUrls.add(url);
                             }
                         }
-                        patientReferences.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
-                    } else if (resource instanceof ListResource) {
-                        patientReferences.add(getSubjectReference(resource, r -> ((ListResource) r).getSubject()));
+                        patientReferences.add(getSubjectReference(dr, DocumentReference::getSubject));
+                    } else if (resource instanceof ListResource listResource) {
+                        patientReferences.add(getSubjectReference(listResource, ListResource::getSubject));
                     } else if (!(resource instanceof Binary)) {
                         throw FhirUtils.unprocessableEntity(
                                 OperationOutcome.IssueSeverity.ERROR,
@@ -323,7 +323,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                             }
                         }
                     }
-                    patientReferences.add(getSubjectReference(resource, r -> listResource.getSubject()));
+                    patientReferences.add(getSubjectReference(listResource, ListResource::getSubject));
                 } else if (resource instanceof DocumentReference dr) {
                     for (var content : dr.getContent()) {
                         var url = content.getAttachment().getUrl();
@@ -331,7 +331,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                             expectedBinaryFullUrls.add(url);
                         }
                     }
-                    patientReferences.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
+                    patientReferences.add(getSubjectReference(dr, DocumentReference::getSubject));
                 } else if (!(resource instanceof Binary)) {
                     throw FhirUtils.unprocessableEntity(
                         OperationOutcome.IssueSeverity.ERROR,
@@ -408,7 +408,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
             UNCONTAINED_COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST.hasProfile(listResource);
     }
 
-    private String getSubjectReference(Resource resource, Function<Resource, Reference> f) {
+    private <T extends Resource> String getSubjectReference(T resource, Function<T, Reference> f) {
         var reference = f.apply(resource);
         if (reference == null) {
             throw FhirUtils.unprocessableEntity(

@@ -134,12 +134,12 @@ public final class ConformanceProfileValidators {
         var body = exchange.getIn().getBody();
         Message message;
 
-        if (body instanceof Message) {
-            message = (Message) body;
-        } else if (body instanceof String) {
+        if (body instanceof Message m) {
+            message = m;
+        } else if (body instanceof String s) {
             var context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
             context = context != null ? context : FALLBACK_HAPI_CONTEXT;
-            message = new GenericParser(context).parse((String) body);
+            message = new GenericParser(context).parse(s);
         } else {
             // try type conversion
             message = exchange.getIn().getBody(Message.class);
