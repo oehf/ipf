@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.audit.queue;
 
+import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 
 import java.io.DataOutputStream;
@@ -44,7 +45,9 @@ public class BasicHttpAuditMessageQueue extends AbstractAuditMessageQueue {
     private final String user;
     private final String password;
 
+    @Setter
     private int connectTimeout = -1;
+    @Setter
     private int readTimeout = -1;
 
 
@@ -98,14 +101,6 @@ public class BasicHttpAuditMessageQueue extends AbstractAuditMessageQueue {
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         connection.setUseCaches(false);
-    }
-
-    public void setConnectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
-    }
-
-    public void setReadTimeout(int readTimeout) {
-        this.readTimeout = readTimeout;
     }
 
     private HttpURLConnection openConnection() throws IOException {

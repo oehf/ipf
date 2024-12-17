@@ -36,7 +36,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Default implementation of an AuditContext.
+ * Default implementation of an AuditContext. By default, audit is written to localhost:514 via UDP.
  * <p>
  * The {@link ContextRegistry} returned by {@link #getContextRegistry()} will always contain an instance
  * of {@link Slf4jThreadLocalAccessor} in order to propagate MDC context to an

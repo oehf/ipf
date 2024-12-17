@@ -122,6 +122,7 @@ public class IpfAtnaAutoConfiguration {
         }
         var oAuth = config.getBalp().getOauth();
         var props = auditContext.getBalpJwtExtractorProperties();
+
         if (oAuth != null) {
             if (oAuth.getIdPath() != null) {
                 props.setIdPath(oAuth.getIdPath());

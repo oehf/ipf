@@ -122,6 +122,10 @@ public interface AuditContext {
         }
     }
 
+    /**
+     * Returns audit metadata e.g. for populating the RFC 5424 header
+     * @return audit metadata
+     */
     default AuditMetadataProvider getAuditMetadataProvider() {
         return AuditMetadataProvider.getDefault();
     }
@@ -172,7 +176,7 @@ public interface AuditContext {
     boolean isIncludeParticipantsFromResponse();
 
     /**
-     * Returns a registry of ThreadLocalAccessors that are used to propagate context
+     * Returns a registry of {@link io.micrometer.context.ThreadLocalAccessor} instances that are used to propagate context
      * when asynchronously queuing audit records.
      *
      * @return context registry
