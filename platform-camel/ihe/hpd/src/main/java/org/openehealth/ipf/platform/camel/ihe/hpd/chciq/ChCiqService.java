@@ -19,13 +19,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.ihe.hpd.chciq.ChCiqPortType;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
+import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdQueryEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdQueryService;
 
 @Slf4j
 public class ChCiqService extends HpdQueryService implements ChCiqPortType {
 
-    public ChCiqService(HpdQueryEndpoint endpoint) {
+    public ChCiqService(HpdQueryEndpoint<WsAuditDataset> endpoint) {
         super(endpoint);
     }
 

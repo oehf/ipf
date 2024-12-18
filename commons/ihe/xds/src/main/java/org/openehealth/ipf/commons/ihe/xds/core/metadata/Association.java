@@ -30,6 +30,8 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +53,7 @@ import java.util.UUID;
 @ToString(doNotUseGetters = true)
 public class Association implements Serializable, ExtraMetadataHolder {
 
+    @Serial
     private static final long serialVersionUID = -4556980177483609469L;
 
     @Getter @Setter private String targetUuid;

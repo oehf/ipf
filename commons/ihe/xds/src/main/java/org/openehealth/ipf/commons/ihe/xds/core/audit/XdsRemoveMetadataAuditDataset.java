@@ -18,12 +18,15 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+
 /**
  * XDS audit dataset specific for transactions related to XDS Metadata removal.
  *
  * @author Boris Stanojevic
  */
 public class XdsRemoveMetadataAuditDataset extends XdsAuditDataset {
+    @Serial
     private static final long serialVersionUID = 3746882739914130719L;
 
     @Getter @Setter private String[] objectIds;

@@ -17,9 +17,7 @@ package org.openehealth.ipf.platform.camel.core.process.splitter;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -30,7 +28,7 @@ public class SplitIndexTest {
     public void testValueOf() {
         var index = SplitIndex.valueOf(14, true);
         assertEquals(14, index.getIndex());
-        assertEquals(true, index.isLast());
+        assertTrue(index.isLast());
     }
     
     @Test
@@ -39,15 +37,13 @@ public class SplitIndexTest {
         var index1b = SplitIndex.valueOf(4, false);
         var index2 = SplitIndex.valueOf(5, false);
         var index3 = SplitIndex.valueOf(4, true);
-        
-        assertTrue(index1a.equals(index1b), "Should be equal");
-        assertFalse(index1a.equals(index2), "Should not be equal");
-        assertFalse(index1a.equals(index3), "Should not be equal");
-        
-        assertFalse(index1a.equals(null), "Null is never equal");
-        assertFalse(index1a.equals(this), "Unrelated class is never equal");
-        
-        assertTrue(index1a.equals(index1a), "Same instances should be equal");
+
+        assertEquals(index1a, index1b, "Should be equal");
+        assertNotEquals(index1a, index2, "Should not be equal");
+        assertNotEquals(index1a, index3, "Should not be equal");
+
+        assertNotEquals(null, index1a, "Null is never equal");
+        assertNotEquals(this, index1a, "Unrelated class is never equal");
     }
     
     @Test

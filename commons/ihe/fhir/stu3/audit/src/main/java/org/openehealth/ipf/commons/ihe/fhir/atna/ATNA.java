@@ -38,6 +38,7 @@ public class ATNA implements IntegrationProfile {
         ITI_81(ITI_81_CONFIG);
 
         @Getter
+        final
         FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
     }
 

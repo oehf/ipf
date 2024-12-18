@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
 

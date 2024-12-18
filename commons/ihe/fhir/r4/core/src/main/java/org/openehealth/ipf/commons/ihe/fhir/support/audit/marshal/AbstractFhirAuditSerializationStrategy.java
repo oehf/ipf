@@ -117,7 +117,7 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
                 .setValue(new Base64BinaryType(tvp.getValue()))));
         if (poit.getParticipantObjectTypeCodeRole() == ParticipantObjectTypeCodeRole.Patient &&
             isNotBlank(poit.getParticipantObjectID())) {
-            Reference patReference = new Reference(poit.getParticipantObjectID());
+            var patReference = new Reference(poit.getParticipantObjectID());
             if (patReference.getReferenceElement().hasResourceType()) {
                 entity.setWhat(new Reference(poit.getParticipantObjectID()));
             } else {
@@ -138,7 +138,7 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
     }
 
     protected AuditEvent.AuditEventAgentComponent activeParticipantToAgent(ActiveParticipantType ap) {
-        Optional<AuditEvent.AuditEventAgentComponent> oAuthEventAgent = oAuthActiveParticipantToAgent(ap);
+        var oAuthEventAgent = oAuthActiveParticipantToAgent(ap);
         return oAuthEventAgent.orElseGet(() -> new AuditEvent.AuditEventAgentComponent()
             .setType(ap.getRoleIDCodes().isEmpty() ? null : codedValueTypeToCodeableConcept(ap.getRoleIDCodes().get(0), DCM_SYSTEM_NAME))
             .setWho(new Reference().setDisplay(ap.getUserID()))
@@ -152,9 +152,9 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
     }
 
     private Optional<AuditEvent.AuditEventAgentComponent> oAuthActiveParticipantToAgent(ActiveParticipantType ap) {
-        Optional<String> oUser = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_TYPE_SYSTEM_NAME);
+        var oUser = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_TYPE_SYSTEM_NAME);
         if (oUser.isPresent()) {
-            AuditEvent.AuditEventAgentComponent agent = new AuditEvent.AuditEventAgentComponent()
+            var agent = new AuditEvent.AuditEventAgentComponent()
                 .setType(systemAndCodeToCodeableConcept(OUSER_AGENT_TYPE_SYSTEM_NAME, OUSER_AGENT_TYPE_CODE, "information recipient"))
                 .addPolicy(oUser.get())
                 .setName(ap.getUserName())
@@ -171,7 +171,7 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
                     systemAndCodeToCodeableConcept(OUSER_AGENT_ROLE_SYSTEM_NAME, purpose, "")));
             return Optional.of(agent);
         }
-        Optional<String> oClient = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), DCM_SYSTEM_NAME);
+        var oClient = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), DCM_SYSTEM_NAME);
         if (oClient.isPresent()) {
             return Optional.of(new AuditEvent.AuditEventAgentComponent()
                 .setType(systemAndCodeToCodeableConcept(DCM_SYSTEM_NAME, DCM_OCLIENT_CODE, "Application"))
@@ -179,7 +179,7 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
                 .setWho(new Reference().setIdentifier(
                     new Identifier().setValue(oClient.get())).setDisplay(ap.getUserName())));
         }
-        Optional<String> opaqueToken = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(),
+        var opaqueToken = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(),
             OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME);
         if (opaqueToken.isPresent()) {
             return Optional.of(new AuditEvent.AuditEventAgentComponent()

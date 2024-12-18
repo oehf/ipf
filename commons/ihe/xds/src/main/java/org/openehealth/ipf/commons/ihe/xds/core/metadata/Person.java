@@ -20,6 +20,7 @@ import ca.uhn.hl7v2.model.v25.datatype.XCN;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -38,6 +39,7 @@ import java.util.Objects;
 @XmlAccessorType()
 @XmlType(name = "Person", propOrder = {"id", "name"})
 public class Person extends Hl7v2Based<XCN> {
+    @Serial
     private static final long serialVersionUID = 1775227207521668959L;
     
     /**

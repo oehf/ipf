@@ -38,7 +38,7 @@ public class MllpEndpointConfiguration extends AuditableEndpointConfiguration {
     @Getter
     private final ConsumerDispatchingInterceptor dispatcher;
 
-    protected MllpEndpointConfiguration(MllpComponent<?, ?> component, String uri, Map<String, Object> parameters) throws Exception {
+    protected MllpEndpointConfiguration(MllpComponent<?, ?> component, String uri, Map<String, Object> parameters) {
         super(component, parameters);
 
         supportSegmentFragmentation = component.getAndRemoveParameter(

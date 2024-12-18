@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.i18n.Msg;
 import ca.uhn.fhir.rest.api.Constants;
-import ca.uhn.fhir.rest.client.apache.ApacheHttpResponse;
 import ca.uhn.fhir.rest.client.api.IHttpResponse;
 import ca.uhn.fhir.rest.client.impl.BaseHttpResponse;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
@@ -38,7 +37,7 @@ import java.util.*;
 
 public class ApacheHttpResponse5 extends BaseHttpResponse implements IHttpResponse {
 
-    private static final Logger log = LoggerFactory.getLogger(ApacheHttpResponse.class);
+    private static final Logger log = LoggerFactory.getLogger(ApacheHttpResponse5.class);
 
     private final ClassicHttpResponse response;
     private boolean entityBuffered = false;
@@ -123,8 +122,10 @@ public class ApacheHttpResponse5 extends BaseHttpResponse implements IHttpRespon
 
     @Override
     public String getMimeType() {
-        ContentType ct = ContentType.parse(response.getEntity().getContentType());
-        return ct != null ? ct.getMimeType() : null;
+        return Optional.ofNullable(response.getEntity())
+            .map(entity -> ContentType.parse(entity.getContentType()))
+            .map(ContentType::getMimeType)
+            .orElse(null);
     }
 
     @Override

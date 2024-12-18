@@ -34,7 +34,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.iti3
  * @author Dmytro Rud
  */
 class Iti38TestRouteBuilder extends RouteBuilder {
-    private static final transient LOG = LoggerFactory.getLogger(Iti38TestRouteBuilder.class)
+    private static final transient log = LoggerFactory.getLogger(Iti38TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
@@ -63,7 +63,7 @@ class Iti38TestRouteBuilder extends RouteBuilder {
                     assert it.in.getBody(QueryResponse.class).status == Status.SUCCESS
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error(e)
+                    log.error(e)
                 }
             }
             .delay(ASYNC_DELAY)
@@ -80,7 +80,7 @@ class Iti38TestRouteBuilder extends RouteBuilder {
                     assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error(e)
+                    log.error(e)
                 }
 
                 // create response, inclusive SOAP and HTTP headers

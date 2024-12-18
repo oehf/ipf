@@ -36,8 +36,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 
 /**
  * @author Christian Ohr
@@ -73,13 +72,16 @@ public class ObservationSearchParameters extends Pcc44CommonSearchParameters<Obs
 
     @Override
     protected Optional<Comparator<Observation>> comparatorFor(String paramName) {
-        if (Observation.SP_DATE.equals(paramName)) {
-            return Optional.of(nullsLast(CP_EFFECTIVE));
-        }
-        return Optional.empty();
+        return Observation.SP_DATE.equals(paramName) ?
+            Optional.of(CP_EFFECTIVE) :
+            Optional.empty();
     }
 
-    private static final Comparator<Observation> CP_EFFECTIVE = nullsLast(comparing(observation -> {
+    private static final Comparator<Observation> CP_EFFECTIVE = comparing(
+        ObservationSearchParameters::getEffectiveStartTime,
+        nullsLast(naturalOrder()));
+
+    private static String getEffectiveStartTime(Observation observation) {
         if (!observation.hasEffective()) return null;
         var effective = observation.getEffective();
         if (effective instanceof DateTimeType) {
@@ -91,5 +93,5 @@ public class ObservationSearchParameters extends Pcc44CommonSearchParameters<Obs
         } else  {
             return null;
         }
-    }));
+    }
 }

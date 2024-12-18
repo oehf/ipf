@@ -58,9 +58,9 @@ public class AcknowledgementAdapter extends HapiAdapter {
                 return null;
             }
         }
-        return t instanceof HL7Exception ?
-                (HL7Exception) t :
-                new HL7Exception(errorMessage != null ? errorMessage : t.getMessage(), errorCode, t);
+        return t instanceof HL7Exception hl7Exception ?
+            hl7Exception :
+            new HL7Exception(errorMessage != null ? errorMessage : t.getMessage(), errorCode, t);
     }
 
 }

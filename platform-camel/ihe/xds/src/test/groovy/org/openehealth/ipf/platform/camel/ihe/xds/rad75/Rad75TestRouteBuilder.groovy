@@ -37,7 +37,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xds.XdsCamelValidators.rad7
  * @author Clay Sebourn
  */
 class Rad75TestRouteBuilder extends RouteBuilder {
-    private static final transient LOG = LoggerFactory.getLogger(Rad75TestRouteBuilder.class)
+    private static final transient log = LoggerFactory.getLogger(Rad75TestRouteBuilder.class)
 
     static final AtomicInteger responseCount = new AtomicInteger()  
     static final AtomicInteger asyncResponseCount = new AtomicInteger()
@@ -86,7 +86,7 @@ class Rad75TestRouteBuilder extends RouteBuilder {
                     asyncCountDownLatch.countDown()
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error(e)
+                    log.error(e)
                 }
             }
 
@@ -107,7 +107,7 @@ class Rad75TestRouteBuilder extends RouteBuilder {
                     assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
                 } catch (Exception e) {
                     errorOccurred = true
-                    LOG.error(e)
+                    log.error(e)
                 }
 
                 // create response, inclusive SOAP and HTTP headers

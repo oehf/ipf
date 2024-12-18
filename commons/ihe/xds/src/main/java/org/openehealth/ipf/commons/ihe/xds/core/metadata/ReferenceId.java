@@ -21,6 +21,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -38,6 +39,7 @@ import java.util.Objects;
 @XmlAccessorType()
 @XmlType(name = "ReferenceId", propOrder = {"id", "assigningAuthority", "idTypeCode"})
 public class ReferenceId extends Hl7v2Based<CX> {
+    @Serial
     private static final long serialVersionUID = 6615092850652668283L;
 
     public static final String ID_TYPE_CODE_UNIQUE_ID       = "urn:ihe:iti:xds:2013:uniqueId";

@@ -31,7 +31,7 @@ import javax.xml.parsers.SAXParser;
  */
 public abstract class AbstractXmlDataFormat extends ServiceSupport implements DataFormat {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractXmlDataFormat.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractXmlDataFormat.class);
     private static final ErrorHandler DEFAULT_HANDLER = new DefaultErrorHandler();
 
     private boolean namespaceAware;
@@ -81,7 +81,7 @@ public abstract class AbstractXmlDataFormat extends ServiceSupport implements Da
 
         @Override
         public void warning(SAXParseException exception) {
-            LOG.warn("Warning occurred during parsing", exception);
+            log.warn("Warning occurred during parsing", exception);
         }
 
         @Override

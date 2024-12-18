@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 
-import javax.security.cert.X509Certificate;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.*;

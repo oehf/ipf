@@ -21,12 +21,12 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.jupiter.api.Test;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.Serial;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -76,7 +76,7 @@ public class TestServers {
             var response = client.execute(method);
             response.getEntity().writeTo(stream);
             assertEquals(200, response.getStatusLine().getStatusCode());
-            assertEquals("hello world", new String(stream.toByteArray()));
+            assertEquals("hello world", stream.toString());
         }
         finally {
             method.releaseConnection();
@@ -85,10 +85,11 @@ public class TestServers {
 
     /** Simple test servlet class */
     public static class Servlet extends HttpServlet {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         @Override
-        protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        protected void service(HttpServletRequest request, HttpServletResponse response) throws IOException {
             request.getInputStream().transferTo(response.getOutputStream());
         }
     }

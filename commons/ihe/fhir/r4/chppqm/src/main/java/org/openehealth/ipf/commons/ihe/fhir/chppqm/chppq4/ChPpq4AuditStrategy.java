@@ -43,9 +43,9 @@ public abstract class ChPpq4AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
     @Override
     public ChPpqmAuditDataset enrichAuditDatasetFromRequest(ChPpqmAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        Bundle bundle = (Bundle) request;
+        var bundle = (Bundle) request;
         if (!bundle.getEntry().isEmpty()) {
-            Bundle.HTTPVerb method = bundle.getEntry().get(0).getRequest().getMethod();
+            var method = bundle.getEntry().get(0).getRequest().getMethod();
             switch (method) {
                 case POST:
                     auditDataset.setAction(EventActionCode.Create);
@@ -67,8 +67,8 @@ public abstract class ChPpq4AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
     }
 
     private static void extractConsentIdsFromEntryResources(ChPpqmAuditDataset auditDataset, Bundle bundle) {
-        for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
-            Consent consent = (Consent) entry.getResource();
+        for (var entry : bundle.getEntry()) {
+            var consent = (Consent) entry.getResource();
             auditDataset.getPolicyAndPolicySetIds().add(ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID));
         }
     }
@@ -76,10 +76,9 @@ public abstract class ChPpq4AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
     @Override
     public boolean enrichAuditDatasetFromResponse(ChPpqmAuditDataset auditDataset, Object response, AuditContext auditContext) {
         if (super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext)) {
-            if (response instanceof Bundle) {
-                Bundle bundle = (Bundle) response;
-                for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
-                    String status = entry.getResponse().getStatus();
+            if (response instanceof Bundle bundle) {
+                for (var entry : bundle.getEntry()) {
+                    var status = entry.getResponse().getStatus();
                     if ((status != null) && status.startsWith("2")) {
                         if ((auditDataset.getAction() == EventActionCode.Update) && status.startsWith("201")) {
                             auditDataset.setAction(EventActionCode.Create);

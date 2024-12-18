@@ -27,6 +27,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElementRef;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -42,6 +44,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class RetrievedDocument implements Serializable {
+    @Serial
     private static final long serialVersionUID = -3950026651885804263L;
     
     @Getter @Setter private transient DataHandler dataHandler;

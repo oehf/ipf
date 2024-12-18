@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * Audit Interceptor for ITI-68. Note that the ParticipantObjectIdentificationType for the document
  * is not populated automatically, because the location of the parametzers depends upon the actual
  * implementation. The AuditDataset is forwarded in the Camel message header "AuditDataset" so that
- * at least {@link Iti68AuditDataset#documentUniqueId} can be set.
+ * at least  can be set.
  *
  * @author Christian Ohr
  * @since 3.5
@@ -41,7 +41,7 @@ class Iti68ConsumerAuditInterceptor
         extends InterceptorSupport
         implements AuditInterceptor<Iti68AuditDataset> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Iti68ConsumerAuditInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(Iti68ConsumerAuditInterceptor.class);
 
     private final AuditContext auditContext;
 
@@ -112,7 +112,7 @@ class Iti68ConsumerAuditInterceptor
 
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
-            LOG.error("Exception when enriching audit dataset from request", e);
+            log.error("Exception when enriching audit dataset from request", e);
             return null;
         }
     }

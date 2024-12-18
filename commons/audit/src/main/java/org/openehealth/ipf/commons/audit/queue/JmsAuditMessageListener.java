@@ -42,7 +42,7 @@ import static org.openehealth.ipf.commons.audit.queue.AbstractAuditMessageQueue.
  */
 public class JmsAuditMessageListener implements MessageListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JmsAuditMessageListener.class);
+    private static final Logger log = LoggerFactory.getLogger(JmsAuditMessageListener.class);
 
     private final AuditContext auditContext;
 
@@ -69,9 +69,9 @@ public class JmsAuditMessageListener implements MessageListener {
             );
             auditContext.getAuditTransmissionProtocol().send(auditContext, auditMetadataProvider, text);
         } catch (JMSException jmsException1) {
-            LOG.error("Could not obtain text from JMS message", jmsException1);
+            log.error("Could not obtain text from JMS message", jmsException1);
         } catch (Exception e) {
-            LOG.warn("Could not send audit message, rolling back", e);
+            log.warn("Could not send audit message, rolling back", e);
             throw new RuntimeException(e);
         }
     }

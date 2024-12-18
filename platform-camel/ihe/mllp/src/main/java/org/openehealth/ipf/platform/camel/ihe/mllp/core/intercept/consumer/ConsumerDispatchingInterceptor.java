@@ -46,7 +46,7 @@ import java.util.Map;
  */
 public final class ConsumerDispatchingInterceptor extends InterceptorSupport
         implements StartupListener {
-    private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerDispatchingInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(ConsumerDispatchingInterceptor.class);
 
     private final List<String> routeIds = new ArrayList<>();
     private final Map<String, Interceptor> map = new HashMap<>();
@@ -87,7 +87,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport
     public void onCamelContextStarted(CamelContext camelContext, boolean alreadyStarted) throws Exception {
         collectTransactionTargets(camelContext);
         if (!addTargets(camelContext)) {
-            LOG.info("Mllp Dispatcher endpoint exposed without transaction targets.");
+            log.info("Mllp Dispatcher endpoint exposed without transaction targets.");
         }
     }
 
@@ -118,7 +118,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport
                     while (!(interceptor instanceof ConsumerStringProcessingInterceptor)) {
                         interceptor = (Interceptor) interceptor.getWrappedProcessor();
                     }
-                    LOG.debug("Adding MLLP transaction route {} to dispatcher", routeId);
+                    log.debug("Adding MLLP transaction route {} to dispatcher", routeId);
                     map.put(routeId, (Interceptor) interceptor.getWrappedProcessor());
                 } else {
                     throw new CamelException("Route with ID='" + routeId + "' not found or is not an IPF MLLP route");
@@ -149,7 +149,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport
             try {
                 config.checkMessageAcceptance(messageType, triggerEvent, messageStructure, version, true);
 
-                LOG.debug("Dispatch message with MSH-9-1='{}', MSH-9-2='{}', MSH-9-3='{}', MSH-12='{}' to route '{}'",
+                log.debug("Dispatch message with MSH-9-1='{}', MSH-9-2='{}', MSH-9-3='{}', MSH-12='{}' to route '{}'",
                         messageType, triggerEvent, messageStructure, version, routeId);
                 found = true;
                 interceptor.process(exchange);
@@ -160,7 +160,7 @@ public final class ConsumerDispatchingInterceptor extends InterceptorSupport
         }
 
         if (!found) {
-            LOG.debug("Nobody can process message with MSH-9-1='{}', MSH-9-2='{}', MSH-9-3='{}', MSH-12='{}'",
+            log.debug("Nobody can process message with MSH-9-1='{}', MSH-9-2='{}', MSH-9-3='{}', MSH-12='{}'",
                     messageType, triggerEvent, messageStructure, version);
             var exception = new HL7Exception(
                     "Unsupported message type and/or version", ErrorCode.APPLICATION_INTERNAL_ERROR);

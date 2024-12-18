@@ -27,21 +27,21 @@ import org.openhealthtools.mdht.uml.cda.util.CDAUtil.ValidationHandler;
  *
  */
 public class DefaultValidationHandler implements ValidationHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultValidationHandler.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(DefaultValidationHandler.class.getName());
     
     @Override
     public void handleError(Diagnostic diagnostic) {
-        LOG.error("Validation error: {}", diagnostic);
+        log.error("Validation error: {}", diagnostic);
     }
     
     @Override
     public void handleWarning(Diagnostic diagnostic) {
-        LOG.warn("Validation warning: {}", diagnostic);
+        log.warn("Validation warning: {}", diagnostic);
     }
     
     @Override
     public void handleInfo(Diagnostic diagnostic) {
-        LOG.debug("Validation info: {}", diagnostic);
+        log.debug("Validation info: {}", diagnostic);
     }
     
 }

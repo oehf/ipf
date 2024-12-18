@@ -40,7 +40,7 @@ public abstract class AbstractExtensionTest {
 
     
     @AfterEach
-    public void tearDown() throws Exception {
+    public void tearDown() {
         mockOutput.reset();
     }
 

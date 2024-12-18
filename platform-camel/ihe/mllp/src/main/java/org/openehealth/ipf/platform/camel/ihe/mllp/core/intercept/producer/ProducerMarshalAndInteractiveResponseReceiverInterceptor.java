@@ -45,7 +45,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * @author Dmytro Rud
  */
 public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends InterceptorSupport {
-    private static final Logger LOG = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(ProducerMarshalAndInteractiveResponseReceiverInterceptor.class);
 
     private final String charsetName;
 
@@ -115,7 +115,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
                 }
                 if (! positiveResponse) {
                     // ignore all collected fragments, pass this response as is to the route
-                    LOG.debug("Not a positive response, cannot perform continuation");
+                    log.debug("Not a positive response, cannot perform continuation");
                     fragmentsCount = 0;
                     recordsCount = 0;
                     break;
@@ -130,7 +130,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
                             && isNotEmpty(dscFields.get(1)))
                     {
                         continuationPointer = dscFields.get(1);
-                        LOG.debug("Automatically query interactive fragment {}", continuationPointer);
+                        log.debug("Automatically query interactive fragment {}", continuationPointer);
                         requestTerser.set("DSC-1", continuationPointer);
                         requestTerser.set("DSC-2", "I");
                         requestTerser.set("MSH-7", MessageUtils.hl7Now());
@@ -185,7 +185,7 @@ public class ProducerMarshalAndInteractiveResponseReceiverInterceptor extends In
                     exchange.getIn().setBody(cancel);
                     getWrappedProcessor().process(exchange);
                 } catch (Exception e) {
-                    LOG.warn("Error while preparing and sending automatic cancel message", e);
+                    log.warn("Error while preparing and sending automatic cancel message", e);
                 }
             }
         }

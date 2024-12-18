@@ -184,8 +184,8 @@ public class Splitter extends DelegateProcessor {
             return Collections.emptySet();
         }
 
-        if (splitResult instanceof Iterable) {
-            return (Iterable<?>) splitResult;
+        if (splitResult instanceof Iterable iterable) {
+            return iterable;
         }
 
         if (splitResult instanceof Iterator) {

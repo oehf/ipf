@@ -24,6 +24,8 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -38,6 +40,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class LocalizedString implements Serializable {
+    @Serial
     private static final long serialVersionUID = 4876325465142358849L;
     
     @XmlAttribute(name = "language")

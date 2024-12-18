@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
  */
 public class QpdAwareNakFactory extends NakFactory<QueryAuditDataset> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(QpdAwareNakFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(QpdAwareNakFactory.class);
     private final String messageType, triggerEvent;
 
 
@@ -68,7 +68,7 @@ public class QpdAwareNakFactory extends NakFactory<QueryAuditDataset> {
                 messageType,
                 triggerEvent);
 
-        LOG.info("Creating NAK response event of type {}", ack.getClass().getName());
+        log.info("Creating NAK response event of type {}", ack.getClass().getName());
 
         e.populateResponse(ack, ackTypeCode, 0);
 
@@ -80,7 +80,7 @@ public class QpdAwareNakFactory extends NakFactory<QueryAuditDataset> {
         if (origQpd != null) {
             var queryTag = Terser.get(origQpd, 2, 0, 1, 1);
             Terser.set(ackQak, 1, 0, 1, 1, queryTag);
-            LOG.debug("Set QAK-1 to {}", queryTag);
+            log.debug("Set QAK-1 to {}", queryTag);
         }
         Terser.set(ackQak, 2, 0, 1, 1, "AE");
 

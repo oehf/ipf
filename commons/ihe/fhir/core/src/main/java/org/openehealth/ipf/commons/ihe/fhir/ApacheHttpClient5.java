@@ -63,7 +63,7 @@ public class ApacheHttpClient5 extends BaseHttpClient implements IHttpClient {
         params.forEach((key, value) -> value.stream()
             .map(s -> new BasicNameValuePair(key, s))
             .forEach(parameters::add));
-        UrlEncodedFormEntity entity = createFormEntity(parameters);
+        var entity = createFormEntity(parameters);
         return createHttpRequest(entity);
     }
 
@@ -81,7 +81,7 @@ public class ApacheHttpClient5 extends BaseHttpClient implements IHttpClient {
     }
 
     private ClassicRequestBuilder constructRequest(HttpEntity entity) {
-        String url = myUrl.toString();
+        var url = myUrl.toString();
         return switch (myRequestType) {
             case DELETE -> ClassicRequestBuilder.delete(url);
             case PATCH -> ClassicRequestBuilder.patch(url).setEntity(entity);

@@ -19,7 +19,7 @@ public class BalpJwtClaimsExtractorTest {
     private final BalpJwtGenerator balpJwtGenerator = new BalpJwtGenerator();
 
     @Test
-    void testExtractor() throws Exception {
+    void testExtractor() {
         String generatedJwt = balpJwtGenerator.next();
 
         JWT jwt = parseJWT(generatedJwt);
@@ -72,37 +72,38 @@ public class BalpJwtClaimsExtractorTest {
         }
     }
 
-    private static final String jwtAsString = "{\n" +
-        "  \"aud\": \"master-realm\",\n" +
-        "  \"sub\": \"f7fc9091-7b8a-42e0-a829-6c4ba22d38b2\",\n" +
-        "  \"extensions\": {\n" +
-        "    \"ihe_iua\": {\n" +
-        "      \"subject_organization_id\": \"urn:oid:1.2.3.19161\",\n" +
-        "      \"home_community_id\": \"urn:oid:1.2.3.43740\",\n" +
-        "      \"national_provider_identifier\": \"urn:oid:1.2.3.48200\",\n" +
-        "      \"subject_role\": [\n" +
-        "        \"my-role-1\",\n" +
-        "        \"my-role-2\"\n" +
-        "      ],\n" +
-        "      \"purpose_of_use\": [\n" +
-        "        \"1.0.14265.1\",\n" +
-        "        \"1.0.14265.2\"\n" +
-        "      ],\n" +
-        "      \"subject_name\": \"Dr. John Smith\",\n" +
-        "      \"subject_organization\": \"Central Hospital\",\n" +
-        "      \"person_id\": \"ABC9586\"\n" +
-        "    },\n" +
-        "    \"ihe_bppc\": {\n" +
-        "      \"patient_id\": \"31494^^^&amp;1.2.840.113619.6.197&amp;ISO\",\n" +
-        "      \"doc_id\": \"urn:oid:1.2.3.29380\",\n" +
-        "      \"acp\": \"urn:oid:1.2.3.32574\"\n" +
-        "    }\n" +
-        "  },\n" +
-        "  \"nbf\": 1706531233,\n" +
-        "  \"iss\": \"https://localhost:8443/auth/realms/master\",\n" +
-        "  \"typ\": \"Bearer\",\n" +
-        "  \"exp\": 1706531353,\n" +
-        "  \"jti\": \"e2093a98-9dcd-4947-b5cb-ee5b47c089c5\",\n" +
-        "  \"client_id\": \"pbrBkyXksp\"\n" +
-        "}";
+    private static final String jwtAsString = """
+        {
+          "aud": "master-realm",
+          "sub": "f7fc9091-7b8a-42e0-a829-6c4ba22d38b2",
+          "extensions": {
+            "ihe_iua": {
+              "subject_organization_id": "urn:oid:1.2.3.19161",
+              "home_community_id": "urn:oid:1.2.3.43740",
+              "national_provider_identifier": "urn:oid:1.2.3.48200",
+              "subject_role": [
+                "my-role-1",
+                "my-role-2"
+              ],
+              "purpose_of_use": [
+                "1.0.14265.1",
+                "1.0.14265.2"
+              ],
+              "subject_name": "Dr. John Smith",
+              "subject_organization": "Central Hospital",
+              "person_id": "ABC9586"
+            },
+            "ihe_bppc": {
+              "patient_id": "31494^^^&amp;1.2.840.113619.6.197&amp;ISO",
+              "doc_id": "urn:oid:1.2.3.29380",
+              "acp": "urn:oid:1.2.3.32574"
+            }
+          },
+          "nbf": 1706531233,
+          "iss": "https://localhost:8443/auth/realms/master",
+          "typ": "Bearer",
+          "exp": 1706531353,
+          "jti": "e2093a98-9dcd-4947-b5cb-ee5b47c089c5",
+          "client_id": "pbrBkyXksp"
+        }""";
 }

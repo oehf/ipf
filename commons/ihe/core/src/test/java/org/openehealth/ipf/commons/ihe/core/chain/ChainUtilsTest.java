@@ -82,9 +82,7 @@ public class ChainUtilsTest {
                 new MyChainable("c4", "c2", ""),
                 new MyChainable("c5", "i4", "i4")        // should fail, Before==After
         );
-        Assertions.assertThrows(ChainException.class, () -> {
-            doTest(custom, "dummy");
-        });
+        Assertions.assertThrows(ChainException.class, () -> doTest(custom, "dummy"));
     }                                               
 
 
@@ -97,9 +95,7 @@ public class ChainUtilsTest {
                 new MyChainable("c4", "c2", ""),
                 new MyChainable("c5", "i3", "i4")        // should fail, Before>After
         );
-        Assertions.assertThrows(ChainException.class, () -> {
-            doTest(custom, "dummy");
-        });
+        Assertions.assertThrows(ChainException.class, () -> doTest(custom, "dummy"));
     }
 
 
@@ -110,9 +106,7 @@ public class ChainUtilsTest {
                 new MyChainable("c2", "c1", "c3"),
                 new MyChainable("c3", "c1", "c2")
         );
-        Assertions.assertThrows(ChainException.class, () -> {
-            doTest(custom, "dummy");
-        });
+        Assertions.assertThrows(ChainException.class, () -> doTest(custom, "dummy"));
     }
 
 }

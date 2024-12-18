@@ -15,20 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.json;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
-import org.openehealth.ipf.commons.ihe.hpd.controls.strategies.ControlStrategy;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Control;
 
 import javax.naming.ldap.BasicControl;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,13 +36,13 @@ import java.util.List;
 public class ControlListDeserializer extends JsonDeserializer<List> {
 
     @Override
-    public List deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JacksonException {
+    public List deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         JsonNode arrayNode = jsonParser.readValueAsTree();
         if (!arrayNode.isArray()) {
             throw new IllegalArgumentException("'controls' shall be a JSON array");
         }
         List<Control> result = new ArrayList<>();
-        Iterator<JsonNode> controlNodes = arrayNode.elements();
+        var controlNodes = arrayNode.elements();
         while (controlNodes.hasNext()) {
             result.add(ControlUtils.toDsmlv2(deserializeControl(controlNodes.next())));
         }
@@ -53,7 +50,7 @@ public class ControlListDeserializer extends JsonDeserializer<List> {
     }
 
     private static BasicControl deserializeControl(JsonNode node) throws IOException {
-        ControlStrategy strategy = ControlUtils.getStrategies().get(node.get("type").textValue());
+        var strategy = ControlUtils.getStrategies().get(node.get("type").textValue());
         if (strategy != null) {
             return strategy.deserializeJson(node);
         } else {

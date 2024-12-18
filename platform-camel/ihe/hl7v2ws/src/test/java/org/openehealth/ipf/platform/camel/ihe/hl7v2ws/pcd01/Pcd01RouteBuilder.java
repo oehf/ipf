@@ -43,7 +43,7 @@ public class Pcd01RouteBuilder extends RouteBuilder {
      * @see org.apache.camel.builder.RouteBuilder#configure()
      */
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         from("pcd-pcd01:devicedata?rejectionHandlingStrategy=#rejectionHandlingStrategy")
                 .onException(Exception.class)

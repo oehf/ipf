@@ -37,9 +37,9 @@ abstract public class ConsumerHpdHandler extends ConsumerHandlerBase<BatchReques
      */
     protected static BatchResponse aggregateResponse(BatchRequest batchRequest, BatchResponse batchResponse, JAXBElement<?>[] localResponses) {
         batchResponse.setRequestID(batchRequest.getRequestID());
-        for (int i = 0; i < localResponses.length; ++i) {
+        for (var i = 0; i < localResponses.length; ++i) {
             if (localResponses[i] != null) {
-                int position = Math.min(i, batchResponse.getBatchResponses().size());
+                var position = Math.min(i, batchResponse.getBatchResponses().size());
                 batchResponse.getBatchResponses().add(position, localResponses[i]);
             }
         }

@@ -42,7 +42,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v2ws.Utils.render;
  * @author Stefan Ivanov
  */
 public abstract class AbstractHl7v2WebService extends AbstractWebService {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractHl7v2WebService.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractHl7v2WebService.class);
 
     private Hl7v2TransactionConfiguration config = null;
     private NakFactory nakFactory = null;
@@ -74,7 +74,7 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
             msg = config.getParser().parse(trimToEmpty(request).replace("\n", "\r\n"));
             config.checkRequestAcceptance(msg);
         } catch (HL7Exception e) {
-            LOG.error(formatErrMsg("Request not acceptable"), e);
+            log.error(formatErrMsg("Request not acceptable"), e);
             return render(nakFactory.createDefaultNak(e));
         }
 
@@ -98,7 +98,7 @@ public abstract class AbstractHl7v2WebService extends AbstractWebService {
 
 
         } catch (Exception e) {
-            LOG.error(formatErrMsg("Message processing failed, response missing or not acceptable"), e);
+            log.error(formatErrMsg("Message processing failed, response missing or not acceptable"), e);
             try {
                 return render(nakFactory.createNak(originalRequest, e));
             } catch (HL7Exception e1) {

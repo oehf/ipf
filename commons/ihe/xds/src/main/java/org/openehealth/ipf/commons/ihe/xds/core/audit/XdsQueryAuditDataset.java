@@ -18,11 +18,14 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+
 /**
  * XDS audit dataset specific for query-related transactions.
  * @author Dmytro Rud
  */
 public class XdsQueryAuditDataset extends XdsAuditDataset {
+    @Serial
     private static final long serialVersionUID = -5590580053651954919L;
 
     @Getter @Setter private String queryUuid;

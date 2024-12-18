@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.TypeValuePairType;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
@@ -58,7 +58,7 @@ public class Pharm5AuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset
         if (endpointUrl != null && endpointUrl.lastIndexOf("$") >= 0) {
             operation = endpointUrl.substring(endpointUrl.lastIndexOf("$"));
         }
-        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.QueryPharmacyDocumentsOverMhd)
+        return new DefaultQueryInformationBuilder(auditContext, auditDataset, FhirEventTypeCode.QueryPharmacyDocumentsOverMhd)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters(
                         operation,
@@ -97,11 +97,10 @@ public class Pharm5AuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset
             if (tokenParams != null) {
                 tokenParams.forEach(t -> addPatientId.accept(t.getValue(), t.getSystem()));
             }
-        } else if (request instanceof Parameters) {
-            final var bodyParameters = (Parameters) request;
+        } else if (request instanceof Parameters bodyParameters) {
             final var patientIdentifier = bodyParameters.getParameterValues(Pharm5ResourceProvider.SP_PATIENT_IDENTIFIER);
-            if (patientIdentifier instanceof StringType) {
-                final var parts = ((StringType) patientIdentifier).getValue().split("\\|");
+            if (patientIdentifier instanceof StringType s) {
+                final var parts = s.getValue().split("\\|");
                 addPatientId.accept(parts[1], parts[0]);
             }
         }

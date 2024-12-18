@@ -1,5 +1,6 @@
 package net.ihe.gazelle.gen.common;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,7 +10,8 @@ public class Concept implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4518318071899080800L;
+	@Serial
+    private static final long serialVersionUID = 4518318071899080800L;
 
 	private String code;
 	private String displayName;
@@ -104,14 +106,9 @@ public class Concept implements Serializable {
 			return false;
 		}
 		if (displayName == null) {
-			if (other.displayName != null) {
-				return false;
-			}
-		} else if (!displayName.equals(other.displayName)) {
-			return false;
-		}
-		return true;
-	}
+            return other.displayName == null;
+		} else return displayName.equals(other.displayName);
+    }
 
 	@Override
 	public String toString() {
@@ -123,7 +120,7 @@ public class Concept implements Serializable {
 		Pattern p = Pattern
 				.compile("Concept \\[code=(.*?), displayName=(.*?), codeSystem=(.*?), codeSystemName=(.*?)\\]");
 		Matcher m = p.matcher(cc);
-		while (m.find()) {
+		if (m.find()) {
 			Concept cons = new Concept();
 			cons.code = m.group(1);
 			cons.displayName = m.group(2);

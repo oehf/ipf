@@ -36,7 +36,7 @@ import java.util.List;
 @Slf4j
 public class FhirMockedSender implements AbstractMockedAuditMessageQueue {
 
-    protected List<AuditEvent> messages = Collections.synchronizedList(new ArrayList<>());
+    protected final List<AuditEvent> messages = Collections.synchronizedList(new ArrayList<>());
 
     private final FhirContext fhirContext;
     private final boolean needValidation;

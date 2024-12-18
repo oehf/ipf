@@ -34,7 +34,7 @@ public class ChPpq3TestRouteBuilder extends RouteBuilder {
     public static final String TRACE_CONTEXT_ID = "00-0af7651916cd43dd8448eb211c80319c-1111111111111111-01";
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from("ch-ppq3:stub")
                 .setHeader(ValidatorAdapter.NEED_VALIDATION_HEADER_NAME, constant(true))
                 .setHeader(VALIDATION_MODE, constant(MODEL))

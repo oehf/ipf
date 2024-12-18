@@ -25,6 +25,8 @@ import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -38,6 +40,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ToString(doNotUseGetters = true)
 public class QueryRegistry implements Serializable {
+    @Serial
     private static final long serialVersionUID = -7089029668323133489L;
 
     @XmlElementRefs({

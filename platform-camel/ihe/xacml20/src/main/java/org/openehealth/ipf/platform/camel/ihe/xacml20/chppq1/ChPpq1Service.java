@@ -59,9 +59,9 @@ public class ChPpq1Service extends AbstractWebService implements ChPpq1PortType 
         var result = process(request);
         var exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
-            if (exception instanceof UnknownPolicySetIdFaultMessage) {
-                throw (UnknownPolicySetIdFaultMessage) exception;
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
+            if (exception instanceof UnknownPolicySetIdFaultMessage unknownPolicySetIdFaultMessage) {
+                throw unknownPolicySetIdFaultMessage;
             }
             return errorResponse();
         }

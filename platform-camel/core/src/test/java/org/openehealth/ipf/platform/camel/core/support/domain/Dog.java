@@ -29,10 +29,9 @@ public class Dog extends Animal {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Dog)) {
+        if (!(obj instanceof Dog that)) {
             return false;
         }
-        var that = (Dog)obj;
         return getName().equals(that.getName());
     }
 

@@ -107,8 +107,8 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
 
         // Handle "related" parameters
 
-        ReferenceOrListParam relatedParam = new ReferenceOrListParam();
-        TokenOrListParam relatedIdParam = new TokenOrListParam();
+        var relatedParam = new ReferenceOrListParam();
+        var relatedIdParam = new TokenOrListParam();
         if (relatedRef != null) {
             relatedParam = relatedRef;
         } else if (relatedId != null) {

@@ -47,7 +47,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
 abstract class Hl7v3ContinuationAwareWebService
         extends AbstractHl7v3WebService
         implements Hl7v3ContinuationsPortType {
-    private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3ContinuationAwareWebService.class)
+    private static final transient Logger log = LoggerFactory.getLogger(Hl7v3ContinuationAwareWebService.class)
 
     private static final String XSLT_TEMPLATE = '/xslt/hl7v3-continuations-fragmentize.xslt'
     private static final XsltTransmogrifier XSLT_TRANSMOGRIFIER = new XsltTransmogrifier(String.class)
@@ -128,8 +128,8 @@ abstract class Hl7v3ContinuationAwareWebService
      * Handles "main operation" requests of the IHE transaction.
      */
     String operation0(String requestString) {
-        if (LOG.debugEnabled) {
-            LOG.debug('operation(): Got request\n' + requestString)
+        if (log.debugEnabled) {
+            log.debug('operation(): Got request\n' + requestString)
         }
 
         // prepare ATNA audit, if necessary
@@ -140,7 +140,7 @@ abstract class Hl7v3ContinuationAwareWebService
             try {
                 VALIDATOR.validate(requestString, wsTransactionConfiguration.requestValidationProfile)
             } catch (ValidationException e) {
-                LOG.info('operation(): invalid request', e)
+                log.info('operation(): invalid request', e)
                 String nak = createNak(requestString, e)
                 finalizeAtnaAuditing(nak, auditStrategy, auditContext, auditDataset)
                 return nak
@@ -155,7 +155,7 @@ abstract class Hl7v3ContinuationAwareWebService
             try {
                 VALIDATOR.validate(responseString, wsTransactionConfiguration.responseValidationProfile)
             } catch (ValidationException e) {
-                LOG.info('operation(): invalid response', e)
+                log.info('operation(): invalid response', e)
                 String nak = createNak(requestString, e)
                 finalizeAtnaAuditing(nak, auditStrategy, auditContext, auditDataset)
                 return nak
@@ -172,14 +172,14 @@ abstract class Hl7v3ContinuationAwareWebService
             threshold = defaultThreshold
         }
         if (threshold < 1) {
-            LOG.debug('operation(): Threshold not set')
+            log.debug('operation(): Threshold not set')
             return responseString
         }
 
         try {
             String result = createFragment(request, responseString, 1, threshold)
-            if (LOG.debugEnabled) {
-                LOG.debug('operation(): Generated fragment\n' + result)
+            if (log.debugEnabled) {
+                log.debug('operation(): Generated fragment\n' + result)
             }
             def key = getQueryKey(request, false)
             storage.storeMessage(key, responseString)
@@ -188,7 +188,7 @@ abstract class Hl7v3ContinuationAwareWebService
             return result
         } catch (Exception e) {
             if (e.cause?.message?.startsWith('[ipf]')) {
-                LOG.debug('operation(): Negative response or too few subjects')
+                log.debug('operation(): Negative response or too few subjects')
                 return responseString
             } else {
                 throw e
@@ -201,8 +201,8 @@ abstract class Hl7v3ContinuationAwareWebService
      * Handles continuation requests.
      */
     String continuation0(String requestString) {
-        if (LOG.debugEnabled) {
-            LOG.debug('continuation(): Got request\n' + requestString)
+        if (log.debugEnabled) {
+            log.debug('continuation(): Got request\n' + requestString)
         }
 
         // validate
@@ -210,7 +210,7 @@ abstract class Hl7v3ContinuationAwareWebService
             try {
                 VALIDATOR.validate(requestString, wsTransactionConfiguration.requestValidationProfile)
             } catch (ValidationException e) {
-                LOG.info('continuation(): invalid request', e)
+                log.info('continuation(): invalid request', e)
                 def nak = createNak(requestString, e)
                 return nak
             }
@@ -243,8 +243,8 @@ abstract class Hl7v3ContinuationAwareWebService
 
         try {
             String result = createFragment(request, responseString, startResultNumber, continuationQuantity)
-            if (LOG.debugEnabled) {
-                LOG.debug('continuation(): Generated fragment\n' + result)
+            if (log.debugEnabled) {
+                log.debug('continuation(): Generated fragment\n' + result)
             }
             storage.storeLastResultNumber(key, startResultNumber + continuationQuantity)
             storage.storeContinuationQuantity(key, continuationQuantity)
@@ -259,8 +259,8 @@ abstract class Hl7v3ContinuationAwareWebService
      * Handles continuation cancel requests.
      */
     String cancel0(String requestString) {
-        if (LOG.debugEnabled) {
-            LOG.debug('cancel(): Got request\n' + requestString)
+        if (log.debugEnabled) {
+            log.debug('cancel(): Got request\n' + requestString)
         }
 
         // validate
@@ -268,7 +268,7 @@ abstract class Hl7v3ContinuationAwareWebService
             try {
                 VALIDATOR.validate(requestString, wsTransactionConfiguration.requestValidationProfile)
             } catch (ValidationException e) {
-                LOG.info('cancel(): invalid request', e)
+                log.info('cancel(): invalid request', e)
                 return createNak(requestString, e)
             }
         }
@@ -281,8 +281,8 @@ abstract class Hl7v3ContinuationAwareWebService
             storage.remove(key)
             String result = Hl7v3NakFactory.response(request, null, 'MCCI_IN000002UV01', null, true,
                                                      wsTransactionConfiguration.includeQuantities)
-            if (LOG.debugEnabled) {
-                LOG.debug('cancel(): generated ACK\n' + result)
+            if (log.debugEnabled) {
+                log.debug('cancel(): generated ACK\n' + result)
             }
             return result
         } else {
@@ -331,7 +331,7 @@ abstract class Hl7v3ContinuationAwareWebService
      * Logs an error and creates HL7v3 NAK message for it.
      */
     private String error(GPathResult request, String message, String key) {
-        LOG.warn("{} {}", message, key)
+        log.warn("{} {}", message, key)
         return createNak(request, new Exception(message))
     }
 

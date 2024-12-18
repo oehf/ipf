@@ -26,7 +26,7 @@ import org.apache.cxf.binding.soap.interceptor.AbstractSoapInterceptor;
  * @author Dmytro Rud
  */
 abstract public class AbstractSafeInterceptor extends AbstractSoapInterceptor {
-    private static final transient Logger LOG = LoggerFactory.getLogger(AbstractSafeInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractSafeInterceptor.class);
 
     /**
      * Constructs the interceptor.
@@ -56,7 +56,7 @@ abstract public class AbstractSafeInterceptor extends AbstractSoapInterceptor {
         try {
             process(message);
         } catch(Exception e) {
-            LOG.error(e.getMessage(), e);
+            log.error(e.getMessage(), e);
         }
     }
 

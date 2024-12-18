@@ -30,9 +30,7 @@ public class ExpressionClauseExtensionTest extends AbstractExtensionTest {
     @Test
     public void testExceptionObject() throws InterruptedException {
         mockOutput.expectedMessageCount(1);
-        var result = producerTemplate.request("direct:input1", exchange -> {
-            exchange.getIn().setBody("blah");
-        });
+        var result = producerTemplate.request("direct:input1", exchange -> exchange.getIn().setBody("blah"));
         mockOutput.assertIsSatisfied();
         var received = mockOutput.getExchanges().get(0);
         var exception = (Exception)received.getIn().getHeader("foo");

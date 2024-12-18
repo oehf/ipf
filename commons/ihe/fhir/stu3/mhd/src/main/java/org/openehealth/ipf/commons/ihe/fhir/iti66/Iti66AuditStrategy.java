@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
@@ -37,7 +37,7 @@ public class Iti66AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
-        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobileDocumentManifestQuery)
+        return new DefaultQueryInformationBuilder(auditContext, auditDataset, FhirEventTypeCode.MobileDocumentManifestQuery)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters("MobileDocumentManifestQuery",
                         FhirParticipantObjectIdTypeCode.MobileDocumentManifestQuery,

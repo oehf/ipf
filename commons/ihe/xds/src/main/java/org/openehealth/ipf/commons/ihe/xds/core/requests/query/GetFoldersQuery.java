@@ -21,6 +21,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -33,6 +35,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class GetFoldersQuery extends GetByIdQuery {
+    @Serial
     private static final long serialVersionUID = 854601731250203237L;
 
     @Getter @Setter private List<String> logicalUuid;

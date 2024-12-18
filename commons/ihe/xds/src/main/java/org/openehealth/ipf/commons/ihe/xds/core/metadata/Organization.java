@@ -21,6 +21,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -37,6 +38,7 @@ import java.util.Objects;
 @XmlAccessorType()
 @XmlType(name = "Organization", propOrder = {"idNumber", "assigningAuthority", "organizationName"})
 public class Organization extends Hl7v2Based<XON> {
+    @Serial
     private static final long serialVersionUID = 8283797476558181158L;
 
     /**

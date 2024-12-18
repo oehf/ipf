@@ -31,7 +31,7 @@ import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.extractOutgoing
  * @author Dmytro Rud
  */
 public class MyRejectionHandlingStrategy extends AbstractHl7v2WsRejectionHandlingStrategy {
-    private static final Logger LOG = LoggerFactory.getLogger(MyRejectionHandlingStrategy.class);
+    private static final Logger log = LoggerFactory.getLogger(MyRejectionHandlingStrategy.class);
 
     private static final AtomicInteger COUNTER = new AtomicInteger(0);
 
@@ -61,6 +61,6 @@ public class MyRejectionHandlingStrategy extends AbstractHl7v2WsRejectionHandlin
             sb.append("HL7v2 NAK:\n").append(extractOutgoingPayload(cxfExchange));
         }
 
-        LOG.error(sb.toString(), exception);
+        log.error(sb.toString(), exception);
     }
 }

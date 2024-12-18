@@ -49,7 +49,6 @@ public class ADT_A02 extends AbstractMessage {
         s.put(PV1.class, Cardinality.REQUIRED);
         s.put(PV2.class, Cardinality.OPTIONAL);
         s.put(ZBE.class, Cardinality.OPTIONAL);
-        s.put(ROL.class, Cardinality.OPTIONAL_REPEATING);
         s.put(DB1.class, Cardinality.OPTIONAL_REPEATING);
         s.put(OBX.class, Cardinality.OPTIONAL_REPEATING);
         s.put(PDA.class, Cardinality.OPTIONAL);

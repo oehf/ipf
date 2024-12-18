@@ -34,7 +34,7 @@ import java.util.Map;
  */
 public class SpringCacheInteractiveContinuationStorage implements InteractiveContinuationStorage {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(SpringCacheInteractiveContinuationStorage.class);
+    private static final Logger log = LoggerFactory.getLogger(SpringCacheInteractiveContinuationStorage.class);
     private static final String INTERACTIVE_CONTINUATION_CACHE = "interactiveHl7v2ContinuationCache";
     private final Cache cache;
 
@@ -46,7 +46,7 @@ public class SpringCacheInteractiveContinuationStorage implements InteractiveCon
     public void put(String continuationPointer, String chainId, Message fragment) {
         var chain = cache.get(chainId, InteractiveContinuationChain.class);
         if (chain == null) {
-            LOG.debug("Create chain for storage key {}", chainId);
+            log.debug("Create chain for storage key {}", chainId);
             chain = new InteractiveContinuationChain();
             cache.put(chainId, chain);
         }

@@ -42,8 +42,6 @@ public abstract class Converter<S, T> implements Parser<S>, Renderer<T>, Transmo
      * 
      * @param message message to be converted
      * @return converted message
-     * @throws ParseException
-     * @throws RenderException
      */
     public final String convert(String message, Object... params) {
         var parsed = parse(message, params);

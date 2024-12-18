@@ -23,6 +23,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
     /**
      *
      */
+    @Serial
     private static final long serialVersionUID = 1L;
 
 
@@ -85,14 +87,13 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
      */
     public List<net.ihe.gazelle.hl7v3.datatypes.CS> getRealmCode() {
         if (realmCode == null) {
-            realmCode = new ArrayList<net.ihe.gazelle.hl7v3.datatypes.CS>();
+            realmCode = new ArrayList<>();
         }
         return realmCode;
     }
 
     /**
      * Set a value to attribute realmCode.
-     * @param realmCode.
      */
     public void setRealmCode(List<net.ihe.gazelle.hl7v3.datatypes.CS> realmCode) {
         this.realmCode = realmCode;
@@ -125,7 +126,6 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
 
     /**
      * Set a value to attribute typeId.
-     * @param typeId.
      */
     public void setTypeId(net.ihe.gazelle.hl7v3.datatypes.II typeId) {
         this.typeId = typeId;
@@ -138,14 +138,13 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
      */
     public List<net.ihe.gazelle.hl7v3.datatypes.II> getTemplateId() {
         if (templateId == null) {
-            templateId = new ArrayList<net.ihe.gazelle.hl7v3.datatypes.II>();
+            templateId = new ArrayList<>();
         }
         return templateId;
     }
 
     /**
      * Set a value to attribute templateId.
-     * @param templateId.
      */
     public void setTemplateId(List<net.ihe.gazelle.hl7v3.datatypes.II> templateId) {
         this.templateId = templateId;
@@ -178,7 +177,6 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
 
     /**
      * Set a value to attribute code.
-     * @param code.
      */
     public void setCode(net.ihe.gazelle.hl7v3.datatypes.CE code) {
         this.code = code;
@@ -191,14 +189,13 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
      */
     public List<net.ihe.gazelle.hl7v3.datatypes.SXCMTS> getEffectiveTime() {
         if (effectiveTime == null) {
-            effectiveTime = new ArrayList<net.ihe.gazelle.hl7v3.datatypes.SXCMTS>();
+            effectiveTime = new ArrayList<>();
         }
         return effectiveTime;
     }
 
     /**
      * Set a value to attribute effectiveTime.
-     * @param effectiveTime.
      */
     public void setEffectiveTime(List<net.ihe.gazelle.hl7v3.datatypes.SXCMTS> effectiveTime) {
         this.effectiveTime = effectiveTime;
@@ -227,14 +224,13 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
      */
     public List<net.ihe.gazelle.hl7v3.mcaimt900001UV01.MCAIMT900001UV01Subject> getSubject() {
         if (subject == null) {
-            subject = new ArrayList<net.ihe.gazelle.hl7v3.mcaimt900001UV01.MCAIMT900001UV01Subject>();
+            subject = new ArrayList<>();
         }
         return subject;
     }
 
     /**
      * Set a value to attribute subject.
-     * @param subject.
      */
     public void setSubject(List<net.ihe.gazelle.hl7v3.mcaimt900001UV01.MCAIMT900001UV01Subject> subject) {
         this.subject = subject;
@@ -267,7 +263,6 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
 
     /**
      * Set a value to attribute classCode.
-     * @param classCode.
      */
     public void setClassCode(net.ihe.gazelle.hl7v3.voc.ActClassRoot classCode) {
         this.classCode = classCode;
@@ -284,7 +279,6 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
 
     /**
      * Set a value to attribute moodCode.
-     * @param moodCode.
      */
     public void setMoodCode(net.ihe.gazelle.hl7v3.voc.ActMood moodCode) {
         this.moodCode = moodCode;
@@ -301,7 +295,6 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
 
     /**
      * Set a value to attribute nullFlavor.
-     * @param nullFlavor.
      */
     public void setNullFlavor(net.ihe.gazelle.hl7v3.voc.NullFlavor nullFlavor) {
         this.nullFlavor = nullFlavor;
@@ -318,7 +311,7 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
             try {
                 db = dbf.newDocumentBuilder();
                 doc = db.newDocument();
-            } catch (ParserConfigurationException e1) {
+            } catch (ParserConfigurationException ignored) {
             }
             try {
                 jc = JAXBContext.newInstance("net.ihe.gazelle.hl7v3.mcaimt900001UV01");
@@ -329,7 +322,7 @@ public class MCAIMT900001UV01ActOrderRequired implements java.io.Serializable {
                 try {
                     db = dbf.newDocumentBuilder();
                     _xmlNodePresentation = db.newDocument();
-                } catch (Exception ee) {
+                } catch (Exception ignored) {
                 }
             }
         }

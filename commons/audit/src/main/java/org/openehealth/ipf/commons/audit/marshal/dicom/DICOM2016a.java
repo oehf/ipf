@@ -96,9 +96,7 @@ public class DICOM2016a implements SerializationStrategy {
             element.setAttribute(EVENT_ACTION_CODE, eventIdentification.getEventActionCode().getValue());
             element.setAttribute(EVENT_DATE_TIME, eventIdentification.getEventDateTime().toString());
             element.setAttribute(EVENT_OUTCOME_INDICATOR, eventIdentification.getEventOutcomeIndicator().getValue().toString());
-            if (eventIdentification.getEventID() != null) {
-                element.addContent(codedValueType(EVENT_ID, eventIdentification.getEventID()));
-            }
+            element.addContent(codedValueType(EVENT_ID, eventIdentification.getEventID()));
             eventIdentification.getEventTypeCode().stream()
                     .map(eventTypeCode -> codedValueType(EVENT_TYPE_CODE, eventTypeCode))
                     .forEach(element::addContent);

@@ -24,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -39,6 +41,7 @@ import java.util.List;
 public class GetRelatedDocumentsQuery extends GetFromDocumentQuery
         implements DocumentEntryTypeAwareStoredQuery
 {
+    @Serial
     private static final long serialVersionUID = -8768793068458839362L;
 
     @XmlElement(name = "associationType")

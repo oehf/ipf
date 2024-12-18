@@ -40,7 +40,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 public class ConformanceProfileValidatorsTest {
 
-    CamelContext camelContext = new DefaultCamelContext();
+    final CamelContext camelContext = new DefaultCamelContext();
 
     ProducerTemplate template;
 
@@ -53,7 +53,7 @@ public class ConformanceProfileValidatorsTest {
     }
 
     @AfterEach
-    public void onAfterClass() throws Exception {
+    public void onAfterClass() {
         template.stop();
         camelContext.stop();
     }

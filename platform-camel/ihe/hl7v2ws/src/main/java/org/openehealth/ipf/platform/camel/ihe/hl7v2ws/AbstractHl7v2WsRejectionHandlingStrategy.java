@@ -19,6 +19,8 @@ import org.apache.cxf.message.Exchange;
 import org.openehealth.ipf.commons.ihe.ws.cxf.AbstractWsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 
+import java.util.Objects;
+
 /**
  * Rejection handling strategy base for HL7v2-based WS transactions.
  * @author Dmytro Rud
@@ -44,7 +46,7 @@ abstract public class AbstractHl7v2WsRejectionHandlingStrategy extends AbstractW
         // or does contain an HL7v2 NAK with code 'AR' or 'CR'
         var response = SoapUtils.extractOutgoingPayload(cxfExchange);
         try {
-            var pos = response.indexOf("\r\nMSA");
+            var pos = Objects.requireNonNull(response).indexOf("\r\nMSA");
             return ((pos < 0) || (response.charAt(pos + 7) == 'R'));
         } catch (Exception e) {
             return true;

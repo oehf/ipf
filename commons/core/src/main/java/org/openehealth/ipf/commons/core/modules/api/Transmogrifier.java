@@ -31,7 +31,7 @@ public interface Transmogrifier<S, T> {
      * Transmogrifies an object into another one.
      * 
      * @param object what goes in
-     * @param params
+     * @param params parameters
      * @return what comes out
      */
     T zap(S object, Object... params);

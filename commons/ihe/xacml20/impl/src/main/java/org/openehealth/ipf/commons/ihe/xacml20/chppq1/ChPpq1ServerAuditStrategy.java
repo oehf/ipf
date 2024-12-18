@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xacml20.chppq1;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultPHIImportBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 
 import static org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes.PrivacyPolicyFeed;
@@ -34,7 +34,7 @@ public class ChPpq1ServerAuditStrategy extends ChPpq1AuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChPpqAuditDataset auditDataset) {
-        var builder = new PHIImportBuilder<>(auditContext, auditDataset, auditDataset.getAction(), PrivacyPolicyFeed, auditDataset.getPurposesOfUse());
+        var builder = new DefaultPHIImportBuilder(auditContext, auditDataset, auditDataset.getAction(), PrivacyPolicyFeed, auditDataset.getPurposesOfUse());
         builder.addSecurityResourceParticipantObjects(ParticipantObjectIdType.of(PrivacyPolicyFeed), auditDataset.getPolicyAndPolicySetIds());
         if (auditDataset.getPatientId() != null) {
             builder.setPatient(auditDataset.getPatientId());

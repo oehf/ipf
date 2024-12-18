@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ExtensionModuleFactory extends PropertiesModuleFactory {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExtensionModuleFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(ExtensionModuleFactory.class);
     private static final String MODULE_NAME_INITIALIZER_CLASS = "moduleInitializerClass";
 
     public ExtensionModuleFactory() {
@@ -43,13 +43,13 @@ public class ExtensionModuleFactory extends PropertiesModuleFactory {
 
     @Override
     public ExtensionModule newModule(Properties properties, ClassLoader classLoader) {
-        LOG.info("Registering new extension module {} defined in class {}",
+        log.info("Registering new extension module {} defined in class {}",
                 properties.getProperty(MODULE_NAME_KEY),
                 properties.getProperty(MetaInfExtensionModule.MODULE_INSTANCE_CLASSES_KEY));
         var module = createExtensionModule(properties, classLoader);
-        if (LOG.isDebugEnabled()) {
+        if (log.isDebugEnabled()) {
             for(var method : module.getMetaMethods()) {
-                LOG.debug("registered method: {}", method);
+                log.debug("registered method: {}", method);
             }
         }
         if (properties.containsKey(MODULE_NAME_INITIALIZER_CLASS)) {
@@ -58,7 +58,7 @@ public class ExtensionModuleFactory extends PropertiesModuleFactory {
                 var initializerClass = Class.forName(initializerClassName);
                 initializerClass.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
-                LOG.warn("Unable to initialize extension using {}.", initializerClassName, e);
+                log.warn("Unable to initialize extension using {}.", initializerClassName, e);
             }
         }
 

@@ -17,6 +17,8 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.v25.datatype.XCN;
 
+import java.io.Serial;
+
 /**
  * This class represents a name.
  * <p>
@@ -30,6 +32,7 @@ import ca.uhn.hl7v2.model.v25.datatype.XCN;
  * @author Dmytro Rud
  */
 public class XcnName extends Name<XCN> {
+    @Serial
     private static final long serialVersionUID = 1003106925101895418L;
 
     public XcnName() {

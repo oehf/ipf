@@ -76,20 +76,20 @@ public class ConverterAdapter extends ProcessorAdapter {
     protected void doProcess(Exchange exchange, Object inputData, 
             Object... inputParams) throws Exception {
         
-        if (inputData instanceof InputStream) {
+        if (inputData instanceof InputStream inputStream) {
             var outputData = new ReadableByteArrayOutputStream();
-            doProcess((InputStream)inputData, outputData, inputParams);
+            doProcess(inputStream, outputData, inputParams);
             prepareResult(exchange).setBody(outputData.inputStream());
-        } else if (inputData instanceof Reader) {
+        } else if (inputData instanceof Reader reader) {
             var outputData = new ReadableStringWriter();
-            doProcess((Reader)inputData, outputData, inputParams);
+            doProcess(reader, outputData, inputParams);
             prepareResult(exchange).setBody(outputData.reader());
-        } else if (inputData instanceof Source) {
+        } else if (inputData instanceof Source source) {
             var outputData = new ReadableStreamResult();
-            doProcess((Source)inputData, outputData, inputParams);
+            doProcess(source, outputData, inputParams);
             prepareResult(exchange).setBody(outputData.source());
-        } else if (inputData instanceof String) {
-            prepareResult(exchange).setBody(doProcess((String)inputData, inputParams));
+        } else if (inputData instanceof String s) {
+            prepareResult(exchange).setBody(doProcess(s, inputParams));
         } else {
             throw new IllegalArgumentException(
                     "input data class not supported: " + inputData.getClass());

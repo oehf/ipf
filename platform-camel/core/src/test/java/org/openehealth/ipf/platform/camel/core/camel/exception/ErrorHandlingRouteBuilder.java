@@ -29,7 +29,7 @@ public class ErrorHandlingRouteBuilder extends RouteBuilder {
     
         
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         // global error handler
         errorHandler(noErrorHandler());

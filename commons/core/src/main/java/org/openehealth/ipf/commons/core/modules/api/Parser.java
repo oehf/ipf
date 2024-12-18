@@ -36,10 +36,9 @@ public interface Parser<S> {
      * Parses a message and returns an internal representation of the
      * information.
      * 
-     * @param message
-     * @param params
+     * @param message message
+     * @param params parse parameters
      * @return the parsed message
-     * @throws ParseException
      */
     S parse(String message, Object... params);
 
@@ -47,12 +46,11 @@ public interface Parser<S> {
      * Parses a message and returns an internal representation of the
      * information.
      * 
-     * @param message
-     * @param params
+     * @param message message to be parsed
+     * @param params parse parameters
      * @return the parsed message
      * @throws IOException
      *             if reading from stream fails
-     * @throws ParseException
      */
     S parse(InputStream message, Object... params) throws IOException;
 
@@ -60,24 +58,23 @@ public interface Parser<S> {
      * Parses a message and returns an internal representation of the
      * information.
      * 
-     * @param source
-     * @param params
+     * @param source message to be parsed
+     * @param params parse parameters
      * @return the parsed message
      * @throws IOException
      *             if reading from stream fails
-     * @throws ParseException
      */
     S parse(Source source, Object... params) throws IOException;
 
     /**
      * Parses a message and returns an internal representation of the
      * information.
-     * 
-     * @param params
+     *
+     * @param reader message to be parsed
+     * @param params parse parameters
      * @return the parsed message
      * @throws IOException
      *             if reading from stream fails
-     * @throws ParseException
      */
     S parse(Reader reader, Object... params) throws IOException;
 

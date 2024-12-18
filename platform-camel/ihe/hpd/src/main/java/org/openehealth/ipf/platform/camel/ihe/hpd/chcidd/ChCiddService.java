@@ -30,7 +30,7 @@ public class ChCiddService extends AbstractWebService implements ChCiddPortType 
         var result = process(request);
         var exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
             throw new RuntimeException(exception);
         }
         return result.getMessage().getBody(DownloadResponse.class);

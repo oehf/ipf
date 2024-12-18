@@ -76,6 +76,6 @@ public class EbXMLRegistryResponse30 implements EbXMLRegistryResponse<RegistryRe
         var list = value.getRegistryError();
         list.addAll(errors.stream()
                 .map(error -> ((EbXMLRegistryError30) error).getInternal())
-                .collect(Collectors.toList()));
+                .toList());
     }
 }

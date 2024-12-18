@@ -49,9 +49,9 @@ public class ConsumerSortingHandler extends ConsumerHpdHandler {
         // responses computed locally, i.e. not obtained from the route
         JAXBElement<?>[] localResponses = new JAXBElement[batchRequest.getBatchRequests().size()];
 
-        for (int position = batchRequest.getBatchRequests().size() - 1; position >= 0; --position) {
-            DsmlMessage request = batchRequest.getBatchRequests().get(position);
-            String requestId = StringUtils.trimToNull(request.getRequestID());
+        for (var position = batchRequest.getBatchRequests().size() - 1; position >= 0; --position) {
+            var request = batchRequest.getBatchRequests().get(position);
+            var requestId = StringUtils.trimToNull(request.getRequestID());
 
             if (requestId == null) {
                 log.warn("Request ID is missing in {} --> cannot handle, pass to the route as is", request.getClass().getSimpleName());
@@ -79,16 +79,15 @@ public class ConsumerSortingHandler extends ConsumerHpdHandler {
             }
         }
 
-        BatchResponse batchResponse = getWrappedHandler().handle(batchRequest);
+        var batchResponse = getWrappedHandler().handle(batchRequest);
 
-        for (int position = batchResponse.getBatchResponses().size() - 1; position >= 0; --position) {
-            JAXBElement<?> jaxbElement = batchResponse.getBatchResponses().get(position);
-            Object value = jaxbElement.getValue();
-            String requestId = HpdUtils.extractResponseRequestId(value);
+        for (var position = batchResponse.getBatchResponses().size() - 1; position >= 0; --position) {
+            var jaxbElement = batchResponse.getBatchResponses().get(position);
+            var value = jaxbElement.getValue();
+            var requestId = HpdUtils.extractResponseRequestId(value);
 
-            if (value instanceof SearchResponse) {
-                SearchResponse searchResponse = (SearchResponse) value;
-                SortControl2 sorting = (requestId == null) ? null : controls.get(requestId);
+            if (value instanceof SearchResponse searchResponse) {
+                var sorting = (requestId == null) ? null : controls.get(requestId);
 
                 if (sorting == null) {
                     log.debug("No sorting was requested for request with ID {} --> return response as is", requestId);

@@ -56,7 +56,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SchematronTransmogrifier.class);
+    private final static Logger log = LoggerFactory.getLogger(SchematronTransmogrifier.class);
 
     private final XsltTransmogrifier<String> xsltTransmogrifier;
 
@@ -86,8 +86,7 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
     @Override
     protected String resourceCacheKey(Object... params) {
         String phase = null;
-        if (params[0] instanceof SchematronProfile) {
-            var schematronProfile = (SchematronProfile) params[0];
+        if (params[0] instanceof SchematronProfile schematronProfile) {
             var parameters = schematronProfile.getParameters();
             if (parameters != null) {
                 phase = (String) parameters.get("phase");
@@ -101,20 +100,20 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
     @Override
     protected Templates createResource(Object... params) {
         try {
-            LOG.debug("Creating new Schematron stylesheet");
+            log.debug("Creating new Schematron stylesheet");
             Source rules = resourceContent(params);
             var parameters = resourceParameters(params);
-            LOG.debug("step 1 of 3");
+            log.debug("step 1 of 3");
             var source = step(xsltTransmogrifier, rules,
                     "/schematron/iso_dsdl_include.xsl", parameters);
-            LOG.debug("step 2 of 3");
+            log.debug("step 2 of 3");
             source = step(xsltTransmogrifier, source,
                     "/schematron/iso_abstract_expand.xsl", parameters);
-            LOG.debug("step 3 of 3");
+            log.debug("step 3 of 3");
             source = step(xsltTransmogrifier, source,
                     "/schematron/iso_svrl_for_xslt2.xsl", parameters);
             var template = getFactory().newTemplates(source);
-            LOG.debug("done!");
+            log.debug("done!");
             return template;
         } catch (Exception e) {
             throw new IllegalArgumentException("The schematron rules resource "

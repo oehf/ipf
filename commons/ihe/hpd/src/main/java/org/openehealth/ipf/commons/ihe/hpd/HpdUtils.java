@@ -34,21 +34,21 @@ public class HpdUtils {
     public static final ObjectFactory DSMLV2_OBJECT_FACTORY = new ObjectFactory();
 
     public static JAXBElement<ErrorResponse> errorResponse(Exception exception, String requestId) {
-        ErrorResponse error = DSMLV2_OBJECT_FACTORY.createErrorResponse();
+        var error = DSMLV2_OBJECT_FACTORY.createErrorResponse();
         error.setMessage(exception.getMessage());
         error.setRequestID(requestId);
-        ErrorResponse.ErrorType errorType = (exception instanceof HpdException) ? ((HpdException) exception).getType() : ErrorResponse.ErrorType.OTHER;
+        var errorType = (exception instanceof HpdException hpdException) ? hpdException.getType() : ErrorResponse.ErrorType.OTHER;
         error.setType(errorType);
         return DSMLV2_OBJECT_FACTORY.createBatchResponseErrorResponse(error);
     }
 
     public static String extractResponseRequestId(Object dsmlResponse) {
-        if (dsmlResponse instanceof SearchResponse) {
-            return ((SearchResponse) dsmlResponse).getRequestID();
-        } else if (dsmlResponse instanceof LDAPResult) {
-            return ((LDAPResult) dsmlResponse).getRequestID();
-        } else if (dsmlResponse instanceof ErrorResponse) {
-            return ((ErrorResponse) dsmlResponse).getRequestID();
+        if (dsmlResponse instanceof SearchResponse searchResponse) {
+            return searchResponse.getRequestID();
+        } else if (dsmlResponse instanceof LDAPResult ldapResult) {
+            return ldapResult.getRequestID();
+        } else if (dsmlResponse instanceof ErrorResponse errorResponse) {
+            return errorResponse.getRequestID();
         } else {
             throw new NotImplementedException("Cannot handle HPD response type " + dsmlResponse.getClass() + ", please submit a bug report");
         }

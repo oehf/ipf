@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractWsProducer<
         AuditDatasetType extends WsAuditDataset,
         ConfigType extends WsTransactionConfiguration<AuditDatasetType>, InType, OutType> extends DefaultProducer {
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractWsProducer.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractWsProducer.class);
 
     private final JaxWsClientFactory<AuditDatasetType> clientFactory;
     private final Class<InType> requestClass;
@@ -83,7 +83,7 @@ public abstract class AbstractWsProducer<
     @Override
     public void process(Exchange exchange) throws Exception {
         var body = exchange.getIn().getMandatoryBody(requestClass);
-        final BindingProvider bindingProvider = (BindingProvider) clientFactory.getClient();
+        final var bindingProvider = (BindingProvider) clientFactory.getClient();
         final OutType result;
         String replyToUri = null;
 
@@ -245,7 +245,7 @@ public abstract class AbstractWsProducer<
         var uri = new AttributedURIType();
         uri.setValue(messageId);
         apropos.setMessageID(uri);
-        LOG.debug("Set WS-Addressing message ID: {}", messageId);
+        log.debug("Set WS-Addressing message ID: {}", messageId);
 
         // ReplyTo header
         if (replyToUri != null) {

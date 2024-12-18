@@ -166,7 +166,7 @@ public class AdhocQueryRequestValidatorTest {
             validator.validate(transformer.toEbXML(request), ITI_18);
         } catch (XdsRuntimeException e) {
             exceptionOccurred = true;
-            assertEquals(e.getErrorCode(), ErrorCode.STORED_QUERY_PARAM_NUMBER);
+            assertEquals(ErrorCode.STORED_QUERY_PARAM_NUMBER, e.getErrorCode());
             assertTrue(e.getMessage().contains("[$XDSDocumentEntryEntryUUID, $XDSDocumentEntryUniqueId, $XDSDocumentEntryLogicalID]"));
         }
         assertTrue(exceptionOccurred);

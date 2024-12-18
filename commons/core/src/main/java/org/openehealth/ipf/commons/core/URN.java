@@ -15,8 +15,10 @@
  */
 package org.openehealth.ipf.commons.core;
 
+import lombok.NonNull;
 import org.ietf.jgss.Oid;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -35,6 +37,7 @@ import java.util.regex.Pattern;
  */
 public final class URN implements Comparable<URN>, Serializable {
 
+    @Serial
     private static final long serialVersionUID = -7978304633360508549L;
     public static final String UUID = "uuid";
     public static final String OID = "oid";
@@ -73,7 +76,7 @@ public final class URN implements Comparable<URN>, Serializable {
     }
 
     @Override
-    public int compareTo(URN urn) {
+    public int compareTo(@NonNull URN urn) {
         return equals(urn) ? 0 : uri.compareTo(urn.uri);
     }
 

@@ -41,8 +41,8 @@ public abstract class Iti105AuditStrategy extends FhirAuditStrategy<Iti105AuditD
     public Iti105AuditDataset enrichAuditDatasetFromRequest(Iti105AuditDataset auditDataset, Object request,
                                                             Map<String, Object> parameters) {
         var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        if (request instanceof DocumentReference) {
-            dataset.enrichDatasetFromDocumentReference((DocumentReference) request);
+        if (request instanceof DocumentReference documentReference) {
+            dataset.enrichDatasetFromDocumentReference(documentReference);
         }
         return dataset;
     }

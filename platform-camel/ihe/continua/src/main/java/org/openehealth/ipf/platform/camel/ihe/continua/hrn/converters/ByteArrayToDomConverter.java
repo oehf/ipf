@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
+import lombok.NonNull;
 import org.openehealth.ipf.commons.core.DomBuildersPool;
 import org.springframework.core.convert.converter.Converter;
 import org.w3c.dom.Document;
@@ -27,7 +28,7 @@ import java.io.ByteArrayInputStream;
 public class ByteArrayToDomConverter implements Converter<byte[], Document> {
 
     @Override
-    public Document convert(byte[] source) {
+    public Document convert(byte @NonNull [] source) {
         return DomBuildersPool.use(builder -> {
             try {
                 return builder.parse(new ByteArrayInputStream(source));

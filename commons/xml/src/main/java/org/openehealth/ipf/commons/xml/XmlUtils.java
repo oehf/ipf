@@ -105,7 +105,7 @@ abstract public class XmlUtils {
      *
      * @param inputNode DOM Node to serialize
      * @return Byte array of XML in ASCII form
-     * @throws Exception
+     * @throws Exception exception
      */
     public static byte[] serialize(Node inputNode) throws Exception {
         // Initialize sources and targets

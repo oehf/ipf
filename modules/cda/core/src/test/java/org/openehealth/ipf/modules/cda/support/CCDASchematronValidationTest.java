@@ -35,7 +35,7 @@ import static org.openehealth.ipf.modules.cda.constants.CDAR2Constants.CCDA_SCHE
  */
 public class CCDASchematronValidationTest {
 
-    protected static final transient Logger LOG = LoggerFactory.getLogger(CCDASchematronValidationTest.class);
+    protected static final Logger log = LoggerFactory.getLogger(CCDASchematronValidationTest.class);
 
     private SchematronValidator schematron;
     private Map<String, Object> params;
@@ -45,21 +45,21 @@ public class CCDASchematronValidationTest {
                                                            "UD 1", "UD 2"};
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         params = new HashMap<>();
         params.put("phase", "errors");
         schematron = new SchematronValidator();
     }
 
     @Test
-    public void validateSchemaGoodSamples() throws Exception {
+    public void validateSchemaGoodSamples() {
         for (var ccdaFile: ccdaFiles){
             var ccdaFilePathFormat = "/ccda/%s.xml";
             var ccdaFilePath = String.format(ccdaFilePathFormat, ccdaFile);
             Source testXml = new StreamSource(getClass().getResourceAsStream(ccdaFilePath));
-            LOG.info("Testing {} ...", ccdaFile);
+            log.info("Testing {} ...", ccdaFile);
             schematron.validate(testXml, new SchematronProfile(CCDA_SCHEMATRON_RULES, params));
-            LOG.info("{} - OK", ccdaFile);
+            log.info("{} - OK", ccdaFile);
         }
     }
 

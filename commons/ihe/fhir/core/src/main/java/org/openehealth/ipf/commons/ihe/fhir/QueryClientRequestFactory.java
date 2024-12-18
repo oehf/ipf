@@ -42,14 +42,13 @@ public class QueryClientRequestFactory<T extends IBaseBundle> implements ClientR
     @Override
     public IClientExecutable<IQuery<T>, T> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
         IQuery<IBaseBundle> query;
-        if (requestData instanceof ICriterion) {
+        if (requestData instanceof ICriterion criterion) {
             query = client.search()
                     .forResource(type)
-                    .where((ICriterion<?>) requestData);
-        } else if (requestData instanceof ICriterion[]) {
+                    .where(criterion);
+        } else if (requestData instanceof ICriterion[] criteria) {
             query = client.search()
                     .forResource(type);
-            ICriterion<?>[] criteria = (ICriterion<?>[]) requestData;
             if (criteria.length > 0) {
                 query = query.where(criteria[0]);
                 if (criteria.length > 1) {

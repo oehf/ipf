@@ -22,6 +22,8 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -34,5 +36,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
 public class RetrieveDocumentSet extends NonconstructiveDocumentSetRequest implements Serializable {
+    @Serial
     private static final long serialVersionUID = -3410625944194160618L;
 }

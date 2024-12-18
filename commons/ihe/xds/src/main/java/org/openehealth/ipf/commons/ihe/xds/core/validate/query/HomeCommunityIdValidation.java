@@ -46,20 +46,11 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
-        final boolean homeCommunityRequired;
-        switch (optionality) {
-            case NEVER:
-                homeCommunityRequired = false;
-                break;
-            case ALWAYS:
-                homeCommunityRequired = true;
-                break;
-            case ON_MISSING_PATIENT_ID:
-                homeCommunityRequired = patientIdMissing(request);
-                break;
-            default:
-                throw new UnsupportedOperationException("Cannot handle optionality " + optionality);
-        }
+        final boolean homeCommunityRequired = switch (optionality) {
+            case NEVER -> false;
+            case ALWAYS -> true;
+            case ON_MISSING_PATIENT_ID -> patientIdMissing(request);
+        };
 
         var validator = new HomeCommunityIdValidator(homeCommunityRequired);
         validator.validate(request.getHome());

@@ -78,12 +78,12 @@ public class GenericFhirAuditStrategy extends FhirAuditStrategy<GenericFhirAudit
         auditDataset.setOperation(operation);
 
         // Resource in the request? Extract Patient ID and Sensitivity at this point
-        if (request instanceof IDomainResource) {
-            addResourceData(auditDataset, (IDomainResource) request);
-        } else if (request instanceof IBaseBinary) {
-            addResourceData(auditDataset, (IBaseBinary) request);
-        } else if (request instanceof IIdType) {
-            auditDataset.setResourceId(((IIdType) request).toUnqualifiedVersionless());
+        if (request instanceof IDomainResource domainResource) {
+            addResourceData(auditDataset, domainResource);
+        } else if (request instanceof IBaseBinary binary) {
+            addResourceData(auditDataset, binary);
+        } else if (request instanceof IIdType id) {
+            auditDataset.setResourceId(id.toUnqualifiedVersionless());
         }
 
         // For instance-level operations e.g. PUT, DELETE, EXTENDED_OPERATION_INSTANCE: set resource ID and patient ID
@@ -99,10 +99,10 @@ public class GenericFhirAuditStrategy extends FhirAuditStrategy<GenericFhirAudit
         }
 
         // Domain Resource in the request? Extract Patient ID and Sensitivity at this point
-        if (request instanceof IDomainResource) {
-            addResourceData(auditDataset, (IDomainResource) request);
-        } else if (request instanceof IIdType) {
-            auditDataset.setResourceId((IIdType) request);
+        if (request instanceof IDomainResource domainResource) {
+            addResourceData(auditDataset, domainResource);
+        } else if (request instanceof IIdType id) {
+            auditDataset.setResourceId(id);
         }
 
         if (requestDetails != null && requestDetails.getRestOperationType() != null) {
@@ -132,10 +132,9 @@ public class GenericFhirAuditStrategy extends FhirAuditStrategy<GenericFhirAudit
     @Override
     public boolean enrichAuditDatasetFromResponse(GenericFhirAuditDataset auditDataset, Object response, AuditContext auditContext) {
         // Domain Resource in the request? Extract Patient ID and Sensitivity at this point
-        if (response instanceof IDomainResource) {
-            addResourceData(auditDataset, (IDomainResource) response);
-        }
-        if (response instanceof MethodOutcome methodOutcome) {
+        if (response instanceof IDomainResource domainResource) {
+            addResourceData(auditDataset, domainResource);
+        } else if (response instanceof MethodOutcome methodOutcome) {
             if (methodOutcome.getCreated() != null && methodOutcome.getCreated()) {
                 auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
             }

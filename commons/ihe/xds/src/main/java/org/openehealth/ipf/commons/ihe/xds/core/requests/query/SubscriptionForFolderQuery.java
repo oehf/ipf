@@ -23,6 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -35,6 +37,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class SubscriptionForFolderQuery extends GetByIdQuery implements PatientIdBasedStoredQuery {
+    @Serial
     private static final long serialVersionUID = -5765363916663583605L;
 
     @Getter @Setter private Identifiable patientId;

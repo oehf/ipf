@@ -36,7 +36,7 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
 
     private SpringBidiMappingService mappingService;
     
-    private static final Logger LOG = LoggerFactory.getLogger(CustomMappingsConfigurer.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomMappingsConfigurer.class);
     
     /**
      * lookup for the specific {@link CustomMappings} objects inside
@@ -56,7 +56,7 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
     public void configure(MappingResourceHolder configuration) {
         if (configuration.getMappingResources() != null) {
             mappingService.setMappingResources(configuration.getMappingResources());
-            LOG.debug("Mapping scripts added {}", configuration);
+            log.debug("Mapping scripts added {}", configuration);
         }
     }
     

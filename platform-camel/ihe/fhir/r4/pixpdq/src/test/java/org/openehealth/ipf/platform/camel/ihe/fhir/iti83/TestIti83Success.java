@@ -50,7 +50,7 @@ public class TestIti83Success extends AbstractTestIti83 {
         var component = conf.getRest().iterator().next();
         var operation = component.getResource().stream()
                 .filter(resource -> "Patient".equals(resource.getType()))
-                .flatMap(resource -> resource.getOperation().stream()).findFirst().get();
+                .flatMap(resource -> resource.getOperation().stream()).findFirst().orElse(null);
         assertEquals(Iti83Constants.PIXM_OPERATION_NAME.substring(1), operation.getName());
 
         // printAsXML(conf);

@@ -39,10 +39,11 @@ public class IHEWebServiceClientTest {
     private ApplicationContext applicationContext;
 
     @Test
-    public void testSmoke() throws Exception {
+    public void testSmoke() {
         assertNotNull(iheClient.getCamelContext());
     }
 
+    @Test
     @Disabled
     public void testIti47() throws Exception {
         var in = getClass().getResourceAsStream("/example-messages/PDQv3.xml");

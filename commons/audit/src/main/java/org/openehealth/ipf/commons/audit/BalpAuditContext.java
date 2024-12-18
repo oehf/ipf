@@ -16,6 +16,8 @@
 package org.openehealth.ipf.commons.audit;
 
 /**
+ * Extended AuditContext interface with properties required for <a href="https://profiles.ihe.net/ITI/BALP/index.html">IHE BALP</a>.
+ *
  * @author Boris Stanojevic
  * @since 4.8
  */

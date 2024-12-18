@@ -104,11 +104,9 @@ public class Xacml20Utils {
         Stream<Evaluatable> result = Stream.of();
         if (response != null) {
             for (var object : response.getAssertionOrEncryptedAssertion()) {
-                if (object instanceof AssertionType) {
-                    var assertion = (AssertionType) object;
+                if (object instanceof AssertionType assertion) {
                     for (var statement : assertion.getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
-                        if (statement instanceof XACMLPolicyStatementType) {
-                            var policyStatement = (XACMLPolicyStatementType) statement;
+                        if (statement instanceof XACMLPolicyStatementType policyStatement) {
                             result = Stream.concat(result, policyStatement.getPolicyOrPolicySet().stream().map(x -> (Evaluatable) x));
                         }
                     }
@@ -122,8 +120,7 @@ public class Xacml20Utils {
         Stream<Evaluatable> result = Stream.of();
         if (request != null) {
             for (var abstractStatement : request.getAssertion().getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
-                if (abstractStatement instanceof XACMLPolicyStatementType) {
-                    var policyStatement = (XACMLPolicyStatementType) abstractStatement;
+                if (abstractStatement instanceof XACMLPolicyStatementType policyStatement) {
                     result = Stream.concat(result, policyStatement.getPolicyOrPolicySet().stream().map(x -> (Evaluatable) x));
                 }
             }
@@ -161,8 +158,7 @@ public class Xacml20Utils {
         Stream<IdReferenceType> result = Stream.of();
         if ((request != null) && (request.getAssertion() != null)) {
             for (var abstractStatement : request.getAssertion().getStatementOrAuthnStatementOrAuthzDecisionStatement()) {
-                if (abstractStatement instanceof XACMLPolicySetIdReferenceStatementType) {
-                    var xacmlStatement = (XACMLPolicySetIdReferenceStatementType) abstractStatement;
+                if (abstractStatement instanceof XACMLPolicySetIdReferenceStatementType xacmlStatement) {
                     result = Stream.concat(result, xacmlStatement.getPolicySetIdReference().stream());
                 }
             }
@@ -172,17 +168,14 @@ public class Xacml20Utils {
 
     public static Optional<String> extractPatientId(XACMLPolicyQueryType request) {
         for (var jaxbElement : request.getRequestOrPolicySetIdReferenceOrPolicyIdReference()) {
-            if (QUERY_REQUEST_QNAME.equals(jaxbElement.getName()) && (jaxbElement.getValue() instanceof RequestType)) {
-                var requestType = (RequestType) jaxbElement.getValue();
+            if (QUERY_REQUEST_QNAME.equals(jaxbElement.getName()) && (jaxbElement.getValue() instanceof RequestType requestType)) {
                 for (var resourceType : requestType.getResources()) {
                     for (var attributeType : resourceType.getAttributes()) {
                         if (Xacml20Utils.ATTRIBUTE_TYPE_PATIENT_ID.equals(attributeType.getAttributeId()) && (attributeType.getDataType() instanceof IiDataTypeAttribute)) {
                             for (var attributeValueType : attributeType.getAttributeValues()) {
                                 for (var valueObject : attributeValueType.getContent()) {
-                                    if (valueObject instanceof JAXBElement) {
-                                        var jaxbElement1 = (JAXBElement) valueObject;
-                                        if (Xacml20Utils.ELEMENT_NAME_PATIENT_ID.equals(jaxbElement1.getName().getLocalPart()) && (jaxbElement1.getValue() instanceof II)) {
-                                            var ii = (II) jaxbElement1.getValue();
+                                    if (valueObject instanceof JAXBElement jaxbElement1) {
+                                        if (Xacml20Utils.ELEMENT_NAME_PATIENT_ID.equals(jaxbElement1.getName().getLocalPart()) && (jaxbElement1.getValue() instanceof II ii)) {
                                             var root = StringUtils.trimToEmpty(ii.getRoot());
                                             var extension = StringUtils.trimToEmpty(ii.getExtension());
                                             return Optional.of(extension + "^^^&" + root + "&ISO");
@@ -201,9 +194,9 @@ public class Xacml20Utils {
     public static Optional<IdReferenceType> extractPolicyId(XACMLPolicyQueryType request) {
         for (var jaxbElement : request.getRequestOrPolicySetIdReferenceOrPolicyIdReference()) {
             if ((QUERY_POLICY_SET_ID_QNAME.equals(jaxbElement.getName()) || QUERY_POLICY_ID_QNAME.equals(jaxbElement.getName()))
-                    && (jaxbElement.getValue() instanceof IdReferenceType))
+                    && (jaxbElement.getValue() instanceof IdReferenceType idReferenceType))
             {
-                return Optional.of((IdReferenceType) jaxbElement.getValue());
+                return Optional.of(idReferenceType);
             }
         }
         return Optional.empty();
@@ -211,8 +204,8 @@ public class Xacml20Utils {
 
     public static RequestType extractAuthzRequest(XACMLAuthzDecisionQueryType query) {
         for (JAXBElement<?> jaxbElement : query.getRest()) {
-            if (jaxbElement.getValue() instanceof RequestType) {
-                return (RequestType) jaxbElement.getValue();
+            if (jaxbElement.getValue() instanceof RequestType requestType) {
+                return requestType;
             }
         }
         throw new IllegalArgumentException("Could not extract authorization request");
@@ -229,10 +222,10 @@ public class Xacml20Utils {
     public static CV extractCodeAttributeValue(AttributeType attribute) {
         try {
             for (Object o : attribute.getAttributeValues().get(0).getContent()) {
-                if (o instanceof JAXBElement) {
-                    var value = ((JAXBElement<?>) o).getValue();
-                    if (value instanceof CV) {
-                        return (CV) value;
+                if (o instanceof JAXBElement jaxbElement) {
+                    var value = jaxbElement.getValue();
+                    if (value instanceof CV cv) {
+                        return cv;
                     }
                 }
             }

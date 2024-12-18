@@ -44,15 +44,15 @@ public class ClassificationListAdapter extends XmlAdapter<ClassificationList, Li
         if (ebXMLClassifications == null) {
             return null;
         }
-        ArrayList<ClassificationType> classifications = new ArrayList<>();
-        for (EbXMLClassification ebXml : ebXMLClassifications) {
+        var classifications = new ArrayList<ClassificationType>();
+        for (var ebXml : ebXMLClassifications) {
             if (ebXml instanceof EbXMLClassification30 ebxml30) {
                 classifications.add(ebxml30.getInternal());
             } else {
                 throw new UnsupportedOperationException("Only ebXML 3.0 is supported at the moment");
             }
         }
-        ClassificationList result = new ClassificationList();
+        var result = new ClassificationList();
         result.setClassifications(classifications);
         return result;
     }

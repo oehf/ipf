@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import lombok.extern.slf4j.Slf4j;
 import org.hl7.fhir.r4.model.Consent;
-import org.hl7.fhir.r4.model.Identifier;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
@@ -43,7 +42,7 @@ public abstract class ChPpq3AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
     @Override
     public ChPpqmAuditDataset enrichAuditDatasetFromRequest(ChPpqmAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        String method = (String) parameters.get(Constants.HTTP_METHOD);
+        var method = (String) parameters.get(Constants.HTTP_METHOD);
         switch (method) {
             case "POST":
                 auditDataset.setAction(EventActionCode.Create);
@@ -65,15 +64,15 @@ public abstract class ChPpq3AuditStrategy extends FhirAuditStrategy<ChPpqmAuditD
     }
 
     private static void enrichAuditDatasetFromConsent(ChPpqmAuditDataset auditDataset, Object resource) {
-        Consent consent = (Consent) resource;
+        var consent = (Consent) resource;
         auditDataset.getPolicyAndPolicySetIds().add(ChPpqmUtils.extractConsentId(consent, ChPpqmUtils.ConsentIdTypes.POLICY_SET_ID));
-        Identifier pid = consent.getPatient().getIdentifier();
+        var pid = consent.getPatient().getIdentifier();
         auditDataset.getPatientIds().add(String.format("%s^^^&%s&ISO", pid.getValue(), pid.getSystem().substring(8)));
     }
 
     @Override
     public boolean enrichAuditDatasetFromResponse(ChPpqmAuditDataset auditDataset, Object response, AuditContext auditContext) {
-        MethodOutcome methodOutcome = (MethodOutcome) response;
+        var methodOutcome = (MethodOutcome) response;
         if ((auditDataset.getAction() == EventActionCode.Update) && Boolean.TRUE.equals(methodOutcome.getCreated())) {
             auditDataset.setAction(EventActionCode.Create);
         }

@@ -30,8 +30,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 
 /**
  * @author Christian Ohr
@@ -52,13 +51,16 @@ public class MedicationStatementSearchParameters extends Pcc44CommonSearchParame
 
     @Override
     protected Optional<Comparator<MedicationStatement>> comparatorFor(String paramName) {
-        if (MedicationStatement.SP_EFFECTIVE.equals(paramName)) {
-            return Optional.of(nullsLast(CP_EFFECTIVE));
-        }
-        return Optional.empty();
+        return MedicationStatement.SP_EFFECTIVE.equals(paramName) ?
+            Optional.of(CP_EFFECTIVE) :
+            Optional.empty();
     }
 
-    private static final Comparator<MedicationStatement> CP_EFFECTIVE = nullsLast(comparing(medicationStatement -> {
+    private static final Comparator<MedicationStatement> CP_EFFECTIVE = comparing(
+        MedicationStatementSearchParameters::getEffectiveStartTime,
+        nullsLast(naturalOrder()));
+
+    private static String getEffectiveStartTime(MedicationStatement medicationStatement) {
         if (!medicationStatement.hasEffective()) return null;
         var effective = medicationStatement.getEffective();
         if (effective instanceof DateTimeType) {
@@ -66,5 +68,5 @@ public class MedicationStatementSearchParameters extends Pcc44CommonSearchParame
         } else {
             return medicationStatement.getEffectivePeriod().getStartElement().getValueAsString();
         }
-    }));
+    }
 }

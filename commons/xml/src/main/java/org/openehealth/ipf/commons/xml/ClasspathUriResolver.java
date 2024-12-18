@@ -50,8 +50,8 @@ class ClasspathUriResolver implements URIResolver {
             return new StreamSource(inputStream);
         } else {
             final var source = standardResolver.resolve(href, base);
-            if (source instanceof SAXSource) {
-                return new StreamSource(((SAXSource) source).getInputSource().getByteStream());
+            if (source instanceof SAXSource saxSource) {
+                return new StreamSource(saxSource.getInputSource().getByteStream());
             } else {
                 return source;
             }

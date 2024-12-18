@@ -39,7 +39,7 @@ import static java.util.Objects.requireNonNull;
  * @author Christian Ohr
  * @since 3.5
  */
-public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> extends IHEAuditMessageBuilder<T, QueryBuilder> {
+public abstract class QueryInformationBuilder<T extends QueryInformationBuilder<T>> extends IHEAuditMessageBuilder<T, QueryBuilder> {
 
     public QueryInformationBuilder(AuditContext auditContext,
                                    AuditDataset auditDataset,
@@ -150,8 +150,4 @@ public class QueryInformationBuilder<T extends QueryInformationBuilder<T>> exten
         return self();
     }
 
-    @Override
-    public void validate() {
-        super.validate();
-    }
 }

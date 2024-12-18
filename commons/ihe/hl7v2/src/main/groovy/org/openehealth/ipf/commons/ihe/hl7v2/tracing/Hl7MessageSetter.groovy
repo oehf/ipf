@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory
  */
 class Hl7MessageSetter implements Propagator.Setter<Message> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Hl7MessageSetter)
+    private static final Logger log = LoggerFactory.getLogger(Hl7MessageSetter)
 
     private final String segmentName
 
@@ -53,8 +53,8 @@ class Hl7MessageSetter implements Propagator.Setter<Message> {
             def varies = nextRepetition(seg[1])
             varies.data = qip
 
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Added trace context with key [{}] and value [{}]", key, value)
+            if (log.isDebugEnabled()) {
+                log.debug("Added trace context with key [{}] and value [{}]", key, value)
             }
         }
     }

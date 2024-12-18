@@ -18,8 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti65.v421;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
-import org.apache.camel.Exchange;
-import org.apache.camel.component.http.HttpConstants;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.*;
 import org.ietf.jgss.Oid;
@@ -37,7 +35,6 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.http.HttpHeaders;
 import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -51,7 +48,7 @@ import java.util.UUID;
  */
 abstract class AbstractTestIti65 extends FhirTestContainer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti65.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractTestIti65.class);
 
     private static final String BINARY_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
     private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bc";
@@ -170,7 +167,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     }
 
     protected void printAsXML(IBaseResource resource) {
-        LOG.info(clientFhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
+        log.info(clientFhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
     }
 
 

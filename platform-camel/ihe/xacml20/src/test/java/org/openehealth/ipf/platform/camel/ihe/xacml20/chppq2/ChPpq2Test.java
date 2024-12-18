@@ -34,8 +34,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 import jakarta.xml.bind.JAXBElement;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Dmytro Rud
@@ -62,8 +61,8 @@ public class ChPpq2Test extends StandardTestContainer {
         var stream = ChPpq2Test.class.getClassLoader().getResourceAsStream("messages/chppq2/" + fn);
         var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
         var object = unmarshaller.unmarshal(stream);
-        if (object instanceof JAXBElement) {
-            object = ((JAXBElement) object).getValue();
+        if (object instanceof JAXBElement jaxbElement) {
+            object = jaxbElement.getValue();
         }
         return (T) object;
     }
@@ -74,7 +73,7 @@ public class ChPpq2Test extends StandardTestContainer {
                 return;
             }
         }
-        assertEquals(null, value);
+        assertNull(value);
     }
 
     @Test

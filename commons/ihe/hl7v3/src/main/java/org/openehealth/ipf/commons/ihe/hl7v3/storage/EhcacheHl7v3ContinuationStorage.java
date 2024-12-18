@@ -21,8 +21,6 @@ import javax.cache.Cache;
 
 import java.io.Serializable;
 
-import static java.util.Objects.requireNonNull;
-
 /**
  * @author Dmytro Rud
  * @author Christian Ohr

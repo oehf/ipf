@@ -25,7 +25,7 @@ import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSuppo
 public class PredicateRouteBuilder extends RouteBuilderSupport {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from("direct:predicate-test-1")
         .filter(predicate1())
         .to("mock:mock");

@@ -21,6 +21,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -39,6 +40,7 @@ import java.util.Objects;
         "streetAddress", "otherDesignation", "city", "countyParishCode", "stateOrProvince", "country", 
         "zipOrPostalCode"})
 public class Address extends Hl7v2Based<XAD> {
+    @Serial
     private static final long serialVersionUID = -5050715144917393181L;
 
     public Address() {

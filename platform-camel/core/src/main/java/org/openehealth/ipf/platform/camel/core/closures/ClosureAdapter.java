@@ -44,8 +44,8 @@ public abstract class ClosureAdapter<T> {
         try {
             return closure.call(args);
         } catch (InvokerInvocationException e) {
-            if (e.getCause() instanceof RuntimeException) {
-                throw (RuntimeException)e.getCause();
+            if (e.getCause() instanceof RuntimeException re) {
+                throw re;
             } else {
                 throw e;
             }

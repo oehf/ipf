@@ -16,12 +16,9 @@
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.Enumerations;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
 
 import java.util.Date;
-import java.util.UUID;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_DOCUMENT_REFERENCE;
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_DOCUMENT_REFERENCE_PROFILE;

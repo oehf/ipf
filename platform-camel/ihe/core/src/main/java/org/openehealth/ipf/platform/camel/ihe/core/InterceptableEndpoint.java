@@ -44,7 +44,6 @@ public interface InterceptableEndpoint<
      * for the target
      *
      * @return intercepted producer
-     * @throws Exception
      */
     @Override
     default Producer createProducer() throws Exception {
@@ -110,7 +109,6 @@ public interface InterceptableEndpoint<
 
     /**
      * @return the actual producer without any interceptors configured
-     * @throws Exception
      */
     Producer doCreateProducer() throws Exception;
 

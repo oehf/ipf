@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq5;
 import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditStrategy;
 
@@ -35,7 +35,7 @@ public class ChPpq5AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
-        return new QueryInformationBuilder(auditContext, auditDataset, MobilePrivacyPolicyRetrieve)
+        return new DefaultQueryInformationBuilder(auditContext, auditDataset, MobilePrivacyPolicyRetrieve)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters("MobilePrivacyPolicyQuery",
                         MobilePrivacyPolicyQuery,

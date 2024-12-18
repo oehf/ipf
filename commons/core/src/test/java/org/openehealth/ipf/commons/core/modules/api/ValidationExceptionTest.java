@@ -68,7 +68,7 @@ public class ValidationExceptionTest {
         // -----------------
         causes = new Throwable[] {};
         s = new ValidationException(message, causes).getMessage();
-        assertEquals(s, message);
+        assertEquals(message, s);
 
         s = new ValidationException(causes).getMessage();
         assertEquals(s, ValidationException.class.getName());
@@ -76,7 +76,7 @@ public class ValidationExceptionTest {
         // -----------------
         causes = null;
         s = new ValidationException(message, causes).getMessage();
-        assertEquals(s, message);
+        assertEquals(message, s);
 
         s = new ValidationException(causes).getMessage();
         assertEquals(s, ValidationException.class.getName());
@@ -84,7 +84,7 @@ public class ValidationExceptionTest {
         // -----------------
         Throwable cause = null;
         s = new ValidationException(message, cause).getMessage();
-        assertEquals(s, message);
+        assertEquals(message, s);
 
         s = new ValidationException(cause).getMessage();
         assertEquals(s, ValidationException.class.getName());

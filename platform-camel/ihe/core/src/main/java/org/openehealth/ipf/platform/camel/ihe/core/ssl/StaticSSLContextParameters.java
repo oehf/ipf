@@ -36,7 +36,6 @@ public class StaticSSLContextParameters extends SSLContextParameters {
     /**
      * Sets the SSLContext
      * @param sslContext SSLContext. If null, defaults to
-     * @throws NoSuchAlgorithmException
      */
     public StaticSSLContextParameters(SSLContext sslContext) {
         if (sslContext == null) throw new IllegalArgumentException("SSLContext must not be null");

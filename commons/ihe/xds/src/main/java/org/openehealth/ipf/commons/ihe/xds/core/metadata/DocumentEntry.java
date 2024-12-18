@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.PatientInf
 
 import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class DocumentEntry extends XDSMetaClass implements Serializable {
+    @Serial
     private static final long serialVersionUID = -4779500440504776909L;
     
     @XmlElement(name = "author")

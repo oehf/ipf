@@ -18,11 +18,8 @@ package org.openehealth.ipf.commons.ihe.fhir.support;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import ca.uhn.fhir.validation.FhirValidator;
-import ca.uhn.fhir.validation.ValidationResult;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
@@ -49,9 +46,9 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
      * @return {@link OperationOutcome} containing or not containing validation errors (never <code>null</code>).
      */
     protected OperationOutcome validateProfileConformance(Resource resource, Set<String> allowedProfileUris) {
-        String profileUri = allowedProfileUris.iterator().next();
+        var profileUri = allowedProfileUris.iterator().next();
         if (profileUri.startsWith(STANDARD_PREFIX)) {
-            String expectedResourceType = profileUri.substring(STANDARD_PREFIX.length());
+            var expectedResourceType = profileUri.substring(STANDARD_PREFIX.length());
             if (resource.fhirType().equals(expectedResourceType)) {
                 return doValidate(resource);
             } else {
@@ -62,7 +59,7 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
                                 .setDiagnostics("Resource shall be of type " + expectedResourceType));
             }
         } else {
-            for (CanonicalType profile : resource.getMeta().getProfile()) {
+            for (var profile : resource.getMeta().getProfile()) {
                 if (allowedProfileUris.contains(profile.asStringValue())) {
                     return doValidate(resource);
                 }
@@ -81,8 +78,8 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
     }
 
     private OperationOutcome doValidate(Resource resource) {
-        FhirValidator validator = fhirContext.newValidator();
-        ValidationResult validationResult = validator.validateWithResult(resource);
+        var validator = fhirContext.newValidator();
+        var validationResult = validator.validateWithResult(resource);
         return validationResult.isSuccessful()
                 ? new OperationOutcome()
                 : (OperationOutcome) validationResult.toOperationOutcome();
@@ -93,7 +90,7 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
             return;
         }
         outcome.getIssue().sort(Comparator.comparing(OperationOutcome.OperationOutcomeIssueComponent::getSeverity));
-        for (OperationOutcome.OperationOutcomeIssueComponent issue : outcome.getIssue()) {
+        for (var issue : outcome.getIssue()) {
             if ((issue.getSeverity() == OperationOutcome.IssueSeverity.FATAL) || (issue.getSeverity() == OperationOutcome.IssueSeverity.ERROR)) {
                 throw FhirUtils.exception(UnprocessableEntityException::new, outcome, "Validation Failed");
             }

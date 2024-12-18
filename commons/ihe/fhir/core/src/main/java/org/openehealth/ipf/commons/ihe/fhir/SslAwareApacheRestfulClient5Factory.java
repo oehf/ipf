@@ -23,8 +23,10 @@ import ca.uhn.fhir.rest.client.api.IHttpClient;
 import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.ssl.SSLConnectionSocketFactoryBuilder;
+import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
+import org.apache.hc.client5.http.ssl.HttpsSupport;
 import org.apache.hc.core5.http.HttpHost;
+import org.apache.hc.core5.ssl.SSLContexts;
 import org.apache.hc.core5.util.Timeout;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 
@@ -139,14 +141,14 @@ public class SslAwareApacheRestfulClient5Factory extends SslAwareAbstractRestful
         @Override
         public void configureHttpClientBuilder(HttpClient5Builder builder) {
             if (isSecure()) {
-                var connectionSocketFactoryBuilder = SSLConnectionSocketFactoryBuilder.create().useSystemProperties();
-                if (getSslContext() != null) {
-                    connectionSocketFactoryBuilder.setSslContext(getSslContext());
-                }
-                if (getHostnameVerifier() != null) {
-                    connectionSocketFactoryBuilder.setHostnameVerifier(getHostnameVerifier());
-                }
-                builder.setSSLSocketFactory(connectionSocketFactoryBuilder.build());
+                var sslContext = getSslContext() != null ?
+                    getSslContext() :
+                    SSLContexts.createSystemDefault();
+                var hostnameVerifier = getHostnameVerifier() != null ?
+                    getHostnameVerifier() :
+                    HttpsSupport.getDefaultHostnameVerifier();
+                var tlsStrategy = new DefaultClientTlsStrategy(sslContext, hostnameVerifier);
+                builder.setSSLSocketFactory(tlsStrategy);
             }
         }
 

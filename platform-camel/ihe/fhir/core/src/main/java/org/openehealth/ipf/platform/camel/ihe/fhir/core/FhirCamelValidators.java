@@ -70,7 +70,7 @@ import static org.openehealth.ipf.commons.ihe.core.Constants.INTERACTION_ID_NAME
  */
 public final class FhirCamelValidators {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FhirCamelValidators.class);
+    private static final Logger log = LoggerFactory.getLogger(FhirCamelValidators.class);
 
     private FhirCamelValidators() {
     }
@@ -99,9 +99,7 @@ public final class FhirCamelValidators {
      * belonging to the request of the FHIR transaction
      */
     public static Processor itiRequestValidator() {
-        return exchange -> {
-            validateMessage(exchange, true);
-        };
+        return exchange -> validateMessage(exchange, true);
     }
 
     /**
@@ -109,30 +107,27 @@ public final class FhirCamelValidators {
      * belonging to the response of the FHIR transaction
      */
     public static Processor itiResponseValidator() {
-        return exchange -> {
-            validateMessage(exchange, false);
-        };
+        return exchange -> validateMessage(exchange, false);
     }
 
     private static void validateMessage(Exchange exchange, boolean isRequest) {
         var context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
         if (context != null) {
-            Object body = exchange.getIn().getBody();
-            if (body instanceof List) {
-                for (Object bodyPart : (List<?>) body) {
+            var body = exchange.getIn().getBody();
+            if (body instanceof List list) {
+                for (var bodyPart : list) {
                     validateIfResource(exchange, context, bodyPart, isRequest);
                 }
             } else {
                 validateIfResource(exchange, context, body, isRequest);
             }
         } else {
-            LOG.warn("Could not validate {} because FHIR Context is unknown", isRequest ? "request" : "response");
+            log.warn("Could not validate {} because FHIR Context is unknown", isRequest ? "request" : "response");
         }
     }
 
     private static void validateIfResource(Exchange exchange, FhirContext context, Object payload, boolean isRequest) {
-        if (payload instanceof IBaseResource) {
-            IBaseResource resource = (IBaseResource) payload;
+        if (payload instanceof IBaseResource resource) {
             int mode = exchange.getIn().getHeader(VALIDATION_MODE, Integer.class);
             if (isValidateSchema(mode) || isValidateSchematron(mode)) {
                 validateSchema(context, resource, isValidateSchema(mode), isValidateSchematron(mode));
@@ -147,10 +142,10 @@ public final class FhirCamelValidators {
         var result = getValidator(context, checkSchema, checkSchematron).validateWithResult(resource);
         if (!result.isSuccessful()) {
             var outcome = result.toOperationOutcome();
-            LOG.debug("FHIR validation failed with outcome {}", outcome);
+            log.debug("FHIR validation failed with outcome {}", outcome);
             throw new UnprocessableEntityException("FHIR validation error", outcome);
         } else {
-            LOG.debug("FHIR validation succeeded");
+            log.debug("FHIR validation succeeded");
         }
     }
 
@@ -164,7 +159,7 @@ public final class FhirCamelValidators {
                 validator.validateResponse(resource, exchange.getIn().getHeaders());
             }
         } else {
-            LOG.warn("Could not validate {} because FHIR Transaction ID is unknown", isRequest ? "request" : "response");
+            log.warn("Could not validate {} because FHIR Transaction ID is unknown", isRequest ? "request" : "response");
         }
     }
 

@@ -55,7 +55,7 @@ import org.vibur.objectpool.util.ConcurrentLinkedQueueCollection;
  * @author Jens Riemschneider
  */
 public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
-    private static final Logger LOG = LoggerFactory.getLogger(JaxWsClientFactory.class);
+    private static final Logger log = LoggerFactory.getLogger(JaxWsClientFactory.class);
 
     public static final String POOL_SIZE_PROPERTY = JaxWsClientFactory.class.getName() + ".POOLSIZE";
     private static final int DEFAULT_POOL_SIZE = 100;
@@ -212,7 +212,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             // See https://issues.apache.org/jira/browse/CXF-7710 and https://issues.apache.org/jira/browse/CXF-7591
             ClientProxy.getClient(client).getResponseContext().clear();
             clientPool.restore(client);
-            LOG.debug("Returned client stub {} to the pool", client);
+            log.debug("Returned client stub {} to the pool", client);
         }
     }
 
@@ -233,7 +233,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
             if (httpClientPolicy != null) {
                 ((HTTPConduit) client.getConduit()).setClient(httpClientPolicy);
             }
-            LOG.debug("Created client stub {} for {}", port, wsTransactionConfiguration.getServiceName());
+            log.debug("Created client stub {} for {}", port, wsTransactionConfiguration.getServiceName());
             return port;
         }
 

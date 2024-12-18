@@ -24,6 +24,8 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,6 +38,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public abstract class GetByUuidQuery extends StoredQuery implements Serializable {
+    @Serial
     private static final long serialVersionUID = -7962722576557371093L;
 
     @XmlElement(name = "uuid")

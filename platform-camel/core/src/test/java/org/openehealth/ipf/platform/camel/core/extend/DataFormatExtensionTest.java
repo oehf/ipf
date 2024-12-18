@@ -28,28 +28,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class DataFormatExtensionTest extends AbstractExtensionTest {
 
     @Test
-    public void testUnmarshalObject() throws Exception {
+    public void testUnmarshalObject() {
         var result = (String) producerTemplate.sendBody("direct:external1",
                 ExchangePattern.InOut, "message");
         assertEquals("stream: message", result);
     }
 
     @Test
-    public void testMarshalObject() throws Exception {
+    public void testMarshalObject() {
         var result = (String) producerTemplate.sendBody("direct:internal1",
                 ExchangePattern.InOut, "message");
         assertEquals("message", result);
     }
 
     @Test
-    public void testUnmarshalBean() throws Exception {
+    public void testUnmarshalBean() {
         var result = (String) producerTemplate.sendBody("direct:external2",
                 ExchangePattern.InOut, "message");
         assertEquals("stream: message", result);
     }
 
     @Test
-    public void testMarshalBean() throws Exception {
+    public void testMarshalBean() {
         var result = (String) producerTemplate.sendBody("direct:internal2",
                 ExchangePattern.InOut, "message");
         assertEquals("message", result);

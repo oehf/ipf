@@ -40,7 +40,7 @@ class Iti68BinaryConsumerAuditInterceptor
         extends InterceptorSupport
         implements AuditInterceptor<FhirAuditDataset> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Iti68BinaryConsumerAuditInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(Iti68BinaryConsumerAuditInterceptor.class);
 
     private final AuditContext auditContext;
 
@@ -111,7 +111,7 @@ class Iti68BinaryConsumerAuditInterceptor
 
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {
-            LOG.error("Exception when enriching audit dataset from request", e);
+            log.error("Exception when enriching audit dataset from request", e);
             return null;
         }
     }

@@ -28,7 +28,6 @@ import org.openehealth.ipf.commons.xml.XsdValidator;
 import javax.naming.InvalidNameException;
 import javax.naming.ldap.LdapName;
 import jakarta.xml.bind.JAXBContext;
-import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.util.JAXBSource;
 import javax.xml.transform.Source;
@@ -88,7 +87,7 @@ public class HpdValidator {
         Set<String> requestIds = new HashSet<>();
         check(isUniqueRequestId(batchRequest.getRequestID(), requestIds), "Batch request ID must be a non-negative number");
 
-        for (DsmlMessage dsml : batchRequest.getBatchRequests()) {
+        for (var dsml : batchRequest.getBatchRequests()) {
             check(dsml != null, "Batch request element is null");
             check(ArrayUtils.contains(allowedElementTypes, dsml.getClass()), "Bad batch request element type " + ClassUtils.getSimpleName(dsml));
             check(isUniqueRequestId(dsml.getRequestID(), requestIds), "Request ID must be a non-negative number unique in the batch request");
@@ -138,23 +137,28 @@ public class HpdValidator {
         Set<String> requestIds = new HashSet<>();
         check(isUniqueRequestId(batchResponse.getRequestID(), requestIds), "Batch request ID must be a non-negative number");
 
-        for (JAXBElement<?> jaxbElement : batchResponse.getBatchResponses()) {
+        for (var jaxbElement : batchResponse.getBatchResponses()) {
             check(jaxbElement != null, "Batch response element is null");
-            Object value = jaxbElement.getValue();
+            var value = jaxbElement.getValue();
             check(value != null, "Batch response element is null");
 
-            String requestId;
-            if (value instanceof LDAPResult) {
-                requestId = ((LDAPResult) value).getRequestID();
-            } else if (value instanceof SearchResponse) {
-                requestId = ((SearchResponse) value).getRequestID();
-            } else if (value instanceof ErrorResponse) {
-                requestId = ((ErrorResponse) value).getRequestID();
-            } else {
-                throw new HpdException("Wrong response element type " + value.getClass().getSimpleName(), ErrorType.MALFORMED_REQUEST);
-            }
+            var requestId = getRequestId(value);
             check(isUniqueRequestId(requestId, requestIds), "Request ID must be a non-negative number unique in the batch response");
         }
+    }
+
+    private static String getRequestId(Object value) {
+        String requestId;
+        if (value instanceof LDAPResult ldapResult) {
+            requestId = ldapResult.getRequestID();
+        } else if (value instanceof SearchResponse searchResponse) {
+            requestId = searchResponse.getRequestID();
+        } else if (value instanceof ErrorResponse errorResponse) {
+            requestId = errorResponse.getRequestID();
+        } else {
+            throw new HpdException("Wrong response element type " + value.getClass().getSimpleName(), ErrorType.MALFORMED_REQUEST);
+        }
+        return requestId;
     }
 
     public static void validateIti59Request(BatchRequest batchRequest) {

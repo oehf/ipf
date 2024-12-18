@@ -48,10 +48,10 @@ public class SwissEprFhirAuditDatasetEnricher implements FhirAuditDatasetEnriche
 
     private static void extractW3cTraceContextId(Map<String, Object> parameters, String key, AuditDataset auditDataset) {
         if (auditDataset.getW3cTraceContextId() == null) {
-            Object value = parameters.get(key);
+            var value = parameters.get(key);
             if (value != null) {
-                Map<String, List<String>> headers = (Map<String, List<String>>) value;
-                for (String name : headers.keySet()) {
+                var headers = (Map<String, List<String>>) value;
+                for (var name : headers.keySet()) {
                     if ("traceparent".equalsIgnoreCase(name)) {
                         auditDataset.setW3cTraceContextId(headers.get(name).get(0));
                         return;

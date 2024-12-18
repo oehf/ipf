@@ -26,6 +26,8 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlMimeType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
@@ -42,6 +44,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(doNotUseGetters = true, callSuper = false)
 @ToString(doNotUseGetters = true)
 public class Document extends ContentMap implements Serializable {
+    @Serial
     private static final long serialVersionUID = 5206884085835642756L;
 
     private DocumentEntry documentEntry;

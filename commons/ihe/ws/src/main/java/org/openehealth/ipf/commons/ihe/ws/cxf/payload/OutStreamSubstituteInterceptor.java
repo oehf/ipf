@@ -97,12 +97,12 @@ public class OutStreamSubstituteInterceptor extends AbstractPhaseInterceptor<Mes
      */
     public static WrappedOutputStream getStreamWrapper(Message message) {
         var outputStream =  message.getContent(OutputStream.class);
-        if (outputStream instanceof CacheAndWriteOutputStream) {
+        if (outputStream instanceof CacheAndWriteOutputStream cacheAndWriteOutputStream) {
             // Extract what we need from the wrapper added by CXF. CXF sometimes adds the wrapper for diagnostics.
-            outputStream = ((CacheAndWriteOutputStream) outputStream).getFlowThroughStream();
+            outputStream = cacheAndWriteOutputStream.getFlowThroughStream();
         }
-        if (outputStream instanceof WrappedOutputStream) {
-            return (WrappedOutputStream) outputStream;
+        if (outputStream instanceof WrappedOutputStream wrappedOutputStream) {
+            return wrappedOutputStream;
         } else {
             throw new IllegalStateException("Message output stream is not of expected type");
         }

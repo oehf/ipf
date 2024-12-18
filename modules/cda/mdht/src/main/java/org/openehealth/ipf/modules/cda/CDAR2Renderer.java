@@ -67,8 +67,8 @@ public class CDAR2Renderer implements Renderer<ClinicalDocument> {
         resources.getDefaultSaveOptions().put(XMLResource.OPTION_DECLARE_XML,
                 Boolean.TRUE);
         
-        if (options != null && options.length > 0 && options[0] instanceof Map) {
-            resources.getDefaultSaveOptions().putAll((Map)options[0]);
+        if (options != null && options.length > 0 && options[0] instanceof Map map) {
+            resources.getDefaultSaveOptions().putAll(map);
         }
         
         // Create document root

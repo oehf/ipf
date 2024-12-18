@@ -55,7 +55,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredrespons
  * @author Dmytro Rud
  */
 public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortType {
-    private static final transient Logger LOG = LoggerFactory.getLogger(Iti55Service.class);
+    private static final Logger log = LoggerFactory.getLogger(Iti55Service.class);
 
     private final ProducerTemplate producerTemplate;
     private final ExecutorService executorService;
@@ -131,7 +131,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
             final var requestMessageId = ((apropos != null) && (apropos.getMessageID() != null)) ?
                     apropos.getMessageID().getValue() : null;
             if (requestMessageId == null) {
-                LOG.warn("Cannot determine WS-Addressing ID of the request message");
+                log.warn("Cannot determine WS-Addressing ID of the request message");
             }
 
             final var auditDataset = (WsAuditDataset) messageContext.getWrappedMessage()
@@ -165,7 +165,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
                     exchange = producerTemplate.send(responseEndpoint, exchange);
                     var exception = Exchanges.extractException(exchange);
                     if (exception != null) {
-                        LOG.error("Sending deferred response failed", exception);
+                        log.error("Sending deferred response failed", exception);
                     }
                 } finally {
                     MDC.clear();
@@ -210,8 +210,8 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
      */
     private String nak(Exception exception, GPathResult requestXml) {
         Hl7v3Exception hl7v3Exception;
-        if (exception instanceof Hl7v3Exception) {
-            hl7v3Exception = (Hl7v3Exception) exception;
+        if (exception instanceof Hl7v3Exception e) {
+            hl7v3Exception = e;
         } else {
             hl7v3Exception = new Hl7v3Exception(exception.getMessage(), exception);
             hl7v3Exception.setDetectedIssueManagementCode("InternalError");

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.audit;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +30,7 @@ import java.util.List;
  */
 abstract public class XdsAuditDataset extends WsAuditDataset {
 
+    @Serial
     private static final long serialVersionUID = 652866992858926778L;
 
     // patient ID as HL7 CX datatype, e.g. "1234^^^&1.2.3.4&ISO"

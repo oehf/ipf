@@ -45,7 +45,7 @@ public class ChPpqmConsentCreator {
             Date endDate,
             List<PurposeOfUse> purposesOfUse)
     {
-        Consent consent = new Consent()
+        var consent = new Consent()
                 .addIdentifier(new Identifier()
                         .setType(new CodeableConcept(new Coding()
                                 .setSystem(ChPpqmUtils.CodingSystems.CONSENT_IDENTIFIER_TYPE)
@@ -71,7 +71,7 @@ public class ChPpqmConsentCreator {
                 .setPolicyRule(new CodeableConcept(new Coding()
                         .setSystem(Constants.URN_IETF_RFC_3986)
                         .setCode(referencedPolicySetId)))
-                .setProvision(new Consent.provisionComponent()
+                .setProvision(new Consent.ProvisionComponent()
                         .setPeriod(createPeriod(startDate, endDate))
                         .addActor(actor)
                         .setPurpose(purposesOfUse.stream()

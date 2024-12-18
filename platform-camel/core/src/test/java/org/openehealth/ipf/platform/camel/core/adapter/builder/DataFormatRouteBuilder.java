@@ -27,7 +27,7 @@ import org.openehealth.ipf.platform.camel.core.support.transform.min.TestConvert
 public class DataFormatRouteBuilder extends RouteBuilderSupport {
 	
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         
         DataFormat format = new DataFormatAdapter(new TestConverter());
         

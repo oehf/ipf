@@ -33,7 +33,7 @@ import java.util.function.Consumer;
  */
 public class SyslogEventDICOMPrinter {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SyslogEventDICOMPrinter.class);
+    private static final Logger log = LoggerFactory.getLogger(SyslogEventDICOMPrinter.class);
     private static final AuditParser PARSER = new DICOMAuditParser();
 
     public static EventConsumer newEventConsumer(String channel) {
@@ -44,18 +44,18 @@ public class SyslogEventDICOMPrinter {
         return new ErrorConsumer();
     }
 
-    private static class ErrorConsumer implements Consumer<Throwable> {
+    public static class ErrorConsumer implements Consumer<Throwable> {
 
         private ErrorConsumer() {
         }
 
         @Override
         public void accept(Throwable throwable) {
-            LOG.error("Error occurred while receiving a syslog event: ", throwable);
+            log.error("Error occurred while receiving a syslog event: ", throwable);
         }
     }
 
-    private static class EventConsumer implements Consumer<Map<String, Object>> {
+    public static class EventConsumer implements Consumer<Map<String, Object>> {
 
         private final String channel;
 
@@ -65,21 +65,21 @@ public class SyslogEventDICOMPrinter {
 
         @Override
         public void accept(Map<String, Object> syslogMap) {
-            LOG.info("Received event on {} from {}:{}",
+            log.info("Received event on {} from {}:{}",
                     channel,
                     syslogMap.get("syslog.remote.host"),
                     syslogMap.get("syslog.remote.port"));
-            LOG.info("Syslog Metadata: AppName: {}, HostName: {}, Timestamp: {}",
+            log.info("Syslog Metadata: AppName: {}, HostName: {}, Timestamp: {}",
                     syslogMap.get(SyslogFieldKeys.HEADER_APPNAME.getField()),
                     syslogMap.get(SyslogFieldKeys.HEADER_HOSTNAME.getField()),
                     syslogMap.get(SyslogFieldKeys.HEADER_TIMESTAMP.getField()));
             try {
                 var auditMessage = parse(syslogMap);
-                LOG.info("DICOM Payload is");
-                LOG.info("{}", auditMessage);
+                log.info("DICOM Payload is");
+                log.info("{}", auditMessage);
             } catch (Exception e) {
-                LOG.warn("Could not parse payload:", e);
-                LOG.info("{}", syslogMap.get(SyslogFieldKeys.MESSAGE.getField()));
+                log.warn("Could not parse payload:", e);
+                log.info("{}", syslogMap.get(SyslogFieldKeys.MESSAGE.getField()));
             }
         }
 

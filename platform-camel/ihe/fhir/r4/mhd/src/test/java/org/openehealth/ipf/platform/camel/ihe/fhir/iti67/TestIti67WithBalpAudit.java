@@ -30,7 +30,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -96,7 +95,7 @@ public class TestIti67WithBalpAudit extends AbstractTestIti67 {
         List<byte[]> queries = FhirAuditRepository.getAuditEvents().stream().flatMap(event -> event.getEntity().stream()
             .filter(entity -> entity.getType().getCode().equals("2") && entity.getRole().getCode().equals("24"))
             .map(AuditEvent.AuditEventEntityComponent::getQuery)
-            .filter(Objects::nonNull)).collect(Collectors.toList());
+            .filter(Objects::nonNull)).toList();
 
         String query = new String(queries.get(0), StandardCharsets.UTF_8);
         assertTrue(query.startsWith("patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1"));

@@ -35,12 +35,13 @@ class MessageTracer {
     private static final String HL7_SENDING_FACILITY = "MSH-4"
     private static final String HL7_MESSAGE_TYPE = "MSH-9-1"
     private static final String HL7_TRIGGER_EVENT = "MSH-9-2"
+    private static final String HL7_MESSAGE_ID = "MSH-10"
     private static final String HL7_PROCESSING_ID = "MSH-11"
 
     private final Tracer tracer
     private final boolean removeSegment
     private final String segmentName
-    private final Propagator propagator;
+    private final Propagator propagator
     private final Propagator.Setter<Message> setter
     private final Propagator.Getter<Message> getter
 
@@ -56,7 +57,7 @@ class MessageTracer {
         this.segmentName = segmentName
         this.setter = new Hl7MessageSetter(segmentName)
         this.getter = new Hl7MessageGetter(segmentName)
-        this.propagator = propagator;
+        this.propagator = propagator
     }
 
     void sendMessage(Message msg, String name, Handler sender) {
@@ -99,6 +100,7 @@ class MessageTracer {
             .tag(HL7_SENDING_FACILITY, msg.MSH[4]?.value ?: '')
             .tag(HL7_MESSAGE_TYPE, msg.MSH[9][1]?.value ?: '')
             .tag(HL7_TRIGGER_EVENT, msg.MSH[9][2]?.value ?: '')
+            .tag(HL7_MESSAGE_ID, msg.MSH[10]?.value ?: '')
             .tag(HL7_PROCESSING_ID, msg.MSH[11]?.value ?: '')
             .start()
     }

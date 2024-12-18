@@ -134,7 +134,7 @@ class FhirToXacmlTranslator {
      * @return PPQ-2 request POJO
      */
     XACMLPolicyQueryType translatePpq5To2Request(String httpQuery) {
-        List<NameValuePair> params = URLEncodedUtils.parse(httpQuery, StandardCharsets.UTF_8);
+        List<NameValuePair> params = URLEncodedUtils.parse(httpQuery, StandardCharsets.UTF_8)
         def policySetId = params.find { it.name == Consent.SP_IDENTIFIER }?.value
         if (policySetId) {
             return ppqMessageCreator.createPolicyQuery([policySetId])

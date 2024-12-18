@@ -24,6 +24,8 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
+
 /**
  * Base class for queries that retrieve results via a document entry.
  * @author Jens Riemschneider
@@ -33,6 +35,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public abstract class GetFromDocumentQuery extends StoredQuery {
+    @Serial
     private static final long serialVersionUID = 627720659958894242L;
     
     @Getter @Setter private String uuid;

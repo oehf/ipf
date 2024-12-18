@@ -56,7 +56,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
         }
 
         if (config.isAudit()) {
-            FhirAuditDataset auditDataset = exchange.getIn().getHeader(Constants.FHIR_AUDIT_HEADER, FhirAuditDataset.class);
+            var auditDataset = exchange.getIn().getHeader(Constants.FHIR_AUDIT_HEADER, FhirAuditDataset.class);
             if (auditDataset != null) {
                 client.registerInterceptor(new HapiClientAuditInterceptor(auditDataset));
                 exchange.getIn().removeHeader(Constants.FHIR_AUDIT_HEADER);
@@ -85,7 +85,6 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
      * the actual query can be dynamically constructed from the exchange.
      *
      * @param exchange Camel exchange
-     * @throws Exception
      */
     @Override
     public void process(Exchange exchange) {
@@ -95,11 +94,11 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
                 exchange.getIn().getBody(),
                 exchange.getIn().getHeaders());
 
-        Object httpHeadersObject = exchange.getIn().getHeader(Constants.HTTP_OUTGOING_HEADERS);
+        var httpHeadersObject = exchange.getIn().getHeader(Constants.HTTP_OUTGOING_HEADERS);
         if (httpHeadersObject instanceof Map) {
-            Map<String, List<String>> headers = (Map<String, List<String>>) httpHeadersObject;
-            for (Map.Entry<String, List<String>> entry : headers.entrySet()) {
-                for (String value : entry.getValue()) {
+            var headers = (Map<String, List<String>>) httpHeadersObject;
+            for (var entry : headers.entrySet()) {
+                for (var value : entry.getValue()) {
                     executableClient.withAdditionalHeader(entry.getKey(), value);
                 }
             }

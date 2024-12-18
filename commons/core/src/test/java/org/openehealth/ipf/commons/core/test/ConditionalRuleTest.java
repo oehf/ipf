@@ -28,7 +28,7 @@ public class ConditionalRuleTest {
 
     private static final String currentArchitecture = System.getProperty("os.name");
 
-    @Rule public ConditionalRule rule = new ConditionalRule()
+    @Rule public final ConditionalRule rule = new ConditionalRule()
             .ifSystemPropertyIs("os.name", currentArchitecture);
 
     @Test

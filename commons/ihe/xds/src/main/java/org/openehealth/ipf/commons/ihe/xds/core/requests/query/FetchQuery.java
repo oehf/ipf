@@ -26,6 +26,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
+
 /**
  * Represents a stored query Cross-Community Fetch.
  * @author Dmytro Rud
@@ -36,6 +38,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class FetchQuery extends DocumentsQuery implements PatientIdBasedStoredQuery {
+    @Serial
     private static final long serialVersionUID = 7171404956090539393L;
 
     @Getter @Setter private Identifiable patientId;

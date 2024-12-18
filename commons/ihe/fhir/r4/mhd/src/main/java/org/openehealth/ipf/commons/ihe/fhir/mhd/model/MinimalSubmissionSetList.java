@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import org.hl7.fhir.r4.model.ListResource;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_SUBMISSIONSET_TYPE_LIST;
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_SUBMISSIONSET_TYPE_LIST_PROFILE;

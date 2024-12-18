@@ -25,6 +25,8 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +53,7 @@ import static java.util.Objects.requireNonNull;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 public class QueryList<T> implements Serializable {
+    @Serial
     private static final long serialVersionUID = -2729640243221349924L;
     
     @XmlJavaTypeAdapter(ListOfListAdapter.class)

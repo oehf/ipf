@@ -1,3 +1,18 @@
+/*
+ * Copyright 2023 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.boot.atna;
 
 import org.junit.jupiter.api.AfterEach;
@@ -25,13 +40,11 @@ import static org.mockserver.model.HttpResponse.response;
 
 public class RestTemplateAuditMessageQueueTest {
 
-
     private int port;
     private ClientAndServer mockServer;
     private RestTemplateAuditMessageQueue atnaQueue;
     private DefaultAuditContext auditContext;
     private Throwable caught;
-
 
     @BeforeEach
     public void setup() {
@@ -39,7 +52,8 @@ public class RestTemplateAuditMessageQueueTest {
         mockServer = startClientAndServer(port);
         auditContext = new DefaultAuditContext();
         auditContext.setAuditTransmissionProtocol(new RecordingAuditMessageTransmission());
-        auditContext.setAuditExceptionHandler((auditContext, t, auditMessages) -> caught = t);
+        auditContext.setAuditExceptionHandler((auditContext, t, auditMessages) ->
+            caught = t);
         auditContext.setAuditEnabled(true);
     }
 
@@ -64,7 +78,9 @@ public class RestTemplateAuditMessageQueueTest {
                     );
 
             // Setup producer
-            atnaQueue = new RestTemplateAuditMessageQueue(new RestTemplateBuilder(), URI.create("http://localhost:" + port + "/audit"));
+            atnaQueue = new RestTemplateAuditMessageQueue(
+                new RestTemplateBuilder(),
+                URI.create("http://localhost:" + port + "/audit"));
             auditContext.setAuditMessageQueue(atnaQueue);
             sendAudit();
         }
@@ -85,7 +101,9 @@ public class RestTemplateAuditMessageQueueTest {
                     );
 
             // Setup producer
-            atnaQueue = new RestTemplateAuditMessageQueue(new RestTemplateBuilder(), URI.create("http://localhost:" + port + "/audit"));
+            atnaQueue = new RestTemplateAuditMessageQueue(
+                new RestTemplateBuilder(),
+                URI.create("http://localhost:" + port + "/audit"));
             auditContext.setAuditMessageQueue(atnaQueue);
             sendAudit();
             assertThat(caught, instanceOf(RestClientException.class));

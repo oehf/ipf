@@ -51,7 +51,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.*;
 
@@ -65,7 +64,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.*;
  */
 public class Iti65Validator extends FhirTransactionValidator.Support {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Iti65Validator.class);
+    private static final Logger log = LoggerFactory.getLogger(Iti65Validator.class);
     private static final String IHE_PROFILE_PREFIX = "http://ihe.net/fhir/StructureDefinition/";
 
     private final FhirContext fhirContext;
@@ -73,11 +72,11 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
 
     public Iti65Validator(FhirContext fhirContext) {
         this.fhirContext = fhirContext;
-        LOG.info("Initializing Validator for ITI-65 bundles");
+        log.info("Initializing Validator for ITI-65 bundles");
         validationSupportv320 = loadStructureDefinitionsv320(new DefaultProfileValidationSupport(fhirContext), "Minimal");
         validationSupportv320 = loadStructureDefinitionsv320(validationSupportv320, "Comprehensive");
         validationSupportv320 = new CachingValidationSupport(validationSupportv320);
-        LOG.info("Initialized Validator for ITI-65 bundles");
+        log.info("Initialized Validator for ITI-65 bundles");
     }
 
     @Override
@@ -184,26 +183,24 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                 .flatMap(Collection::stream)
                 .map(Bundle.BundleEntryComponent::getResource)
                 .forEach(resource -> {
-                    if (resource instanceof DocumentManifest) {
-                        var dm = (DocumentManifest) resource;
+                    if (resource instanceof DocumentManifest dm) {
                         for (var content : dm.getContent()) {
                             try {
                                 expectedReferenceFullUrls.add(content.getReference());
                             } catch (Exception ignored) {
                             }
                         }
-                        patientReferences.add(getSubjectReference(resource, r -> dm.getSubject()));
-                    } else if (resource instanceof DocumentReference) {
-                        var dr = (DocumentReference) resource;
+                        patientReferences.add(getSubjectReference(dm, DocumentManifest::getSubject));
+                    } else if (resource instanceof DocumentReference dr) {
                         for (var content : dr.getContent()) {
                             var url = content.getAttachment().getUrl();
                             if (!url.startsWith("http")) {
                                 expectedBinaryFullUrls.add(url);
                             }
                         }
-                        patientReferences.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
-                    } else if (resource instanceof ListResource) {
-                        patientReferences.add(getSubjectReference(resource, r -> ((ListResource) r).getSubject()));
+                        patientReferences.add(getSubjectReference(dr, DocumentReference::getSubject));
+                    } else if (resource instanceof ListResource listResource) {
+                        patientReferences.add(getSubjectReference(listResource, ListResource::getSubject));
                     } else if (!(resource instanceof Binary)) {
                         throw FhirUtils.unprocessableEntity(
                                 OperationOutcome.IssueSeverity.ERROR,
@@ -291,7 +288,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
             .map(Bundle.BundleEntryComponent::getResource)
             .map(ListResource.class::cast)
             .filter(this::isListSubmissionSet)
-            .collect(Collectors.toList());
+            .toList();
         if (submissionSets.size() != 1) {
             throw FhirUtils.unprocessableEntity(
                 OperationOutcome.IssueSeverity.ERROR,
@@ -317,8 +314,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
             .flatMap(Collection::stream)
             .map(Bundle.BundleEntryComponent::getResource)
             .forEach(resource -> {
-                if (resource instanceof ListResource) {
-                    var listResource = (ListResource) resource;
+                if (resource instanceof ListResource listResource) {
                     if (isListSubmissionSet(listResource)) {
                         for (var entry : listResource.getEntry()) {
                             try {
@@ -327,16 +323,15 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                             }
                         }
                     }
-                    patientReferences.add(getSubjectReference(resource, r -> listResource.getSubject()));
-                } else if (resource instanceof DocumentReference) {
-                    var dr = (DocumentReference) resource;
+                    patientReferences.add(getSubjectReference(listResource, ListResource::getSubject));
+                } else if (resource instanceof DocumentReference dr) {
                     for (var content : dr.getContent()) {
                         var url = content.getAttachment().getUrl();
                         if (!url.startsWith("http")) {
                             expectedBinaryFullUrls.add(url);
                         }
                     }
-                    patientReferences.add(getSubjectReference(resource, r -> ((DocumentReference) r).getSubject()));
+                    patientReferences.add(getSubjectReference(dr, DocumentReference::getSubject));
                 } else if (!(resource instanceof Binary)) {
                     throw FhirUtils.unprocessableEntity(
                         OperationOutcome.IssueSeverity.ERROR,
@@ -413,7 +408,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
             UNCONTAINED_COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST.hasProfile(listResource);
     }
 
-    private String getSubjectReference(Resource resource, Function<Resource, Reference> f) {
+    private <T extends Resource> String getSubjectReference(T resource, Function<T, Reference> f) {
         var reference = f.apply(resource);
         if (reference == null) {
             throw FhirUtils.unprocessableEntity(

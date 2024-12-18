@@ -25,6 +25,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
+import java.io.Serial;
+
 /**
  * Represents a stored query for GetSubmissionSetAndContents.
  * @author Jens Riemschneider
@@ -35,6 +37,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class GetSubmissionSetAndContentsQuery extends GetByIdAndCodesQuery {
+    @Serial
     private static final long serialVersionUID = -4883836034076616558L;
 
     @Getter @Setter private Integer metadataLevel;

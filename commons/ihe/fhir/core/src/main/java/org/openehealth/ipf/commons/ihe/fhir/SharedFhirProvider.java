@@ -45,7 +45,7 @@ import java.util.Optional;
  */
 public abstract class SharedFhirProvider extends FhirProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SharedFhirProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(SharedFhirProvider.class);
 
     private FhirContext fhirContext;
     private final List<RequestConsumer> consumers = new ArrayList<>();
@@ -115,7 +115,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
             throw new IllegalStateException("Consumer has a different FhirContext than the others: " + consumer);
         }
         consumers.add(consumer);
-        LOG.info("Connected consumer {} to provider {}", consumer, this);
+        log.info("Connected consumer {} to provider {}", consumer, this);
     }
 
     boolean conflictingFhirContext(FhirContext otherFhirContext) {
@@ -130,7 +130,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
     @Override
     public void unsetConsumer(RequestConsumer consumer) {
         if (consumers.remove(consumer)) {
-            LOG.info("Disconnected consumer {} from provider {}", consumer, this);
+            log.info("Disconnected consumer {} from provider {}", consumer, this);
         }
         if (consumers.isEmpty()) {
             fhirContext = null;

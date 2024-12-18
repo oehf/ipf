@@ -53,7 +53,7 @@ import static java.util.Objects.requireNonNull
  */
 class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(PdqResponseToPdqmResponseTranslator)
+    private static final Logger log = LoggerFactory.getLogger(PdqResponseToPdqmResponseTranslator)
     private final UriMapper uriMapper
 
     String pdqSupplierResourceIdentifierUri
@@ -131,7 +131,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         if (resourcePid) {
             patient.setId(new IdType('Patient', resourcePid[1].value))
         } else {
-            LOG.warn("No ID found with resource system URI {}", pdqSupplierResourceIdentifierUri)
+            log.warn("No ID found with resource system URI {}", pdqSupplierResourceIdentifierUri)
         }
 
         convertIdentifiers(pid[3](), patient.getIdentifier())

@@ -20,7 +20,7 @@ import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.StringType;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditStrategy;
@@ -43,7 +43,7 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, FhirQueryAuditDataset auditDataset) {
-        return new QueryInformationBuilder<>(auditContext, auditDataset, FhirEventTypeCode.MobilePatientIdentifierCrossReferenceQuery)
+        return new DefaultQueryInformationBuilder(auditContext, auditDataset, FhirEventTypeCode.MobilePatientIdentifierCrossReferenceQuery)
                 .addPatients(auditDataset.getPatientIds())
                 .setQueryParameters(
                         "PIXmQuery",
@@ -64,11 +64,9 @@ public class Iti83AuditStrategy extends FhirQueryAuditStrategy {
                     .map(Parameters.ParametersParameterComponent::getValue)
                     .findFirst().orElseThrow(() -> new RuntimeException("No sourceIdentifier in PIX query"));
 
-            if (sourceIdentifier instanceof Identifier) {
-                var identifier = (Identifier) sourceIdentifier;
+            if (sourceIdentifier instanceof Identifier identifier) {
                 dataset.getPatientIds().add(String.format("%s|%s", identifier.getSystem(), identifier.getValue()));
-            } else if (sourceIdentifier instanceof StringType) {
-                var identifier = (StringType) sourceIdentifier;
+            } else if (sourceIdentifier instanceof StringType identifier) {
                 dataset.getPatientIds().add(identifier.getValue());
             } else {
                 dataset.getPatientIds().add(sourceIdentifier.toString());
