@@ -45,12 +45,12 @@ public class TestIti119Success extends AbstractTestIti119 {
     }
 
     @Test
-    public void testGetConformance() {
+    public void getConformance() {
         assertConformance("Patient");
     }
 
     @Test
-    public void testSendManualPdqmMatch() {
+    public void sendManualPdqmMatch() {
 
         var p = new Parameters();
         p.addParameter()
@@ -121,7 +121,7 @@ public class TestIti119Success extends AbstractTestIti119 {
     }
 
     @Test
-    public void testSendEndpointParametersResource() {
+    public void sendEndpointParametersResource() {
         var p = new Parameters();
         p.addParameter()
             .setName(RESOURCE)
