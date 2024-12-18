@@ -47,7 +47,6 @@ class TestIti8 extends AbstractMllpTest {
         System.setProperty(PayloadLoggerBase.PROPERTY_DISABLED, 'true')
     }
 
-
     @AfterAll
     static void tearDownAfterClass() {
         System.clearProperty(PayloadLoggerBase.PROPERTY_DISABLED)
@@ -83,6 +82,7 @@ class TestIti8 extends AbstractMllpTest {
         assertFalse(clientSpan.tags().isEmpty())
         assertEquals(new HashMap<>(clientSpan.tags()), new HashMap<>(serverSpan.tags()))
         assertNotEquals(clientSpan.id(), serverSpan.id())
+        assertEquals(clientSpan.traceId(), serverSpan.traceId())
         assertEquals(clientSpan.id(), serverSpan.parentId())
     }
 
