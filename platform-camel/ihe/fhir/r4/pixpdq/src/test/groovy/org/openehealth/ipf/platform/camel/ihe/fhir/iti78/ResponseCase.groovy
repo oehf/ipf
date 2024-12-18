@@ -24,7 +24,7 @@ import org.openehealth.ipf.modules.hl7.message.MessageUtils
 /**
  *
  */
-public enum ResponseCase {
+enum ResponseCase {
 
     OK(AcknowledgmentCode.AA, "OK") {
         @Override

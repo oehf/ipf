@@ -85,4 +85,13 @@ public class MhdValidator extends FhirTransactionValidator.Support {
         }
     }
 
+    @Override
+    public void validateResponse(Object payload, Map<String, Object> parameters) {
+        var resource = (IBaseResource) payload;
+        var validationResult = validator.validateWithResult(resource);
+        if (!validationResult.isSuccessful()) {
+            var operationOutcome = validationResult.toOperationOutcome();
+            throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
+        }
+    }
 }
