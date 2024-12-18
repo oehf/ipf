@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.core;
 
 import ca.uhn.hl7v2.model.DataTypeException;
 import ca.uhn.hl7v2.model.primitive.CommonTS;
-import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -46,7 +45,7 @@ public class HL7DTM {
      * @throws DataTypeException if the DTM string is invalid.
      */
     public static ZonedDateTime toZonedDateTime(String s) throws DataTypeException {
-        if (StringUtils.isEmpty(s)) {
+        if (s == null || s.isEmpty()) {
             return null;
         }
 

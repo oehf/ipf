@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
-import org.apache.commons.lang3.ClassUtils;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
@@ -44,7 +43,7 @@ public class ChPpq1Producer extends AbstractWsProducer<ChPpqAuditDataset, WsTran
         } else if (body instanceof DeletePolicyRequest request) {
             return client.deletePolicy(request);
         } else {
-            throw new RuntimeException("Cannot dispatch request of the type " + ClassUtils.getSimpleName(body, "<null>"));
+            throw new RuntimeException("Cannot dispatch request of the type " + body.getClass().getSimpleName());
         }
     }
 }

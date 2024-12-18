@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.core.atna;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
@@ -53,7 +52,7 @@ public abstract class AuditDataset implements Serializable {
         }
 
         public boolean isEmpty() {
-            return StringUtils.isAllBlank(id, name);
+            return (id == null || id.trim().isEmpty()) && (name == null || name.trim().isEmpty());
         }
     }
 

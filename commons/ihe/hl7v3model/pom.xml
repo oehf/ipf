@@ -18,6 +18,10 @@
             <artifactId>ipf-commons-ihe-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>ca.uhn.hapi</groupId>
+            <artifactId>hapi-base</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
