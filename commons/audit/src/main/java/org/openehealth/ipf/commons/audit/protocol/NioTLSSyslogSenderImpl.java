@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl.Destination<H>> extends RFC5425Protocol implements AuditTransmissionProtocol {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NioTLSSyslogSenderImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(NioTLSSyslogSenderImpl.class);
     private boolean loggingEnabled = false;
     private final TlsParameters tlsParameters;
 
@@ -63,15 +63,15 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
         if (auditMessage != null) {
             Destination<H> destination = getDestination(auditContext.getAuditRepositoryHostName(), auditContext.getAuditRepositoryPort());
             var payload = getTransportPayload(auditMetadataProvider, auditMessage);
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Auditing {} bytes to {}:{}",
+            if (log.isDebugEnabled()) {
+                log.debug("Auditing {} bytes to {}:{}",
                         payload.length,
                         auditContext.getAuditRepositoryHostName(),
                         auditContext.getAuditRepositoryPort());
             }
             destination.write(payload);
-            if (LOG.isTraceEnabled()) {
-                LOG.trace(new String(payload, StandardCharsets.UTF_8));
+            if (log.isTraceEnabled()) {
+                log.trace(new String(payload, StandardCharsets.UTF_8));
             }
         }
     }

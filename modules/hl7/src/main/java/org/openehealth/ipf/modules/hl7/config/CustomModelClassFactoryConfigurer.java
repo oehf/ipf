@@ -37,7 +37,7 @@ public class CustomModelClassFactoryConfigurer<R extends Registry> extends Order
 
     private CustomModelClassFactory customModelClassFactory;
 
-    private static final Logger LOG = LoggerFactory.getLogger(CustomModelClassFactoryConfigurer.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomModelClassFactoryConfigurer.class);
 
     boolean configureRecursively = true;
 
@@ -56,7 +56,7 @@ public class CustomModelClassFactoryConfigurer<R extends Registry> extends Order
             currentFactory = (CustomModelClassFactory) delegateFactory;
             delegateFactory = configureAndDelegate(currentFactory, configuration);
         }
-        LOG.debug("Custom model classes configured: {}", configuration);
+        log.debug("Custom model classes configured: {}", configuration);
     }
 
     private ModelClassFactory configureAndDelegate(CustomModelClassFactory factory,

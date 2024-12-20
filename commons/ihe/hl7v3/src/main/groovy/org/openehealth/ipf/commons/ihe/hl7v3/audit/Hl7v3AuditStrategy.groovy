@@ -30,7 +30,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
  */
 abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset> {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3AuditStrategy.class)
+    private static final transient Logger log = LoggerFactory.getLogger(Hl7v3AuditStrategy.class)
 
     Hl7v3AuditStrategy(boolean serverSide) {
         super(serverSide)
@@ -67,7 +67,7 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
                     EventOutcomeIndicator.SeriousFailure
 
         } catch (Exception e) {
-            LOG.error('Exception in audit strategy', e)
+            log.error('Exception in audit strategy', e)
             return EventOutcomeIndicator.MajorFailure
         }
     }

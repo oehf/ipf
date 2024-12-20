@@ -55,8 +55,8 @@ public class TtlHeaderUtils {
                 Map.class));
         if ((soapHeaders != null) && soapHeaders.containsKey(TTL_HEADER_QNAME)) {
             var o = soapHeaders.get(TTL_HEADER_QNAME).getObject();
-            if (o instanceof Element) {
-                var child = ((Element) o).getFirstChild();
+            if (o instanceof Element element) {
+                var child = element.getFirstChild();
                 if (child instanceof Text) {
                     var value = child.getNodeValue();
                     try {
@@ -83,10 +83,10 @@ public class TtlHeaderUtils {
         }
 
         var ttlHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());
-        if (soapHeaders instanceof Collection) {
-            ((Collection) soapHeaders).add(ttlHeader);
-        } else if (soapHeaders instanceof Map) {
-            ((Map) soapHeaders).put(TTL_HEADER_QNAME, ttlHeader);
+        if (soapHeaders instanceof Collection collection) {
+            collection.add(ttlHeader);
+        } else if (soapHeaders instanceof Map map) {
+            map.put(TTL_HEADER_QNAME, ttlHeader);
         }
     }
     

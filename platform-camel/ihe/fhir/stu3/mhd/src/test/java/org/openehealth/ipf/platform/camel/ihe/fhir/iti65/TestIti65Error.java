@@ -21,8 +21,6 @@ import org.hl7.fhir.dstu3.model.OperationOutcome;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import jakarta.servlet.ServletException;
-
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
@@ -33,12 +31,12 @@ public class TestIti65Error extends AbstractTestIti65 {
     private static final String CONTEXT_DESCRIPTOR = "iti-65-error.xml";
 
     @BeforeAll
-    public static void setUpClass() throws ServletException {
+    public static void setUpClass() {
         startServer(CONTEXT_DESCRIPTOR);
     }
 
     @Test
-    public void testSendManuallyReturningError() throws Exception {
+    public void testSendManuallyReturningError() {
         assertThrows(InternalErrorException.class, ()->{
             try {
                 sendManually(provideAndRegister());

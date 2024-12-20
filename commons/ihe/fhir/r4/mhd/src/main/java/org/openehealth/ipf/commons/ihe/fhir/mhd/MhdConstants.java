@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.mhd;
 
-import org.hl7.fhir.r4.model.Coding;
-
 interface MhdConstants {
 
     // Bundle Profiles V4

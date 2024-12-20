@@ -65,8 +65,8 @@ public class ProducerPaginationHandler extends ProducerHandlerBase<BatchRequest,
 
         for (DsmlMessage request : batchRequest.getBatchRequests()) {
             String requestId = request.getRequestID();
-            if (request instanceof SearchRequest) {
-                requestMap.put(requestId, (SearchRequest) request);
+            if (request instanceof SearchRequest searchRequest) {
+                requestMap.put(requestId, searchRequest);
                 PagedResultsResponseControl pagination = ControlUtils.extractControl(request, PagedResultsResponseControl.OID);
                 if (pagination != null) {
                     paginations.put(requestId, pagination);
@@ -84,8 +84,7 @@ public class ProducerPaginationHandler extends ProducerHandlerBase<BatchRequest,
                 String requestId = HpdUtils.extractResponseRequestId(value);
                 expectedPaginationResponses.remove(requestId);
 
-                if (value instanceof SearchResponse) {
-                    SearchResponse searchResponse = (SearchResponse) value;
+                if (value instanceof SearchResponse searchResponse) {
                     PagedResultsResponseControl pagination = ControlUtils.extractControl(searchResponse, PagedResultsResponseControl.OID);
 
                     Integer resultCode = ((searchResponse.getSearchResultDone() != null) && (searchResponse.getSearchResultDone().getResultCode() != null))

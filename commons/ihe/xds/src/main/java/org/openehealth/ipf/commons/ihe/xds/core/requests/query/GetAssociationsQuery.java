@@ -22,6 +22,8 @@ import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -34,6 +36,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class GetAssociationsQuery extends GetByUuidQuery {
+    @Serial
     private static final long serialVersionUID = 5623733746377113397L;
 
     @XmlElement(name = "associationStatus")

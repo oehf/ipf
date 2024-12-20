@@ -26,7 +26,7 @@ public class ManagementNamingStrategyTestRouteBuilder extends
         RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         from("direct:input")
                 .routeId("namingStrategyRoute")

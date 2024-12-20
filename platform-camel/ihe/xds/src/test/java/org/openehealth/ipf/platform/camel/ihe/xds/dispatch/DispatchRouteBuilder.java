@@ -38,10 +38,8 @@ public class DispatchRouteBuilder extends RouteBuilder {
     @Override
     public void configure() throws Exception {
         from("cxf:bean:xdsRegistryEndpoint")
-                .process(exchange -> {
-                    exchange.setProperty(ACTION_PROPERTY, DispatchInContextCreatorInterceptor
-                            .extractWsaAction(exchange.getProperty(CxfConstants.JAXWS_CONTEXT, Map.class)));
-                }).choice()
+                .process(exchange -> exchange.setProperty(ACTION_PROPERTY, DispatchInContextCreatorInterceptor
+                        .extractWsaAction(exchange.getProperty(CxfConstants.JAXWS_CONTEXT, Map.class)))).choice()
                 .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:iti:2007:RegistryStoredQuery"))
                     .to("direct:handle-iti18")
                 .when(exchangeProperty(ACTION_PROPERTY).isEqualTo("urn:ihe:iti:2007:RegisterDocumentSet-b"))

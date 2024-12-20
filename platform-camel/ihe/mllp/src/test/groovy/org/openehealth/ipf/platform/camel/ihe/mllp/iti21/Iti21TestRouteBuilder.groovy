@@ -30,7 +30,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.ack
  */
 class Iti21TestRouteBuilder extends RouteBuilder {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Iti21TestRouteBuilder)
+    private static final Logger log = LoggerFactory.getLogger(Iti21TestRouteBuilder)
 
      def rsp = '''MSH|^~\\&|MESA_PD_SUPPLIER|PIM|MESA_PD_CONSUMER|MESA_DEPARTMENT|20090901140929||RSP^K22^RSP_K21|356757|P|2.5
 MSA|AA|1305506339
@@ -83,7 +83,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
          from('pdq-iti21://0.0.0.0:18220')
                  .process {
                      long wait = Long.parseLong(it.in.body.QPD[2].value)
-                     LOG.debug("Waiting $wait ms")
+                     log.debug("Waiting $wait ms")
                      Thread.sleep(wait)
                  }
                  .transmogrify {
@@ -92,7 +92,7 @@ PID|4||79233^^^HZLN&2.16.840.1.113883.3.37.4.1.1.2.411.1&ISO^PI||MÃ¼ller^Joach
                      response.QAK[1] = response.QPD[2].value
                      response.MSA[1] = 'AA'
                      response.MSH[18] = it.MSH[18]
-                     LOG.debug("Now responding after waiting ${response.QAK[1].value} ms")
+                     log.debug("Now responding after waiting ${response.QAK[1].value} ms")
                      response
                  }
 

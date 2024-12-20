@@ -5,13 +5,12 @@ import org.w3c.dom.Node;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
 public final class CommonOperationsStatic {
 	
-	private static CommonOperations commonOperations = new CommonOperations();
+	private static final CommonOperations commonOperations = new CommonOperations();
 	
 	private CommonOperationsStatic() {}
 
@@ -91,9 +90,9 @@ public final class CommonOperationsStatic {
 	}
 	
 	public static List<String> extractListLitteral(Class<?> cl){
-		List<String> res = new ArrayList<String>();
+		List<String> res = new ArrayList<>();
 		if (cl != null){
-			List<?> aa = Arrays.asList(cl.getEnumConstants());
+			Object[] aa = cl.getEnumConstants();
 			for (Object object : aa) {
 				System.out.println(object.getClass().getSimpleName());
 				try {

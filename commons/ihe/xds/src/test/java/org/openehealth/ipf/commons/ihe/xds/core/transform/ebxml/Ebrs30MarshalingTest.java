@@ -149,8 +149,8 @@ public class Ebrs30MarshalingTest {
         assertEquals(1, submissionSet.getAuthors().size());
         assertEquals("Sherry Dopplemeyer", submissionSet.getAuthors().get(0).getAuthorPerson().getId().getId());
 
-        assertEquals(result.getAssociations().get(0).getAssociationType(), AssociationType.HAS_MEMBER);
-        assertEquals(result.getAssociations().get(1).getAssociationType(), AssociationType.IS_SNAPSHOT_OF);
+        assertEquals(AssociationType.HAS_MEMBER, result.getAssociations().get(0).getAssociationType());
+        assertEquals(AssociationType.IS_SNAPSHOT_OF, result.getAssociations().get(1).getAssociationType());
 
     }
 

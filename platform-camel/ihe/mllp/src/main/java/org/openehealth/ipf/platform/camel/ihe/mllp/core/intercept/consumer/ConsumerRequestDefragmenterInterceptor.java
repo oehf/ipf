@@ -38,7 +38,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * @author Dmytro Rud
  */
 public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport {
-    private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerRequestDefragmenterInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(ConsumerRequestDefragmenterInterceptor.class);
     
     // keys consist of: continuation pointer, MSH-3-1, MSH-3-2, and MSH-3-3  
     private UnsolicitedFragmentationStorage storage;
@@ -89,7 +89,7 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport {
         } else {
             accumulator = storage.getAndRemove(keyString(msh14, msh31, msh32, msh33));
             if (accumulator == null) {
-                LOG.warn("Pass unknown fragment with MSH-14=={} to the route", msh14);
+                log.warn("Pass unknown fragment with MSH-14=={} to the route", msh14);
                 getWrappedProcessor().process(exchange);
                 return;
             }
@@ -102,14 +102,14 @@ public class ConsumerRequestDefragmenterInterceptor extends InterceptorSupport {
         
         // DSC-1 is empty -- finish accumulation, pass message to the marshaller
         if (isEmpty(dsc1)) {
-            LOG.debug("Finished fragment chain {}", msh14);
+            log.debug("Finished fragment chain {}", msh14);
             exchange.getIn().setBody(accumulator.toString());
             getWrappedProcessor().process(exchange);
             return;
         } 
 
         // DSC-1 is not empty -- update accumulators map, request the next fragment
-        LOG.debug("Processed fragment {} requesting {}", msh14, dsc1);
+        log.debug("Processed fragment {} requesting {}", msh14, dsc1);
             
         storage.put(keyString(dsc1, msh31, msh32, msh33), accumulator);
         var ack = MessageUtils.response(

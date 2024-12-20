@@ -111,7 +111,7 @@ public class AggregatorAdapter extends AdapterSupport implements AggregationStra
     /**
      * Aggregates <code>oldInputData</code> and <code>newInputData</code>.
      * The aggregation result is written to body of the message returned by
-     * {@link org.openehealth.ipf.platform.camel.core.util.Exchanges#resultMessage(Exchange)}.
+     * .
      * 
      * @param oldExchange original message exchange to write results to.
      * @param oldInputData original input data

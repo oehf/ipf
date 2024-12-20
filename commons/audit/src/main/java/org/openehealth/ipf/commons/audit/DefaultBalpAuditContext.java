@@ -18,6 +18,9 @@ package org.openehealth.ipf.commons.audit;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Default implementation of a {@link BalpAuditContext}.
+ */
 public class DefaultBalpAuditContext extends DefaultAuditContext implements BalpAuditContext {
 
     @Getter

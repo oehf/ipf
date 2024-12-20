@@ -45,7 +45,7 @@ public class MethanolHttpResponse extends BaseHttpResponse {
      * Buffers the response entity. This is usually only called when HAPI client interceptors
      * want to do some logging or response capturing.
      *
-     * @throws IOException
+     * @throws IOException IOException
      */
     @Override
     public void bufferEntity() throws IOException {

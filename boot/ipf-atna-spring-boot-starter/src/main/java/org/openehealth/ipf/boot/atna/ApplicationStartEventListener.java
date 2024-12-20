@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.boot.atna;
 
+import lombok.NonNull;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
@@ -27,9 +28,6 @@ import org.springframework.context.event.ContextRefreshedEvent;
 
 import static java.util.Objects.requireNonNull;
 
-/**
- *
- */
 public class ApplicationStartEventListener implements ApplicationListener<ContextRefreshedEvent> {
 
     private final AuditContext auditContext;
@@ -42,7 +40,7 @@ public class ApplicationStartEventListener implements ApplicationListener<Contex
     }
 
     @Override
-    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+    public void onApplicationEvent(@NonNull ContextRefreshedEvent contextRefreshedEvent) {
         if (contextRefreshedEvent.getApplicationContext() == applicationContext) {
             auditContext.audit(
                     new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)

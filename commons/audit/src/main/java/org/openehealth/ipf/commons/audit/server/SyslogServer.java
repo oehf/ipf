@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.audit.server;
 
+import lombok.Setter;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.netty.DisposableChannel;
@@ -47,6 +48,8 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
     protected T channel;
     protected final Consumer<? super Map<String, Object>> consumer;
     protected final Consumer<Throwable> errorConsumer;
+    @Setter
+    protected int timeoutSeconds = TIMEOUT;
 
     /**
      * @param consumer      consumer for handled syslog frames
@@ -85,7 +88,7 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
      */
     public void stop() {
         if (channel != null) {
-            channel.disposeNow(Duration.ofSeconds(TIMEOUT));
+            channel.disposeNow(Duration.ofSeconds(timeoutSeconds));
         }
         channel = null;
     }

@@ -41,7 +41,7 @@ import java.util.Optional;
  */
 public abstract class AbstractPlainProvider extends FhirProvider {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractPlainProvider.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractPlainProvider.class);
 
     private RequestConsumer consumer;
 
@@ -62,14 +62,14 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             throw new IllegalStateException("This provider is already used by a different consumer: " + consumer);
         }
         this.consumer = consumer;
-        LOG.info("Connected consumer {} to provider {}", consumer, this);
+        log.info("Connected consumer {} to provider {}", consumer, this);
     }
 
     @Override
     public void unsetConsumer(RequestConsumer consumer) {
         if (this.consumer == consumer) {
             this.consumer = null;
-            LOG.info("Disconnected consumer {} from provider {}", consumer, this);
+            log.info("Disconnected consumer {} from provider {}", consumer, this);
         }
     }
 

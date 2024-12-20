@@ -38,7 +38,7 @@ import java.util.regex.Pattern;
  * @author Christian Ohr
  * @since 3.5
  */
-public class PatientRecordEventBuilder<T extends PatientRecordEventBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
+public abstract class PatientRecordEventBuilder<T extends PatientRecordEventBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
 
     private static final Pattern PATIENT_ID_PATTERN = Pattern.compile("^.+?\\^\\^\\^.*?&.+?&ISO(\\^.*){0,4}$");
 

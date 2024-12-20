@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.boot.atna;
 
+import lombok.NonNull;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.UserAuthenticationBuilder;
@@ -42,7 +43,7 @@ public class AuthenticationListener extends AbstractAuthenticationAuditListener 
     }
 
     @Override
-    public void onApplicationEvent(AbstractAuthenticationEvent authenticationEvent) {
+    public void onApplicationEvent(@NonNull AbstractAuthenticationEvent authenticationEvent) {
         delegateListener.onApplicationEvent(authenticationEvent);
 
         var outcome = authenticationEvent instanceof AbstractAuthenticationFailureEvent ?
@@ -50,11 +51,9 @@ public class AuthenticationListener extends AbstractAuthenticationAuditListener 
                 EventOutcomeIndicator.Success;
 
         var details = authenticationEvent.getAuthentication().getDetails();
-        if (details instanceof WebAuthenticationDetails) {
-            var webAuthenticationDetails = (WebAuthenticationDetails) details;
+        if (details instanceof WebAuthenticationDetails webAuthenticationDetails) {
             var principal = authenticationEvent.getAuthentication().getPrincipal();
-            if (principal instanceof UserDetails) {
-                var userDetails = (UserDetails) principal;
+            if (principal instanceof UserDetails userDetails) {
 
                 var builder = new UserAuthenticationBuilder.Login(outcome)
                                 .setAuditSource(auditContext);

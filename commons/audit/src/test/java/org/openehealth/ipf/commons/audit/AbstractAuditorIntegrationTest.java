@@ -35,7 +35,7 @@ import java.util.Properties;
  */
 abstract class AbstractAuditorIntegrationTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractAuditorIntegrationTest.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractAuditorIntegrationTest.class);
 
     static final String CLIENT_KEY_STORE;
     static final String CLIENT_KEY_STORE_PASS = "initinit";
@@ -91,7 +91,7 @@ abstract class AbstractAuditorIntegrationTest {
     }
 
     void sendAudit(String userName) {
-        LOG.debug("Sending audit record");
+        log.debug("Sending audit record");
         auditContext.audit(
                 new ApplicationActivityBuilder.ApplicationStart(EventOutcomeIndicator.Success)
                         .setAuditSource(auditContext)
@@ -108,7 +108,7 @@ abstract class AbstractAuditorIntegrationTest {
         try (var serverSocket = new ServerSocket(0)) {
             return serverSocket.getLocalPort();
         } catch (Exception e) {
-            LOG.error(e.getMessage());
+            log.error(e.getMessage());
             return -1;
         }
     }

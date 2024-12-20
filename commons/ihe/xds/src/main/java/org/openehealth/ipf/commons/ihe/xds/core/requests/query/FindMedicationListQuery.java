@@ -24,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -38,6 +40,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class FindMedicationListQuery extends PharmacyDocumentsQuery {
+    @Serial
     private static final long serialVersionUID = 7810851265303915098L;
 
     @XmlElement(name = "formatCode")

@@ -119,14 +119,12 @@ public class QPD extends AbstractSegment {
     /** {@inheritDoc} */
     @Override
     protected Type createNewTypeWithoutReflection(int field) {
-        switch (field) {
-            case 0: return new CE(getMessage());
-            case 1: return new ST(getMessage());
-            case 2:
-            case 3:
-                return new CX(getMessage());
-            default: return null;
-        }
+        return switch (field) {
+            case 0 -> new CE(getMessage());
+            case 1 -> new ST(getMessage());
+            case 2, 3 -> new CX(getMessage());
+            default -> null;
+        };
     }
 
 }

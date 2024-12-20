@@ -14,8 +14,6 @@ import org.hl7.fhir.r4.model.Reference;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfiles;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +31,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.URN_IETF_RFC_3986;
 
 public class Iti105ValidatorTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Iti105ValidatorTest.class);
+    private static final Logger log = LoggerFactory.getLogger(Iti105ValidatorTest.class);
 
     static Iti105Validator iti105Validator;
 
@@ -57,7 +55,7 @@ public class Iti105ValidatorTest {
         );
         assertNotNull(exception);
         var oo = (OperationOutcome) exception.getOperationOutcome();
-        oo.getIssue().forEach(ooc -> LOG.error(ooc.getSeverity().getDisplay() + " : " + ooc.getDiagnostics()));
+        oo.getIssue().forEach(ooc -> log.error("{} : {}", ooc.getSeverity().getDisplay(), ooc.getDiagnostics()));
     }
 
     private static DocumentReference validDocumentreference() throws NoSuchAlgorithmException {

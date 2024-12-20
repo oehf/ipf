@@ -28,9 +28,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.nio.charset.Charset;
+import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Boris Stanojevic
@@ -48,7 +48,7 @@ public class SampleRouteBuilderTest {
     @EndpointInject(value = "mock:file")
     MockEndpoint mockFile;
     
-    private final String JETTY_URI = "http://0.0.0.0:8800";
+    private final String JETTY_URI = "http://localhost:8800";
     
     @BeforeEach
     public void setUp(){
@@ -68,7 +68,9 @@ public class SampleRouteBuilderTest {
     @Test
     public void testMap() throws Exception {
         mockFile.expectedMessageCount(1);
-        var hl7 = IOUtils.toString(this.getClass().getResourceAsStream("/message.hl7"), Charset.defaultCharset());
+        var hl7 = IOUtils.toString(
+            Objects.requireNonNull(this.getClass().getResourceAsStream("/message.hl7")),
+            Charset.defaultCharset());
         var response = producerTemplate.requestBody(JETTY_URI + "/map", hl7, String.class);
         assertTrue(response.contains("Nachname||W|||Blahplatz"));
         mockFile.assertIsSatisfied();
@@ -78,11 +80,12 @@ public class SampleRouteBuilderTest {
     public void testMapError() {
         try {
             producerTemplate.requestBody(JETTY_URI + "/map", "BLAH");
+            fail();
         } catch (Exception e) {
-            assertTrue(e.getCause() instanceof HttpOperationFailedException);
+            assertInstanceOf(HttpOperationFailedException.class, e.getCause());
             var response = ((HttpOperationFailedException)e.getCause()).getResponseBody();
             assertTrue(response.startsWith("Message encoding is not recognized"));
-            assertEquals(400, ((HttpOperationFailedException)e.getCause()).getStatusCode());            
+            assertEquals(400, ((HttpOperationFailedException)e.getCause()).getStatusCode());
         }
     }
 }

@@ -61,8 +61,8 @@ public class Iti79Test extends StandardTestContainer {
         var stream = Iti79Test.class.getClassLoader().getResourceAsStream("messages/iti79/" + fn);
         var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
         var object = unmarshaller.unmarshal(stream);
-        if (object instanceof JAXBElement) {
-            object = ((JAXBElement<?>) object).getValue();
+        if (object instanceof JAXBElement jaxbElement) {
+            object = jaxbElement.getValue();
         }
         return (T) object;
     }
@@ -73,7 +73,7 @@ public class Iti79Test extends StandardTestContainer {
                 return;
             }
         }
-        assertEquals(null, value);
+        assertNull(value);
     }
 
     @Test
@@ -100,9 +100,7 @@ public class Iti79Test extends StandardTestContainer {
         List<AuditMessage> messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (var object : messages) {
-            var message = (AuditMessage) object;
-
+        for (var message : messages) {
             var event = message.getEventIdentification();
             assertEquals(EventActionCode.Execute, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());

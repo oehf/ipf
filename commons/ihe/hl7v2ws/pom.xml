@@ -29,6 +29,7 @@
         <dependency>
             <groupId>org.openehealth.ipf.gazelle</groupId>
             <artifactId>ipf-gazelle-validation-profiles-pcd</artifactId>
+            <optional>true</optional>
         </dependency>
 
     </dependencies>

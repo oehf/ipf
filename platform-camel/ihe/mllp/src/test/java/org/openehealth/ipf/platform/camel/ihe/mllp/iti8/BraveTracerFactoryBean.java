@@ -16,7 +16,7 @@ public class BraveTracerFactoryBean implements FactoryBean<BraveTracer> {
     }
 
     @Override
-    public BraveTracer getObject() throws Exception {
+    public BraveTracer getObject() {
         var braveCurrentTraceContext = ThreadLocalCurrentTraceContext.newBuilder()
             .addScopeDecorator(MDCScopeDecorator.get()) // Example of Brave's automatic MDC setup
             .build();

@@ -40,7 +40,7 @@ import java.util.concurrent.ConcurrentMap;
  * @author Christian Ohr
  */
 public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements Validator<Source, String> {
-    private static final Logger LOG = LoggerFactory.getLogger(XsdValidator.class);
+    private static final Logger log = LoggerFactory.getLogger(XsdValidator.class);
 
     private static final ConcurrentMap<String, Loader<Schema>> XSD_CACHE = new ConcurrentHashMap<>();
     private static final LSResourceResolverImpl RESOURCE_RESOLVER = new LSResourceResolverImpl();
@@ -73,11 +73,11 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
      *            the message to be validated
      * @param schemaResource
      *            the XML schema to validate against
-     * @return an array of validation exceptions
+     * @return a list of validation exceptions
      */
     protected List<ValidationException> doValidate(Source message, String schemaResource) {
         try {
-            LOG.debug("Validating XML message");
+            log.debug("Validating XML message");
             var schema = resource(schemaResource);
             var validator = schema.newValidator();
             var errorHandler = new CollectingErrorHandler();
@@ -85,9 +85,9 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
             validator.validate(message);
             var exceptions = errorHandler.getExceptions();
             if (! exceptions.isEmpty()) {
-                LOG.debug("Message validation found {} problems", exceptions.size());
+                log.debug("Message validation found {} problems", exceptions.size());
             } else {
-                LOG.debug("Message validation successful");
+                log.debug("Message validation successful");
             }
             return exceptions;
         } catch (Exception e) {
@@ -141,7 +141,7 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
 
         @Override
         public void warning(SAXParseException exception) {
-            // TODO LOG some message
+            // TODO log some message
         }
 
         private void add(SAXParseException exception) {

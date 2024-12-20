@@ -885,7 +885,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "delimiter", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDelimiter> createADDelimiter(net.ihe.gazelle.hl7v3.datatypes.AdxpDelimiter value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDelimiter>(_ADDelimiter_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDelimiter.class, AD.class, value);
+        return new JAXBElement<>(_ADDelimiter_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDelimiter.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpCountry }{@code >}}
@@ -893,7 +893,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "country", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCountry> createADCountry(net.ihe.gazelle.hl7v3.datatypes.AdxpCountry value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCountry>(_ADCountry_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCountry.class, AD.class, value);
+        return new JAXBElement<>(_ADCountry_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCountry.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpState }{@code >}}
@@ -901,7 +901,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "state", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpState> createADState(net.ihe.gazelle.hl7v3.datatypes.AdxpState value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpState>(_ADState_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpState.class, AD.class, value);
+        return new JAXBElement<>(_ADState_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpState.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpCounty }{@code >}}
@@ -909,7 +909,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "county", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCounty> createADCounty(net.ihe.gazelle.hl7v3.datatypes.AdxpCounty value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCounty>(_ADCounty_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCounty.class, AD.class, value);
+        return new JAXBElement<>(_ADCounty_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCounty.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpCity }{@code >}}
@@ -917,7 +917,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "city", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCity> createADCity(net.ihe.gazelle.hl7v3.datatypes.AdxpCity value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCity>(_ADCity_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCity.class, AD.class, value);
+        return new JAXBElement<>(_ADCity_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCity.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpPostalCode }{@code >}}
@@ -925,7 +925,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "postalCode", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpPostalCode> createADPostalCode(net.ihe.gazelle.hl7v3.datatypes.AdxpPostalCode value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpPostalCode>(_ADPostalCode_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpPostalCode.class, AD.class, value);
+        return new JAXBElement<>(_ADPostalCode_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpPostalCode.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpStreetAddressLine }{@code >}}
@@ -933,7 +933,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "streetAddressLine", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpStreetAddressLine> createADStreetAddressLine(net.ihe.gazelle.hl7v3.datatypes.AdxpStreetAddressLine value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpStreetAddressLine>(_ADStreetAddressLine_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpStreetAddressLine.class, AD.class, value);
+        return new JAXBElement<>(_ADStreetAddressLine_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpStreetAddressLine.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpHouseNumber }{@code >}}
@@ -941,7 +941,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "houseNumber", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumber> createADHouseNumber(net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumber value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumber>(_ADHouseNumber_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumber.class, AD.class, value);
+        return new JAXBElement<>(_ADHouseNumber_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumber.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpHouseNumberNumeric }{@code >}}
@@ -949,7 +949,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "houseNumberNumeric", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumberNumeric> createADHouseNumberNumeric(net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumberNumeric value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumberNumeric>(_ADHouseNumberNumeric_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumberNumeric.class, AD.class, value);
+        return new JAXBElement<>(_ADHouseNumberNumeric_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpHouseNumberNumeric.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpDirection }{@code >}}
@@ -957,7 +957,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "direction", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDirection> createADDirection(net.ihe.gazelle.hl7v3.datatypes.AdxpDirection value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDirection>(_ADDirection_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDirection.class, AD.class, value);
+        return new JAXBElement<>(_ADDirection_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDirection.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpStreetName }{@code >}}
@@ -965,7 +965,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "streetName", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpStreetName> createADStreetName(net.ihe.gazelle.hl7v3.datatypes.AdxpStreetName value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpStreetName>(_ADStreetName_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpStreetName.class, AD.class, value);
+        return new JAXBElement<>(_ADStreetName_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpStreetName.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpStreetNameBase }{@code >}}
@@ -973,7 +973,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "streetNameBase", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameBase> createADStreetNameBase(net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameBase value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameBase>(_ADStreetNameBase_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameBase.class, AD.class, value);
+        return new JAXBElement<>(_ADStreetNameBase_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameBase.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpStreetNameType }{@code >}}
@@ -981,7 +981,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "streetNameType", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameType> createADStreetNameType(net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameType value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameType>(_ADStreetNameType_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameType.class, AD.class, value);
+        return new JAXBElement<>(_ADStreetNameType_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpStreetNameType.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpAdditionalLocator }{@code >}}
@@ -989,7 +989,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "additionalLocator", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpAdditionalLocator> createADAdditionalLocator(net.ihe.gazelle.hl7v3.datatypes.AdxpAdditionalLocator value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpAdditionalLocator>(_ADAdditionalLocator_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpAdditionalLocator.class, AD.class, value);
+        return new JAXBElement<>(_ADAdditionalLocator_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpAdditionalLocator.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpUnitID }{@code >}}
@@ -997,7 +997,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "unitID", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpUnitID> createADUnitID(net.ihe.gazelle.hl7v3.datatypes.AdxpUnitID value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpUnitID>(_ADUnitID_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpUnitID.class, AD.class, value);
+        return new JAXBElement<>(_ADUnitID_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpUnitID.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpUnitType }{@code >}}
@@ -1005,7 +1005,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "unitType", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpUnitType> createADUnitType(net.ihe.gazelle.hl7v3.datatypes.AdxpUnitType value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpUnitType>(_ADUnitType_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpUnitType.class, AD.class, value);
+        return new JAXBElement<>(_ADUnitType_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpUnitType.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpCareOf }{@code >}}
@@ -1013,7 +1013,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "careOf", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCareOf> createADCareOf(net.ihe.gazelle.hl7v3.datatypes.AdxpCareOf value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCareOf>(_ADCareOf_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCareOf.class, AD.class, value);
+        return new JAXBElement<>(_ADCareOf_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCareOf.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpCensusTract }{@code >}}
@@ -1021,7 +1021,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "censusTract", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCensusTract> createADCensusTract(net.ihe.gazelle.hl7v3.datatypes.AdxpCensusTract value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpCensusTract>(_ADCensusTract_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCensusTract.class, AD.class, value);
+        return new JAXBElement<>(_ADCensusTract_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpCensusTract.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpDeliveryAddressLine }{@code >}}
@@ -1029,7 +1029,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "deliveryAddressLine", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryAddressLine> createADDeliveryAddressLine(net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryAddressLine value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryAddressLine>(_ADDeliveryAddressLine_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryAddressLine.class, AD.class, value);
+        return new JAXBElement<>(_ADDeliveryAddressLine_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryAddressLine.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpDeliveryInstallationType }{@code >}}
@@ -1037,7 +1037,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "deliveryInstallationType", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationType> createADDeliveryInstallationType(net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationType value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationType>(_ADDeliveryInstallationType_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationType.class, AD.class, value);
+        return new JAXBElement<>(_ADDeliveryInstallationType_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationType.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpDeliveryInstallationArea }{@code >}}
@@ -1045,7 +1045,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "deliveryInstallationArea", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationArea> createADDeliveryInstallationArea(net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationArea value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationArea>(_ADDeliveryInstallationArea_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationArea.class, AD.class, value);
+        return new JAXBElement<>(_ADDeliveryInstallationArea_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationArea.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpDeliveryInstallationQualifier }{@code >}}
@@ -1053,7 +1053,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "deliveryInstallationQualifier", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationQualifier> createADDeliveryInstallationQualifier(net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationQualifier value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationQualifier>(_ADDeliveryInstallationQualifier_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationQualifier.class, AD.class, value);
+        return new JAXBElement<>(_ADDeliveryInstallationQualifier_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryInstallationQualifier.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpDeliveryMode }{@code >}}
@@ -1061,7 +1061,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "deliveryMode", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryMode> createADDeliveryMode(net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryMode value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryMode>(_ADDeliveryMode_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryMode.class, AD.class, value);
+        return new JAXBElement<>(_ADDeliveryMode_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryMode.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpDeliveryModeIdentifier }{@code >}}
@@ -1069,7 +1069,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "deliveryModeIdentifier", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryModeIdentifier> createADDeliveryModeIdentifier(net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryModeIdentifier value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryModeIdentifier>(_ADDeliveryModeIdentifier_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryModeIdentifier.class, AD.class, value);
+        return new JAXBElement<>(_ADDeliveryModeIdentifier_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpDeliveryModeIdentifier.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpBuildingNumberSuffix }{@code >}}
@@ -1077,7 +1077,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "buildingNumberSuffix", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpBuildingNumberSuffix> createADBuildingNumberSuffix(net.ihe.gazelle.hl7v3.datatypes.AdxpBuildingNumberSuffix value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpBuildingNumberSuffix>(_ADBuildingNumberSuffix_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpBuildingNumberSuffix.class, AD.class, value);
+        return new JAXBElement<>(_ADBuildingNumberSuffix_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpBuildingNumberSuffix.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpPostBox }{@code >}}
@@ -1085,7 +1085,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "postBox", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpPostBox> createADPostBox(net.ihe.gazelle.hl7v3.datatypes.AdxpPostBox value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpPostBox>(_ADPostBox_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpPostBox.class, AD.class, value);
+        return new JAXBElement<>(_ADPostBox_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpPostBox.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link AdxpPrecinct }{@code >}}
@@ -1093,7 +1093,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "precinct", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpPrecinct> createADPrecinct(net.ihe.gazelle.hl7v3.datatypes.AdxpPrecinct value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.AdxpPrecinct>(_ADPrecinct_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpPrecinct.class, AD.class, value);
+        return new JAXBElement<>(_ADPrecinct_QNAME, net.ihe.gazelle.hl7v3.datatypes.AdxpPrecinct.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link SXCMTS }{@code >}}
@@ -1101,7 +1101,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "useablePeriod", scope = AD.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.SXCMTS> createADUseablePeriod(net.ihe.gazelle.hl7v3.datatypes.SXCMTS value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.SXCMTS>(_ADUseablePeriod_QNAME, net.ihe.gazelle.hl7v3.datatypes.SXCMTS.class, AD.class, value);
+        return new JAXBElement<>(_ADUseablePeriod_QNAME, net.ihe.gazelle.hl7v3.datatypes.SXCMTS.class, AD.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link TEL }{@code >}}
@@ -1109,7 +1109,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "reference", scope = ED.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.TEL> createEDReference(net.ihe.gazelle.hl7v3.datatypes.TEL value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.TEL>(_EDReference_QNAME, net.ihe.gazelle.hl7v3.datatypes.TEL.class, ED.class, value);
+        return new JAXBElement<>(_EDReference_QNAME, net.ihe.gazelle.hl7v3.datatypes.TEL.class, ED.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link Thumbnail }{@code >}}
@@ -1117,7 +1117,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "thumbnail", scope = ED.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.Thumbnail> createEDThumbnail(net.ihe.gazelle.hl7v3.datatypes.Thumbnail value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.Thumbnail>(_EDThumbnail_QNAME, net.ihe.gazelle.hl7v3.datatypes.Thumbnail.class, ED.class, value);
+        return new JAXBElement<>(_EDThumbnail_QNAME, net.ihe.gazelle.hl7v3.datatypes.Thumbnail.class, ED.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link EnDelimiter }{@code >}}
@@ -1125,7 +1125,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "delimiter", scope = EN.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnDelimiter> createENDelimiter(net.ihe.gazelle.hl7v3.datatypes.EnDelimiter value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnDelimiter>(_ENDelimiter_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnDelimiter.class, EN.class, value);
+        return new JAXBElement<>(_ENDelimiter_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnDelimiter.class, EN.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link EnFamily }{@code >}}
@@ -1133,7 +1133,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "family", scope = EN.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnFamily> createENFamily(net.ihe.gazelle.hl7v3.datatypes.EnFamily value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnFamily>(_ENFamily_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnFamily.class, EN.class, value);
+        return new JAXBElement<>(_ENFamily_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnFamily.class, EN.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link EnGiven }{@code >}}
@@ -1141,7 +1141,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "given", scope = EN.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnGiven> createENGiven(net.ihe.gazelle.hl7v3.datatypes.EnGiven value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnGiven>(_ENGiven_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnGiven.class, EN.class, value);
+        return new JAXBElement<>(_ENGiven_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnGiven.class, EN.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link EnPrefix }{@code >}}
@@ -1149,7 +1149,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "prefix", scope = EN.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnPrefix> createENPrefix(net.ihe.gazelle.hl7v3.datatypes.EnPrefix value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnPrefix>(_ENPrefix_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnPrefix.class, EN.class, value);
+        return new JAXBElement<>(_ENPrefix_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnPrefix.class, EN.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link EnSuffix }{@code >}}
@@ -1157,7 +1157,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "suffix", scope = EN.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnSuffix> createENSuffix(net.ihe.gazelle.hl7v3.datatypes.EnSuffix value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.EnSuffix>(_ENSuffix_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnSuffix.class, EN.class, value);
+        return new JAXBElement<>(_ENSuffix_QNAME, net.ihe.gazelle.hl7v3.datatypes.EnSuffix.class, EN.class, value);
     }
 	/**
      * Create an instance of {@link JAXBElement }{@code <}{@link IVLTS }{@code >}}
@@ -1165,7 +1165,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "validTime", scope = EN.class)
     public JAXBElement<net.ihe.gazelle.hl7v3.datatypes.IVLTS> createENValidTime(net.ihe.gazelle.hl7v3.datatypes.IVLTS value) {
-        return new JAXBElement<net.ihe.gazelle.hl7v3.datatypes.IVLTS>(_ENValidTime_QNAME, net.ihe.gazelle.hl7v3.datatypes.IVLTS.class, EN.class, value);
+        return new JAXBElement<>(_ENValidTime_QNAME, net.ihe.gazelle.hl7v3.datatypes.IVLTS.class, EN.class, value);
     }
 
 }

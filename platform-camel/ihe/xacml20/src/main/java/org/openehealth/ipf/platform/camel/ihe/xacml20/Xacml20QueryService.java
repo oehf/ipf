@@ -39,7 +39,7 @@ abstract public class Xacml20QueryService extends AbstractWebService {
         var exchange = process(request);
         var exception = Exchanges.extractException(exchange);
         if (exception != null) {
-            log.debug(getClass().getSimpleName() + " service failed", exception);
+            log.debug("{} service failed", getClass().getSimpleName(), exception);
             var homeCommunityId = HomeCommunityUtils.getHomeCommunityId(exchange, this.homeCommunityId);
             var messageCreator = new Xacml20MessageCreator(homeCommunityId);
             return messageCreator.createNegativeQueryResponse(exception);

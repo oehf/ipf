@@ -35,7 +35,7 @@ import org.w3c.dom.ls.LSResourceResolver;
  */
 public class LSResourceResolverImpl implements LSResourceResolver {
 
-    private final static Logger LOG = LoggerFactory.getLogger(LSResourceResolverImpl.class);
+    private final static Logger log = LoggerFactory.getLogger(LSResourceResolverImpl.class);
 
     /**
      * @see org.w3c.dom.ls.LSResourceResolver#resolveResource(String, String,
@@ -52,7 +52,7 @@ public class LSResourceResolverImpl implements LSResourceResolver {
             var is = resource.openStream();
             lsInput = new LSInputImpl(is);
         } catch (IOException e) {
-            LOG.debug("Referenced external file {} could not be found. Falling back to "
+            log.debug("Referenced external file {} could not be found. Falling back to "
                     + "default resolution.", systemId);
         }
         return lsInput;

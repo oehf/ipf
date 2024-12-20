@@ -25,7 +25,7 @@ class Transport2RouteBuilder extends RouteBuilder {
     
     void configure() {
 
-        from('netty:tcp://127.0.0.1:8888?sync=true&decoders=#hl7decoder&encoders=#hl7encoder')
+        from('netty:tcp://127.0.0.1:8889?sync=true&decoders=#hl7decoder&encoders=#hl7encoder')
             .unmarshal().hl7()
             .delay(50) // simulate some processing effort
             .transform(HL7v2.ack())

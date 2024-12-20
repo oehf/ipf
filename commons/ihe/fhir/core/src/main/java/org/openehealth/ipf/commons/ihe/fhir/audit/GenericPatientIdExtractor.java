@@ -50,7 +50,7 @@ public class GenericPatientIdExtractor implements PatientIdExtractor {
         if (resource != null) {
             var resourceDefinition = fhirContext.getResourceDefinition(resource);
             if (PATIENT.equals(resourceDefinition.getName())) {
-                String id = resource.getIdElement().getIdPart();
+                var id = resource.getIdElement().getIdPart();
                 return id != null ? Optional.of(patientReference(id)) : Optional.empty();
             } else {
                 try {
@@ -69,7 +69,7 @@ public class GenericPatientIdExtractor implements PatientIdExtractor {
     // There is probably a bug in HAPI FHIR for expressions like DocumentReference.subject.where(resolve() is Patient)
     // resolve() always returns null instead of the actual reference value, see FhirPathEngine#funcResolve()
     private String simplifyPath(String path) {
-        int idx = path.indexOf(".where");
+        var idx = path.indexOf(".where");
         return idx < 0 ? path : path.substring(0, idx);
     }
 

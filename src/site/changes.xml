@@ -23,18 +23,52 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="" description="" date="">
+        <release version="5.0.0" description="" date="">
+            <action issue="461" dev="ohr" type="update">
+                Removed HAPI FHIR dependency from ipf-commons-audit module, replacing it with a more flexible
+                approach of (thread-local) context propagation.
+            </action>
+            <action issue="460" dev="unixoid" type="fix">
+                Added missing type converter for PDQv3 continuation protocol.
+            </action>
+            <action issue="457" dev="stanojevic-boris" type="update">
+                Add the possibility to use custom additional URL parameters on a ITI SOAP calls, using
+                the new interceptor type CustomUrlParametersOutInterceptor.
+            </action>
+            <action issue="454" dev="thopap" type="fix">
+                Deprecated code was removed. Most notably, XDS.a remainders, Exchanges.resultMessage(Exchange) and some
+                accessors in AuditContext.
+            </action>
+            <action issue="454" dev="ohr" type="update">
+                MessageUtils.copy has been renamed to copyMessage because there was a
+                conflict in more recent versions of the HAPI HL7 library.
+            </action>
+            <action issue="453" dev="ohr" type="update">
+                Use Micrometer-tracing for distributed tracing instead of directly using Brave. Test cases have
+                been added for Brave and OpenTelemetry tracing implementations.
+            </action>
+            <action issue="452" dev="ohr" type="fix">
+                If a FhirContext is provided as parameter to a Fhir Producer, other client-side
+                parameters must be disregarded.
+            </action>
             <action issue="451" dev="unixoid" type="fix">
-                Improved translation between DSMLv2 and JSON
+                Improved translation between DSMLv2 and JSON.
             </action>
             <action issue="449" dev="unixoid" type="add">
-                Add W3C Trace Context ID to Audit Trail records in the Swiss EPR context
+                Add W3C Trace Context ID to Audit Trail records in the Swiss EPR context.
+            </action>
+            <action issue="448" dev="ohr" type="add">
+                Add support for IHE ITI-119 Patient $match operation (PDQm option).
             </action>
             <action issue="447" dev="unixoid" type="add">
-                Implement CP-ITI-793: Support for query type "FindDocumentsByReferenceIdListForMultiplePatients" in ITI-51
+                Implement CP-ITI-793: Support for query type "FindDocumentsByReferenceIdListForMultiplePatients" in ITI-51.
             </action>
             <action issue="446" dev="Ivan1pl" type="fix">
-                Properly handle query payload when translating ATNA audit records to FHIR
+                Properly handle query payload when translating ATNA audit records to FHIR.
+            </action>
+            <action issue="414" dev="ohr" type="update">
+                IPF and all major dependencies (including Camel, CXF, Spring Framework, Spring Boot, HAPI FHIR) have been aligned
+                to be compatible with Javarta EE 10 APIs. IPF now also requires JDK 17 as minimum.
             </action>
         </release>
         <release version="4.8.0" description="IPF 4.8.0" date="14 Mar 2024">

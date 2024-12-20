@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.TimeRange;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -40,6 +42,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public abstract class DocumentsQuery extends StoredQuery  {
+    @Serial
     private static final long serialVersionUID = 1162423827844317922L;
 
     @XmlElement(name = "typeCode")

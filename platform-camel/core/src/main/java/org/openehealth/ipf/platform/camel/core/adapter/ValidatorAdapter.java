@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.core.modules.api.Validator;
  * @author Martin Krasser
  */
 public class ValidatorAdapter extends ProcessorAdapter {
-    private static final transient Logger LOG = LoggerFactory.getLogger(ValidatorAdapter.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(ValidatorAdapter.class.getName());
 
     /**
      * Validators may check whether the Camel message header is set
@@ -119,7 +119,7 @@ public class ValidatorAdapter extends ProcessorAdapter {
      */
     public static boolean validationEnabled(Exchange exchange) {
         if (Boolean.FALSE.equals(exchange.getIn().getHeader(NEED_VALIDATION_HEADER_NAME, Boolean.class))) {
-            LOG.debug("Validation disabled");
+            log.debug("Validation disabled");
             return false;
         }
         return true;

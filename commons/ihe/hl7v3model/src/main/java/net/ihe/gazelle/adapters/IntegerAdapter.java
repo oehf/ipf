@@ -5,7 +5,7 @@ import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 public class IntegerAdapter extends XmlAdapter<String, Integer>{
 
 	@Override
-	public String marshal(final Integer v) throws Exception {
+	public String marshal(final Integer v) {
 		if (v != null) {
 			return String.valueOf(v.intValue());
 		}
@@ -13,7 +13,7 @@ public class IntegerAdapter extends XmlAdapter<String, Integer>{
 	}
 
 	@Override
-	public Integer unmarshal(final String v) throws Exception {
+	public Integer unmarshal(final String v) {
 		if ((v == null) || (v.isEmpty())){
 			return null;
 		}

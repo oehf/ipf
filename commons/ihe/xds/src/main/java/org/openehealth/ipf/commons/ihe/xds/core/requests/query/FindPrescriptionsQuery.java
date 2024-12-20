@@ -20,6 +20,8 @@ import lombok.ToString;
 
 import jakarta.xml.bind.annotation.*;
 
+import java.io.Serial;
+
 /**
  * Represents a stored query for FindPrescriptionsQuery (PHARM-1).
  * @author Quentin Ligier
@@ -31,6 +33,7 @@ import jakarta.xml.bind.annotation.*;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class FindPrescriptionsQuery extends PharmacyStableDocumentsQuery {
+    @Serial
     private static final long serialVersionUID = -3448220074327935334L;
 
     /**

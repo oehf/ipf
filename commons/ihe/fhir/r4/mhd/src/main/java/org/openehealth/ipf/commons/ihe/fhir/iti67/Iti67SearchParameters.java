@@ -42,8 +42,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 import static org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67ResourceProvider.STU3_INDEXED;
 
 /**
@@ -119,24 +118,26 @@ public class Iti67SearchParameters extends FhirSearchAndSortParameters<DocumentR
         return Optional.empty();
     }
 
-    private static final Comparator<DocumentReference> CP_DATE = nullsLast(comparing(DocumentReference::getDate));
+    private static final Comparator<DocumentReference> CP_DATE = comparing(
+        DocumentReference::getDate, nullsLast(naturalOrder()));
 
-    private static final Comparator<DocumentReference> CP_AUTHOR = nullsLast(comparing(documentReference -> {
+    private static final Comparator<DocumentReference> CP_AUTHOR = comparing(
+        Iti67SearchParameters::getAuthorName, nullsLast(naturalOrder()));
+
+    private static String getAuthorName(DocumentReference documentReference) {
         if (!documentReference.hasAuthor()) return null;
         var author = documentReference.getAuthorFirstRep();
-        if (author.getResource() instanceof PractitionerRole) {
-            var practitionerRole = (PractitionerRole) author.getResource();
+        if (author.getResource() instanceof PractitionerRole practitionerRole) {
             if (!practitionerRole.hasPractitioner()) return null;
-                author = practitionerRole.getPractitioner();
+            author = practitionerRole.getPractitioner();
         }
         if (author.getResource() == null) return null;
-        if (author.getResource() instanceof Practitioner) {
-            var practitioner = (Practitioner) author.getResource();
+        if (author.getResource() instanceof Practitioner practitioner) {
             if (!practitioner.hasName()) return null;
             var name = practitioner.getNameFirstRep();
             return name.getFamilyElement().getValueNotNull() + name.getGivenAsSingleString();
         }
         return null;
-    }));
+    }
 
 }

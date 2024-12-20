@@ -111,7 +111,7 @@ public class ChPpq3Test extends FhirTestContainer {
     }
 
     @Test
-    public void testUpdate2() throws Exception {
+    public void testUpdate2() {
         String traceContextId = "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01";
 
         Consent consent = create201Consent(createUuid(), "123456789012345678");
@@ -139,7 +139,7 @@ public class ChPpq3Test extends FhirTestContainer {
     }
 
     @Test
-    public void testUpdate3() throws Exception {
+    public void testUpdate3() {
         Consent consent = create201Consent(createUuid(), "123456789012345678");
         consent.setId(createUuid());
 
@@ -165,7 +165,7 @@ public class ChPpq3Test extends FhirTestContainer {
 
     @Test
     @Disabled
-    public void testDelete1() throws Exception {
+    public void testDelete1() {
         MethodOutcome methodOutcome = client.delete()
                 .resourceConditionalByType(Consent.class)
                 .where(Consent.IDENTIFIER.exactly().identifier(createUuid()))

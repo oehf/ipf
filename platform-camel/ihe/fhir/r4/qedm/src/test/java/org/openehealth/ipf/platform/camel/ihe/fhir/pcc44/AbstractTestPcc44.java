@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 abstract class AbstractTestPcc44 extends FhirTestContainer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestPcc44.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractTestPcc44.class);
 
     public static void startServer(String contextDescriptor, boolean secure) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);

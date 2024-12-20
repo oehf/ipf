@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.core.support.builder.RouteBuilderSuppo
 public class ConverterRouteBuilder extends RouteBuilderSupport {
     
     @Override
-    public void configure() throws Exception {
+    public void configure() {
         from("direct:converter-test")
         .process(helper.converter("testConverter"));
     }

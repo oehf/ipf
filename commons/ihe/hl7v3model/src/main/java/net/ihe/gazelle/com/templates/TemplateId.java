@@ -8,7 +8,9 @@
 
 package net.ihe.gazelle.com.templates;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.Objects;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -44,7 +46,8 @@ public class TemplateId  implements Serializable{
     /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 	
 	@XmlAttribute(name = "id")
     protected String id;
@@ -84,11 +87,7 @@ public class TemplateId  implements Serializable{
      *     
      */
     public String getName() {
-        if (name == null) {
-            return "UNKNOWN";
-        } else {
-            return name;
-        }
+        return Objects.requireNonNullElse(name, "UNKNOWN");
     }
 
     /**

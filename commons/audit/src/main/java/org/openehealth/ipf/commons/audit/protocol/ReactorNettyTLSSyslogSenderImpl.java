@@ -25,9 +25,9 @@ import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.netty.Connection;
+import reactor.netty.internal.util.Metrics;
 import reactor.netty.resources.LoopResources;
 import reactor.netty.tcp.TcpClient;
-import reactor.util.Metrics;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Connection, ReactorNettyTLSSyslogSenderImpl.ReactorNettyDestination> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ReactorNettyTLSSyslogSenderImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(ReactorNettyTLSSyslogSenderImpl.class);
 
     private int workerThreads = 1;
     private long connectTimeoutMillis = 5000;
@@ -119,11 +119,11 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
                     .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int) connectTimeout)
                     .option(ChannelOption.SO_KEEPALIVE, true)
                     .wiretap(getClass().getName(), LogLevel.TRACE)
-                    .metrics(Metrics.isInstrumentationAvailable())
+                    .metrics(Metrics.isMicrometerAvailable())
                     .secure(spec -> spec.sslContext(sslContext))
-                    .doOnConnect(config -> LOG.info("TLS Syslog Client is about to be started"))
-                    .doOnConnected(connection -> LOG.info("TLS Syslog Client connected to {}", connection.address()))
-                    .doOnDisconnected(connection -> LOG.info("TLS Syslog Client disconnected from {}", connection.address()));
+                    .doOnConnect(config -> log.info("TLS Syslog Client is about to be started"))
+                    .doOnConnected(connection -> log.info("TLS Syslog Client connected to {}", connection.address()))
+                    .doOnDisconnected(connection -> log.info("TLS Syslog Client disconnected from {}", connection.address()));
 
         }
 
@@ -150,7 +150,7 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
         public void write(byte[] bytes) {
             // The write operation is asynchronous.
             var channel = getHandle().channel();
-            LOG.trace("Writing {} bytes using session: {}", bytes.length, channel);
+            log.trace("Writing {} bytes using session: {}", bytes.length, channel);
             try {
                 if (!channel.writeAndFlush(Unpooled.wrappedBuffer(bytes)).await(sendTimeout)) {
                     throw new AuditException("Could not send audit message to " + host + ":" + port);

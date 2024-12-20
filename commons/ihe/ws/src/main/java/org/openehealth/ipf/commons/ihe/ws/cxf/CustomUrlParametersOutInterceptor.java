@@ -1,6 +1,5 @@
 package org.openehealth.ipf.commons.ihe.ws.cxf;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
@@ -26,7 +25,7 @@ public class CustomUrlParametersOutInterceptor extends AbstractPhaseInterceptor<
 
     @Override
     public void handleMessage(SoapMessage message) throws Fault {
-        if (StringUtils.isNotBlank(queryParameters)) {
+        if (queryParameters != null && !queryParameters.isEmpty()) {
             message.put(Message.QUERY_STRING, queryParameters);
         }
     }

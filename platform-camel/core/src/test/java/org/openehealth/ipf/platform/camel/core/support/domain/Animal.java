@@ -20,7 +20,7 @@ package org.openehealth.ipf.platform.camel.core.support.domain;
  */
 public abstract class Animal {
 
-    private String name;
+    private final String name;
 
     public Animal(String name) {
         this.name = name;

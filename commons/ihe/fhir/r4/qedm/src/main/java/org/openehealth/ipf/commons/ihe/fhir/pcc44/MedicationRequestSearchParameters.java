@@ -51,8 +51,8 @@ public class MedicationRequestSearchParameters extends Pcc44CommonSearchParamete
 
     @Override
     protected Optional<Comparator<MedicationRequest>> comparatorFor(String paramName) {
-        switch (paramName) {
-            case MedicationRequest.SP_AUTHOREDON: return Optional.of(nullsLast(comparing(MedicationRequest::getAuthoredOn)));
+        if (paramName.equals(MedicationRequest.SP_AUTHOREDON)) {
+            return Optional.of(nullsLast(comparing(MedicationRequest::getAuthoredOn)));
         }
         return Optional.empty();
     }

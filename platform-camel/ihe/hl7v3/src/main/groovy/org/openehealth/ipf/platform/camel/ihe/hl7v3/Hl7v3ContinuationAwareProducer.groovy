@@ -51,7 +51,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  * in the IHE PIXv3/PDQv3 Supplement August 2010, pp. 85-87 and 117-119.
  */
 class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration, String, String> {
-    private static final transient Logger LOG = LoggerFactory.getLogger(Hl7v3ContinuationAwareProducer.class)
+    private static final transient Logger log = LoggerFactory.getLogger(Hl7v3ContinuationAwareProducer.class)
 
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()
 
@@ -141,7 +141,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
             auditDataset.setRemoteAddress(requestContext.get(Message.ENDPOINT_ADDRESS)?.toString())
             auditStrategy.enrichAuditDatasetFromRequest(auditDataset, request, null)
         } catch (Exception e) {
-            LOG.error("Phase 1 of client-side ATNA auditing failed", e)
+            log.error("Phase 1 of client-side ATNA auditing failed", e)
         }
 
         Exception exception
@@ -205,7 +205,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
             if ((fragment.documentElement.localName != wsTransactionConfiguration.mainResponseRootElementName) ||
                 (getAttribute(queryAck, 'queryResponseCode', 'code') != 'OK'))
             {
-                LOG.debug('Bad response type, continuation not possible')
+                log.debug('Bad response type, continuation not possible')
                 accumulator = null
                 break
             }
@@ -215,7 +215,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
             int currentQuantity   = getIntFromValueAttribute(queryAck, 'resultCurrentQuantity')
             int remainingQuantity = getIntFromValueAttribute(queryAck, 'resultRemainingQuantity')
             if ((totalQuantity < 0) || (currentQuantity < 0) || (remainingQuantity < 0)) {
-                LOG.debug('Total/current/remaining quantity not specified, continuation not possible')
+                log.debug('Total/current/remaining quantity not specified, continuation not possible')
                 accumulator = null
                 break
             }
@@ -225,7 +225,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
                 // check whether the response consists from a single fragment,
                 // i.e. whether aggregation is necessary at all
                 if (remainingQuantity == 0) {
-                    LOG.debug('Response not fragmented, return as is')
+                    log.debug('Response not fragmented, return as is')
                     break
                 }
 
@@ -245,7 +245,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
 
                 // check whether the next fragment should be requested
                 if (remainingQuantity == 0) {
-                    LOG.debug('Processed last fragment')
+                    log.debug('Processed last fragment')
                     break
                 }
             }
@@ -254,7 +254,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
             startResultNumber += currentQuantity
             String continuationRequest = createQuqiRequest(
                     request, false, startResultNumber, continuationQuantity)
-            LOG.debug('Sending continuation request\n {}', continuationRequest)
+            log.debug('Sending continuation request\n {}', continuationRequest)
             fragmentString = client.continuation(continuationRequest)
         }
 
@@ -263,7 +263,7 @@ class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDatase
             if (autoCancel) {
                 // TODO: cancel on errors as well
                 String cancelRequest = createQuqiRequest(request, true, 0, 0)
-                LOG.debug('Sending automatic cancel request\n {}', cancelRequest)
+                log.debug('Sending automatic cancel request\n {}', cancelRequest)
                 client.cancel(cancelRequest)
             }
 

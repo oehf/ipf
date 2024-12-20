@@ -17,8 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
-import org.hl7.fhir.r4.model.ListResource;
-import org.ietf.jgss.Oid;
 
 public abstract class FolderList<T extends FolderList<T>> extends MhdList<T> {
 

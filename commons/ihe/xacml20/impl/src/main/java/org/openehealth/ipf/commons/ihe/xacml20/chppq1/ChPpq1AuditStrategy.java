@@ -52,17 +52,17 @@ abstract public class ChPpq1AuditStrategy extends AuditStrategySupport<ChPpqAudi
 
     @Override
     public ChPpqAuditDataset enrichAuditDatasetFromRequest(ChPpqAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        if (request instanceof AddPolicyRequest) {
+        if (request instanceof AddPolicyRequest addPolicyRequest) {
             auditDataset.setAction(EventActionCode.Create);
-            Xacml20Utils.toStream((AddPolicyRequest) request).forEach(policy -> auditDataset.getPolicyAndPolicySetIds().add(policy.getId().toString()));
+            Xacml20Utils.toStream(addPolicyRequest).forEach(policy -> auditDataset.getPolicyAndPolicySetIds().add(policy.getId().toString()));
             auditDataset.setPatientId(extractPatientIdFromPolicy(Xacml20Utils.toStream((AddPolicyRequest) request)));
-        } else if (request instanceof UpdatePolicyRequest) {
+        } else if (request instanceof UpdatePolicyRequest updatePolicyRequest) {
             auditDataset.setAction(EventActionCode.Update);
-            Xacml20Utils.toStream((UpdatePolicyRequest) request).forEach(policy -> auditDataset.getPolicyAndPolicySetIds().add(policy.getId().toString()));
+            Xacml20Utils.toStream(updatePolicyRequest).forEach(policy -> auditDataset.getPolicyAndPolicySetIds().add(policy.getId().toString()));
             auditDataset.setPatientId(extractPatientIdFromPolicy(Xacml20Utils.toStream((UpdatePolicyRequest) request)));
-        } else if (request instanceof DeletePolicyRequest) {
+        } else if (request instanceof DeletePolicyRequest deletePolicyRequest) {
             auditDataset.setAction(EventActionCode.Delete);
-            Xacml20Utils.toStream((DeletePolicyRequest) request).forEach(id -> auditDataset.getPolicyAndPolicySetIds().add(id.getValue()));
+            Xacml20Utils.toStream(deletePolicyRequest).forEach(id -> auditDataset.getPolicyAndPolicySetIds().add(id.getValue()));
             // The deletion request payload only contains a policy ID. So we have to rely on the XUA token; if no XUA token is present
             // the patient participant won't be present in the ATNA record either.
             auditDataset.setPatientId(auditDataset.getXuaPatientId());

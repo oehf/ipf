@@ -30,7 +30,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class CDAR2ValidatorTest {
-    private static final Logger LOG = LoggerFactory.getLogger(CDAR2ValidatorTest.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(CDAR2ValidatorTest.class.getName());
 
     private CDAR2Validator validator;
 
@@ -42,9 +42,9 @@ public class CDAR2ValidatorTest {
     }
 
     @BeforeEach
-    public void setUp() throws Exception {
+    public void setUp() {
         validator = new CDAR2Validator();
-        var context = new HashMap<Object, Object>();
+        var context = new HashMap<>();
         context.put(CDAUtil.ValidationHandler.class, new DefaultValidationHandler());
         CDAR2Utils.initCCD();
         CDAR2Utils.initHITSPC32();
@@ -53,7 +53,7 @@ public class CDAR2ValidatorTest {
 
     @Test
     public final void validateCDA() throws Exception {
-        LOG.info("Validating plain CDA document");
+        log.info("Validating plain CDA document");
         var is = getClass().getResourceAsStream(
             "/builders/content/document/SampleCDADocument.xml");
         var cda = CDAUtil.load(is);
@@ -62,7 +62,7 @@ public class CDAR2ValidatorTest {
     
     @Test
     public final void validateCDAError() throws Exception {
-        LOG.info("Validating erroneous plain CDA document");
+        log.info("Validating erroneous plain CDA document");
         var is = getClass().getResourceAsStream(
             "/builders/content/document/InvalidCDADocument.xml");
         var cda = CDAUtil.load(is);
@@ -72,7 +72,7 @@ public class CDAR2ValidatorTest {
     
     @Test
     public final void validateCCD() throws Exception {
-        LOG.info("Validating CCD document");
+        log.info("Validating CCD document");
         var is = getClass().getResourceAsStream(
             "/builders/content/document/SampleCCDDocument.xml");
         var ccd = CDAUtil.load(is);
@@ -81,7 +81,7 @@ public class CDAR2ValidatorTest {
     
     @Test
     public final void validateCCDError() throws Exception {
-        LOG.info("Validating erroneous CCD document");
+        log.info("Validating erroneous CCD document");
         var is = getClass().getResourceAsStream(
             "/builders/content/document/InvalidCCDDocument.xml");
         var ccd = CDAUtil.load(is);
@@ -91,7 +91,7 @@ public class CDAR2ValidatorTest {
 
     @Disabled
     public final void validateCDAwithHITSPProfile() throws Exception {
-        LOG.info("Validating HITSPC32 document");
+        log.info("Validating HITSPC32 document");
         var is = getClass().getResourceAsStream(
                 "/builders/content/document/SampleHITSPC32v25Document.xml");
         var hitsp = CDAUtil.load(is);

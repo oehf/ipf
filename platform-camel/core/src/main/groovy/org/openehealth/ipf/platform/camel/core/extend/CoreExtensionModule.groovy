@@ -350,7 +350,7 @@ class CoreExtensionModule {
         String dispatcherEndpointUri = 'direct:multiplast-' + uuid
         routeBuilder.from(dispatcherEndpointUri)
             .process {
-                int index = it.getProperty(Exchange.SPLIT_INDEX)
+                int index = it.getProperty(Exchange.SPLIT_INDEX, Integer.class)
                 it.in.headers['multiplast.uri'] = it.properties['multiplast.endpointUris'][index]
             }
             .recipientList().header('multiplast.uri')

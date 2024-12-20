@@ -25,7 +25,6 @@ import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
-import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 import java.nio.charset.StandardCharsets;
 

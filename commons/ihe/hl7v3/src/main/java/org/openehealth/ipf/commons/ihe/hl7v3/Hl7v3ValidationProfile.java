@@ -30,7 +30,7 @@ public class Hl7v3ValidationProfile implements CombinedXmlValidationProfile {
     public static final String DEFAULT_XSD = "";
     public static final String GAZELLE_PIXPDQV3_SCHEMATRON = "/schematron/gazelle-pixpdqv3.sch.xml";
 
-    static class Row {
+    public static class Row {
         private static final String HL7V3_SCHEMAS_PATH = "/schema/HL7V3/NE2008/multicacheschemas/";
 
         @Getter final String rootElementName;

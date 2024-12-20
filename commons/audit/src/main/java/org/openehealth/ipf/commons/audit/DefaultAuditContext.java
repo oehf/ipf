@@ -16,6 +16,8 @@
 
 package org.openehealth.ipf.commons.audit;
 
+import io.micrometer.context.ContextRegistry;
+import io.micrometer.context.integration.Slf4jThreadLocalAccessor;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
@@ -34,6 +36,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
+ * Default implementation of an AuditContext. By default, audit is written to localhost:514 via UDP.
+ * <p>
+ * The {@link ContextRegistry} returned by {@link #getContextRegistry()} will always contain an instance
+ * of {@link Slf4jThreadLocalAccessor} in order to propagate MDC context to an
+ * potentially asynchronous auditor.
+ *
  * @author Christian Ohr
  * @since 3.5
  */
@@ -106,6 +114,10 @@ public class DefaultAuditContext implements AuditContext {
 
     @Setter
     private FhirAuditDatasetEnricher fhirAuditDatasetEnricher;
+
+    @Getter
+    private final ContextRegistry contextRegistry = new ContextRegistry()
+        .registerThreadLocalAccessor(new Slf4jThreadLocalAccessor());
 
     public String getAuditRepositoryTransport() {
         return auditTransmissionProtocol.getTransportName();

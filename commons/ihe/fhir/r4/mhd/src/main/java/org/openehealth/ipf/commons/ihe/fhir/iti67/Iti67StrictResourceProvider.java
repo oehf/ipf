@@ -88,8 +88,8 @@ public class Iti67StrictResourceProvider extends AbstractPlainProvider {
                     .forEach(relatedTokenParam::addOr);
         }
 
-        ReferenceOrListParam relatedParam = new ReferenceOrListParam();
-        TokenOrListParam relatedIdParam = new TokenOrListParam();
+        var relatedParam = new ReferenceOrListParam();
+        var relatedIdParam = new TokenOrListParam();
         if (related != null) {
             related.getValuesAsQueryTokens().stream()
                     .filter(referenceParam -> !DocumentReference.SP_IDENTIFIER.equals(referenceParam.getChain()))

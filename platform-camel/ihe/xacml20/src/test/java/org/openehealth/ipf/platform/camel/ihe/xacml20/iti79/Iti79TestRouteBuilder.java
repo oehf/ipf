@@ -30,7 +30,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidat
 public class Iti79TestRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         // sends a correct response with status "success"
         from("ser-iti79:iti79-success")

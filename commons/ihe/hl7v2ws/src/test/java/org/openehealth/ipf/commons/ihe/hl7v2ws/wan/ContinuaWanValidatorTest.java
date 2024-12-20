@@ -84,6 +84,7 @@ public class ContinuaWanValidatorTest extends Pcd01ValidatorTest {
         assertThrows(ValidationException.class, () -> validate(load(getParser(), "wan/invalid-wan-response.hl7v2")));
     }
     
+    @Test
     @Disabled
     @Override
     public void testSyntheticResponseMessage() {

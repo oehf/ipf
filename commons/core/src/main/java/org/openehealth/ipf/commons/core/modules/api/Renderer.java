@@ -34,52 +34,48 @@ public interface Renderer<T> {
     /**
      * Renders the model into its external representation.
      * 
-     * @param model
+     * @param model model to be rendered
      * @param params
      *            dynamic information used during rendering. See the respective
      *            implementation class documentation if this is required or
      *            supported.
      * @return the external representation of the model
-     * @throws RenderException
      */
     Result render(final T model, Result result, final Object... params) throws IOException;
 
     /**
      * Renders the model into its external representation.
      * 
-     * @param model
+     * @param model model to be rendered
      * @param params
      *            dynamic information used during rendering. See the respective
      *            implementation class documentation if this is required or
      *            supported.
      * @return the external representation of the model
-     * @throws RenderException
      */
     OutputStream render(final T model, OutputStream result, final Object... params) throws IOException;
 
     /**
      * Renders the model into its external representation.
      * 
-     * @param model
+     * @param model model to be rendered
      * @param params
      *            dynamic information used during rendering. See the respective
      *            implementation class documentation if this is required or
      *            supported.
      * @return the external representation of the model
-     * @throws RenderException
      */
     Writer render(final T model, Writer result, final Object... params) throws IOException;
 
     /**
      * Renders the model into its external representation.
      * 
-     * @param model
+     * @param model model to be rendered
      * @param params
      *            dynamic information used during rendering. See the respective
      *            implementation class documentation if this is required or
      *            supported.
      * @return the external representation of the model
-     * @throws RenderException
      */
     String render(final T model, final Object... params);
 

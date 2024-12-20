@@ -33,7 +33,7 @@ import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidat
 public class ChPpq2TestRouteBuilder extends RouteBuilder {
 
     @Override
-    public void configure() throws Exception {
+    public void configure() {
 
         // sends a correct response with status "success"
         from("ch-ppq2:ch-ppq-success")
@@ -47,7 +47,7 @@ public class ChPpq2TestRouteBuilder extends RouteBuilder {
                     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
                     var writer = new StringWriter();
                     marshaller.marshal(exchange.getMessage().getBody(), writer);
-                    log.debug("PPQ output message:\n{}", writer.toString());
+                    log.debug("PPQ output message:\n{}", writer);
                 })
                 .process(chPpq2ResponseValidator());
 

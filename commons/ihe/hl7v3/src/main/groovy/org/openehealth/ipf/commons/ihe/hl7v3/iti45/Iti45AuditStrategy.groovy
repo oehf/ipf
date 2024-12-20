@@ -18,16 +18,13 @@ package org.openehealth.ipf.commons.ihe.hl7v3.iti45
 import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
 
+import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.PIXQuery
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
-import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
-
 /**
  * @author Dmytro Rud
  */
@@ -74,7 +71,7 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new QueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PIXQuery, auditDataset.getPurposesOfUse())
+        new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PIXQuery, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.patientIds)
                 .setQueryParameters(auditDataset.messageId, PIXQuery, auditDataset.requestPayload)
                 .getMessages()

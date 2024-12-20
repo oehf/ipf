@@ -38,8 +38,8 @@ public class ChPpq4Validator extends IgBasedInstanceValidator {
 
     @Override
     public void validateResponse(Object payload, Map<String, Object> parameters) {
-        Bundle bundle = (Bundle) payload;
-        OperationOutcome outcome = validateProfileConformance(bundle, "http://hl7.org/fhir/StructureDefinition/Bundle");
+        var bundle = (Bundle) payload;
+        var outcome = validateProfileConformance(bundle, "http://hl7.org/fhir/StructureDefinition/Bundle");
         if (bundle.getType() != Bundle.BundleType.TRANSACTIONRESPONSE) {
             outcome.addIssue(new OperationOutcome.OperationOutcomeIssueComponent()
                     .setSeverity(OperationOutcome.IssueSeverity.ERROR)

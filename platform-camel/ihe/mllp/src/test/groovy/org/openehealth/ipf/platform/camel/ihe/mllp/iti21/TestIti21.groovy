@@ -44,7 +44,7 @@ import static org.junit.jupiter.api.Assertions.*
 @ContextConfiguration('/iti21/iti-21.xml')
 class TestIti21 extends AbstractMllpTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TestIti21)
+    private static final Logger log = LoggerFactory.getLogger(TestIti21)
     private Random random = new Random(System.currentTimeMillis())
 
     @EndpointInject("mock:trace")

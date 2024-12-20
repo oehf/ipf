@@ -122,8 +122,4 @@ public class DicomInstancesTransferredAuditBuilder<T extends DicomInstancesTrans
         return self();
     }
 
-    @Override
-    public void validate() {
-        super.validate();
-    }
 }

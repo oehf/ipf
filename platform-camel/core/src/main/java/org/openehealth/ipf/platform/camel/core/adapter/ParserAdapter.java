@@ -69,14 +69,14 @@ public class ParserAdapter extends ProcessorAdapter {
     protected void doProcess(Exchange exchange, Object inputData, 
             Object... inputParams) throws Exception {
         
-        if (inputData instanceof InputStream) {
-            prepareResult(exchange).setBody(doProcess((InputStream)inputData, inputParams));
-        } else if (inputData instanceof Reader) {
-            prepareResult(exchange).setBody(doProcess((Reader)inputData, inputParams));
-        } else if (inputData instanceof Source) {
-            prepareResult(exchange).setBody(doProcess((Source)inputData, inputParams));
-        } else if (inputData instanceof String) {
-            prepareResult(exchange).setBody(doProcess((String)inputData, inputParams));
+        if (inputData instanceof InputStream inputStream) {
+            prepareResult(exchange).setBody(doProcess(inputStream, inputParams));
+        } else if (inputData instanceof Reader reader) {
+            prepareResult(exchange).setBody(doProcess(reader, inputParams));
+        } else if (inputData instanceof Source source) {
+            prepareResult(exchange).setBody(doProcess(source, inputParams));
+        } else if (inputData instanceof String s) {
+            prepareResult(exchange).setBody(doProcess(s, inputParams));
         } else {
             throw new IllegalArgumentException(
                     "input data class not supported: " + inputData.getClass());

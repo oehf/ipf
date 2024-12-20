@@ -20,6 +20,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -48,6 +49,7 @@ import java.util.regex.Pattern;
  */
 @EqualsAndHashCode(doNotUseGetters = true)
 public class PatientInfo implements Serializable {
+    @Serial
     private static final long serialVersionUID = 7202574584233259959L;
 
     /**

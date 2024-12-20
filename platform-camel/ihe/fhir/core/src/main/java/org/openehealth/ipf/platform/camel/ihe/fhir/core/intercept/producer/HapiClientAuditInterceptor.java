@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.audit.GenericFhirAuditDataset;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -48,14 +47,14 @@ public class HapiClientAuditInterceptor implements IClientInterceptor {
         }
         var uri = URI.create(requestUri);
         fhirAuditDataset.setRemoteAddress(uri.getHost());
-        int queryPos = requestUri.indexOf("?");
+        var queryPos = requestUri.indexOf("?");
         if (queryPos >= 0) {
             fhirAuditDataset.setDestinationUserId(requestUri.substring(0, queryPos));
-            if (fhirAuditDataset instanceof FhirQueryAuditDataset) {
-                ((FhirQueryAuditDataset) fhirAuditDataset).setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
+            if (fhirAuditDataset instanceof FhirQueryAuditDataset fhirQueryAuditDataset) {
+                fhirQueryAuditDataset.setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
             }
-            if (fhirAuditDataset instanceof GenericFhirAuditDataset) {
-                ((GenericFhirAuditDataset) fhirAuditDataset).setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
+            if (fhirAuditDataset instanceof GenericFhirAuditDataset genericFhirAuditDataset) {
+                genericFhirAuditDataset.setQueryString(URLDecoder.decode(uri.getQuery(), StandardCharsets.UTF_8));
             }
         } else {
             fhirAuditDataset.setDestinationUserId(requestUri);
@@ -63,7 +62,7 @@ public class HapiClientAuditInterceptor implements IClientInterceptor {
     }
 
     @Override
-    public void interceptResponse(IHttpResponse response) throws IOException {
+    public void interceptResponse(IHttpResponse response) {
     }
 
 }

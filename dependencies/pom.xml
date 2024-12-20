@@ -9,7 +9,7 @@
 
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
-        <bouncycastle-version>1.78</bouncycastle-version>
+        <bouncycastle-version>1.79</bouncycastle-version>
         <camel-version>4.8.2</camel-version>
         <!-- resolve dependency convergence between guava and hapi caffeine -->
         <checker-qual-version>3.19.0</checker-qual-version>
@@ -25,14 +25,14 @@
         <ipf-gazelle-version>3.1.0</ipf-gazelle-version>
         <httpclient5-version>5.4.1</httpclient5-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
-        <jackson-version>2.17.2</jackson-version>
+        <jackson-version>2.18.2</jackson-version>
         <jaxb-version>4.0.5</jaxb-version>
         <jakarta-jwsapi-version>3.0.0</jakarta-jwsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
         <kotlin-dokka-version>1.9.20</kotlin-dokka-version>
-        <kotlin-version>1.9.25</kotlin-version>
-        <kotlin-logging-version>3.0.5</kotlin-logging-version>
-        <micrometer-version>1.3.2</micrometer-version>
+        <kotlin-version>2.1.0</kotlin-version>
+        <kotlin-logging-version>7.0.0</kotlin-logging-version>
+        <micrometer-tracing-version>1.4.1</micrometer-tracing-version>
         <methanol-version>1.7.0</methanol-version>
         <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
         <ph-schematron-version>7.1.2</ph-schematron-version>
@@ -40,12 +40,10 @@
         <saxon-he-version>12.5</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
         <spring-boot-version>3.4.0</spring-boot-version>
-        <velocity-version>2.3</velocity-version>
+        <velocity-version>2.4.1</velocity-version>
         <vibur-version>25.0</vibur-version>
         <woodstox-version>7.1.0</woodstox-version>
         <xmlsec-version>4.0.3</xmlsec-version>
-
-
     </properties>
 
     <url>https://github.com/oehf/ipf</url>
@@ -58,7 +56,7 @@
             <dependency>
                 <groupId>io.micrometer</groupId>
                 <artifactId>micrometer-tracing-bom</artifactId>
-                <version>${micrometer-version}</version>
+                <version>${micrometer-tracing-version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -83,6 +81,21 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-bom</artifactId>
+                <version>${cxf-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-bom</artifactId>
+                <version>${camel-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <dependency>
                 <groupId>ca.uhn.hapi.fhir</groupId>
                 <artifactId>hapi-fhir-server</artifactId>
@@ -163,13 +176,6 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-bom</artifactId>
-                <version>${cxf-version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-ws-security</artifactId>
                 <version>${cxf-version}</version>
                 <exclusions>
@@ -185,13 +191,7 @@
                     </exclusion>
                 </exclusions>
             </dependency>
-            <dependency>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-bom</artifactId>
-                <version>${camel-version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
+
             <dependency>
                 <groupId>org.jdom</groupId>
                 <artifactId>jdom2</artifactId>
@@ -323,12 +323,6 @@
                 <groupId>org.apache.camel.springboot</groupId>
                 <artifactId>camel-hl7-starter</artifactId>
                 <version>${camel-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>ca.uhn.hapi</groupId>
-                        <artifactId>hapi-base</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>com.github.mizosoft.methanol</groupId>

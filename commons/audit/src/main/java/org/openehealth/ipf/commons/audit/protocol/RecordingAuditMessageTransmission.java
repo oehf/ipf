@@ -16,11 +16,14 @@
 
 package org.openehealth.ipf.commons.audit.protocol;
 
+import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * For testing only: an implementation that records the audit message strings in memory instead of sending them to
@@ -30,6 +33,9 @@ import java.util.*;
  * @since 3.5
  */
 public class RecordingAuditMessageTransmission implements AuditTransmissionProtocol {
+
+    @Setter
+    private Consumer<String> consumer = auditMessage -> {};
 
     public RecordingAuditMessageTransmission() {
     }
@@ -45,6 +51,7 @@ public class RecordingAuditMessageTransmission implements AuditTransmissionProto
     @Override
     public void send(AuditContext auditContext, AuditMetadataProvider auditMetadataProvider, String auditMessage) {
         if (auditMessage != null) {
+            consumer.accept(auditMessage);
             messages.add(auditMessage);
         }
     }

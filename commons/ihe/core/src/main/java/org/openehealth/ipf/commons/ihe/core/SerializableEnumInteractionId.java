@@ -15,12 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.core;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 /**
  *
  */
 public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> implements Serializable, InteractionId {
+    @Serial
     private static final long serialVersionUID = -2740691943593482233L;
 
     private final String interaction;

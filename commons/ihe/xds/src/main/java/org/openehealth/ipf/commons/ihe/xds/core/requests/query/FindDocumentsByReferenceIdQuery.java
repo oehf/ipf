@@ -24,6 +24,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySl
 
 import jakarta.xml.bind.annotation.*;
 
+import java.io.Serial;
+
 /**
  * Represents a stored query for FindDocumentsByReferenceIdQuery.
  * @author Dmytro Rud
@@ -34,6 +36,7 @@ import jakarta.xml.bind.annotation.*;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class FindDocumentsByReferenceIdQuery extends FindDocumentsQuery {
+    @Serial
     private static final long serialVersionUID = 8898792914033157098L;
 
     @XmlElement(name = "referenceId")

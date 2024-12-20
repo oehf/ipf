@@ -45,7 +45,7 @@ public class ChPpqmConsentCreator {
             Date endDate,
             List<PurposeOfUse> purposesOfUse)
     {
-        Consent consent = new Consent()
+        var consent = new Consent()
                 .addIdentifier(new Identifier()
                         .setType(new CodeableConcept(new Coding()
                                 .setSystem(ChPpqmUtils.CodingSystems.CONSENT_IDENTIFIER_TYPE)

@@ -91,7 +91,6 @@ public class Hl7v2MarshalUtils {
      * @param message     Camel message
      * @param charsetName charset name
      * @return string
-     * @throws Exception
      */
     public static String convertBodyToString(
             Message message,
@@ -102,19 +101,19 @@ public class Hl7v2MarshalUtils {
             throw adaptingException(body);
         }
         String s;
-        if (body instanceof String) {
-            s = (String) body;
-        } else if (body instanceof ca.uhn.hl7v2.model.Message) {
-            s = ((ca.uhn.hl7v2.model.Message) body).encode();
-        } else if (body instanceof byte[]) {
-            s = toString((byte[]) body, charsetName);
-        } else if (body instanceof InputStream) {
-            var bytes = IOConverter.toBytes((InputStream) message.getBody());
+        if (body instanceof String string) {
+            s = string;
+        } else if (body instanceof ca.uhn.hl7v2.model.Message m) {
+            s = m.encode();
+        } else if (body instanceof byte[] bytes) {
+            s = toString(bytes, charsetName);
+        } else if (body instanceof InputStream inputStream) {
+            var bytes = IOConverter.toBytes(inputStream);
             s = toString(bytes, charsetName);
         } else if (body instanceof File) {
             s = readFile(body, charsetName);
-        } else if (body instanceof WrappedFile<?>) {
-            var file = ((WrappedFile<?>) body).getFile();
+        } else if (body instanceof WrappedFile<?> wrappedFile) {
+            var file = wrappedFile.getFile();
             s = readFile(file, charsetName);
         } else {
             var bytes = message.getBody(byte[].class);
@@ -160,19 +159,18 @@ public class Hl7v2MarshalUtils {
      * @param body HL7 object
      * @param charsetName charset name
      * @return byte array
-     * @throws Exception
      */
     public static byte[] convertBodyToByteArray(
             Object body,
             String charsetName) throws Exception {
-        if (body instanceof String) {
-            return toByteArray((String) body, charsetName);
-        } else if (body instanceof byte[]) {
-            return (byte[]) body;
-        } else if (body instanceof InputStream) {
-            return IOConverter.toBytes((InputStream) body);
-        } else if (body instanceof ca.uhn.hl7v2.model.Message) {
-            return toByteArray(((ca.uhn.hl7v2.model.Message) body).encode(), charsetName);
+        if (body instanceof String string) {
+            return toByteArray(string, charsetName);
+        } else if (body instanceof byte[] bytes) {
+            return bytes;
+        } else if (body instanceof InputStream inputStream) {
+            return IOConverter.toBytes(inputStream);
+        } else if (body instanceof ca.uhn.hl7v2.model.Message message) {
+            return toByteArray(message.encode(), charsetName);
         } else {
             throw adaptingException(body);
         }
@@ -195,8 +193,8 @@ public class Hl7v2MarshalUtils {
             Parser parser) throws Exception {
         var body = message.getBody();
         ca.uhn.hl7v2.model.Message msg = null;
-        if (body instanceof ca.uhn.hl7v2.model.Message) {
-            msg = (ca.uhn.hl7v2.model.Message) body;
+        if (body instanceof ca.uhn.hl7v2.model.Message m) {
+            msg = m;
         } else {
             // process all other types (String, File, InputStream, ByteBuffer, byte[])
             // by means of the standard routine.  An exception here will be o.k.
@@ -212,19 +210,19 @@ public class Hl7v2MarshalUtils {
     // Guess charset from configuration. If the message contains something different in MSH-18, it will be
     // again converted using this charset.
     private static String toString(byte[] bytes, String defaultCharsetName) throws Exception {
-        String guessed = new String(bytes, defaultCharsetName);
-        String msh18 = PreParser.getFields(guessed, "MSH-18")[0];
-        HL7Charset hl7Charset = HL7Charset.getHL7Charset(msh18);
-        String hl7CharsetName = hl7Charset != null ? hl7Charset.getJavaCharsetName() : defaultCharsetName;
+        var guessed = new String(bytes, defaultCharsetName);
+        var msh18 = PreParser.getFields(guessed, "MSH-18")[0];
+        var hl7Charset = HL7Charset.getHL7Charset(msh18);
+        var hl7CharsetName = hl7Charset != null ? hl7Charset.getJavaCharsetName() : defaultCharsetName;
         return hl7CharsetName.equals(defaultCharsetName) ?
                 guessed :
                 new String(bytes, hl7CharsetName);
     }
 
     private static byte[] toByteArray(String s, String defaultCharsetName) throws Exception {
-        String msh18 = PreParser.getFields(s, "MSH-18")[0];
-        HL7Charset hl7Charset = HL7Charset.getHL7Charset(msh18);
-        String hl7CharsetName = hl7Charset != null ? hl7Charset.getJavaCharsetName() : defaultCharsetName;
+        var msh18 = PreParser.getFields(s, "MSH-18")[0];
+        var hl7Charset = HL7Charset.getHL7Charset(msh18);
+        var hl7CharsetName = hl7Charset != null ? hl7Charset.getJavaCharsetName() : defaultCharsetName;
         return s.getBytes(hl7CharsetName);
     }
 

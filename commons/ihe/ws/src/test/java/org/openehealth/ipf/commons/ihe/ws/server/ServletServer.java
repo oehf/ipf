@@ -46,7 +46,7 @@ public abstract class ServletServer {
     private String keystorePass;
     private String truststoreFile;
     private String truststorePass;
-    private Map<String, String> initParameters = new HashMap<>();
+    private final Map<String, String> initParameters = new HashMap<>();
     private ClientAuthType clientAuthType;
 
     /**
@@ -261,21 +261,22 @@ public abstract class ServletServer {
     
     private static boolean isPortFree(int port) {
         ServerSocket socket = null;
+        var result = true;
         try {
             socket = new ServerSocket(port);
-            return true;
         } 
         catch (IOException e) {
-            return false;
+            result = false;
         } 
         finally { 
             if (socket != null) {
                 try {
                     socket.close();
                 } catch (IOException e) {
-                    return false;
+                    result =  false;
                 }
             }
         }
+        return result;
     }
 }

@@ -29,8 +29,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.Set;
 
-import static java.util.Comparator.comparing;
-import static java.util.Comparator.nullsLast;
+import static java.util.Comparator.*;
 
 /**
  * @author Christian Ohr
@@ -51,14 +50,14 @@ public class ImmunizationSearchParameters extends Pcc44CommonSearchParameters<Im
 
     @Override
     protected Optional<Comparator<Immunization>> comparatorFor(String paramName) {
-        if (Immunization.SP_DATE.equals(paramName)) {
-            return Optional.of(nullsLast(CP_OCCURRENCE));
-        }
-        return Optional.empty();
+        return Immunization.SP_DATE.equals(paramName) ?
+            Optional.of(CP_OCCURRENCE) :
+            Optional.empty();
     }
 
-    private static final Comparator<Immunization> CP_OCCURRENCE = nullsLast(comparing(immunization -> {
-        if (!immunization.hasOccurrenceDateTimeType()) return null;
-        return immunization.getOccurrenceDateTimeType().getValue();
-    }));
+    private static final Comparator<Immunization> CP_OCCURRENCE = comparing(
+        immunization -> !immunization.hasOccurrenceDateTimeType() ?
+            null :
+            immunization.getOccurrenceDateTimeType().getValue(),
+        nullsLast(naturalOrder()));
 }

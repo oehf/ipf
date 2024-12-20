@@ -34,7 +34,6 @@ import java.util.Map;
 
 public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> {
 
-    @SuppressWarnings("unchecked")
     public SomeItiEndpoint(
             String endpointUri,
             String address,

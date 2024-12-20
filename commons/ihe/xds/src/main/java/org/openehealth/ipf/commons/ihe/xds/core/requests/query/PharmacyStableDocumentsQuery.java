@@ -23,6 +23,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -39,6 +41,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public abstract class PharmacyStableDocumentsQuery extends PharmacyDocumentsQuery {
+    @Serial
     private static final long serialVersionUID = 7497052735222205532L;
 
     @XmlElement(name = "uuid")

@@ -67,7 +67,7 @@ public class ChPpq3ResourceProvider extends AbstractResourceProvider {
             HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse)
     {
-        String consentId = ChPpqmUtils.extractConsentIdFromUrl(condition);
+        var consentId = ChPpqmUtils.extractConsentIdFromUrl(condition);
         return requestAction(consentId, null, httpServletRequest, httpServletResponse, requestDetails);
     }
 

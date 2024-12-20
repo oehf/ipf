@@ -52,7 +52,7 @@ class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Messa
         switch (ackCode) {
             case 'OK': return handleRegularResponse(message.QUERY_RESPONSE.PID[3]()) // Case 1
             case 'NF': return handleEmptyResponse()  // Case 2
-            case 'AE': return handleErrorResponse(message) // Cases 3-5
+            case 'AE': return handleErrorResponse(message as RSP_K23) // Cases 3-5
             default: throw new InternalErrorException("Unexpected ack code " + ackCode)
         }
     }

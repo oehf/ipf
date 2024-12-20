@@ -99,7 +99,7 @@ public class PixV3QueryResponseTransformerTest {
         response.setDataFound();
         response.setTargetMessageId(new II("m1", "1.3.5"));
         response.setMessageId(new II("m2", "1.3.5"));
-        response.getPatientIds().addAll(List.of(new II("9810", "2.16.756.5.30.1.127")));
+        response.getPatientIds().add(new II("9810", "2.16.756.5.30.1.127"));
         response.setCustodianOid("1.4.2");
         response.setProviderOrganization(new COCTMT150003UV03Organization());
         response.getProviderOrganization().getName().add(new ON());

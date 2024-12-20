@@ -42,7 +42,7 @@ public class AbstractNamingSystemServiceImpl implements NamingSystemService {
 
     public void addNamingSystems(Bundle bundle) {
         this.namingSystems.merge(bundle.getIdElement().getIdPart(), setOfNamingSystems(bundle), (set1, set2) -> {
-            var result = new HashSet<NamingSystem>(set1);
+            var result = new HashSet<>(set1);
             result.addAll(set2);
             return result;
         });

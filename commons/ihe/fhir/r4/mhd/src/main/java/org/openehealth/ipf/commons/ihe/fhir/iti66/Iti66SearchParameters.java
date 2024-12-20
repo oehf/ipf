@@ -16,22 +16,9 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti66;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.model.api.Include;
-import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.ReferenceAndListParam;
-import ca.uhn.fhir.rest.param.ReferenceParam;
-import ca.uhn.fhir.rest.param.StringParam;
-import ca.uhn.fhir.rest.param.TokenParam;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.r4.model.Practitioner;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Common SearchParameter base class for ITI-66 transactions

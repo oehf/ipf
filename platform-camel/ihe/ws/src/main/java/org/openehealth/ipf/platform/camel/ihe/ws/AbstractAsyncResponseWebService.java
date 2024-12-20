@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * @author Dmytro Rud
  */
 abstract public class AbstractAsyncResponseWebService extends AbstractWebService {
-    private static final transient Logger LOG = LoggerFactory.getLogger(AbstractAsyncResponseWebService.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractAsyncResponseWebService.class);
 
     /**
      * Determines whether correlation items related to the given message can be dropped.
@@ -95,7 +95,7 @@ abstract public class AbstractAsyncResponseWebService extends AbstractWebService
                 correlator.delete(messageId);
             }
         } else {
-            LOG.error("Cannot retrieve WSA RelatesTo header, message correlation not possible");
+            log.error("Cannot retrieve WSA RelatesTo header, message correlation not possible");
         }
 
         return super.process(body, headers, exchangePattern);

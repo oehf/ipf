@@ -67,7 +67,7 @@ public class ChPpq5Test extends FhirTestContainer {
     }
 
     @Test
-    public void test1() throws Exception {
+    public void test1() {
         Bundle response = client.search()
                 .forResource(Consent.class)
                 .where(Consent.IDENTIFIER.exactly().identifier(UUID.randomUUID().toString()))

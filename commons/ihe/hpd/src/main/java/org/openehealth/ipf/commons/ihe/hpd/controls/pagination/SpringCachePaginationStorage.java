@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.hpd.controls.pagination;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Unmarshaller;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.extern.slf4j.Slf4j;
@@ -72,8 +71,8 @@ public class SpringCachePaginationStorage implements PaginationStorage {
         log.debug("Store {} entries for cookie with hash {}", entries.size(), Arrays.hashCode(cookie));
 
         if (needSerialization) {
-            Container container = new Container(entries);
-            String value = XmlUtils.renderJaxb(JAXB_CONTEXT, container, false);
+            var container = new Container(entries);
+            var value = XmlUtils.renderJaxb(JAXB_CONTEXT, container, false);
             cache.put(new String(cookie), value);
         } else {
             cache.put(new String(cookie), entries);
@@ -82,8 +81,8 @@ public class SpringCachePaginationStorage implements PaginationStorage {
 
     @Override
     public TakeResult take(PagedResultsResponseControl pagination) throws Exception {
-        byte[] cookie = pagination.getCookie();
-        Object value = cache.get(new String(cookie));
+        var cookie = pagination.getCookie();
+        var value = cache.get(new String(cookie));
 
         if (value == null) {
             log.debug("No entries for cookie with hash {}", Arrays.hashCode(cookie));
@@ -92,15 +91,15 @@ public class SpringCachePaginationStorage implements PaginationStorage {
 
         List<SearchResultEntry> entries;
         if (needSerialization) {
-            Unmarshaller unmarshaller = JAXB_CONTEXT.createUnmarshaller();
-            Container container = (Container) unmarshaller.unmarshal(XmlUtils.source((String) value));
+            var unmarshaller = JAXB_CONTEXT.createUnmarshaller();
+            var container = (Container) unmarshaller.unmarshal(XmlUtils.source((String) value.get()));
             entries = container.entries;
         } else {
             entries = (List<SearchResultEntry>) value;
         }
 
-        int entriesCount = entries.size();
-        int requestedCount = pagination.getResultSize();
+        var entriesCount = entries.size();
+        var requestedCount = pagination.getResultSize();
         if (entriesCount > requestedCount) {
             log.debug("Return {} entries for cookie with hash {}, let {} in the storage", requestedCount, Arrays.hashCode(cookie), entries.size() - requestedCount);
 

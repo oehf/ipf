@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ConsumerMarshalInterceptor extends InterceptorSupport {
 
-    private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerMarshalInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(ConsumerMarshalInterceptor.class);
 
     private final boolean copyOriginalMessage;
 
@@ -60,8 +60,8 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport {
         try {
             originalMessage = parser.parse(originalString);
         } catch (HL7Exception e) {
-            LOG.error("Unmarshalling failed, message processing not possible ({}). Creating a default NAK response", e.getMessage());
-            LOG.debug("Exception details: ", e);
+            log.error("Unmarshalling failed, message processing not possible ({}). Creating a default NAK response", e.getMessage());
+            log.debug("Exception details: ", e);
             var nak = getEndpoint(HL7v2Endpoint.class).getNakFactory().createDefaultNak(e);
             exchange.getMessage().setBody(parser.encode(nak));
             return;
@@ -89,8 +89,8 @@ public class ConsumerMarshalInterceptor extends InterceptorSupport {
             exchange.getMessage().setBody(s);
         } catch (Exception e) {
             // With Netty, we treat unhandlable response types like other errors and return a NAK
-            LOG.warn("Message processing failed ({}). Creating NAK message.", e.getMessage());
-            LOG.debug("Exception details: ", e);
+            log.warn("Message processing failed ({}). Creating NAK message.", e.getMessage());
+            log.debug("Exception details: ", e);
             var nak = getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(originalMessage, e);
             exchange.getMessage().setBody(parser.encode(nak));
         }

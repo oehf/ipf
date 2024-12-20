@@ -21,6 +21,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -34,6 +36,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class GetDocumentsQuery extends GetByIdQuery implements Serializable {
+    @Serial
     private static final long serialVersionUID = 3610389657970005956L;
 
     @Getter @Setter private List<String> logicalUuid;

@@ -50,7 +50,7 @@ import java.util.function.Predicate;
  */
 public class ConditionalRule implements TestRule {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ConditionalRule.class);
+    private static final Logger log = LoggerFactory.getLogger(ConditionalRule.class);
     private Predicate<Void> predicate;
     private String reason;
 
@@ -129,7 +129,7 @@ public class ConditionalRule implements TestRule {
                 statement.evaluate();
             } catch (Throwable e) {
                 if (isIgnoredException(e)) {
-                    LOG.warn("Did not execute test {}: {} ", description, conditionalRule.getReason());
+                    log.warn("Did not execute test {}: {} ", description, conditionalRule.getReason());
                     return;
                 }
                 throw e;

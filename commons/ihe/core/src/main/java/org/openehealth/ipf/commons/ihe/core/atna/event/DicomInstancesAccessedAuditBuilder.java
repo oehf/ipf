@@ -122,8 +122,4 @@ public class DicomInstancesAccessedAuditBuilder<T extends DicomInstancesAccessed
         return self();
     }
 
-    @Override
-    public void validate() {
-        super.validate();
-    }
 }

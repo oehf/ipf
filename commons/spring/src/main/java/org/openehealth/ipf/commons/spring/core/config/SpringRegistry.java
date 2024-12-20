@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.spring.core.config;
 import java.util.Map;
 import java.util.Objects;
 
+import lombok.NonNull;
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.springframework.beans.BeansException;
@@ -74,7 +75,7 @@ public class SpringRegistry implements Registry, BeanFactoryAware {
      * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
      */
     @Override
-    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+    public void setBeanFactory(@NonNull BeanFactory beanFactory) throws BeansException {
         this.beanFactory = (ListableBeanFactory) beanFactory;
         ContextFacade.setRegistry(this);
     }
@@ -82,8 +83,7 @@ public class SpringRegistry implements Registry, BeanFactoryAware {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof SpringRegistry)) return false;
-        var that = (SpringRegistry) o;
+        if (!(o instanceof SpringRegistry that)) return false;
         return Objects.equals(beanFactory, that.beanFactory);
     }
 

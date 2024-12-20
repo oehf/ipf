@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySl
 
 import jakarta.xml.bind.annotation.*;
 
+import java.io.Serial;
+
 /**
  * Represents a stored query for SubscriptionFilterQuery used for ITI-52 filters
  * @author Christian Ohr
@@ -35,6 +37,7 @@ import jakarta.xml.bind.annotation.*;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class SubscriptionForDocumentEntryQuery extends DocumentsQuery implements PatientIdBasedStoredQuery {
+    @Serial
     private static final long serialVersionUID = -5765363916663583605L;
 
     @Getter @Setter private Identifiable patientId;

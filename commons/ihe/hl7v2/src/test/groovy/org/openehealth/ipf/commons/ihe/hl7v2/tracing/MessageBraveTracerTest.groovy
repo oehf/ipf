@@ -38,7 +38,7 @@ import static org.junit.jupiter.api.Assertions.*
 /**
  * @author Christian Ohr
  */
-class MessageTracerTest {
+class MessageBraveTracerTest {
 
     private static final HapiContext CONTEXT = HapiContextFactory.createHapiContext()
 
@@ -87,6 +87,7 @@ class MessageTracerTest {
         assertEquals(new HashMap<>(clientSpan.tags()), new HashMap<>(serverSpan.tags()))
         assertNotEquals(clientSpan.id(), serverSpan.id())
         assertEquals(clientSpan.id(), serverSpan.parentId())
+        assertEquals(clientSpan.traceId(), serverSpan.traceId())
     }
 
     class MockReporter extends SpanHandler {

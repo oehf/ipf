@@ -50,7 +50,7 @@ import jakarta.servlet.ServletException;
  */
 public class IpfFhirServlet extends RestfulServer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(IpfFhirServlet.class);
+    private static final Logger log = LoggerFactory.getLogger(IpfFhirServlet.class);
 
     private static final String SERVLET_FHIR_VERSION_PARAMETER_NAME = "fhirVersion";
     private static final String SERVLET_LOGGING_PARAMETER_NAME = "logging";
@@ -134,7 +134,7 @@ public class IpfFhirServlet extends RestfulServer {
             throw new ServletException(e);
         }
 
-        LOG.debug("Initializing IpfFhirServlet {}", servletName);
+        log.debug("Initializing IpfFhirServlet {}", servletName);
 
         if (config.getInitParameter(SERVLET_FHIR_VERSION_PARAMETER_NAME) != null) {
             fhirVersion = FhirVersionEnum.valueOf(config.getInitParameter(SERVLET_FHIR_VERSION_PARAMETER_NAME));
@@ -177,11 +177,11 @@ public class IpfFhirServlet extends RestfulServer {
             try {
                 registry.unregister(this);
             } catch (Exception e) {
-                LOG.warn("Problem while unregistering servlet {}", getServletName(), e);
+                log.warn("Problem while unregistering servlet {}", getServletName(), e);
             }
         }
         super.destroy();
-        LOG.info("Destroyed IpfFhirServlet [{}]", getServletName());
+        log.info("Destroyed IpfFhirServlet [{}]", getServletName());
     }
 
     /**

@@ -68,7 +68,8 @@ public class SpringCacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDat
 
     @Override
     public AuditDatasetType getAuditDataset(String messageId) {
-        return (AuditDatasetType) cache.get(messageId + AUDIT_DATASET_SUFFIX).get();
+        var value = cache.get(messageId + AUDIT_DATASET_SUFFIX);
+        return value == null || value.get() == null ? null : (AuditDatasetType) value.get();
     }
 
     @Override

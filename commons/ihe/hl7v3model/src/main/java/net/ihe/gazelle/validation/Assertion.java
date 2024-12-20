@@ -70,12 +70,9 @@ public class Assertion {
 		} else if (!assertionId.equals(other.assertionId))
 			return false;
 		if (idScheme == null) {
-			if (other.idScheme != null)
-				return false;
-		} else if (!idScheme.equals(other.idScheme))
-			return false;
-		return true;
-	}
+            return other.idScheme == null;
+		} else return idScheme.equals(other.idScheme);
+    }
 	
 	
 

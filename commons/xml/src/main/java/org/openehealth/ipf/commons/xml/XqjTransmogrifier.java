@@ -41,7 +41,7 @@ import java.util.concurrent.ConcurrentMap;
  *     output type
  */
 public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPreparedExpression> implements Transmogrifier<Source, T> {
-    private final static Logger LOG = LoggerFactory.getLogger(XqjTransmogrifier.class);
+    private final static Logger log = LoggerFactory.getLogger(XqjTransmogrifier.class);
 
     private static final ConcurrentMap<String, Loader<XQPreparedExpression>> XQUERY_CACHE = new ConcurrentHashMap<>();
     private static final Configuration XQUERY_GLOBAL_CONFIG;
@@ -152,7 +152,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
                 try {
                     seq.close();
                 } catch (XQException e) {
-                    LOG.trace("XQLTransmogrifier didn't return a value.", e);
+                    log.trace("XQLTransmogrifier didn't return a value.", e);
                 }
             }
         }
@@ -167,9 +167,9 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
                 continue;
             }
             var value = entry.getValue();
-            if (value instanceof java.lang.String) {
-                exp.bindString(new QName(entry.getKey()), (String) value, null);
-            } else if (value instanceof javax.xml.transform.Source) {
+            if (value instanceof String s) {
+                exp.bindString(new QName(entry.getKey()), s, null);
+            } else if (value instanceof Source) {
                 exp.bindDocument(new QName(entry.getKey()), (Source) entry.getValue(), null);
             } else if (value instanceof Boolean) {
                 exp.bindBoolean(new QName(entry.getKey()), (Boolean) entry.getValue(), null);
@@ -192,7 +192,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
     @Override
     public XQPreparedExpression createResource(Object... params) {
         var resourceLocation = resourceLocation(params);
-        LOG.debug("Create new template for {}", resourceLocation);
+        log.debug("Create new template for {}", resourceLocation);
         try {
             var stream = resourceContent(params).getInputStream();
             return getConnection().prepareExpression(stream);

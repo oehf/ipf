@@ -23,7 +23,7 @@ import org.openehealth.ipf.platform.camel.core.builder.RouteHelper;
  */
 public abstract class RouteBuilderSupport extends RouteBuilder {
 
-    protected RouteHelper helper;
+    protected final RouteHelper helper;
     
     public RouteBuilderSupport() {
         helper = new RouteHelper(this);

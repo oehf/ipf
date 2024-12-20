@@ -49,7 +49,7 @@ import static org.openehealth.ipf.platform.camel.ihe.mllp.core.FragmentationUtil
  * @author Dmytro Rud
  */
 public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSupport {
-    private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerInteractiveResponseSenderInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(ConsumerInteractiveResponseSenderInterceptor.class);
     private InteractiveContinuationStorage storage;
 
     @Override
@@ -76,7 +76,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
                     requestTerser.get("QID-1") :
                     requestTerser.get("QPD-2");
             if (storage.delete(keyString(queryTag, msh31, msh32, msh33))) {
-                LOG.debug("Dropped response chain for query tag {}", queryTag);
+                log.debug("Dropped response chain for query tag {}", queryTag);
                 var ack = requestMessage.generateACK();
 
                 // Workaround: HAPI misses to populate the message structure for ACKs, but client may want to see it
@@ -98,7 +98,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         var rcp22 = requestTerser.get("RCP-2-2");
         if (! "RD".equals(rcp22)) {
             if (rcp22 != null) {
-                LOG.warn("Unit '{}' in RCP-2-2 is not supported", rcp22);
+                log.warn("Unit '{}' in RCP-2-2 is not supported", rcp22);
             }
             getWrappedProcessor().process(exchange);
             return;
@@ -109,13 +109,13 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         try {
             threshold = Integer.parseInt(requestTerser.get("RCP-2-1"));
         } catch (NumberFormatException nfe) {
-            LOG.warn("Cannot parse RCP-2-1, try to use default threshold", nfe);
+            log.warn("Cannot parse RCP-2-1, try to use default threshold", nfe);
         }
         if (threshold < 1) {
             threshold = getEndpoint(MllpTransactionEndpoint.class).getInteractiveContinuationDefaultThreshold();
         }
         if (threshold < 1) {
-            LOG.debug("Cannot perform interactive continuation: invalid or missing threshold");
+            log.debug("Cannot perform interactive continuation: invalid or missing threshold");
             getWrappedProcessor().process(exchange);
             return;
         }
@@ -127,14 +127,14 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         }
 
         if ((continuationPointer != null) && ! "I".equals(requestTerser.get("DSC-2"))) {
-            LOG.warn("Cannot perform interactive continuation: DSC-1 is not empty and DSC-2 is not 'I'");
+            log.warn("Cannot perform interactive continuation: DSC-1 is not empty and DSC-2 is not 'I'");
             getWrappedProcessor().process(exchange);
             return;
         }
 
         final var queryTag = requestTerser.get("QPD-2");
         if (isEmpty(queryTag)) {
-            LOG.warn("Cannot perform interactive continuation: empty query tag in QPD-2");
+            log.warn("Cannot perform interactive continuation: empty query tag in QPD-2");
             getWrappedProcessor().process(exchange);
             return;
         }
@@ -144,7 +144,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         var responseMessage = storage.get(continuationPointer, chainId);
         if (responseMessage != null) {
             // a prepared response fragment found -- perform some post-processing and send it to the user
-            LOG.debug("Use prepared fragment for {}", continuationPointer);
+            log.debug("Use prepared fragment for {}", continuationPointer);
             synchronized (responseMessage) {
                 var responseTerser = new Terser(responseMessage);
                 responseTerser.set("MSH-7", MessageUtils.hl7Now());
@@ -177,7 +177,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
     {
         var responseTerser = new Terser(responseMessage);
         if (isNotEmpty(responseTerser.get("DSC-1"))) {
-            LOG.warn("Cannot perform interactive continuation: DSC-1 already " +
+            log.warn("Cannot perform interactive continuation: DSC-1 already " +
             		 "present in the response message returned from the route");
             return responseMessage;
         }
@@ -231,7 +231,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
                 responseMessage = fragment;
             }
         }
-        LOG.debug("Prepared {} interactive fragments for query tag {}", fragmentsCount, queryTag);
+        log.debug("Prepared {} interactive fragments for query tag {}", fragmentsCount, queryTag);
         return responseMessage;
     }
 
@@ -247,7 +247,7 @@ public class ConsumerInteractiveResponseSenderInterceptor extends InterceptorSup
         for (var i = 1; i < segments.size(); ++i) {
             if (config.isDataStartSegment(segments, i)) {
                 recordBoundaries.add(i);
-            } else if ((recordBoundaries.size() > 0) && config.isFooterStartSegment(segments, i)) {
+            } else if ((!recordBoundaries.isEmpty()) && config.isFooterStartSegment(segments, i)) {
                 foundFooter = true;
                 recordBoundaries.add(i);
                 break;

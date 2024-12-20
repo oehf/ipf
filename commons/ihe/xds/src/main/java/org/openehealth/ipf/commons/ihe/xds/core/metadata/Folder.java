@@ -16,6 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +41,7 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class Folder extends XDSMetaClass implements Serializable {
+    @Serial
     private static final long serialVersionUID = -1923451867453561796L;
     
     @XmlElement(name = "code")

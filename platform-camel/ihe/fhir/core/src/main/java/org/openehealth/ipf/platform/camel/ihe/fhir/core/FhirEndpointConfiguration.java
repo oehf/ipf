@@ -138,7 +138,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 parameters, CONSUMER_SELECTOR, Predicate.class);
         boolean secure = component.getAndRemoveParameter(parameters, "secure", Boolean.class, false);
 
-        FhirContext fhirContext = component.getAndRemoveOrResolveReferenceParameter(
+        var fhirContext = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "fhirContext", FhirContext.class);
 
         // If a (shared) FhirContext parameter is set on the endpoint, no further producer-related parameters
@@ -163,7 +163,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
         // Create a new FhirContext either by a custom FhirContextProvider
         // or by component itself according to its transaction configuration
-        FhirContextProvider fhirContextProvider = component.getAndRemoveOrResolveReferenceParameter(
+        var fhirContextProvider = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "fhirContextProvider", FhirContextProvider.class);
         this.context = fhirContextProvider != null ?
                 fhirContextProvider.apply(component.getFhirTransactionConfiguration().getFhirVersion()) :

@@ -19,15 +19,15 @@ import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.audit.model.AuditMessage
-import org.openehealth.ipf.commons.ihe.core.atna.event.QueryInformationBuilder
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.PatientLocationQuery
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
+import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.PatientLocationQuery
 
 /**
  * Generic audit strategy for ITI-56 (XCPD).
@@ -36,7 +36,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
  */
 class Iti56AuditStrategy extends Hl7v3AuditStrategy {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Iti56AuditStrategy)
+    private static final Logger log = LoggerFactory.getLogger(Iti56AuditStrategy)
 
     Iti56AuditStrategy(boolean serverSide) {
         super(serverSide)
@@ -57,7 +57,7 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
                     (gpath.namespaceURI() == 'urn:ihe:iti:xcpd:2009')) ?
                     EventOutcomeIndicator.Success : EventOutcomeIndicator.SeriousFailure
         } catch (Exception e) {
-            LOG.error('Exception in ITI-56 audit strategy', e)
+            log.error('Exception in ITI-56 audit strategy', e)
             return EventOutcomeIndicator.MajorFailure
         }
     }
@@ -71,7 +71,7 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new QueryInformationBuilder<>(auditContext, auditDataset, Hl7v3EventTypeCode.PatientLocationQuery, auditDataset.getPurposesOfUse())
+        new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PatientLocationQuery, auditDataset.getPurposesOfUse())
                 .addPatients(auditDataset.patientIds)
                 .setQueryParameters("PatientLocationQueryRequest", PatientLocationQuery, auditDataset.requestPayload)
                 .getMessages()

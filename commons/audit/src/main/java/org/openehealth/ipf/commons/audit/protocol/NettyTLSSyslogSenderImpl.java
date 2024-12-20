@@ -49,7 +49,7 @@ import static org.openehealth.ipf.commons.audit.protocol.NettyTLSSyslogSenderImp
  */
 public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFuture, NettyDestination> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(NettyTLSSyslogSenderImpl.class);
+    private static final Logger log = LoggerFactory.getLogger(NettyTLSSyslogSenderImpl.class);
 
     private int workerThreads = 1;
     private long connectTimeoutMillis = 5000;
@@ -137,7 +137,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
         @Override
         public void shutdown() {
             if (workerGroup != null) {
-                LOG.info("TLS Channel to Audit Repository at {}:{} is closed", host, port);
+                log.info("TLS Channel to Audit Repository at {}:{} is closed", host, port);
                 workerGroup.shutdownGracefully();
             }
         }
@@ -161,7 +161,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
         public void write(byte[] bytes) {
             // The write operation is asynchronous.
             var channel = getHandle().channel();
-            LOG.trace("Writing {} bytes using session: {}", bytes.length, channel);
+            log.trace("Writing {} bytes using session: {}", bytes.length, channel);
             try {
                 if (!channel.writeAndFlush(Unpooled.wrappedBuffer(bytes)).await(sendTimeout)) {
                     throw new AuditException("Could not send audit message to " + host + ":" + port);
@@ -186,13 +186,13 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
 
             @Override
             public void channelActive(ChannelHandlerContext ctx) throws Exception {
-                LOG.info("TLS Channel to Audit Repository at {}:{} is now active", host, port);
+                log.info("TLS Channel to Audit Repository at {}:{} is now active", host, port);
                 super.channelActive(ctx);
             }
 
             @Override
             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-                LOG.info("Exception on receiving message for context {}", ctx, cause);
+                log.info("Exception on receiving message for context {}", ctx, cause);
                 if (ctx != null) {
                     ctx.close();
                 }

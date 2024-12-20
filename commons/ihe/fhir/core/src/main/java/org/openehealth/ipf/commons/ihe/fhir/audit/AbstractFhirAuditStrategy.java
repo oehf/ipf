@@ -45,6 +45,16 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
     }
 
     @Override
+    public void doAudit(AuditContext auditContext, T auditDataset) {
+        try {
+            FhirContextHolder.setCurrentContext(auditDataset.getFhirContext());
+            super.doAudit(auditContext, auditDataset);
+        } finally {
+            FhirContextHolder.remove();
+        }
+    }
+
+    @Override
     public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters) {
 
         if (parameters.get(HTTP_URI) != null) {
@@ -89,15 +99,15 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
      * @return event outcome code
      */
     protected EventOutcomeIndicator getEventOutcomeCodeFromResource(T auditDataset, IBaseResource resource) {
-        return resource instanceof IBaseOperationOutcome ?
-                getEventOutcomeCodeFromOperationOutcome(auditDataset.getFhirContext(), (O)resource) :
+        return resource instanceof IBaseOperationOutcome outcome ?
+                getEventOutcomeCodeFromOperationOutcome(auditDataset.getFhirContext(), (O)outcome) :
                 EventOutcomeIndicator.Success;
     }
 
     @Override
     public String getEventOutcomeDescription(T auditDataset, Object response) {
-        return response instanceof IBaseOperationOutcome ?
-                getEventOutcomeDescriptionFromOperationOutcome(auditDataset.getFhirContext(), (O)response) :
+        return response instanceof IBaseOperationOutcome outcome ?
+                getEventOutcomeDescriptionFromOperationOutcome(auditDataset.getFhirContext(), (O)outcome) :
                 null;
     }
 

@@ -31,9 +31,9 @@ import org.slf4j.LoggerFactory;
  */
 public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Hl7CorrelationManager.class);
+    private static final Logger log = LoggerFactory.getLogger(Hl7CorrelationManager.class);
 
-    private PipeParser parser;
+    private final PipeParser parser;
 
     public Hl7CorrelationManager(HapiContext hapiContext) {
         this.parser = hapiContext.getPipeParser();
@@ -44,7 +44,7 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
         try {
             Message message = getMessage(request);
             var msgId = new Terser(message).get("/MSH-10");
-            LOG.debug("Recorded request with msg id {}", msgId);
+            log.debug("Recorded request with msg id {}", msgId);
             return msgId;
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);
@@ -56,7 +56,7 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
         try {
             Message message = getMessage(response);
             var msgId = new Terser(message).get("/MSA-2");
-            LOG.debug("Recorded response with msg id {}", msgId);
+            log.debug("Recorded response with msg id {}", msgId);
             return msgId;
         } catch (HL7Exception e) {
             throw new HL7v2Exception(e);
@@ -65,10 +65,10 @@ public class Hl7CorrelationManager extends TimeoutCorrelationManagerSupport {
 
     private Message getMessage(Object request) throws HL7Exception {
         Message message;
-        if (request instanceof Message) {
-            message = (Message) request;
-        } else if (request instanceof byte[]) {
-            message = parser.parse(new String((byte[]) request));
+        if (request instanceof Message m) {
+            message = m;
+        } else if (request instanceof byte[] bytes) {
+            message = parser.parse(new String(bytes));
         } else {
             message = parser.parse(request.toString());
         } return message;

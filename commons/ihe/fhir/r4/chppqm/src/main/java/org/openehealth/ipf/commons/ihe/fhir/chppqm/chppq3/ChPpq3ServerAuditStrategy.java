@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PHIImportBuilder;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultPHIImportBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmAuditDataset;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode.MobilePrivacyPolicyFeed;
@@ -32,7 +32,7 @@ public class ChPpq3ServerAuditStrategy extends ChPpq3AuditStrategy {
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, ChPpqmAuditDataset auditDataset) {
-        return new PHIImportBuilder<>(auditContext, auditDataset, MobilePrivacyPolicyFeed)
+        return new DefaultPHIImportBuilder(auditContext, auditDataset, MobilePrivacyPolicyFeed)
                 .setPatient(auditDataset.getPatientId())
                 .addSecurityResourceParticipantObjects(ParticipantObjectIdType.of(MobilePrivacyPolicyFeed), auditDataset.getPolicyAndPolicySetIds())
                 .getMessages();

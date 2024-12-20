@@ -16,14 +16,17 @@
 package org.openehealth.ipf.commons.ihe.fhir.audit.protocol;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
 import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
-import org.openehealth.ipf.commons.audit.*;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.BalpAuditContext;
+import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +46,7 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
     private static final String BASE_URL_FORMAT = "https://%s:%s/%s";
     private FhirContext context;
     private TlsParameters tlsParameters;
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractFhirRestTLSAuditRecordSender.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractFhirRestTLSAuditRecordSender.class);
 
     public AbstractFhirRestTLSAuditRecordSender(final FhirContext context, String baseUrl) {
         this.context = Objects.requireNonNull(context, "FhirContext must not be null");
@@ -73,19 +76,19 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
             var clientFactory = new TlsParametersAwareRestfulClientFactory(
                 this.context,
                 this.tlsParameters);
-            String baseUrl = String.format(BASE_URL_FORMAT,
+            var baseUrl = String.format(BASE_URL_FORMAT,
                 auditContext.getAuditRepositoryHostName(),
                 auditContext.getAuditRepositoryPort(),
-                (auditContext instanceof BalpAuditContext balpAuditContext)?
+                (auditContext instanceof BalpAuditContext balpAuditContext) ?
                         balpAuditContext.getAuditRepositoryContextPath() : "");
             createClient(clientFactory.getRestfulClientFactory(), baseUrl);
         }
-        MethodOutcome outcome = client
+        var outcome = client
             .create()
             .resource(auditEvent)
             .execute();
 
-        LOG.debug("Audit Repository Response: {}", outcome.getResponseStatusCode());
+        log.debug("Audit Repository Response: {}", outcome.getResponseStatusCode());
     }
 
     private synchronized void createClient(IRestfulClientFactory restfulClientFactory, String baseUrl) {
@@ -109,7 +112,7 @@ public abstract class AbstractFhirRestTLSAuditRecordSender implements AuditTrans
         }
 
         private RestfulClientFactory createRestfulFactory(TlsParameters tlsParameters) {
-            SslAwareAbstractRestfulClientFactory<?> factory = createSslAwareClientFactory(fhirContext);
+            var factory = createSslAwareClientFactory(fhirContext);
             factory.setServerValidationMode(ServerValidationModeEnum.NEVER);
             factory.initializeSecurityInformation(true,
                 tlsParameters.getSSLContext(false), null, "", "");

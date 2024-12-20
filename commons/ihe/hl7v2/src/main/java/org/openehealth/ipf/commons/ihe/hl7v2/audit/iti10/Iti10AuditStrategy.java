@@ -20,9 +20,9 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
-import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
+import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultPatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 
 import java.util.Map;
 
@@ -45,7 +45,7 @@ public class Iti10AuditStrategy extends AuditStrategySupport<QueryAuditDataset> 
 
     @Override
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, QueryAuditDataset auditDataset) {
-        return new PatientRecordEventBuilder(
+        return new DefaultPatientRecordEventBuilder(
                 auditContext,
                 auditDataset,
                 isServerSide() ? EventActionCode.Update : EventActionCode.Read,

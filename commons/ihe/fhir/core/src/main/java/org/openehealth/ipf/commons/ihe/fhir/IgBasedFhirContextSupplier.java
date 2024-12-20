@@ -42,7 +42,7 @@ public class IgBasedFhirContextSupplier {
         }
 
         var npmValidationSupport = new NpmPackageValidationSupport(fhirContext);
-        for (String igResource : igResources) {
+        for (var igResource : igResources) {
             npmValidationSupport.loadPackageFromClasspath(igResource);
         }
 
@@ -53,8 +53,8 @@ public class IgBasedFhirContextSupplier {
                 new InMemoryTerminologyServerValidationSupport(fhirContext)));
 
         return fhirContext.setFhirValidatorFactory(ctx -> {
-            FhirValidator validator = new FhirValidator(ctx);
-            FhirInstanceValidator instanceValidator = new FhirInstanceValidator(validationSupport);
+            var validator = new FhirValidator(ctx);
+            var instanceValidator = new FhirInstanceValidator(validationSupport);
             validator.registerValidatorModule(instanceValidator);
             return validator;
         });

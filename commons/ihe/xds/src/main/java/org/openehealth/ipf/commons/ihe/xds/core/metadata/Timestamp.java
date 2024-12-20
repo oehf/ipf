@@ -26,6 +26,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import jakarta.xml.bind.annotation.*;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -44,6 +46,7 @@ import java.util.Objects;
 public class Timestamp implements Serializable {
     private static final ZoneId UTC_ZONE_ID = ZoneId.of("UTC");
 
+    @Serial
     private static final long serialVersionUID = 4324651691599629794L;
 
     @XmlEnum
@@ -100,6 +103,17 @@ public class Timestamp implements Serializable {
             return null;
         }
 
+        var precision = getPrecision(s);
+
+        // parse timestamp
+        try {
+            return new Timestamp(HL7DTM.toZonedDateTime(s), precision);
+        } catch (DataTypeException e) {
+            throw new XDSMetaDataException(ValidationMessage.INVALID_TIME, s);
+        }
+    }
+
+    private static Precision getPrecision(String s) {
         var pos = Math.max(s.indexOf('-'), s.indexOf('+'));
         var len = (pos >= 0) ? pos : s.length();
 
@@ -118,13 +132,7 @@ public class Timestamp implements Serializable {
         } else {
             precision = Precision.YEAR;
         }
-
-        // parse timestamp
-        try {
-            return new Timestamp(HL7DTM.toZonedDateTime(s), precision);
-        } catch (DataTypeException e) {
-            throw new XDSMetaDataException(ValidationMessage.INVALID_TIME, s);
-        }
+        return precision;
     }
 
     /**

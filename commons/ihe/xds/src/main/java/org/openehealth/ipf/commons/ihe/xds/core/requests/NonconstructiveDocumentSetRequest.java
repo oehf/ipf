@@ -21,6 +21,8 @@ import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry;
 
 import jakarta.xml.bind.annotation.XmlElementRef;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,7 @@ import java.util.List;
 @EqualsAndHashCode(doNotUseGetters = true)
 @ToString(doNotUseGetters = true)
 abstract public class NonconstructiveDocumentSetRequest implements Serializable {
+    @Serial
     private static final long serialVersionUID = 4812212416179958948L;
 
     @XmlElementRef

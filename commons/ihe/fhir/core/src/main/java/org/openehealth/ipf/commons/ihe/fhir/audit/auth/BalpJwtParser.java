@@ -15,13 +15,13 @@ public class BalpJwtParser {
 
     private static final BalpJwtClaimsExtractor claimsExtractor = new BalpJwtClaimsExtractor();
 
-    private static final Logger LOG = LoggerFactory.getLogger(BalpJwtParser.class);
+    private static final Logger log = LoggerFactory.getLogger(BalpJwtParser.class);
 
     public static Optional<BalpJwtDataSet> parseAuthorizationToBalpDataSet(String authenticationHeader,
                                                                            BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        Optional<JWT> jwt = parseAuthenticationToJWT(authenticationHeader);
+        var jwt = parseAuthenticationToJWT(authenticationHeader);
         return jwt.map(value -> {
-            BalpJwtDataSet balpJwtDataSet = parseJwtToBalpDataSet(value, claimsExtractor, balpJwtExtractorProperties);
+            var balpJwtDataSet = parseJwtToBalpDataSet(value, claimsExtractor, balpJwtExtractorProperties);
             balpJwtDataSet.setOpaqueJwt(authenticationHeader.substring(authenticationHeader.length() - 32));
             return balpJwtDataSet;
         });
@@ -31,11 +31,11 @@ public class BalpJwtParser {
         if (isBlank(authenticationHeader) ||
             !authenticationHeader.toLowerCase().startsWith("bearer ")) return Optional.empty();
 
-        String bearer = authenticationHeader.replaceAll("^[Bb][Ee][Aa][Rr][Ee][Rr][ ]+", "");
+        var bearer = authenticationHeader.replaceAll("^[Bb][Ee][Aa][Rr][Ee][Rr][ ]+", "");
         try {
             return Optional.of(JWTParser.parse(bearer));
         } catch (ParseException pe) {
-            LOG.debug("Invalid JWT token", pe);
+            log.debug("Invalid JWT token", pe);
             return Optional.empty();
         }
     }
@@ -43,7 +43,7 @@ public class BalpJwtParser {
     public static BalpJwtDataSet parseJwtToBalpDataSet(JWT jwt,
                                                        BalpJwtClaimsExtractor claimsExtractor,
                                                        BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        BalpJwtDataSet balpJwtDataSet = new BalpJwtDataSet();
+        var balpJwtDataSet = new BalpJwtDataSet();
 
         claimsExtractor.extractIssuer(jwt, balpJwtExtractorProperties).ifPresent(balpJwtDataSet::setIssuer);
         claimsExtractor.extractId(jwt, balpJwtExtractorProperties).ifPresent(balpJwtDataSet::setJwtId);

@@ -62,10 +62,10 @@ abstract public class Hl7v3DataTypeAttribute<T> extends AbstractDataTypeAttribut
         try {
             // try with JAXB elements, optionally accompanied with strings (most probably spaces and line feeds)
             for (Object o : list) {
-                if (o instanceof Node) {
-                    o = JAXB_CONTEXT.createUnmarshaller().unmarshal((Node) o);
+                if (o instanceof Node node) {
+                    o = JAXB_CONTEXT.createUnmarshaller().unmarshal(node);
                 }
-                var pojo = (o instanceof JAXBElement) ? ((JAXBElement) o).getValue() : o;
+                var pojo = (o instanceof JAXBElement jaxbElement) ? jaxbElement.getValue() : o;
                 if (typeClass.isAssignableFrom(pojo.getClass())) {
                     return (T) pojo;
                 }

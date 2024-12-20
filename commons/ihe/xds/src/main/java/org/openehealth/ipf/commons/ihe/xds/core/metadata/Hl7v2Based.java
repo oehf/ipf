@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import static java.util.Objects.requireNonNull;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 import ca.uhn.hl7v2.Location;
@@ -45,6 +46,7 @@ import jakarta.xml.bind.annotation.XmlTransient;
  */
 @XmlTransient
 abstract public class Hl7v2Based<C extends Composite> implements Serializable {
+    @Serial
     private static final long serialVersionUID = 5463666004063275303L;
 
     protected static final Message MESSAGE;
@@ -214,6 +216,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      * Fake enclosing element for an HL7 v2 sub-component, necessary for correct rendering and parsing.
      */
     public static class Holder<T extends Type> extends AbstractType implements Composite {
+        @Serial
         private static final long serialVersionUID = -9084300955263787034L;
 
         private final Type[] data = new Type[1];

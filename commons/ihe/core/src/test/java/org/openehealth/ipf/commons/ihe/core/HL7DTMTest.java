@@ -25,9 +25,33 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HL7DTMTest {
 
     @Test
-    public void testToZonedDateTime() throws DataTypeException {
+    public void testToZonedDateTimeWithoutTimezone() throws DataTypeException {
         assertEquals(ZonedDateTime.parse("2007-08-10T14:09:00+00:00").toInstant(),
                 HL7DTM.toZonedDateTime("20070810140900").toInstant());
+    }
+
+    @Test
+    public void testToZonedDateTimeWithTimezone() throws DataTypeException {
+        assertEquals(ZonedDateTime.parse("2007-08-10T14:09:00+01:00").toInstant(),
+            HL7DTM.toZonedDateTime("20070810140900+0100").toInstant());
+    }
+
+    @Test
+    public void testToZonedDateTimeWithoutSeconds() throws DataTypeException {
+        assertEquals(ZonedDateTime.parse("2007-08-10T14:09:00+00:00").toInstant(),
+            HL7DTM.toZonedDateTime("200708101409").toInstant());
+    }
+
+    @Test
+    public void testToZonedDateTimeWithoutMinutes() throws DataTypeException {
+        assertEquals(ZonedDateTime.parse("2007-08-10T14:00:00+00:00").toInstant(),
+            HL7DTM.toZonedDateTime("2007081014").toInstant());
+    }
+
+    @Test
+    public void testToZonedDateTimeWithoutHours() throws DataTypeException {
+        assertEquals(ZonedDateTime.parse("2007-08-10T00:00:00+00:00").toInstant(),
+            HL7DTM.toZonedDateTime("20070810+0000").toInstant());
     }
 
     @Test

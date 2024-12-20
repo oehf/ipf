@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 @ContextConfiguration('/iti8/iti-8-validation.xml')
 class TestIti8Validation extends AbstractMllpTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TestIti8Validation)
+    private static final Logger log = LoggerFactory.getLogger(TestIti8Validation)
     
     @Test
     void testHappyCase() {
@@ -50,7 +50,7 @@ class TestIti8Validation extends AbstractMllpTest {
     void testConcurrentMessages() {
         File f = File.createTempFile("tmp", "tmp")
         Writer w = new BufferedWriter(new FileWriter(f))
-        LOG.info("Wrinting into {}", f.absolutePath)
+        log.info("Wrinting into {}", f.absolutePath)
         def endpointUri = 'pix-iti8://localhost:18080?audit=false'
         def body = getMessageString('ADT^A01', '2.3.1')
         int n = 100000000

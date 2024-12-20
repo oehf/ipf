@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
+import lombok.NonNull;
 import org.openehealth.ipf.modules.cda.CDAR2Renderer;
 import org.openhealthtools.mdht.uml.cda.ClinicalDocument;
 import org.springframework.core.convert.converter.Converter;
@@ -27,7 +28,7 @@ import java.io.ByteArrayOutputStream;
 public class ClinicalDocumentToByteArrayConverter implements Converter<ClinicalDocument, byte[]> {
 
     @Override
-    public byte[] convert(ClinicalDocument clinicalDocument) {
+    public byte[] convert(@NonNull ClinicalDocument clinicalDocument) {
         var os = new ByteArrayOutputStream();
         try {
             new CDAR2Renderer().render(clinicalDocument, os);

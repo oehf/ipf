@@ -40,7 +40,7 @@ public class XsdValidatorTest {
 	}
 
 	@Test
-	public void testValidate() throws Exception {
+	public void testValidate() {
 		cache.clear();
 		Source testXml = new StreamSource(getClass().getResourceAsStream("/xsd/test.xml"));
 		validator.validate(testXml, SCHEMA_RESOURCE);
@@ -48,14 +48,12 @@ public class XsdValidatorTest {
 	}
 
 	@Test
-	public void testValidateFails() throws Exception {
+	public void testValidateFails() {
 		var schemaExisted = cache.containsKey(SCHEMA_RESOURCE);
 		var cacheSize = cache.size();
 		Source testXml = new StreamSource(getClass().getResourceAsStream(
 				"/xsd/invalidtest.xml"));
-		Assertions.assertThrows(ValidationException.class, () -> {
-			validator.validate(testXml, SCHEMA_RESOURCE);
-		});
+		Assertions.assertThrows(ValidationException.class, () -> validator.validate(testXml, SCHEMA_RESOURCE));
 
 		if (schemaExisted) {
 			Assertions.assertEquals(cacheSize, cache.size());

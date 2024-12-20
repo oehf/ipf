@@ -182,293 +182,243 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     }
 
     private QueryParameterValidation[] instantiateValidators(QueryType queryType, XdsIntegrationProfile.HomeCommunityIdOptionality homeCommunityIdOptionality) {
-        switch (queryType) {
-            case FETCH:
-                return new QueryParameterValidation[]{
-                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                        new CodeValidation(DOC_ENTRY_CLASS_CODE, false),
-                        new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                };
+        return switch (queryType) {
+            case FETCH -> new QueryParameterValidation[]{
+                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                new CodeValidation(DOC_ENTRY_CLASS_CODE, false),
+                new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
+                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+            };
+            case FIND_DOCUMENTS, FIND_DOCUMENTS_MPQ -> new QueryParameterValidation[]{
+                // PatientId MUST BE supplied in single patient query.
+                // PatientId (list) MAY BE supplied in multi patient query.
+                // The validators for the two cases are otherwise identical.
+                queryType.equals(FIND_DOCUMENTS)
+                    ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false)
+                    : new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator),
+                new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
+                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                new StatusValidation(DOC_ENTRY_STATUS),
+                new DocumentEntryTypeValidation(),
+            };
+            case FIND_DOCUMENTS_BY_TITLE -> new QueryParameterValidation[]{
+                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
+                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                new StringListValidation(DOC_ENTRY_TITLE, nopValidator),
+                new StatusValidation(DOC_ENTRY_STATUS),
+                new DocumentEntryTypeValidation(),
+            };
+            case FIND_DOCUMENTS_BY_REFERENCE_ID, FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ -> new QueryParameterValidation[]{
+                queryType.equals(FIND_DOCUMENTS_BY_REFERENCE_ID)
+                    ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false)
+                    : new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator),
+                new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
+                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                new StatusValidation(DOC_ENTRY_STATUS),
+                new DocumentEntryTypeValidation(),
+                new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator)
+            };
+            case FIND_SUBMISSION_SETS -> new QueryParameterValidation[]{
+                new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
+                // Excluded to avoid validation errors for xdstest requests
+                // new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
+                new TimestampValidation(SUBMISSION_SET_SUBMISSION_TIME_FROM),
+                new TimestampValidation(SUBMISSION_SET_SUBMISSION_TIME_TO),
+                new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
+                new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE),
+                new StatusValidation(SUBMISSION_SET_STATUS),
+            };
+            case FIND_FOLDERS, FIND_FOLDERS_MPQ -> new QueryParameterValidation[]{
+                // PatientId MUST BE supplied in single patient query.
+                // PatientId (list) MAY BE supplied in multi patient query.
+                // The validators for the two cases are otherwise identical.
+                queryType.equals(FIND_FOLDERS) ? new StringValidation(FOLDER_PATIENT_ID, cxValidator, false) : new StringListValidation(FOLDER_PATIENT_ID, cxValidator),
+                new TimestampValidation(FOLDER_LAST_UPDATE_TIME_FROM),
+                new TimestampValidation(FOLDER_LAST_UPDATE_TIME_TO),
+                new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME),
+                new StatusValidation(FOLDER_STATUS),
+            };
+            case GET_ALL -> new QueryParameterValidation[]{
+                new StringValidation(PATIENT_ID, cxValidator, false),
+                new StatusValidation(DOC_ENTRY_STATUS),
+                new StatusValidation(SUBMISSION_SET_STATUS),
+                new StatusValidation(FOLDER_STATUS),
+                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                new DocumentEntryTypeValidation(),
+            };
+            case GET_DOCUMENTS -> new QueryParameterValidation[]{
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
+                new StringListValidation(DOC_ENTRY_UUID, nopValidator),
+                new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
+            };
+            case GET_DOCUMENTS_AND_ASSOCIATIONS -> new QueryParameterValidation[]{
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                new StringListValidation(DOC_ENTRY_UUID, nopValidator),
+                new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
+            };
+            case GET_FOLDERS_FOR_DOCUMENT -> new QueryParameterValidation[]{
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
+                new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
+            };
+            case GET_FOLDERS -> new QueryParameterValidation[]{
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
+                new StringListValidation(FOLDER_UUID, nopValidator),
+                new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
+            };
+            case GET_ASSOCIATIONS, GET_SUBMISSION_SETS -> new QueryParameterValidation[]{
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                new StringListValidation(UUID, nopValidator),
+            };
+            case GET_SUBMISSION_SET_AND_CONTENTS -> new QueryParameterValidation[]{
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                new ChoiceValidation(false, SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
+                new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
+                new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                new DocumentEntryTypeValidation(),
+            };
+            case GET_FOLDER_AND_CONTENTS -> new QueryParameterValidation[]{
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID),
+                new StringValidation(FOLDER_UUID, nopValidator, true),
+                new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
+                new DocumentEntryTypeValidation(),
+            };
+            case GET_RELATED_DOCUMENTS -> new QueryParameterValidation[]{
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
+                new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
+                new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
+                new AssociationValidation(ASSOCIATION_TYPE),
+                new DocumentEntryTypeValidation(),
+            };
+            case FIND_MEDICATION_TREATMENT_PLANS, FIND_PRESCRIPTIONS, FIND_DISPENSES, FIND_MEDICATION_ADMINISTRATIONS,
+                 FIND_PRESCRIPTIONS_FOR_VALIDATION, FIND_PRESCRIPTIONS_FOR_DISPENSE -> new QueryParameterValidation[]{
+                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                new ChoiceValidation(true, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
+                new StringListValidation(FOLDER_UUID, nopValidator),
+                new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_EVENT_CODE),
+                new CodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
+                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
+                new StatusValidation(DOC_ENTRY_STATUS),
+            };
+            case FIND_MEDICATION_LIST -> new QueryParameterValidation[]{
+                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_START_TO),
+                new TimestampValidation(DOC_ENTRY_SERVICE_END_FROM),
+                new TimestampValidation(DOC_ENTRY_SERVICE_END_TO),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new StatusValidation(DOC_ENTRY_STATUS),
+                new DocumentEntryTypeValidation(),
+            };
+            case SUBSCRIPTION_FOR_DOCUMENT_ENTRY -> new QueryParameterValidation[]{
+                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
+                new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator)
+            };
+            case SUBSCRIPTION_FOR_FOLDER -> new QueryParameterValidation[]{
+                new StringValidation(FOLDER_PATIENT_ID, cxValidator, false),
+                new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
+                new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME)
+            };
+            case SUBSCRIPTION_FOR_SUBMISSION_SET -> new QueryParameterValidation[]{
+                new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
+                new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
+                new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
+                new StringListValidation(SUBMISSION_SET_INTENDED_RECIPIENT, nopValidator)
+            };
+            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY -> new QueryParameterValidation[]{
+                new CodeValidation(DOC_ENTRY_CLASS_CODE),
+                new CodeValidation(DOC_ENTRY_TYPE_CODE),
+                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
+                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
+                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
+                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
+                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
+                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator)
+            };
+            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET -> new QueryParameterValidation[]{
+                new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
+                new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
+                new StringListValidation(SUBMISSION_SET_INTENDED_RECIPIENT, nopValidator)
+            };
+        };
 
-            case FIND_DOCUMENTS:
-            case FIND_DOCUMENTS_MPQ:
-                return new QueryParameterValidation[]{
-                        // PatientId MUST BE supplied in single patient query.
-                        // PatientId (list) MAY BE supplied in multi patient query.
-                        // The validators for the two cases are otherwise identical.
-                        queryType.equals(FIND_DOCUMENTS)
-                                ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false)
-                                : new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator),
-                        new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                        new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                        new StatusValidation(DOC_ENTRY_STATUS),
-                        new DocumentEntryTypeValidation(),
-                };
-
-            case FIND_DOCUMENTS_BY_TITLE:
-                return new QueryParameterValidation[]{
-                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                        new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                        new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                        new StringListValidation(DOC_ENTRY_TITLE, nopValidator),
-                        new StatusValidation(DOC_ENTRY_STATUS),
-                        new DocumentEntryTypeValidation(),
-                };
-
-            case FIND_DOCUMENTS_BY_REFERENCE_ID:
-            case FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ:
-                return new QueryParameterValidation[]{
-                        queryType.equals(FIND_DOCUMENTS_BY_REFERENCE_ID)
-                                ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false)
-                                : new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator),
-                        new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                        new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                        new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                        new StatusValidation(DOC_ENTRY_STATUS),
-                        new DocumentEntryTypeValidation(),
-                        new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator)
-                };
-
-            case FIND_SUBMISSION_SETS:
-                return new QueryParameterValidation[]{
-                        new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
-                        // Excluded to avoid validation errors for xdstest requests
-                        // new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
-                        new TimestampValidation(SUBMISSION_SET_SUBMISSION_TIME_FROM),
-                        new TimestampValidation(SUBMISSION_SET_SUBMISSION_TIME_TO),
-                        new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
-                        new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE),
-                        new StatusValidation(SUBMISSION_SET_STATUS),
-                };
-
-            case FIND_FOLDERS:
-            case FIND_FOLDERS_MPQ:
-                return new QueryParameterValidation[]{
-                        // PatientId MUST BE supplied in single patient query.
-                        // PatientId (list) MAY BE supplied in multi patient query.
-                        // The validators for the two cases are otherwise identical.
-                        queryType.equals(FIND_FOLDERS) ? new StringValidation(FOLDER_PATIENT_ID, cxValidator, false) : new StringListValidation(FOLDER_PATIENT_ID, cxValidator),
-                        new TimestampValidation(FOLDER_LAST_UPDATE_TIME_FROM),
-                        new TimestampValidation(FOLDER_LAST_UPDATE_TIME_TO),
-                        new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME),
-                        new StatusValidation(FOLDER_STATUS),
-                };
-
-            case GET_ALL:
-                return new QueryParameterValidation[]{
-                        new StringValidation(PATIENT_ID, cxValidator, false),
-                        new StatusValidation(DOC_ENTRY_STATUS),
-                        new StatusValidation(SUBMISSION_SET_STATUS),
-                        new StatusValidation(FOLDER_STATUS),
-                        new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
-                        new DocumentEntryTypeValidation(),
-                };
-
-            case GET_DOCUMENTS:
-                return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
-                        new StringListValidation(DOC_ENTRY_UUID, nopValidator),
-                        new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
-                };
-
-            case GET_DOCUMENTS_AND_ASSOCIATIONS:
-                return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
-                        new StringListValidation(DOC_ENTRY_UUID, nopValidator),
-                        new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
-                };
-
-            case GET_FOLDERS_FOR_DOCUMENT:
-                return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
-                        new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
-                        new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
-                };
-
-            case GET_FOLDERS:
-                return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                        new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
-                        new StringListValidation(FOLDER_UUID, nopValidator),
-                        new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
-                };
-
-            case GET_ASSOCIATIONS:
-            case GET_SUBMISSION_SETS:
-                return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                        new StringListValidation(UUID, nopValidator),
-                };
-
-            case GET_SUBMISSION_SET_AND_CONTENTS:
-                return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                        new ChoiceValidation(false, SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
-                        new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
-                        new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
-                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                        new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
-                        new DocumentEntryTypeValidation(),
-                };
-
-            case GET_FOLDER_AND_CONTENTS:
-                return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                        new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID),
-                        new StringValidation(FOLDER_UUID, nopValidator, true),
-                        new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
-                        new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                        new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
-                        new DocumentEntryTypeValidation(),
-                };
-
-            case GET_RELATED_DOCUMENTS:
-                return new QueryParameterValidation[]{
-                        new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                        new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
-                        new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
-                        new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
-                        new AssociationValidation(ASSOCIATION_TYPE),
-                        new DocumentEntryTypeValidation(),
-                };
-
-            case FIND_MEDICATION_TREATMENT_PLANS:
-            case FIND_PRESCRIPTIONS:
-            case FIND_DISPENSES:
-            case FIND_MEDICATION_ADMINISTRATIONS:
-            case FIND_PRESCRIPTIONS_FOR_VALIDATION:
-            case FIND_PRESCRIPTIONS_FOR_DISPENSE:
-                return new QueryParameterValidation[]{
-                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                        new ChoiceValidation(true, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
-                        new StringListValidation(FOLDER_UUID, nopValidator),
-                        new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
-                        new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                        new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                        new CodeValidation(DOC_ENTRY_EVENT_CODE),
-                        new CodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
-                        new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                        new StatusValidation(DOC_ENTRY_STATUS),
-                };
-
-            case FIND_MEDICATION_LIST:
-                return new QueryParameterValidation[]{
-                        new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_START_TO),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_END_FROM),
-                        new TimestampValidation(DOC_ENTRY_SERVICE_END_TO),
-                        new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                        new StatusValidation(DOC_ENTRY_STATUS),
-                        new DocumentEntryTypeValidation(),
-                };
-
-            case SUBSCRIPTION_FOR_DOCUMENT_ENTRY:
-                return new QueryParameterValidation[]{
-                    new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                    new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                    new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                    new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
-                    new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                    new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                    new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                    new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                    new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                    new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                    new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator)
-                };
-
-            case SUBSCRIPTION_FOR_FOLDER:
-                return new QueryParameterValidation[]{
-                    new StringValidation(FOLDER_PATIENT_ID, cxValidator, false),
-                    new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
-                    new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME)
-                };
-
-            case SUBSCRIPTION_FOR_SUBMISSION_SET:
-                return new QueryParameterValidation[]{
-                    new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
-                    new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
-                    new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
-                    new StringListValidation(SUBMISSION_SET_INTENDED_RECIPIENT, nopValidator)
-                };
-            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY:
-                return new QueryParameterValidation[]{
-                    new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                    new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                    new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                    new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                    new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                    new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                    new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                    new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator)
-                };
-            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET:
-                return new QueryParameterValidation[]{
-                    new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
-                    new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
-                    new StringListValidation(SUBMISSION_SET_INTENDED_RECIPIENT, nopValidator)
-                };
-        }
-
-        return null;    // should not occur
     }
 
     @Override

@@ -26,7 +26,6 @@ public interface Validateable {
      * Validates the constructed audit message against the specification, because API does not completely
      * prevent constructing incomplete or inconsistent messages.
      *
-     * @throws org.openehealth.ipf.commons.audit.AuditException
      */
     void validate();
 

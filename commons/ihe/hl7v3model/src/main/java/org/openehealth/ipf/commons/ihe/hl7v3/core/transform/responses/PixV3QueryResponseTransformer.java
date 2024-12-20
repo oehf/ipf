@@ -232,7 +232,7 @@ public class PixV3QueryResponseTransformer {
             return simpleResponse;
         }
         final var registrationEvent =
-                Optional.ofNullable(controlActProcess.getSubject().get(0).getRegistrationEvent()).orElse(null);
+            controlActProcess.getSubject().get(0).getRegistrationEvent();
         if (registrationEvent == null) {
             return simpleResponse;
         }
@@ -246,7 +246,7 @@ public class PixV3QueryResponseTransformer {
         if (patient == null) {
             return simpleResponse;
         }
-        simpleResponse.setProviderOrganization(Optional.ofNullable(patient.getProviderOrganization()).orElse(null));
+        simpleResponse.setProviderOrganization(patient.getProviderOrganization());
         if (!patient.getId().isEmpty()) {
             simpleResponse.getPatientIds().addAll(patient.getId());
         }

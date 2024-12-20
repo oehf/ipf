@@ -73,8 +73,8 @@ public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends Abstra
         //   a) for HL7v3-based transactions, payload corresponds to the "main" message;
         //   b) for ebXML-based transactions, rely on the {@link OutPayloadExtractorInterceptor}.
         if (wsTransactionConfiguration.isAuditRequestPayload()) {
-            if (request instanceof String) {
-                auditDataset.setRequestPayload((String) request);
+            if (request instanceof String s) {
+                auditDataset.setRequestPayload(s);
             } else {
                 auditDataset.setRequestPayload(message.getContent(StringPayloadHolder.class));
             }

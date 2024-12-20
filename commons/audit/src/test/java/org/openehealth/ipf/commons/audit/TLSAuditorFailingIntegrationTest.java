@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegrationTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TLSAuditorFailingIntegrationTest.class);
+    private static final Logger log = LoggerFactory.getLogger(TLSAuditorFailingIntegrationTest.class);
 
     private CustomTlsParameters tlsParameters;
 

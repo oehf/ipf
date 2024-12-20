@@ -62,7 +62,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
     }
 
     @Test
-    public void happyCase() throws Exception {
+    public void happyCase() {
         var uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
         var response = (Response) send(uri, hrnRequest, Response.class);
         assertEquals(Status.SUCCESS, response.getStatus());
@@ -106,7 +106,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
      * Test whether MDHT POJO can be used as input for Continua HRN.
      */
     @Test
-    public void testMdhtInputDatatype() throws Exception {
+    public void testMdhtInputDatatype() {
         var uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
 
         // prepare request, delete original document contents

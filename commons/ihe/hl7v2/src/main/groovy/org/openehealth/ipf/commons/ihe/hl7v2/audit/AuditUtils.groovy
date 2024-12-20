@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory
  * @author Dmytro Rud
  */
 class AuditUtils {
-    private static final transient Logger LOG = LoggerFactory.getLogger(AuditUtils.class)
+    private static final transient Logger log = LoggerFactory.getLogger(AuditUtils.class)
 
     private AuditUtils() {
         throw new IllegalStateException('Helper class, do not instantiate')

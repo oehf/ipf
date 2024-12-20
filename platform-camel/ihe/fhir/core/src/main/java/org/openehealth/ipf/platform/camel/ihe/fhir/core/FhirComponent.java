@@ -66,9 +66,8 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * Disconnects the URL specified on the endpoint from the specified processor.
      *
      * @param consumer the consumer
-     * @throws Exception can be thrown
      */
-    public void disconnect(FhirConsumer<AuditDatasetType> consumer, FhirProvider resourceProvider) throws Exception {
+    public void disconnect(FhirConsumer<AuditDatasetType> consumer, FhirProvider resourceProvider) {
         var name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
         DefaultFhirRegistry.getFhirRegistry(name).unregister(resourceProvider);
     }

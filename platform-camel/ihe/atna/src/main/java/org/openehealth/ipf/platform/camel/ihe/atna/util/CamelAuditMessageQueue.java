@@ -53,7 +53,7 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
      * to. This method needs only be used for setting the Camel context if
      * auto-wiring is not possible (e.g. in certain test environments).
      *
-     * @param camelContext
+     * @param camelContext Camel context
      */
     public void setCamelContext(CamelContext camelContext) {
         this.camelContext = camelContext;
@@ -62,8 +62,7 @@ public class CamelAuditMessageQueue implements AuditMessageQueue {
     /**
      * The endpoint URI to send audit messages to.
      *
-     * @param endpointUri
-     * @throws URISyntaxException
+     * @param endpointUri Endpoint URI
      */
     public void setEndpointUri(String endpointUri) throws URISyntaxException, UnknownHostException {
         endpointUriString = endpointUri;

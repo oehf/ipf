@@ -31,12 +31,12 @@ import java.util.Map;
  */
 @XmlTransient
 public class ContentMap {
-    private static final transient Logger LOG = LoggerFactory.getLogger(ContentMap.class);
+    private static final Logger log = LoggerFactory.getLogger(ContentMap.class);
 
     // synchronized manually
     private transient final Map<Class<?>, Object> map = new HashMap<>();
 
-    private static transient TypeConverter conversionService;
+    private static TypeConverter conversionService;
 
 
     /**
@@ -54,12 +54,12 @@ public class ContentMap {
     public <T> T getContent(Class<T> targetType) {
         var result = (T) map.get(targetType);
         if (result != null) {
-            LOG.debug("Return existing content of type {}", targetType);
+            log.debug("Return existing content of type {}", targetType);
             return result;
         }
 
         if (conversionService == null) {
-            LOG.debug("Conversion service not configured");
+            log.debug("Conversion service not configured");
             return null;
         }
 
@@ -69,7 +69,7 @@ public class ContentMap {
                 if (conversionService.canConvert(sourceTypeEntry.getKey(), targetType)) {
                     result = conversionService.convert(sourceTypeEntry.getValue(), targetType);
                     if (result != null) {
-                        LOG.debug("Successfully generated {} from {}", targetType, sourceTypeEntry.getKey());
+                        log.debug("Successfully generated {} from {}", targetType, sourceTypeEntry.getKey());
                         setContent(targetType, result);
                         return result;
                     }
@@ -77,7 +77,7 @@ public class ContentMap {
             }
         }
 
-        LOG.debug("Could not find appropriate converter for the target type {}", targetType);
+        log.debug("Could not find appropriate converter for the target type {}", targetType);
         return null;
     }
 

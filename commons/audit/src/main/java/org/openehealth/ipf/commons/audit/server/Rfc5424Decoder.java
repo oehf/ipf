@@ -44,7 +44,7 @@ import java.util.Map;
  */
 class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Rfc5424Decoder.class);
+    private static final Logger log = LoggerFactory.getLogger(Rfc5424Decoder.class);
 
     private static final SyslogParser syslogParser = new SyslogParserBuilder()
             .withNilPolicy(NilPolicy.OMIT)
@@ -66,13 +66,12 @@ class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
     }
 
     private static Map<String, Object> decode(SocketAddress socketAddress, ByteBuf msg) {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Decoding message with {} bytes into RFC 5424 map.", msg.readableBytes());
+        if (log.isDebugEnabled()) {
+            log.debug("Decoding message with {} bytes into RFC 5424 map.", msg.readableBytes());
         }
         var map = parseByteBuf(msg);
-        if (socketAddress instanceof InetSocketAddress) {
+        if (socketAddress instanceof InetSocketAddress inetSocketAddress) {
             var enriched = new HashMap<>(map);
-            var inetSocketAddress = (InetSocketAddress) socketAddress;
             enriched.put(SYSLOG_REMOTE_HOST, inetSocketAddress.getHostName());
             enriched.put(SYSLOG_REMOTE_PORT, inetSocketAddress.getPort());
             enriched.put(SYSLOG_REMOTE_IP, inetSocketAddress.getAddress().getHostAddress());

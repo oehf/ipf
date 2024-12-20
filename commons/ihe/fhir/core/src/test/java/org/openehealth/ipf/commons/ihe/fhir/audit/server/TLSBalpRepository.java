@@ -31,13 +31,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
-import java.io.IOException;
 
 import static io.undertow.servlet.Servlets.*;
 
 public class TLSBalpRepository implements Closeable {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TLSBalpRepository.class);
+    private static final Logger log = LoggerFactory.getLogger(TLSBalpRepository.class);
     protected final TlsParameters tlsParameters;
     private Undertow server;
     private final int httpsPort;
@@ -53,13 +52,13 @@ public class TLSBalpRepository implements Closeable {
     }
 
     @Override
-    public void close() throws IOException {
+    public void close() {
         stop();
     }
 
     public void stop() {
         if (server != null) server.stop();
-        LOG.info("successfully stopped FHIR Audit Server");
+        log.info("successfully stopped FHIR Audit Server");
     }
 
     public Undertow start() throws ServletException {
@@ -85,7 +84,7 @@ public class TLSBalpRepository implements Closeable {
             .setHandler(path)
             .build();
         server.start();
-        LOG.info("successfully started FHIR Audit Server on port {}", httpsPort);
+        log.info("successfully started FHIR Audit Server on port {}", httpsPort);
         return server;
     }
     static class FhirServletInitiator implements InstanceFactory<FhirAuditServer> {

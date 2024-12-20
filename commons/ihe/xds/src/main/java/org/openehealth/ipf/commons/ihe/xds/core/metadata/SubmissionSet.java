@@ -22,6 +22,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class SubmissionSet extends XDSMetaClass implements Serializable {
+    @Serial
     private static final long serialVersionUID = 5961980266312684583L;
     
     @XmlElement(name = "author")

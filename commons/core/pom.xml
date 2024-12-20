@@ -21,7 +21,6 @@
             <groupId>org.vibur</groupId>
             <artifactId>vibur-object-pool</artifactId>
         </dependency>
-        <!-- TODO -->
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>

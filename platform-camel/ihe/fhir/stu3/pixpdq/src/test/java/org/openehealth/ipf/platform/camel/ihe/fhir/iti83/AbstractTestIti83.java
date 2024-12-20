@@ -30,7 +30,7 @@ import org.slf4j.LoggerFactory;
  */
 abstract class AbstractTestIti83 extends FhirTestContainer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti83.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractTestIti83.class);
 
     public static void startServer(String contextDescriptor) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.DSTU3);
@@ -69,25 +69,23 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     }
 
     protected Parameters sendManuallyOnType(Parameters queryParameters) {
-        var result = client.operation()
+        return client.operation()
                 .onType(Patient.class)
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
                 .encodedXml()
                 .execute();
-        return result;
     }
 
     protected Parameters sendManuallyOnInstance(String resourceId, Parameters queryParameters) {
-        var result = client.operation()
+        return client.operation()
                 .onInstance(new IdType("Patient", resourceId))
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
                 .encodedXml()
                 .execute();
-        return result;
     }
 
 }

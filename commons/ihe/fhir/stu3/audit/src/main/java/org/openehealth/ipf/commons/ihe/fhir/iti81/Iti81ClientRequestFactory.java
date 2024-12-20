@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
  * @author Christian Ohr
  * @since 3.1
  */
-public class Iti81ClientRequestFactory extends QueryClientRequestFactory {
+public class Iti81ClientRequestFactory extends QueryClientRequestFactory<Bundle> {
 
     public Iti81ClientRequestFactory() {
         super(AuditEvent.class, Bundle.class);

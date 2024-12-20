@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * 
  */
 @Disabled
-public class QA_Pcd01OBRValidatorTest extends AbstractPCD01ValidatorTest {
+public class QAPcd01OBRValidatorTest extends AbstractPCD01ValidatorTest {
 
     @Test
     public void testMaximalMessage() throws HL7Exception {

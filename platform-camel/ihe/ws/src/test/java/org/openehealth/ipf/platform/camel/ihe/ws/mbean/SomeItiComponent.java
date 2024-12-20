@@ -54,7 +54,6 @@ public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTran
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new SomeItiEndpoint(uri, remaining, this,
                 getAuditContext(parameters),

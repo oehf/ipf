@@ -38,7 +38,7 @@ import java.util.function.Consumer;
  */
 public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TlsSyslogServer.class);
+    private static final Logger log = LoggerFactory.getLogger(TlsSyslogServer.class);
     protected final TlsParameters tlsParameters;
 
     public TlsSyslogServer(Consumer<? super Map<String, Object>> consumer,
@@ -60,16 +60,19 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
                 .host(host)
                 .port(port)
                 .option(ChannelOption.SO_REUSEADDR, true)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int)Duration.ofSeconds(timeoutSeconds).toMillis())
                 .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
                 .wiretap(getClass().getName(), LogLevel.TRACE)
                 .metrics(Metrics.isMicrometerAvailable())
                 .secure(spec -> spec.sslContext(sslContext))
-                .doOnBind(serverBootstrap -> LOG.info("TLS Syslog Server is about to be started"))
-                .doOnBound(disposableServer -> LOG.info("TLS Syslog Server bound on {}", disposableServer.address()))
-                .doOnUnbound(disposableServer -> LOG.info("TLS Syslog Server unbound from {}", disposableServer.address()))
+                .doOnBind(serverBootstrap ->
+                    log.info("TLS Syslog Server is about to be started"))
+                .doOnBound(disposableServer ->
+                    log.info("TLS Syslog Server bound on {}", disposableServer.address()))
+                .doOnUnbound(disposableServer ->
+                    log.info("TLS Syslog Server unbound from {}", disposableServer.address()))
                 .doOnConnection(connection -> {
-                    LOG.debug("Received connection from {}", connection.channel().localAddress());
+                    log.debug("Received connection from {}", connection.channel().localAddress());
                     connection
                             .addHandlerLast(new Rfc5425Decoder())   // extract frame
                             .addHandlerLast(new Rfc5424Decoder());  // parse frame, fast enough for receiver thread
@@ -79,7 +82,7 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
                         .flatMap(this::handleMap)
                         .doOnError(errorConsumer)
                         .then())
-                .bindNow(Duration.ofSeconds(TIMEOUT));
+                .bindNow(Duration.ofSeconds(timeoutSeconds));
         return this;
     }
 

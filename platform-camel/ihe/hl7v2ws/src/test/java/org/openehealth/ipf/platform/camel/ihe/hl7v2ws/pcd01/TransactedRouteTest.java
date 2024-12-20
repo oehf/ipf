@@ -39,14 +39,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class TransactedRouteTest extends StandardTestContainer {
     
-    private static final String WAN_REQUEST = "MSH|^~\\&|AcmeInc^ACDE48234567ABCD^EUI-64||||20090713090030+0500||ORU^R01^ORU_R01|MSGID1234|P|2.6|||NE|AL|||||IHE PCD ORU-R01 2006^HL7^2.16.840.1.113883.9.n.m^HL7\n"
-+ "PID|||789567^^^Imaginary Hospital^PI||Doe^John^Joseph^^^^L^A|||M\n"
-+ "OBR|1|AB12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64|CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64|528391^MDC_DEV_SPEC_PROFILE_BP^MDC|||20090813095715+0500\n"
-+ "OBX|1||528391^MDC_DEV_SPEC_PROFILE_BP^MDC|1|||||||R|||||||0123456789ABCDEF^EUI-64\n"
-+ "OBX|2||150020^MDC_PRESS_BLD_NONINV^MDC|1.0.1|||||||R|||20090813095715+0500\n"
-+ "OBX|3|NM|150021^MDC_PRESS_BLD_NONINV_SYS^MDC|1.0.1.1|120|266016^MDC_DIM_MMHG^MDC|||||R\n"
-+ "OBX|4|NM|150022^MDC_PRESS_BLD_NONINV_DIA^MDC|1.0.1.2|80|266016^MDC_DIM_MMHG^MDC|||||R\n"
-+ "OBX|5|NM|150023^MDC_PRESS_BLD_NONINV_MEAN^MDC|1.0.1.3|100|266016^MDC_DIM_MMHG^MDC|||||R\n";
+    private static final String WAN_REQUEST = """
+        MSH|^~\\&|AcmeInc^ACDE48234567ABCD^EUI-64||||20090713090030+0500||ORU^R01^ORU_R01|MSGID1234|P|2.6|||NE|AL|||||IHE PCD ORU-R01 2006^HL7^2.16.840.1.113883.9.n.m^HL7
+        PID|||789567^^^Imaginary Hospital^PI||Doe^John^Joseph^^^^L^A|||M
+        OBR|1|AB12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64|CD12345^AcmeAHDInc^ACDE48234567ABCD^EUI-64|528391^MDC_DEV_SPEC_PROFILE_BP^MDC|||20090813095715+0500
+        OBX|1||528391^MDC_DEV_SPEC_PROFILE_BP^MDC|1|||||||R|||||||0123456789ABCDEF^EUI-64
+        OBX|2||150020^MDC_PRESS_BLD_NONINV^MDC|1.0.1|||||||R|||20090813095715+0500
+        OBX|3|NM|150021^MDC_PRESS_BLD_NONINV_SYS^MDC|1.0.1.1|120|266016^MDC_DIM_MMHG^MDC|||||R
+        OBX|4|NM|150022^MDC_PRESS_BLD_NONINV_DIA^MDC|1.0.1.2|80|266016^MDC_DIM_MMHG^MDC|||||R
+        OBX|5|NM|150023^MDC_PRESS_BLD_NONINV_MEAN^MDC|1.0.1.3|100|266016^MDC_DIM_MMHG^MDC|||||R
+        """;
     
     private static final SpringTransactionPolicy transactionPolicy = new SpringTransactionPolicy();
     private static PlatformTransactionManager txManager;
@@ -63,7 +65,7 @@ public class TransactedRouteTest extends StandardTestContainer {
     }
     
     @Test
-    public void testNonTransactedRoute () throws Exception {
+    public void testNonTransactedRoute () {
         final var response = sendRequest(
                 "pcd-pcd01://localhost:" + getPort() + "/communicateLabData/notransaction", WAN_REQUEST);
         assertTrue(response.contains("testexception"));        
@@ -71,7 +73,7 @@ public class TransactedRouteTest extends StandardTestContainer {
     }
     
     @Test
-    public void testTransactedRoute () throws Exception {
+    public void testTransactedRoute () {
         // setup the transaction mock        
         EasyMock.reset(txManager);
         txManager.getTransaction(EasyMock.anyObject());
@@ -98,14 +100,14 @@ public class TransactedRouteTest extends StandardTestContainer {
     
     private static class TestRoutes extends RouteBuilder {
         
-        private TransactedPolicy txPolicy;
+        private final TransactedPolicy txPolicy;
 
         private TestRoutes (final TransactedPolicy policy) {
             txPolicy = policy;
         }
 
         @Override
-        public void configure() throws Exception {
+        public void configure() {
             from("pcd-pcd01://communicateLabData/notransaction")
                 .throwException(new Hl7v2AcceptanceException("testexception"));
                 

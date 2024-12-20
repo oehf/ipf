@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
-import org.hl7.fhir.r4.model.Bundle;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

@@ -68,7 +68,7 @@ import static java.util.Objects.requireNonNull;
  * @author Dmytro Rud
  */
 abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
-    private static final transient Logger LOG = LoggerFactory.getLogger(PayloadLoggerBase.class);
+    private static final Logger log = LoggerFactory.getLogger(PayloadLoggerBase.class);
 
     private static final AtomicLong SEQUENCE_ID_GENERATOR = new AtomicLong(0L);
 
@@ -97,15 +97,15 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
             return;
         }
         if ((errorCountLimit >= 0) && (errorCount.get() >= errorCountLimit)) {
-            LOG.warn("Error count limit has bean reached, reset the counter to enable further trials");
+            log.warn("Error count limit has bean reached, reset the counter to enable further trials");
             return;
         }
 
         if (Boolean.getBoolean(PROPERTY_CONSOLE)) {
             // use regular Java logging
-            if (LOG.isDebugEnabled()) {
+            if (log.isDebugEnabled()) {
                 var output = String.join("", payloadPieces);
-                LOG.debug(output);
+                log.debug(output);
             }
         } else {
             // compute the file path and write payload pieces into this file
@@ -121,7 +121,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
                 errorCount.set(0);
             } catch (IOException e) {
                 errorCount.incrementAndGet();
-                LOG.warn("Cannot write into " + path, e);
+                log.warn("Cannot write into {}", path, e);
             }
         }
     }
@@ -129,7 +129,7 @@ abstract public class PayloadLoggerBase<T extends PayloadLoggingContext> {
 
     public boolean canProcess() {
         if ((!enabled) || Boolean.getBoolean(PROPERTY_DISABLED)) {
-            LOG.trace("Message payload logging is disabled");
+            log.trace("Message payload logging is disabled");
             return false;
         }
         return true;

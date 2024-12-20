@@ -38,14 +38,14 @@ public class ChPpq3Validator extends IgBasedInstanceValidator {
     }
 
     private OperationOutcome doValidateRequest(Object payload, Map<String, Object> parameters) {
-        String method = parameters.get(Constants.HTTP_METHOD).toString();
+        var method = parameters.get(Constants.HTTP_METHOD).toString();
         switch (method) {
             case "POST":
             case "PUT":
                 return validateProfileConformance((Resource) payload, ChPpqmUtils.TEMPLATE_PROFILE_URIS);
 
             case "DELETE":
-                String resourceId = (String) payload;
+                var resourceId = (String) payload;
                 if (StringUtils.isBlank(resourceId)) {
                     return new OperationOutcome()
                             .addIssue(new OperationOutcome.OperationOutcomeIssueComponent()

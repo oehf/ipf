@@ -24,6 +24,7 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import java.io.Serial;
 import java.util.Objects;
 
 /**
@@ -39,6 +40,7 @@ import java.util.Objects;
 @XmlAccessorType()
 @XmlType(name = "Identifiable", propOrder = {"id", "assigningAuthority"})
 public class Identifiable extends Hl7v2Based<CX> {
+    @Serial
     private static final long serialVersionUID = -3392755556068006520L;
 
     /**
@@ -79,8 +81,8 @@ public class Identifiable extends Hl7v2Based<CX> {
 
     /**
      * Constructs an identifiable, where the assigningAuthority is expected to an Oid
-     * @param id
-     * @param assigningAuthorityOid
+     * @param id identifier
+     * @param assigningAuthorityOid oid of the identifier authority
      */
     public Identifiable(String id, Oid assigningAuthorityOid) {
         this(id, new AssigningAuthority(assigningAuthorityOid));

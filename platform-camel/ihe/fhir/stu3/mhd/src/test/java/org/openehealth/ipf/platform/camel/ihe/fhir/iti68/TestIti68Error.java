@@ -42,7 +42,7 @@ public class TestIti68Error extends AbstractTestIti68 {
             producerTemplate.requestBody("direct:input", null, byte[].class);
             fail();
         } catch (CamelExecutionException e) {
-            assertTrue(e.getCause() instanceof HttpOperationFailedException);
+            assertInstanceOf(HttpOperationFailedException.class, e.getCause());
 
             // Check ATNA Audit
             var sender = getAuditSender();

@@ -165,10 +165,10 @@ public abstract class XdsHl7v2Renderer {
 
         for (var i = 0; i < fields.length; ++i) {
             if ((inclusions == null) || inclusions.contains(i)) {
-                if (fields[i] instanceof Composite) {
-                    sb.append(encodeComposite((Composite) fields[i], keyModifier, ENCODING_CHARACTERS.getSubcomponentSeparator()));
-                } else if (fields[i] instanceof Primitive) {
-                    sb.append(encodePrimitive((Primitive) fields[i]));
+                if (fields[i] instanceof Composite comp) {
+                    sb.append(encodeComposite(comp, keyModifier, ENCODING_CHARACTERS.getSubcomponentSeparator()));
+                } else if (fields[i] instanceof Primitive primitive) {
+                    sb.append(encodePrimitive(primitive));
                 } else {
                     // actually, this line should be unreachable
                     throw new IllegalStateException("Don't know how to handle " + fields[i]);

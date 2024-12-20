@@ -26,6 +26,8 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
+
+import java.io.Serial;
 import java.util.List;
 
 /**
@@ -39,6 +41,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public abstract class PharmacyDocumentsQuery extends StoredQuery implements PatientIdBasedStoredQuery {
+    @Serial
     private static final long serialVersionUID = -4878731956719028791L;
 
     @Getter @Setter private Identifiable patientId;

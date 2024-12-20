@@ -48,12 +48,12 @@ public abstract class HapiAdapter extends ProcessorAdapter {
 
     private static Message toMessage(Object inputData, Exchange exchange) throws HL7Exception {
         Message message;
-        if (inputData instanceof Message) {
-            message = (Message)inputData;
-        } else if (inputData instanceof String) {
+        if (inputData instanceof Message m) {
+            message = m;
+        } else if (inputData instanceof String s) {
             var context = exchange.getIn().getHeader("CamelHL7Context", HapiContext.class);
             var parser = context != null ? context.getGenericParser() : FALLBACK;
-            message = parser.parse((String)inputData);
+            message = parser.parse(s);
         } else {
             // try type conversion
             message = exchange.getIn().getBody(Message.class);

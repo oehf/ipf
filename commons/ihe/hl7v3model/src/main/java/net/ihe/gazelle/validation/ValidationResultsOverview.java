@@ -168,7 +168,6 @@ public class ValidationResultsOverview {
 
 	/**
 	 * Gives information about the test engine used by the validation service
-	 * @return
 	 */
 	public String getValidationEngine() {
 		return validationEngine;

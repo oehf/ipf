@@ -39,7 +39,7 @@ import java.util.Optional;
  * @author Dmytro Rud
  */
 public class ConsumerAdaptingInterceptor extends InterceptorSupport {
-    private static final transient Logger LOG = LoggerFactory.getLogger(ConsumerAdaptingInterceptor.class);
+    private static final Logger log = LoggerFactory.getLogger(ConsumerAdaptingInterceptor.class);
     public static final String ACK_TYPE_CODE_HEADER = "ipf.hl7v2.AckTypeCode";
 
     private final String charsetName;
@@ -85,8 +85,8 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport {
                 throw exception;
             }
         } catch (Exception e) {
-            LOG.warn("Message processing failed ({}: {}). Creating NAK message.", e.getClass().getSimpleName(), e.getMessage());
-            LOG.debug("Exception details: ", e);
+            log.warn("Message processing failed ({}: {}). Creating NAK message.", e.getClass().getSimpleName(), e.getMessage());
+            log.debug("Exception details: ", e);
             exchange.getMessage().setBody(getEndpoint(HL7v2Endpoint.class).getNakFactory().createNak(originalMessage, e));
         }
 

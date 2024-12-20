@@ -16,6 +16,8 @@
 package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import jakarta.xml.bind.annotation.*;
+
+import java.io.Serial;
 import java.util.List;
 
 import lombok.EqualsAndHashCode;
@@ -38,6 +40,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 public class GetAllQuery extends StoredQuery
         implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery
 {
+    @Serial
     private static final long serialVersionUID = -4161172318244319631L;
 
     @XmlElement(name = "documentStatus")

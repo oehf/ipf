@@ -41,7 +41,7 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
 
     private CamelContext camelContext;
     
-    private static final Logger LOG = LoggerFactory.getLogger(CustomRouteBuilderConfigurer.class);
+    private static final Logger log = LoggerFactory.getLogger(CustomRouteBuilderConfigurer.class);
 
     @Override
     public Collection<CustomRouteBuilder> lookup(R registry) {        
@@ -76,7 +76,7 @@ public class CustomRouteBuilderConfigurer<R extends Registry> extends OrderedCon
         } else {
             camelContext.addRoutes(customRouteBuilder);
         }
-        LOG.debug("Custom route builder configured: {}", customRouteBuilder);
+        log.debug("Custom route builder configured: {}", customRouteBuilder);
     }
 
     public CamelContext getCamelContext() {

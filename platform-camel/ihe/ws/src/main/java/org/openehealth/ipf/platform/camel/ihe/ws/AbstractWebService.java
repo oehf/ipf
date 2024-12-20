@@ -72,9 +72,9 @@ abstract public class AbstractWebService {
         consumer.process(exchange);
 
         var exception = Exchanges.extractException(exchange, false);
-        if (exception instanceof SoapFault) {
-            log.debug("Rethrowing SOAP fault occurred in the route", exception);
-            throw (SoapFault) exception;
+        if (exception instanceof SoapFault soapFault) {
+            log.debug("Rethrowing SOAP fault occurred in the route", soapFault);
+            throw soapFault;
         }
 
         // handle resulting message and headers

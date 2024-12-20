@@ -13,24 +13,16 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.openehealth.ipf.commons.audit;
+package org.openehealth.ipf.commons.ihe.core.atna.event;
 
-import ca.uhn.fhir.context.FhirContext;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.types.EventType;
+import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
-public class FhirContextHolder {
+public class DefaultQueryInformationBuilder extends QueryInformationBuilder<DefaultQueryInformationBuilder> {
 
-    private static final ThreadLocal<FhirContext> currentFhirContext = new ThreadLocal<>();
-
-    public static void setCurrentContext(FhirContext fhirContext) {
-        currentFhirContext.set(fhirContext);
-    }
-
-    public static FhirContext get() {
-        return currentFhirContext.get();
-    }
-
-    public static void remove() {
-        currentFhirContext.remove();
+    public DefaultQueryInformationBuilder(AuditContext auditContext, AuditDataset auditDataset, EventType eventType, PurposeOfUse... purposesOfUse) {
+        super(auditContext, auditDataset, eventType, purposesOfUse);
     }
 }
-

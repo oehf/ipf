@@ -133,8 +133,4 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
         return this;
     }
 
-    @Override
-    public void validate() {
-        super.validate();
-    }
 }

@@ -22,6 +22,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ContextConfiguration;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,18 +33,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ContextConfiguration(locations = {"/config/context-ack.xml"})
 public class AcknowledgementExtensionTest extends AbstractExtensionTest {
 
-    private static String MSH_EXPECTED = "||ACK^A01";
-    private static String ERR1_EXPECTED = "ERR|^^^203&Unsupported version id&HL70357&&Don't like it";
-    private static String ERR2_EXPECTED = "ERR|^^^207&Application internal error&HL70357&&Exception";
+    private static final String MSH_EXPECTED = "||ACK^A01";
+    private static final String ERR1_EXPECTED = "ERR|^^^203&Unsupported version id&HL70357&&Don't like it";
+    private static final String ERR2_EXPECTED = "ERR|^^^207&Application internal error&HL70357&&Exception";
 
 
     @EndpointInject(value = "mock:output")
     private MockEndpoint mockOutput;
 
-    private String resource = "/message/msg-01.hl7";
+    private final String resource = "/message/msg-01.hl7";
 
     @AfterEach
-    public void myTearDown() throws Exception {
+    public void myTearDown() {
         mockOutput.reset();
     }
 
@@ -85,7 +86,7 @@ public class AcknowledgementExtensionTest extends AbstractExtensionTest {
 
     private String inputMessage(String resource) {
         var is = getClass().getResourceAsStream(resource);
-        return new Scanner(is, "UTF-8").useDelimiter("\\A").next();
+        return new Scanner(is, StandardCharsets.UTF_8).useDelimiter("\\A").next();
     }
 
 }

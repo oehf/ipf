@@ -33,12 +33,6 @@
             <artifactId>hapi-fhir-validation-resources-dstu3</artifactId>
         </dependency>
 
-        <!-- FIXME get rid of this -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
-            <scope>test</scope>
-        </dependency>
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>

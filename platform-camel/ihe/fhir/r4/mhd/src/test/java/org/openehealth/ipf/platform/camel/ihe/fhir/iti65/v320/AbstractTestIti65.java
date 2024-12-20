@@ -39,7 +39,7 @@ import java.util.Date;
  */
 abstract class AbstractTestIti65 extends FhirTestContainer {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractTestIti65.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractTestIti65.class);
 
     private static final String BINARY_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
     private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bc";
@@ -162,7 +162,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     }
 
     protected void printAsXML(IBaseResource resource) {
-        LOG.info(clientFhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
+        log.info(clientFhirContext.newXmlParser().setPrettyPrint(true).encodeResourceToString(resource));
     }
 
 

@@ -20,7 +20,6 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import ca.uhn.fhir.rest.client.api.IRestfulClientFactory;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
@@ -167,8 +166,8 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         var resultMessage = exchange.getMessage();
         if (resultMessage.getBody() instanceof List && IBaseResource.class.isAssignableFrom(resultClass)) {
             var singletonList = (List<T>)resultMessage.getBody();
-            if (singletonList.isEmpty() && payload instanceof IIdType) {
-                throw new ResourceNotFoundException((IIdType)payload);
+            if (singletonList.isEmpty() && payload instanceof IIdType id) {
+                throw new ResourceNotFoundException(id);
             }
             resultMessage.setBody(singletonList.isEmpty() ? null : singletonList.get(0));
         }

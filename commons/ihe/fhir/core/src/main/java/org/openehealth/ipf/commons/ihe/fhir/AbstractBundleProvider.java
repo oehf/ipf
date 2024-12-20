@@ -85,8 +85,8 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
     public <T extends IBaseResource> void sortIfApplicable(List<T> resources) {
         if (sort && headers.containsKey(FHIR_REQUEST_PARAMETERS)) {
             var searchParameters =  headers.get(FHIR_REQUEST_PARAMETERS);
-            if (searchParameters instanceof FhirSearchAndSortParameters) {
-                ((FhirSearchAndSortParameters<T>)searchParameters).sort(resources);
+            if (searchParameters instanceof FhirSearchAndSortParameters fhirSearchAndSortParameters) {
+                fhirSearchAndSortParameters.sort(resources);
             }
         }
     }

@@ -24,8 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
@@ -39,13 +38,13 @@ public class IpfAtnaAutoConfigurationTest {
     private AuditContext auditContext;
 
     @Test
-    public void testAtnaSettings() throws Exception {
+    public void testAtnaSettings() {
         assertEquals("atna-test", auditContext.getAuditSourceId());
         assertEquals("mysite", auditContext.getAuditEnterpriseSiteId());
         assertEquals("localhost", auditContext.getAuditRepositoryHostName());
         assertEquals(1342, auditContext.getAuditRepositoryPort());
         assertEquals("TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
-        assertTrue(auditContext.getAuditMessageQueue() instanceof AsynchronousAuditMessageQueue);
+        assertInstanceOf(AsynchronousAuditMessageQueue.class, auditContext.getAuditMessageQueue());
     }
 
 }

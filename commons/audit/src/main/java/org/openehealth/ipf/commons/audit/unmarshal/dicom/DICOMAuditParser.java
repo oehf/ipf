@@ -56,7 +56,6 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.util.Base64;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.audit.XMLNames.*;
 
@@ -202,7 +201,7 @@ public class DICOMAuditParser implements AuditParser {
         container.addAll(
                 element.getChildren(name).stream()
                         .map(mapper)
-                        .collect(Collectors.toList()));
+                        .toList());
     }
 
     private EventId eventId(Element codedValueElement) {
@@ -245,10 +244,10 @@ public class DICOMAuditParser implements AuditParser {
 
     private Instant dateTime(String s) {
         var parsed = DATE_TIME_FORMATTER.parseBest(s, Instant::from, LocalDateTime::from);
-        if (parsed instanceof Instant) {
-            return (Instant) parsed;
-        } else if (parsed instanceof LocalDateTime) {
-            return ((LocalDateTime) parsed).atOffset(ZoneOffset.UTC).toInstant();
+        if (parsed instanceof Instant instant) {
+            return instant;
+        } else if (parsed instanceof LocalDateTime localDateTime) {
+            return localDateTime.atOffset(ZoneOffset.UTC).toInstant();
         } else {
             throw new AuditException("Could not parse " + s + " to Instant");
         }

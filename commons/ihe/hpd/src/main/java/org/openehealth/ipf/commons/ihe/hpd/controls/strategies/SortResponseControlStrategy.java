@@ -39,7 +39,7 @@ public class SortResponseControlStrategy implements ControlStrategy {
 
     @Override
     public void serializeJson(BasicControl control, JsonGenerator gen) throws IOException {
-        SortResponseControl2 sortResponseControl = (SortResponseControl2) control;
+        var sortResponseControl = (SortResponseControl2) control;
         gen.writeNumberField("resultCode", sortResponseControl.getResultCode());
         if (sortResponseControl.getFailedAttributeName() != null) {
             gen.writeStringField("failedAttrId", sortResponseControl.getFailedAttributeName());

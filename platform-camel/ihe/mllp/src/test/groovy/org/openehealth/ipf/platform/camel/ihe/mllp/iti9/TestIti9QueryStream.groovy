@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 @ContextConfiguration('/iti9/iti-9.xml')
 class TestIti9QueryStream extends AbstractMllpTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TestIti9QueryStream)
+    private static final Logger log = LoggerFactory.getLogger(TestIti9QueryStream)
     
     static String getMessageString(String msh9, String msh12, boolean needQpd = true) {
         def s = 'MSH|^~\\&|MESA_PIX_CLIENT|MESA_DEPARTMENT|MESA_XREF|XYZ_HOSPITAL|'+
@@ -68,7 +68,7 @@ class TestIti9QueryStream extends AbstractMllpTest {
                         if (response == 28) {
                             response = inputStream.read() // read second end byte
                             if (response == 13) {
-                                LOG.debug(s.toString().replaceAll('\r', '\n'))
+                                log.debug(s.toString().replaceAll('\r', '\n'))
                                 s = new StringBuilder()
                                 latch.countDown()
                             }

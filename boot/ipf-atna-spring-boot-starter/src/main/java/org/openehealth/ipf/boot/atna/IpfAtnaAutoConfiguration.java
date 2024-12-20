@@ -35,9 +35,6 @@ import org.springframework.context.annotation.Configuration;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-/**
- *
- */
 @Configuration
 @EnableConfigurationProperties(IpfAtnaConfigurationProperties.class)
 public class IpfAtnaAutoConfiguration {
@@ -45,6 +42,7 @@ public class IpfAtnaAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AuditContext auditContext(IpfAtnaConfigurationProperties config,
+                                     AuditContextCustomizer auditContextCustomizer,
                                      AuditTransmissionProtocol auditTransmissionProtocol,
                                      AuditMessageQueue auditMessageQueue,
                                      TlsParameters tlsParameters,
@@ -54,29 +52,38 @@ public class IpfAtnaAutoConfiguration {
                                      WsAuditDatasetEnricher wsAuditDatasetEnricher,
                                      FhirAuditDatasetEnricher fhirAuditDatasetEnricher,
                                      @Value("${spring.application.name}") String appName) {
+        DefaultAuditContext auditContext;
         if (config.getBalp() != null) {
-            return balpConfiguration(defaultContextConfiguration(new DefaultBalpAuditContext(), config,
-                auditTransmissionProtocol, auditMessageQueue, tlsParameters, auditMetadataProvider,
-                auditExceptionHandler, auditMessagePostProcessor, wsAuditDatasetEnricher,
-                fhirAuditDatasetEnricher, appName), config);
+            auditContext = new DefaultBalpAuditContext();
+            configureBalpAuditContext((DefaultBalpAuditContext) auditContext, config);
         } else {
-            return defaultContextConfiguration(new DefaultAuditContext(), config, auditTransmissionProtocol,
-                auditMessageQueue, tlsParameters, auditMetadataProvider, auditExceptionHandler,
-                auditMessagePostProcessor, wsAuditDatasetEnricher, fhirAuditDatasetEnricher, appName);
+            auditContext = new DefaultAuditContext();
         }
+        configureDefaultAuditContext(auditContext, config, auditTransmissionProtocol,
+            auditMessageQueue, tlsParameters, auditMetadataProvider, auditExceptionHandler,
+            auditMessagePostProcessor, wsAuditDatasetEnricher, fhirAuditDatasetEnricher, appName);
+        auditContextCustomizer.customizeAuditContext(auditContext);
+        return auditContext;
     }
 
-    private <T extends DefaultAuditContext> T defaultContextConfiguration(T auditContext,
-                                             IpfAtnaConfigurationProperties config,
-                                             AuditTransmissionProtocol auditTransmissionProtocol,
-                                             AuditMessageQueue auditMessageQueue,
-                                             TlsParameters tlsParameters,
-                                             AuditMetadataProvider auditMetadataProvider,
-                                             AuditExceptionHandler auditExceptionHandler,
-                                             AuditMessagePostProcessor auditMessagePostProcessor,
-                                             WsAuditDatasetEnricher wsAuditDatasetEnricher,
-                                             FhirAuditDatasetEnricher fhirAuditDatasetEnricher,
-                                             @Value("${spring.application.name}") String appName) {
+    @Bean
+    @ConditionalOnMissingBean(AuditContextCustomizer.class)
+    public AuditContextCustomizer auditContextCustomizer() {
+        return AuditContextCustomizer.NOOP;
+    }
+
+
+    private void configureDefaultAuditContext(DefaultAuditContext auditContext,
+                                              IpfAtnaConfigurationProperties config,
+                                              AuditTransmissionProtocol auditTransmissionProtocol,
+                                              AuditMessageQueue auditMessageQueue,
+                                              TlsParameters tlsParameters,
+                                              AuditMetadataProvider auditMetadataProvider,
+                                              AuditExceptionHandler auditExceptionHandler,
+                                              AuditMessagePostProcessor auditMessagePostProcessor,
+                                              WsAuditDatasetEnricher wsAuditDatasetEnricher,
+                                              FhirAuditDatasetEnricher fhirAuditDatasetEnricher,
+                                              @Value("${spring.application.name}") String appName) {
 
         auditContext.setAuditEnabled(config.isAuditEnabled());
 
@@ -103,65 +110,63 @@ public class IpfAtnaAutoConfiguration {
         if (fhirAuditDatasetEnricher != FhirAuditDatasetEnricher.NONE) {
             auditContext.setFhirAuditDatasetEnricher(fhirAuditDatasetEnricher);
         }
-
-        return auditContext;
     }
 
-    private DefaultBalpAuditContext balpConfiguration(DefaultBalpAuditContext auditContext, IpfAtnaConfigurationProperties config) {
-        if (config.getBalp() != null) {
-            auditContext.setAuditRepositoryContextPath(config.getBalp().getAuditRepositoryContextPath());
+    private void configureBalpAuditContext(DefaultBalpAuditContext auditContext, IpfAtnaConfigurationProperties config) {
+        auditContext.setAuditRepositoryContextPath(config.getBalp().getAuditRepositoryContextPath());
 
-            if (isNotBlank(config.getBalp().getAuditEventSerializationType())) {
-                auditContext.setSerializationStrategy(
-                    config.getBalp().getAuditEventSerializationType().equalsIgnoreCase("json") ?
-                        new BalpJsonSerializationStrategy() : new BalpXmlSerializationStrategy());
+        if (isNotBlank(config.getBalp().getAuditEventSerializationType())) {
+            auditContext.setSerializationStrategy(
+                config.getBalp().getAuditEventSerializationType().equalsIgnoreCase("json") ?
+                    new BalpJsonSerializationStrategy() : new BalpXmlSerializationStrategy());
+        }
+        var oAuth = config.getBalp().getOauth();
+        var props = auditContext.getBalpJwtExtractorProperties();
+
+        if (oAuth != null) {
+            if (oAuth.getIdPath() != null) {
+                props.setIdPath(oAuth.getIdPath());
             }
-            if (config.getBalp().getOauth() != null) {
-                if (config.getBalp().getOauth().getIdPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setIdPath(config.getBalp().getOauth().getIdPath());
-                }
-                if (config.getBalp().getOauth().getClientIdPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setClientIdPath(config.getBalp().getOauth().getClientIdPath());
-                }
-                if (config.getBalp().getOauth().getIssuerPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setIssuerPath(config.getBalp().getOauth().getIssuerPath());
-                }
-                if (config.getBalp().getOauth().getSubjectPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setSubjectPath(config.getBalp().getOauth().getSubjectPath());
-                }
-                if (config.getBalp().getOauth().getSubjectNamePath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setSubjectNamePath(config.getBalp().getOauth().getSubjectNamePath());
-                }
-                if (config.getBalp().getOauth().getSubjectRolePath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setSubjectRolePath(config.getBalp().getOauth().getSubjectRolePath());
-                }
-                if (config.getBalp().getOauth().getSubjectOrganizationIdPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setSubjectOrganizationIdPath(config.getBalp().getOauth().getSubjectOrganizationIdPath());
-                }
-                if (config.getBalp().getOauth().getPurposeOfUsePath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setPurposeOfUsePath(config.getBalp().getOauth().getPurposeOfUsePath());
-                }
-                if (config.getBalp().getOauth().getHomeCommunityIdPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setHomeCommunityIdPath(config.getBalp().getOauth().getHomeCommunityIdPath());
-                }
-                if (config.getBalp().getOauth().getNationalProviderIdPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setNationalProviderIdPath(config.getBalp().getOauth().getNationalProviderIdPath());
-                }
-                if (config.getBalp().getOauth().getDocIdPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setDocIdPath(config.getBalp().getOauth().getDocIdPath());
-                }
-                if (config.getBalp().getOauth().getPatientIdPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setPatientIdPath(config.getBalp().getOauth().getPatientIdPath());
-                }
-                if (config.getBalp().getOauth().getPersonIdPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setPersonIdPath(config.getBalp().getOauth().getPersonIdPath());
-                }
-                if (config.getBalp().getOauth().getAcpPath() != null) {
-                    auditContext.getBalpJwtExtractorProperties().setAcpPath(config.getBalp().getOauth().getAcpPath());
-                }
+            if (oAuth.getClientIdPath() != null) {
+                props.setClientIdPath(oAuth.getClientIdPath());
+            }
+            if (oAuth.getIssuerPath() != null) {
+                props.setIssuerPath(oAuth.getIssuerPath());
+            }
+            if (oAuth.getSubjectPath() != null) {
+                props.setSubjectPath(oAuth.getSubjectPath());
+            }
+            if (oAuth.getSubjectNamePath() != null) {
+                props.setSubjectNamePath(oAuth.getSubjectNamePath());
+            }
+            if (oAuth.getSubjectRolePath() != null) {
+                props.setSubjectRolePath(oAuth.getSubjectRolePath());
+            }
+            if (oAuth.getSubjectOrganizationIdPath() != null) {
+                props.setSubjectOrganizationIdPath(oAuth.getSubjectOrganizationIdPath());
+            }
+            if (oAuth.getPurposeOfUsePath() != null) {
+                props.setPurposeOfUsePath(oAuth.getPurposeOfUsePath());
+            }
+            if (oAuth.getHomeCommunityIdPath() != null) {
+                props.setHomeCommunityIdPath(oAuth.getHomeCommunityIdPath());
+            }
+            if (oAuth.getNationalProviderIdPath() != null) {
+                props.setNationalProviderIdPath(oAuth.getNationalProviderIdPath());
+            }
+            if (oAuth.getDocIdPath() != null) {
+                props.setDocIdPath(oAuth.getDocIdPath());
+            }
+            if (oAuth.getPatientIdPath() != null) {
+                props.setPatientIdPath(oAuth.getPatientIdPath());
+            }
+            if (oAuth.getPersonIdPath() != null) {
+                props.setPersonIdPath(oAuth.getPersonIdPath());
+            }
+            if (oAuth.getAcpPath() != null) {
+                props.setAcpPath(oAuth.getAcpPath());
             }
         }
-        return auditContext;
     }
 
     // The following beans configure aud strategies (formats, queues, exception handlers) and
