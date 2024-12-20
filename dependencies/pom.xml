@@ -39,7 +39,7 @@
         <ph-commons-version>11.1.0</ph-commons-version>
         <saxon-he-version>12.5</saxon-he-version>
         <simple-syslog-version>0.0.16</simple-syslog-version>
-        <spring-boot-version>3.4.0</spring-boot-version>
+        <spring-boot-version>3.4.1</spring-boot-version>
         <velocity-version>2.4.1</velocity-version>
         <vibur-version>25.0</vibur-version>
         <woodstox-version>7.1.0</woodstox-version>
