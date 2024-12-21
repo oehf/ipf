@@ -40,9 +40,9 @@ public class ChPpqmUtils {
         try {
             FHIR_CONTEXT = IgBasedFhirContextSupplier.getContext(
                     FhirContext.forR4(),
-                    "classpath:/igs/ch-epr-fhir-4.0.1-ballot.tgz",
-                    "classpath:/igs/ch-epr-term-2.0.9.tgz",
-                    "classpath:/igs/ch-core-4.0.1.tgz");
+                    "classpath:/igs/ch.fhir.ig.ch-epr-fhir-4.0.1.tgz",
+                    "classpath:/igs/ch.fhir.ig.ch-term-3.1.0.tgz",
+                    "classpath:/igs/ch.fhir.ig.ch-core-5.0.0.tgz");
         } catch (IOException e) {
             throw new ExceptionInInitializerError(e);
         }
