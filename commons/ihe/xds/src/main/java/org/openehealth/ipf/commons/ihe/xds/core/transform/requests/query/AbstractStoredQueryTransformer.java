@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.StoredQuery;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.TargetCommunityIdListBasedStoredQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 
@@ -73,6 +74,9 @@ abstract class AbstractStoredQueryTransformer<T extends StoredQuery> {
      */
     protected void toEbXML(T query, QuerySlotHelper slots) {
         query.getExtraParameters().forEach(slots::fromStringList);
+        if (query instanceof TargetCommunityIdListBasedStoredQuery query2) {
+            slots.fromStringList(QueryParameter.TARGET_COMMUNITY_IDS, query2.getTargetCommunityIds());
+        }
     }
 
     /**
@@ -92,5 +96,8 @@ abstract class AbstractStoredQueryTransformer<T extends StoredQuery> {
                         query.getExtraParameters().put(slotName, queryList);
                     }
                 });
+        if (query instanceof TargetCommunityIdListBasedStoredQuery query2) {
+            query2.setTargetCommunityIds(slots.toStringList(QueryParameter.TARGET_COMMUNITY_IDS));
+        }
     }
 }

@@ -15,14 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate.query;
 
+import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Validator for home community ID attribute in stored queries.
@@ -46,6 +49,12 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
+        List<String> targetCommunityIds = request.getSlotValues(QueryParameter.TARGET_COMMUNITY_IDS.getSlotName());
+
+        if (StringUtils.isNotEmpty(request.getHome()) && !targetCommunityIds.isEmpty()) {
+            throw new XDSMetaDataException(ValidationMessage.QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, "home, " + QueryParameter.TARGET_COMMUNITY_IDS.getSlotName());
+        }
+
         final boolean homeCommunityRequired = switch (optionality) {
             case NEVER -> false;
             case ALWAYS -> true;
@@ -53,7 +62,11 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
         };
 
         var validator = new HomeCommunityIdValidator(homeCommunityRequired);
-        validator.validate(request.getHome());
+        if (!targetCommunityIds.isEmpty()) {
+            targetCommunityIds.forEach(validator::validate);
+        } else {
+            validator.validate(request.getHome());
+        }
     }
 
     private static boolean patientIdMissing(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) {

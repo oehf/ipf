@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="5.0.0" description="" date="">
+            <action issue="463" dev="unixoid" type="add">
+                Implement CP-ITI-1301: Support for the option "Target Communities" in XDS metadata queries.
+            </action>
             <action issue="461" dev="ohr" type="update">
                 Removed HAPI FHIR dependency from ipf-commons-audit module, replacing it with a more flexible
                 approach of (thread-local) context propagation.
@@ -35,7 +38,7 @@
                 Add the possibility to use custom additional URL parameters on a ITI SOAP calls, using
                 the new interceptor type CustomUrlParametersOutInterceptor.
             </action>
-            <action issue="454" dev="thopap" type="fix">
+            <action issue="456" dev="thopap" type="fix">
                 Deprecated code was removed. Most notably, XDS.a remainders, Exchanges.resultMessage(Exchange) and some
                 accessors in AuditContext.
             </action>

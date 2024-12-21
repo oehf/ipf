@@ -49,7 +49,7 @@ public class SubscriptionForDocumentEntryQueryTransformerTest extends AbstractQu
         transformer.toEbXML(query, ebXML);
 
         assertEquals(QueryType.SUBSCRIPTION_FOR_DOCUMENT_ENTRY.getId(), ebXML.getId());
-        assertEquals("12.21.41", ebXML.getHome());
+        assertEquals("urn:oid:1.21.41", ebXML.getHome());
         assertEquals(Collections.singletonList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
 

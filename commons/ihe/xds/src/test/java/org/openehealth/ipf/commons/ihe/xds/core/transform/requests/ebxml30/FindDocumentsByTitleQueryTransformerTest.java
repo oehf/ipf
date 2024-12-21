@@ -47,7 +47,7 @@ public class FindDocumentsByTitleQueryTransformerTest extends AbstractQueryTrans
         transformer.toEbXML(query, ebXML);
 
         assertEquals(QueryType.FIND_DOCUMENTS_BY_TITLE.getId(), ebXML.getId());
-        assertEquals("12.21.41", ebXML.getHome());
+        assertEquals("urn:oid:1.21.41", ebXML.getHome());
         assertEquals(Collections.singletonList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
 

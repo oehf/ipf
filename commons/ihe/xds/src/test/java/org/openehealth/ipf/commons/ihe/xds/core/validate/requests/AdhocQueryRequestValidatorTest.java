@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
@@ -33,6 +34,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
@@ -340,4 +342,16 @@ public class AdhocQueryRequestValidatorTest {
             assertEquals(expectedMessage, e.getValidationMessage());
         }
     }
+
+    @Test
+    public void testTargetCommunityIds() {
+        var query = new FindDocumentsQuery();
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setStatus(List.of(AvailabilityStatus.APPROVED));
+        query.setHomeCommunityId("urn:oid:1.2.3");
+        query.setTargetCommunityIds(List.of("urn:oid:2.3.4", "urn:oid:3.4.5"));
+        var ebXML = transformer.toEbXML(new QueryRegistry(query));
+        expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, ebXML, ITI_18);
+    }
+
 }

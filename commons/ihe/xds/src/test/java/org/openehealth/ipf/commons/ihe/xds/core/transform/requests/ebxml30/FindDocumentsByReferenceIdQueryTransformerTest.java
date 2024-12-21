@@ -27,6 +27,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.FindDoc
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -40,6 +41,7 @@ public class FindDocumentsByReferenceIdQueryTransformerTest extends AbstractQuer
     public void setUp() {
         transformer = FindDocumentsByReferenceIdQueryTransformer.getInstance();
         query = (FindDocumentsByReferenceIdQuery) SampleData.createFindDocumentsByReferenceIdQuery().getQuery();
+        query.setTargetCommunityIds(List.of("urn:oid:2.1.1", "urn:oid:2.2.2"));
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
     }
 
@@ -48,7 +50,7 @@ public class FindDocumentsByReferenceIdQueryTransformerTest extends AbstractQuer
         transformer.toEbXML(query, ebXML);
 
         assertEquals(QueryType.FIND_DOCUMENTS_BY_REFERENCE_ID.getId(), ebXML.getId());
-        assertEquals("12.21.41", ebXML.getHome());
+        assertEquals("urn:oid:1.21.41", ebXML.getHome());
         assertEquals(Collections.singletonList("'id3^^^&1.3&ISO'"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
 
@@ -63,6 +65,10 @@ public class FindDocumentsByReferenceIdQueryTransformerTest extends AbstractQuer
                 "('ref-id-21^^^&1.1.1.2&ISO^urn:ihe:iti:xds:2013:accession')",
                 "('ref-id-22^^^^urn:ihe:iti:xds:2013:order')"),
                 referenceIdSlots.get(1).getValueList());
+
+        var targetCommunityIdSlots = ebXML.getSlots(QueryParameter.TARGET_COMMUNITY_IDS.getSlotName());
+        assertEquals(1, targetCommunityIdSlots.size());
+        assertEquals(List.of("('urn:oid:2.1.1')", "('urn:oid:2.2.2')"), targetCommunityIdSlots.get(0).getValueList());
     }
 
     @Override

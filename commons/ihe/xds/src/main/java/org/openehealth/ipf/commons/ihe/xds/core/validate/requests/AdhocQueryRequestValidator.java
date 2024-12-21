@@ -224,6 +224,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                 new StatusValidation(DOC_ENTRY_STATUS),
                 new DocumentEntryTypeValidation(),
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
             };
             case FIND_DOCUMENTS_BY_TITLE -> new QueryParameterValidation[]{
                 new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
@@ -244,6 +245,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StringListValidation(DOC_ENTRY_TITLE, nopValidator),
                 new StatusValidation(DOC_ENTRY_STATUS),
                 new DocumentEntryTypeValidation(),
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
             };
             case FIND_DOCUMENTS_BY_REFERENCE_ID, FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ -> new QueryParameterValidation[]{
                 queryType.equals(FIND_DOCUMENTS_BY_REFERENCE_ID)
@@ -265,7 +267,8 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
                 new StatusValidation(DOC_ENTRY_STATUS),
                 new DocumentEntryTypeValidation(),
-                new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator)
+                new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
             };
             case FIND_SUBMISSION_SETS -> new QueryParameterValidation[]{
                 new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
@@ -276,6 +279,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
                 new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE),
                 new StatusValidation(SUBMISSION_SET_STATUS),
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
             };
             case FIND_FOLDERS, FIND_FOLDERS_MPQ -> new QueryParameterValidation[]{
                 // PatientId MUST BE supplied in single patient query.
@@ -286,6 +290,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new TimestampValidation(FOLDER_LAST_UPDATE_TIME_TO),
                 new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME),
                 new StatusValidation(FOLDER_STATUS),
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
             };
             case GET_ALL -> new QueryParameterValidation[]{
                 new StringValidation(PATIENT_ID, cxValidator, false),
@@ -294,6 +299,7 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 new StatusValidation(FOLDER_STATUS),
                 new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
                 new DocumentEntryTypeValidation(),
+                new HomeCommunityIdValidation(homeCommunityIdOptionality),
             };
             case GET_DOCUMENTS -> new QueryParameterValidation[]{
                 new HomeCommunityIdValidation(homeCommunityIdOptionality),

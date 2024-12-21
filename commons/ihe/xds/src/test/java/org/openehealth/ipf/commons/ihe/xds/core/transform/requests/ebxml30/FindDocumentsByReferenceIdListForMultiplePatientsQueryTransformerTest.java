@@ -47,7 +47,7 @@ public class FindDocumentsByReferenceIdListForMultiplePatientsQueryTransformerTe
         transformer.toEbXML(query, ebXML);
 
         assertEquals(QueryType.FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ.getId(), ebXML.getId());
-        assertEquals("12.21.41", ebXML.getHome());
+        assertEquals("urn:oid:1.21.41", ebXML.getHome());
         assertEquals(Arrays.asList("('id3^^^&1.3&ISO')", "('id4^^^&1.4&ISO')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_PATIENT_ID.getSlotName()));
 

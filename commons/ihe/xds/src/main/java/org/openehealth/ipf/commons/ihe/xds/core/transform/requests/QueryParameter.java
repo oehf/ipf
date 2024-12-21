@@ -149,8 +149,10 @@ public enum QueryParameter {
     ASSOCIATION_TYPE("$AssociationTypes"),
     /** Used to filter {@link Association#getAvailabilityStatus()}. */
     ASSOCIATION_STATUS("$XDSAssociationStatus"),
-    /** Used to filter {none}. */
-    METADATA_LEVEL("$MetadataLevel");
+    /** Used to specify whether old versions of metadata objects shall be returned or not. */
+    METADATA_LEVEL("$MetadataLevel"),
+    /** Used to specify which communities to forward the query to. */
+    TARGET_COMMUNITY_IDS("$targetCommunityIdList");
 
     private final String slotName;
 

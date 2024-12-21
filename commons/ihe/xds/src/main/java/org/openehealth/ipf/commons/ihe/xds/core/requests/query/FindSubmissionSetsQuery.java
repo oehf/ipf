@@ -32,11 +32,11 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FindSubmissionSetsQuery", propOrder = {
-        "status", "sourceIds", "authorPerson", "submissionTime", "contentTypeCodes", "patientId"})
+        "status", "sourceIds", "authorPerson", "submissionTime", "contentTypeCodes", "patientId", "targetCommunityIds"})
 @XmlRootElement(name = "findSubmissionSetsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class FindSubmissionSetsQuery extends StoredQuery implements PatientIdBasedStoredQuery {
+public class FindSubmissionSetsQuery extends StoredQuery implements PatientIdBasedStoredQuery, TargetCommunityIdListBasedStoredQuery {
     @Serial
     private static final long serialVersionUID = 1712346604151312305L;
 
@@ -47,6 +47,7 @@ public class FindSubmissionSetsQuery extends StoredQuery implements PatientIdBas
     @Getter @Setter private List<Code> contentTypeCodes;
     @Getter @Setter private String authorPerson;
     @Getter @Setter private Identifiable patientId;
+    @Getter @Setter private List<String> targetCommunityIds;
 
     @Getter private final TimeRange submissionTime = new TimeRange();
 

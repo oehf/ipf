@@ -35,11 +35,11 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "FindDocumentsQuery", propOrder = {
-        "patientId", "status", "documentEntryTypes", "documentAvailability", "metadataLevel"})
+        "patientId", "status", "documentEntryTypes", "documentAvailability", "metadataLevel", "targetCommunityIds"})
 @XmlRootElement(name = "findDocumentsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery {
+public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery, TargetCommunityIdListBasedStoredQuery {
     @Serial
     private static final long serialVersionUID = -5765363916663583605L;
 
@@ -49,6 +49,7 @@ public class FindDocumentsQuery extends DocumentsQuery implements PatientIdBased
     @Getter @Setter private List<DocumentEntryType> documentEntryTypes;
     @Getter @Setter private List<DocumentAvailability> documentAvailability;
     @Getter @Setter private Integer metadataLevel;
+    @Getter @Setter private List<String> targetCommunityIds;
 
     /**
      * Constructs the query.

@@ -33,12 +33,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "GetAllQuery", propOrder = {
         "statusDocuments", "statusSubmissionSets", "statusFolders", "confidentialityCodes", "formatCodes",
-        "documentEntryTypes", "patientId", "associationStatuses", "metadataLevel"})
+        "documentEntryTypes", "patientId", "associationStatuses", "metadataLevel", "targetCommunityIds"})
 @XmlRootElement(name = "getAllQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class GetAllQuery extends StoredQuery
-        implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery
+        implements PatientIdBasedStoredQuery, DocumentEntryTypeAwareStoredQuery, TargetCommunityIdListBasedStoredQuery
 {
     @Serial
     private static final long serialVersionUID = -4161172318244319631L;
@@ -59,6 +59,7 @@ public class GetAllQuery extends StoredQuery
     @XmlElement(name = "associationStatus")
     @Getter @Setter private List<AvailabilityStatus> associationStatuses;
     @Getter @Setter private Integer metadataLevel;
+    @Getter @Setter private List<String> targetCommunityIds;
 
     /**
      * Constructs the query.

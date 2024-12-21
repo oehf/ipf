@@ -536,7 +536,7 @@ public abstract class SampleData {
 
     private static void populateDocumentsQuery(DocumentsQuery query) {
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
 
         query.setClassCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
         query.setTypeCodes(Arrays.asList(new Code("codet1", null, "schemet1"), new Code("codet2", null, "schemet2")));
@@ -585,7 +585,7 @@ public abstract class SampleData {
     public static QueryRegistry createFindFoldersQuery() {
         var query = new FindFoldersQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.getLastUpdateTime().setFrom("1980");
         query.getLastUpdateTime().setTo("1981");
@@ -607,7 +607,7 @@ public abstract class SampleData {
     public static QueryRegistry createFindFoldersForMultiplePatientsQuery() {
         var query = new FindFoldersForMultiplePatientsQuery();
 
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setPatientIds(Arrays.asList(new Identifiable("id1", new AssigningAuthority("1.2")), new Identifiable("id2", new AssigningAuthority("1.2"))));
         query.getLastUpdateTime().setFrom("1980");
         query.getLastUpdateTime().setTo("1981");
@@ -628,7 +628,7 @@ public abstract class SampleData {
     public static QueryRegistry createFindSubmissionSetsQuery() {
         var query = new FindSubmissionSetsQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         query.getSubmissionTime().setFrom("1980");
         query.getSubmissionTime().setTo("1981");
@@ -646,7 +646,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetAllQuery() {
         var query = new GetAllQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setPatientId(new Identifiable("id1", new AssigningAuthority("1.2")));
         var codes = new QueryList<Code>();
         codes.getOuterList().add(
@@ -669,7 +669,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetAssociationsQuery() {
         var query = new GetAssociationsQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
         
         return new QueryRegistry(query);
@@ -681,7 +681,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetDocumentsAndAssociationsQuery() {
         var query = new GetDocumentsAndAssociationsQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
         query.setUniqueIds(Arrays.asList("12.21.34", "43.56.89"));
         
@@ -694,7 +694,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetFolderAndContentsQuery() {
         var query = new GetFolderAndContentsQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
         var confidentialityCodes = new QueryList<Code>();
@@ -715,7 +715,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetFoldersForDocumentQuery() {
         var query = new GetFoldersForDocumentQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
         var confidentialityCodes = new QueryList<Code>();
@@ -733,7 +733,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetFoldersQuery() {
         var query = new GetFoldersQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
         query.setUniqueIds(Arrays.asList("12.21.34", "43.56.89"));
         
@@ -746,7 +746,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetRelatedDocumentsQuery() {
         var query = new GetRelatedDocumentsQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
         query.setAssociationTypes(Arrays.asList(AssociationType.APPEND, AssociationType.TRANSFORM));
@@ -761,7 +761,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetSubmissionSetAndContentsQuery() {
         var query = new GetSubmissionSetAndContentsQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setUuid("urn:uuid:1.2.3.4");
         query.setUniqueId("12.21.34");
         var confidentialityCodes = new QueryList<Code>();
@@ -780,7 +780,7 @@ public abstract class SampleData {
     public static QueryRegistry createGetSubmissionSetsQuery() {
         var query = new GetSubmissionSetsQuery();
         
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setUuids(Arrays.asList("urn:uuid:1.2.3.4", "urn:uuid:2.3.4.5"));
                 
         return new QueryRegistry(query);
@@ -841,7 +841,7 @@ public abstract class SampleData {
         final var query = new FindDispensesQuery();
 
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.setConfidentialityCodes(Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
         query.getCreationTime().setFrom("1980");
         query.getCreationTime().setTo("1981");
@@ -891,7 +891,7 @@ public abstract class SampleData {
         final var query = new FindMedicationListQuery();
 
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
-        query.setHomeCommunityId("12.21.41");
+        query.setHomeCommunityId("urn:oid:1.21.41");
         query.getServiceStart().setFrom("1982");
         query.getServiceStart().setTo("1983");
         query.getServiceEnd().setFrom("1984");
