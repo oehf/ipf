@@ -51,11 +51,6 @@ public class CMPD implements XdsIntegrationProfile {
     }
 
     @Override
-    public boolean isEbXml30Based() {
-        return true;
-    }
-
-    @Override
     public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
         return HomeCommunityIdOptionality.NEVER;
     }

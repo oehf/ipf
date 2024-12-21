@@ -59,7 +59,7 @@ public abstract class ResponseTransformerTestBase implements FactoryCreator {
 
         error = errors.get(1);
         assertEquals("context2", error.getCodeContext());
-        assertEquals(ErrorCode.SQL_ERROR.getOpcode(), error.getErrorCode());
+        assertEquals(ErrorCode.OBJECT_TYPE_ERROR.getOpcode(), error.getErrorCode());
         assertEquals(Severity.WARNING, error.getSeverity());
         assertNull(error.getLocation());
 

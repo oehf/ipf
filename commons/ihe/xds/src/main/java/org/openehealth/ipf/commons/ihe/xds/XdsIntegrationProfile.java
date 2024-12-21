@@ -25,8 +25,6 @@ public interface XdsIntegrationProfile extends IntegrationProfile {
 
     enum HomeCommunityIdOptionality {ALWAYS, NEVER, ON_MISSING_PATIENT_ID}
 
-    boolean isEbXml30Based();
-
     HomeCommunityIdOptionality getHomeCommunityIdOptionality();
 
 }

@@ -49,13 +49,6 @@ public interface ValidationProfile {
     XdsIntegrationProfile getInteractionProfile();
 
 
-    /**
-     * @return <code>true</code> when the transaction uses ebXML 3.0.
-     */
-    default boolean isEbXml30Based() {
-        return getInteractionProfile().isEbXml30Based();
-    }
-
     default boolean isPartOf(Class<? extends XdsIntegrationProfile> clazz) {
         return clazz.isAssignableFrom(getInteractionProfile().getClass());
     }

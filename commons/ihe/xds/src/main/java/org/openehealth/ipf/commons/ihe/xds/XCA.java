@@ -59,11 +59,6 @@ public class XCA implements XdsIntegrationProfile {
     }
 
     @Override
-    public boolean isEbXml30Based() {
-        return true;
-    }
-
-    @Override
     public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
         return HomeCommunityIdOptionality.ON_MISSING_PATIENT_ID;
     }

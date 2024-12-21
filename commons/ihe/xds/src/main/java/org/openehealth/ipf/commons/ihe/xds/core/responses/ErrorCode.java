@@ -180,12 +180,12 @@ public enum ErrorCode {
     /** The receiving actor has detected an error with a SS-HM annotation. */
     @XmlEnumValue("XDSMetadataAnnotationError") METADATA_ANNOTATION_ERROR("XDSMetadataAnnotationError"),
 
-    /* --- codes for ITI-16 (obsolete XDS.a profile) --- */
-    /** An error occurred when executing an SQL query. */
-    @XmlEnumValue("XDSSqlError") SQL_ERROR("XDSSqlError"),
-
+    /* --- codes for XCDR and MHD --- */
+    /** A value for IntendedRecipient is not recognized. */
     @XmlEnumValue("UnknownRecipient") UNKNOWN_RECIPIENT("UnknownRecipient"),
+    /** An IntendedRecipient which would have been contacted was not available. */
     @XmlEnumValue("UnavailableRecipient") UNAVAILABLE_RECIPIENT("UnavailableRecipient"),
+    /** A request to Publish a FHIR Document was attempted but not supported by the Document Recipient Actor. */
     @XmlEnumValue("FHIRDocumentNotSupported") FHIR_DOCUMENT_NOT_SUPPORTED("FHIRDocumentNotSupported"),
 
     /* --- special value for custom user-defined error codes --- */

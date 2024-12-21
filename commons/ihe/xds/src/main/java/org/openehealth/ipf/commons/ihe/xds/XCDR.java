@@ -52,11 +52,6 @@ public class XCDR implements XdsIntegrationProfile {
 	}
 
 	@Override
-	public boolean isEbXml30Based() {
-		return true;
-	}
-
-	@Override
 	public HomeCommunityIdOptionality getHomeCommunityIdOptionality() {
 		return HomeCommunityIdOptionality.ALWAYS;
 	}
