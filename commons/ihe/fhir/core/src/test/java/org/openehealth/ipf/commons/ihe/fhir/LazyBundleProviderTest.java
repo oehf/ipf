@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import io.undertow.servlet.spec.HttpServletResponseImpl;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -50,7 +51,7 @@ public class LazyBundleProviderTest {
         }
         var payload = new Object();
         var headers = new HashMap<String, Object>();
-        bundleProvider = new LazyBundleProvider(requestConsumer, true, payload, headers);
+        bundleProvider = new LazyBundleProvider(requestConsumer, true, payload, headers, new HttpServletResponseImpl(null, null));
     }
 
     @Test
@@ -63,7 +64,7 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResources() {
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30), eq(new HashMap<>())))
                 .andReturn(response.subList(10, 30));
         EasyMock.replay(requestConsumer);
         var result = bundleProvider.getResources(10, 30);
@@ -74,7 +75,7 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResourcesAlreadyCached() {
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30), eq(new HashMap<>())))
                 .andReturn(response.subList(10, 30));
         EasyMock.replay(requestConsumer);
 
@@ -89,9 +90,9 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResourcesPartlyCached1() {
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30), eq(new HashMap<>())))
                 .andReturn(response.subList(10, 30));
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(30, 40)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(30, 40), eq(new HashMap<>())))
                 .andReturn(response.subList(30, 40));
         EasyMock.replay(requestConsumer);
 
@@ -107,11 +108,11 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResourcesPartlyCached2() {
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 30), eq(new HashMap<>())))
                 .andReturn(response.subList(10, 30));
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(5, 10)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(5, 10), eq(new HashMap<>())))
                 .andReturn(response.subList(5, 10));
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(30, 35)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(30, 35), eq(new HashMap<>())))
                 .andReturn(response.subList(30, 35));
         EasyMock.replay(requestConsumer);
 
@@ -127,11 +128,11 @@ public class LazyBundleProviderTest {
 
     @Test
     public void testGetResourcesPartlyCached3() {
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 20)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(10, 20), eq(new HashMap<>())))
                 .andReturn(response.subList(10, 20));
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(30, 40)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(30, 40), eq(new HashMap<>())))
                 .andReturn(response.subList(30, 40));
-        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(20, 30)))
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(bundleProvider.getPayload()), hasRequestSublistParameters(20, 30), eq(new HashMap<>())))
                 .andReturn(response.subList(20, 30));
         EasyMock.replay(requestConsumer);
 

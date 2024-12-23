@@ -26,6 +26,7 @@
     
     <Loggers>
         <Logger name="org.openehealth.ipf" level="WARN"/>
+        <logger name="ca.uhn.fhir.rest.client.interceptor" level="WARN"/>  <!-- set to INFO for manual tests -->
 
         <Root level="WARN">
             <AppenderRef ref="CONSOLE"/>

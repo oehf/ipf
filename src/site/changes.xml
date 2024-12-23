@@ -34,6 +34,9 @@
             <action issue="460" dev="unixoid" type="fix">
                 Added missing type converter for PDQv3 continuation protocol.
             </action>
+            <action issue="458" dev="unixoid" type="add">
+                Added a possibility to set outgoing HTTP headers in FHIR consumers.
+            </action>
             <action issue="457" dev="stanojevic-boris" type="update">
                 Add the possibility to use custom additional URL parameters on a ITI SOAP calls, using
                 the new interceptor type CustomUrlParametersOutInterceptor.

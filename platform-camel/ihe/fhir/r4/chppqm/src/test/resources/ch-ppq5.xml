@@ -25,4 +25,6 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
           class="org.openehealth.ipf.platform.camel.ihe.fhir.chppqm.chppq5.ChPpq5TestRouteBuilder">
     </bean>
 
+    <bean id="loggingInterceptorFactory" class="org.openehealth.ipf.platform.camel.ihe.fhir.chppqm.LoggingInterceptorFactory"/>
+
 </beans>

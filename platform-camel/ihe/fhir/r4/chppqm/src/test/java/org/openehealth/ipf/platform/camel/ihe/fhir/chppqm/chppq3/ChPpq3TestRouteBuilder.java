@@ -47,7 +47,9 @@ public class ChPpq3TestRouteBuilder extends RouteBuilder {
                     //Consent request = exchange.getMessage().getMandatoryBody(Consent.class);
                     log.info("Method = {}", exchange.getMessage().getHeader(Constants.HTTP_METHOD));
                     exchange.getMessage().setBody(new MethodOutcome(new IdType(UUID.randomUUID().toString())));
-                    exchange.getMessage().setHeader(Constants.HTTP_OUTGOING_HEADERS, Map.of("TraceParent", List.of(TRACE_CONTEXT_ID)));
+                    exchange.getMessage().setHeader(Constants.HTTP_OUTGOING_HEADERS, Map.of(
+                        "TraceParent", List.of(TRACE_CONTEXT_ID),
+                        "ResponseHeader2", List.of("value1", "value2")));
                 })
                 .process(itiResponseValidator());
     }

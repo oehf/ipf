@@ -20,6 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import jakarta.servlet.http.HttpServletResponse;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
@@ -37,7 +38,7 @@ import java.util.function.Predicate;
  * on searches.
  * <ul>
  * <li>{@link Constants#FHIR_REQUEST_SIZE_ONLY}: if this entry is present, the requester expects only
- * the result size to be returned in an parameter entry with the same name and calls {@link #handleSizeRequest(Object, Map)}
+ * the result size to be returned in an parameter entry with the same name and calls {@link #handleSizeRequest(Object, Map, Map)}
  * to do so. If possible, implementations should only request the result size from the backend rather than
  * a complete result set.</li>
  * <li>{@link Constants#FHIR_FROM_INDEX} and {@link Constants#FHIR_TO_INDEX}: if these entries are present,
@@ -71,22 +72,24 @@ public interface RequestConsumer extends Predicate<RequestDetails> {
     /**
      * Handles a Create / Update / Validate / Delete action request.
      *
-     * @param payload request payload
-     * @param headers request parameters, e.g. search parameters
+     * @param payload    request payload
+     * @param inHeaders  request parameters, e.g. search parameters
+     * @param outHeaders map where Camel response headers will be copied into
      * @return result of the action execution
      */
-    MethodOutcome handleAction(Object payload, Map<String, Object> headers);
+    MethodOutcome handleAction(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders);
 
     /**
      * Handles the request for a resource
      *
      * @param payload    request payload
-     * @param headers    request parameters, e.g. search parameters
+     * @param inHeaders  request parameters, e.g. search parameters
+     * @param outHeaders map where Camel response headers will be copied into
      * @param resultType type of the returned resource
      * @param <R>        type of the returned resource
      * @return resource to be returned
      */
-    <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> headers, Class<R> resultType);
+    <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders, Class<R> resultType);
 
     /**
      * Handles the (search) request for a bundle, effectively being a list of resources.
@@ -96,32 +99,35 @@ public interface RequestConsumer extends Predicate<RequestDetails> {
      * indicating that only a part of the result is requested. Implementations must return only the requested entries.
      * </p>
      *
-     * @param payload request payload
-     * @param headers request parameters, e.g. search parameters or
-     * @param <R>     type of the returned resources contained in the bundle
+     * @param payload    request payload
+     * @param inHeaders  request parameters, e.g. search parameters or
+     * @param outHeaders map where Camel response headers will be copied into
+     * @param <R>        type of the returned resources contained in the bundle
      * @return list of resources to be returned
      */
-    <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers);
+    <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders);
 
     /**
      * Handles the request for a bundle provider, effectively constructing a list of resources. The returned
      * IBundleProvider takes over the responsibility to fetch the required subset of the result, usually
-     * by indirectly calling {@link #handleBundleRequest(Object, Map)} as required.
+     * by indirectly calling {@link #handleBundleRequest(Object, Map, Map)} as required.
      *
      * @param payload request payload
      * @param headers request parameters, e.g. search parameters
+     * @param httpServletResponse HTTP servlet response
      * @return a bundle provider
      */
-    IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers);
+    IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse);
 
     /**
      * Handles transaction requests
      *
-     * @param payload request payload
-     * @param headers request parameters
+     * @param payload    request payload
+     * @param inHeaders  request parameters
+     * @param outHeaders map where Camel response headers will be copied into
      * @return transaction response bundle
      */
-    <T extends IBaseBundle> T handleTransactionRequest(Object payload, Map<String, Object> headers, Class<T> bundleClass);
+    <T extends IBaseBundle> T handleTransactionRequest(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders, Class<T> bundleClass);
 
     /**
      * Optional method that request the result size of a bundle request. Only used for lazy

@@ -20,6 +20,7 @@ import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeSet;
 import com.google.common.collect.TreeRangeSet;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.slf4j.Logger;
@@ -65,9 +66,10 @@ public class LazyBundleProvider extends AbstractBundleProvider {
      * @param cacheResults cache results. So far, only the result set size is cached
      * @param payload      incoming payload
      * @param headers      incoming headers
+     * @param httpServletResponse HTTP servlet response
      */
-    public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, Object payload, Map<String, Object> headers) {
-        this(consumer, cacheResults, false, payload, headers);
+    public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
+        this(consumer, cacheResults, false, payload, headers, httpServletResponse);
     }
 
     /**
@@ -78,9 +80,10 @@ public class LazyBundleProvider extends AbstractBundleProvider {
      * @param sort         sort results
      * @param payload      incoming payload
      * @param headers      incoming headers
+     * @param httpServletResponse HTTP servlet response
      */
-    public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, boolean sort, Object payload, Map<String, Object> headers) {
-        super(consumer, sort, payload, headers);
+    public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, boolean sort, Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
+        super(consumer, sort, payload, headers, httpServletResponse);
         this.cacheResults = cacheResults;
     }
 

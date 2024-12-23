@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,8 +95,11 @@ public abstract class SharedFhirProvider extends FhirProvider {
             RequestDetails requestDetails) {
         var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new InvalidRequestException("Request does not match any consumer or consumers are not initialized"));
-        var headers = enrichParameters(null, httpServletRequest, requestDetails);
-        return consumer.handleTransactionRequest(payload, headers, bundleClass);
+        var inHeaders = enrichParameters(null, httpServletRequest, requestDetails);
+        var outHeaders = new HashMap<String, Object>();
+        T bundle = consumer.handleTransactionRequest(payload, inHeaders, outHeaders, bundleClass);
+        processOutHeaders(outHeaders, httpServletResponse);
+        return bundle;
     }
 
     /**

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import jakarta.servlet.http.HttpServletResponse;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.HashMap;
@@ -35,16 +36,18 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
     private final Object payload;
     private final Map<String, Object> headers;
     private final boolean sort;
+    protected final HttpServletResponse httpServletResponse;
 
-    public AbstractBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers) {
-        this(consumer, false, payload, headers);
+    public AbstractBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
+        this(consumer, false, payload, headers, httpServletResponse);
     }
 
-    public AbstractBundleProvider(RequestConsumer consumer, boolean sort, Object payload, Map<String, Object> headers) {
+    public AbstractBundleProvider(RequestConsumer consumer, boolean sort, Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
         this.consumer = consumer;
         this.payload = payload;
         this.headers = headers;
         this.sort = sort;
+        this.httpServletResponse = httpServletResponse;
     }
 
     @Override
@@ -57,8 +60,11 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
         return null;
     }
 
-    protected List<IBaseResource> obtainResources(Object payload, Map<String, Object> parameters) {
-        return consumer.handleBundleRequest(payload, parameters);
+    protected List<IBaseResource> obtainResources(Object payload, Map<String, Object> inHeaders) {
+        HashMap<String, Object> outHeaders = new HashMap<>();
+        List<IBaseResource> resources = consumer.handleBundleRequest(payload, inHeaders, outHeaders);
+        FhirProvider.processOutHeaders(outHeaders, httpServletResponse);
+        return resources;
     }
 
     protected RequestConsumer getConsumer() {

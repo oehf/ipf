@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import io.undertow.servlet.spec.HttpServletResponseImpl;
 import org.easymock.EasyMock;
 import org.hl7.fhir.dstu3.model.Patient;
 import org.hl7.fhir.instance.model.api.IBaseResource;
@@ -48,12 +49,12 @@ public class EagerBundleProviderTest {
         }
         var payload = new Object();
         var headers = new HashMap<String, Object>();
-        bundleProvider = new EagerBundleProvider(requestConsumer, payload, headers);
+        bundleProvider = new EagerBundleProvider(requestConsumer, payload, headers, new HttpServletResponseImpl(null, null));
     }
 
     @Test
     public void testGetSize() {
-        EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders())).andReturn(response);
+        EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders(), new HashMap<>())).andReturn(response);
         EasyMock.replay(requestConsumer);
         assertEquals(response.size(), bundleProvider.size().intValue());
         EasyMock.verify(requestConsumer);
@@ -61,7 +62,7 @@ public class EagerBundleProviderTest {
 
     @Test
     public void testGetResources() {
-        EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders())).andReturn(response);
+        EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders(), new HashMap<>())).andReturn(response);
         EasyMock.replay(requestConsumer);
         var result = bundleProvider.getResources(10, 30);
         Assertions.assertEquals(response.subList(10, 30), result);

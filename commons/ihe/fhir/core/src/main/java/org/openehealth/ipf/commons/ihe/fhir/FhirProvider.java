@@ -20,6 +20,8 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
 import java.io.Serializable;
 import java.util.*;
 
@@ -140,4 +142,17 @@ public abstract class FhirProvider implements Serializable {
         }
         return result;
     }
+
+    public static void processOutHeaders(Map<String, Object> outHeaders, HttpServletResponse httpServletResponse) {
+        var httpHeadersObject = outHeaders.get(Constants.HTTP_OUTGOING_HEADERS);
+        if (httpHeadersObject instanceof Map) {
+            var headers = (Map<String, List<String>>) httpHeadersObject;
+            for (var entry : headers.entrySet()) {
+                for (var value : entry.getValue()) {
+                    httpServletResponse.addHeader(entry.getKey(), value);
+                }
+            }
+        }
+    }
+
 }

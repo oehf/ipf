@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq5.ChPpq5SearchParameters
 import org.openehealth.ipf.platform.camel.core.adapter.ValidatorAdapter;
 
 import java.util.List;
+import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.*;
 import static org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirCamelValidators.*;
@@ -45,6 +46,8 @@ public class ChPpq5TestRouteBuilder extends RouteBuilder {
 
                     consents.forEach(consent -> consent.setId(createUuid()));
                     exchange.getMessage().setBody(consents);
+                    exchange.getMessage().setHeader(Constants.HTTP_OUTGOING_HEADERS, Map.of(
+                        "ResponseHeader2", List.of("value1", "value2")));
                 })
                 .process(itiResponseValidator());
     }

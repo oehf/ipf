@@ -23,6 +23,7 @@ import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
 import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.apache.camel.SuspendableService;
@@ -94,14 +95,15 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * (and potentially handled) request further down a Camel route.
      *
      * @param payload     FHIR request content
-     * @param headers     headers
+     * @param inHeaders   request parameters, e.g. search parameters
+     * @param outHeaders  map where Camel response headers will be copied into
      * @param resultClass class of the result resource
      * @param <R>         Resource type being returned
      * @return result of processing the FHIR request in Camel
      */
     @Override
-    public final <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> headers, Class<R> resultClass) {
-        Object result = handleInRoute(payload, headers, resultClass);
+    public final <R extends IBaseResource> R handleResourceRequest(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders, Class<R> resultClass) {
+        Object result = handleInRoute(payload, inHeaders, outHeaders, resultClass);
         if (result == null) return null;
         if (resultClass.isAssignableFrom(result.getClass())) {
             return resultClass.cast(result);
@@ -113,28 +115,29 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
 
     /**
      * @param payload request payload
-     * @param headers request parameters, e.g. search parameters
+     * @param inHeaders request parameters, e.g. search parameters
+     * @param outHeaders map where Camel response headers will be copied into
      * @param <R> resource type
      * @return list of resources to be packaged into a bundle
      */
     @Override
-    public <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> headers) {
-        return handleInRoute(payload, headers, List.class);
+    public <R extends IBaseResource> List<R> handleBundleRequest(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders) {
+        return handleInRoute(payload, inHeaders, outHeaders, List.class);
     }
 
     @Override
-    public IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers) {
-        return getBundleProvider(payload, headers);
+    public IBundleProvider handleBundleProviderRequest(Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
+        return getBundleProvider(payload, headers, httpServletResponse);
     }
 
     @Override
-    public <T extends IBaseBundle> T handleTransactionRequest(Object payload, Map<String, Object> headers, Class<T> bundleClass) {
-        return handleInRoute(payload, headers, bundleClass);
+    public <T extends IBaseBundle> T handleTransactionRequest(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders, Class<T> bundleClass) {
+        return handleInRoute(payload, inHeaders, outHeaders, bundleClass);
     }
 
     @Override
-    public MethodOutcome handleAction(Object payload, Map<String, Object> headers) {
-        return handleInRoute(payload, headers, MethodOutcome.class);
+    public MethodOutcome handleAction(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders) {
+        return handleInRoute(payload, inHeaders, outHeaders, MethodOutcome.class);
     }
 
     @Override
@@ -157,12 +160,13 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * Forwards the request to be handled into a Camel route
      *
      * @param payload     request payload, will become the Camel message body
-     * @param headers     request parameters, will be added to the Camel headers
+     * @param inHeaders   request parameters, will be added to the Camel headers
+     * @param outHeaders  map where Camel response headers will be copied into
      * @param resultClass expected body type to be returned
      * @return request result, type-converted into the required result class
      */
-    protected <T> T handleInRoute(Object payload, Map<String, Object> headers, Class<T> resultClass) {
-        var exchange = runRoute(payload, headers);
+    protected <T> T handleInRoute(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders, Class<T> resultClass) {
+        var exchange = runRoute(payload, inHeaders);
         var resultMessage = exchange.getMessage();
         if (resultMessage.getBody() instanceof List && IBaseResource.class.isAssignableFrom(resultClass)) {
             var singletonList = (List<T>)resultMessage.getBody();
@@ -171,6 +175,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
             }
             resultMessage.setBody(singletonList.isEmpty() ? null : singletonList.get(0));
         }
+        outHeaders.putAll(resultMessage.getHeaders());
         return getEndpoint().getCamelContext().getTypeConverter().convertTo(resultClass, exchange, resultMessage.getBody());
     }
 
@@ -215,16 +220,19 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
      * @param headers request headers
      * @return resulting bundle provider
      */
-    protected IBundleProvider getBundleProvider(Object payload, Map<String, Object> headers) {
+    protected IBundleProvider getBundleProvider(Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
         var endpointConfiguration = getEndpoint().getInterceptableConfiguration();
         return supportsLazyLoading() ?
                 new LazyBundleProvider(this,
                         endpointConfiguration.isCacheBundles(),
                         endpointConfiguration.isSort(),
                         payload,
-                        headers) :
+                        headers,
+                        httpServletResponse) :
                 new EagerBundleProvider(this,
                         endpointConfiguration.isSort(),
-                        payload, headers);
+                        payload,
+                        headers,
+                        httpServletResponse);
     }
 }

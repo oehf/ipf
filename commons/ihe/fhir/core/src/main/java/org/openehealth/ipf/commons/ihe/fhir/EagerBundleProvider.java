@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
@@ -33,12 +34,12 @@ public class EagerBundleProvider extends AbstractBundleProvider {
 
     private transient List<IBaseResource> resources;
 
-    public EagerBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers) {
-        this(consumer, false, payload, headers);
+    public EagerBundleProvider(RequestConsumer consumer, Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
+        this(consumer, false, payload, headers, httpServletResponse);
     }
 
-    public EagerBundleProvider(RequestConsumer consumer, boolean sort, Object payload, Map<String, Object> headers) {
-        super(consumer, sort, payload, headers);
+    public EagerBundleProvider(RequestConsumer consumer, boolean sort, Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
+        super(consumer, sort, payload, headers, httpServletResponse);
     }
 
     @Override

@@ -37,8 +37,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.create201Consent;
 import static org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmConsentCreator.createUuid;
 
@@ -90,6 +89,8 @@ public class ChPpq3Test extends FhirTestContainer {
 
         MethodOutcome methodOutcome = exchange.getMessage().getMandatoryBody(MethodOutcome.class);
         assertTrue(methodOutcome.getCreated());
+        Map<String, List<String>> httpHeaders = methodOutcome.getResponseHeaders();
+        assertEquals(List.of("value1", "value2"), httpHeaders.get("responseheader2"));
 
         List<AuditMessage> auditMessages = auditSender.getMessages();
         assertEquals(2, auditMessages.size());

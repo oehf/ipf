@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -91,8 +93,11 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             RequestDetails requestDetails) {
         var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
-        return consumer.handleResourceRequest(payload, headers, resultType);
+        var inHeaders = enrichParameters(parameters, httpServletRequest, requestDetails);
+        var outHeaders = new HashMap<String, Object>();
+        R resource = consumer.handleResourceRequest(payload, inHeaders, outHeaders, resultType);
+        processOutHeaders(outHeaders, httpServletResponse);
+        return resource;
     }
 
     /**
@@ -114,17 +119,20 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             RequestDetails requestDetails) {
         var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
+        var inHeaders = enrichParameters(parameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
-            headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
+            inHeaders.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
-        return consumer.handleBundleRequest(payload, headers);
+        var outHeaders = new HashMap<String, Object>();
+        List<R> resources = consumer.handleBundleRequest(payload, inHeaders, outHeaders);
+        processOutHeaders(outHeaders, httpServletResponse);
+        return resources;
     }
 
     /**
      * Requests a {@link IBundleProvider} that takes over the responsibility to fetch requested
      * bundles. The type of the returned {@link IBundleProvider} instance is determined
-     * by the {@link #consumer RequestConsumer} impelmentation.
+     * by the {@link #consumer RequestConsumer} implementation.
      *
      * @param payload             FHIR request resource (often null)
      * @param searchParameters    FHIR search parameters
@@ -142,11 +150,12 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             RequestDetails requestDetails) {
         var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        var headers = enrichParameters(searchParameters, httpServletRequest, requestDetails);
+        var inHeaders = enrichParameters(searchParameters, httpServletRequest, requestDetails);
         if (resourceType != null) {
-            headers.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
+            inHeaders.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
-        return consumer.handleBundleProviderRequest(payload, headers);
+        IBundleProvider bundleProvider = consumer.handleBundleProviderRequest(payload, inHeaders, httpServletResponse);
+        return bundleProvider;
     }
 
     /**
@@ -166,8 +175,11 @@ public abstract class AbstractPlainProvider extends FhirProvider {
             RequestDetails requestDetails) {
         var consumer = getRequestConsumer(requestDetails).orElseThrow(() ->
                 new IllegalStateException("Consumer is not initialized"));
-        var headers = enrichParameters(parameters, httpServletRequest, requestDetails);
-        return consumer.handleAction(payload, headers);
+        var inHeaders = enrichParameters(parameters, httpServletRequest, requestDetails);
+        var outHeaders = new HashMap<String, Object>();
+        MethodOutcome outcome = consumer.handleAction(payload, inHeaders, outHeaders);
+        processOutHeaders(outHeaders, httpServletResponse);
+        return outcome;
     }
 
 
