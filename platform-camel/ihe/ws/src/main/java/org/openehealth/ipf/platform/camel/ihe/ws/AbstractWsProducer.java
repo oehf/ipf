@@ -211,7 +211,7 @@ public abstract class AbstractWsProducer<
 
 
     /**
-     * Sets thread safety & timeout options of the given CXF client.
+     * Sets thread safety and timeout options of the given CXF client.
      */
     protected void configureClient(Object o) {
         var client = (ClientImpl) ClientProxy.getClient(o);

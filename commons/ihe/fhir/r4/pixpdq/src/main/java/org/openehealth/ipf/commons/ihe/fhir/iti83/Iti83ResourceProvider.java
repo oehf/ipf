@@ -41,7 +41,9 @@ import ca.uhn.fhir.rest.param.UriParam;
 
 /**
  * According to the PIXM specification, this resource provider must handle requests in the form
- * GET [base]/Patient/$ihe-pix?sourceIdentifier=[token]]{&targetSystem=[uri]}{&_format=[mime-type]}
+ * <pre>
+ * GET [base]/Patient/$ihe-pix?sourceIdentifier=[token]]{&amp;targetSystem=[uri]}{&amp;_format=[mime-type]}
+ * </pre>
  *
  * @author Christian Ohr
  * @since 3.6

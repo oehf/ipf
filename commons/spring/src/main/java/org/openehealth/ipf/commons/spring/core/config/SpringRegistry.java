@@ -36,9 +36,11 @@ import org.springframework.beans.factory.ListableBeanFactory;
  * </p>
  * or, even easier, using the globalContext tag in the
  * http://openehealth.org/schema/ipf-commons-core extension namespace:
+ *
  * <pre>
- *     <ipf-commons-core:globalContext/>
+ *     &lt;ipf-commons-core:globalContext/>
  * </pre>
+ *
  * Then the "stateful" Groovy Extension Modules will access the Spring
  * registry.
  *

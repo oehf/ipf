@@ -39,7 +39,9 @@ import java.util.Set;
 
 /**
  * According to the Restful ATNA specification, this resource provider must handle requests in the form
- * GET [base]/AuditEvent?date=>start-time&date=<stoptime>&<query>{&_format=[mime-type]}
+ * <pre>
+ * GET [base]/AuditEvent?date=starttime&amp;date=stoptime&amp;query{&amp;_format=[mime-type]}
+ * </pre>
  *
  * @author Christian Ohr
  * @since 3.6

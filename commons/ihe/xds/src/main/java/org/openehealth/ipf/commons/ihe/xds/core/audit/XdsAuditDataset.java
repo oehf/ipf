@@ -42,7 +42,7 @@ abstract public class XdsAuditDataset extends WsAuditDataset {
     }
 
     /**
-     * @return the first present patient ID as HL7 CX string, e.g. "1234^^^&1.2.3.4&ISO",
+     * @return the first present patient ID as HL7 CX string, e.g. "1234^^^&amp;1.2.3.4&amp;ISO",
      * or the patient ID extracted from XUA token,
      * or <code>null</code> when no patient IDs have been collected.
      */

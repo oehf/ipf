@@ -63,7 +63,7 @@ import jakarta.xml.bind.annotation.*;
  *            &lt;xs:sequence>
  *              &lt;xs:element name="TransferSyntaxUID" type="rim:LongName" maxOccurs="unbounded">
  *                &lt;xs:annotation>
- *                   &lt;xs:documentation>This is the list of DICOM transfer syntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
+ *                   &lt;xs:documentation>This is the list of DICOM transfer syntax UIDs to be used when requesting retrieval of DICOM images&lt;/xs:documentation>
  *                &lt;/xs:annotation>
  *              &lt;/xs:element>
  *            &lt;/xs:sequence>
@@ -230,7 +230,7 @@ public class RetrieveImagingDocumentSetRequestType {
      *     &lt;xs:sequence>
      *       &lt;xs:element name="TransferSyntaxUID" type="rim:LongName" maxOccurs="unbounded">
      *         &lt;xs:annotation>
-     *           &lt;xs:documentation>This is the list of DICOM transfer syntax UIDs to be used when requesting retrieval of DICOM images</xs:documentation>
+     *           &lt;xs:documentation>This is the list of DICOM transfer syntax UIDs to be used when requesting retrieval of DICOM images&lt;/xs:documentation>
      *         &lt;/xs:annotation>
      *       &lt;/xs:element>
      *     &lt;/xs:sequence>

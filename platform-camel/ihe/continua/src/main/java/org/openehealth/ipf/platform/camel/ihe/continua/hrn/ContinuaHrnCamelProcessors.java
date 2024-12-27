@@ -84,7 +84,7 @@ abstract public class ContinuaHrnCamelProcessors {
 
 
     /**
-     * Returns a transformation & validation processor for Continua HRN request messages.
+     * Returns a transformation and validation processor for Continua HRN request messages.
      * The HRN request contained in the exchange will be translated into IPF simplified
      * XDS message model and enriched with CDA document content.
      */

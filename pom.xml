@@ -29,7 +29,7 @@
 
         <surefire-plugin-version>3.5.2</surefire-plugin-version>
         <jxr-plugin-version>3.6.0</jxr-plugin-version>
-        <project-info-reports-plugin-version>3.5.0</project-info-reports-plugin-version>
+        <project-info-reports-plugin-version>3.8.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
         <maven-changes-plugin-version>2.12.1</maven-changes-plugin-version>
 
@@ -355,10 +355,35 @@
                         <excludePackageNames>*.tutorials,*.test</excludePackageNames>
                         <additionalJOption>-J-Xmx2048m</additionalJOption>
                         <doclint>none</doclint>
+                        <groups>
+                            <group>
+                                <title>Common (non-Camel) classes</title>
+                                <packages>org.openehealth.ipf.commons*</packages>
+                            </group>
+                            <group>
+                                <title>HL7 and CDA Modules</title>
+                                <packages>org.openehealth.ipf.modules*</packages>
+                            </group>
+                            <group>
+                                <title>Camel component classes</title>
+                                <packages>org.openehealth.ipf.platform.camel*</packages>
+                            </group>
+                            <group>
+                                <title>Spring Boot integration</title>
+                                <packages>org.openehealth.ipf.boot*</packages>
+                            </group>
+                            <group>
+                                <title>Tutorials and Examples</title>
+                                <packages>org.openehealth.ipf.tutorials*</packages>
+                            </group>
+                            <group>
+                                <title>Other</title>
+                                <packages>net.ihe.gazelle*:ca.uhn.hl7v2*</packages>
+                            </group>
+                        </groups>
                         <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
                         <sourcepath>
                             boot/ipf-atna-spring-boot-starter/generated-stubs:
-                            boot/ipf-fhir-stu3-spring-boot-starter/generated-stubs:
                             boot/ipf-fhir-r4-spring-boot-starter/generated-stubs:
                             boot/ipf-hl7-spring-boot-starter/generated-stubs:
                             boot/ipf-hl7v3-spring-boot-starter/generated-stubs:
@@ -370,11 +395,6 @@
                             commons/core/generated-stubs:
                             commons/ihe/core/generated-stubs:
                             commons/ihe/fhir/core/generated-stubs:
-                            commons/ihe/fhir/stu3/core/generated-stubs:
-                            commons/ihe/fhir/stu3/audit/generated-stubs:
-                            commons/ihe/fhir/stu3/mhd/generated-stubs:
-                            commons/ihe/fhir/stu3/pixpdq/generated-stubs:
-                            commons/ihe/fhir/stu3/qedm/generated-stubs:
                             commons/ihe/fhir/r4/core/generated-stubs:
                             commons/ihe/fhir/r4/audit/generated-stubs:
                             commons/ihe/fhir/r4/chppqm/generated-stubs:
@@ -403,10 +423,6 @@
                             platform-camel/ihe/continua/generated-stubs:
                             platform-camel/ihe/core/generated-stubs:
                             platform-camel/ihe/fhir/core/generated-stubs:
-                            platform-camel/ihe/fhir/stu3/audit/generated-stubs:
-                            platform-camel/ihe/fhir/stu3/mhd/generated-stubs:
-                            platform-camel/ihe/fhir/stu3/pixpdq/generated-stubs:
-                            platform-camel/ihe/fhir/stu3/qedm/generated-stubs:
                             platform-camel/ihe/fhir/r4/audit/generated-stubs:
                             platform-camel/ihe/fhir/r4/chppqm/generated-stubs:
                             platform-camel/ihe/fhir/r4/mhd/generated-stubs:
