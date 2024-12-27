@@ -7,6 +7,10 @@ import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClientFactory;
 
+/**
+ * @deprecated use {@link Apache5FhirRestTLSAuditRecordSender} instead
+ */
+@Deprecated(forRemoval = true, since = "5.0.0")
 public class ApacheFhirRestTLSAuditRecordSender extends AbstractFhirRestTLSAuditRecordSender {
 
     public ApacheFhirRestTLSAuditRecordSender(FhirContext context, String baseUrl) {

@@ -25,7 +25,7 @@ import java.io.Serializable;
  * @author Dmytro Rud
  * @deprecated
  */
-@Deprecated(forRemoval = true)
+@Deprecated(forRemoval = true, since = "5.0.0")
 public class EhcacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset> extends JCacheAsynchronyCorrelator<AuditDatasetType> {
 
     public EhcacheAsynchronyCorrelator(Cache<String, Serializable> cache) {

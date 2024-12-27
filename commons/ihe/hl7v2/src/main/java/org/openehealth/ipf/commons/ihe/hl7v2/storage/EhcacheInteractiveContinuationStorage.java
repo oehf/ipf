@@ -23,7 +23,7 @@ import javax.cache.Cache;
  * @author Dmytro Rud
  * @deprecated
  */
-@Deprecated(forRemoval = true)
+@Deprecated(forRemoval = true, since = "5.0.0")
 public class EhcacheInteractiveContinuationStorage extends JCacheInteractiveContinuationStorage {
 
     public EhcacheInteractiveContinuationStorage(Cache<String, InteractiveContinuationChain> cache) {

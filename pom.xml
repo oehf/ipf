@@ -44,7 +44,7 @@
         <gmavenplus-plugin-version>4.0.1</gmavenplus-plugin-version>
 
         <jar-plugin-version>3.4.2</jar-plugin-version>
-        <javadoc-plugin-version>3.11.1</javadoc-plugin-version>
+        <javadoc-plugin-version>3.11.2</javadoc-plugin-version>
         <jaxb-plugin-version>3.2.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
         <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
@@ -338,19 +338,22 @@
                     <inherited>false</inherited>
                     <configuration>
                         <links>
-                            <link>https://docs.oracle.com/en/java/javase/11/docs/api/</link>
+                            <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
                             <link>https://hapifhir.github.io/hapi-hl7v2/base/apidocs/</link>
                             <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-base/</link>
                             <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-server</link>
+                            <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-client</link>
+                            <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-validation</link>
+                            <link>https://hapifhir.io/hapi-fhir/apidocs/hapi-fhir-structures-r4/</link>
                             <link>https://cxf.apache.org/javadoc/latest/</link>
                             <link>https://docs.groovy-lang.org/docs/groovy-${groovy-version}/html/api/</link>
-                            <link>https://www.javadoc.io/doc/org.apache.camel/camel-api/latest/</link>
-                            <link>https://docs.spring.io/spring-framework/docs/6.1.x/javadoc-api/</link>
+                            <link>https://www.javadoc.io/doc/org.apache.camel/camel-api/${camel-version}/</link>
+                            <link>https://docs.spring.io/spring-framework/docs/6.2.x/javadoc-api/</link>
                         </links>
-                        <source>11</source>
+                        <source>17</source>
                         <linksource>false</linksource>
                         <excludePackageNames>*.tutorials,*.test</excludePackageNames>
-                        <additionalJOption>-J-Xmx1024m</additionalJOption>
+                        <additionalJOption>-J-Xmx2048m</additionalJOption>
                         <doclint>none</doclint>
                         <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
                         <sourcepath>
@@ -361,6 +364,7 @@
                             boot/ipf-hl7v3-spring-boot-starter/generated-stubs:
                             boot/ipf-hpd-spring-boot-starter/generated-stubs:
                             boot/ipf-spring-boot-starter/generated-stubs:
+                            boot/ipf-xacml20-spring-boot-starter/generated-stubs:
                             boot/ipf-xds-spring-boot-starter/generated-stubs:
                             commons/audit/generated-stubs:
                             commons/core/generated-stubs:
@@ -373,12 +377,14 @@
                             commons/ihe/fhir/stu3/qedm/generated-stubs:
                             commons/ihe/fhir/r4/core/generated-stubs:
                             commons/ihe/fhir/r4/audit/generated-stubs:
+                            commons/ihe/fhir/r4/chppqm/generated-stubs:
                             commons/ihe/fhir/r4/mhd/generated-stubs:
                             commons/ihe/fhir/r4/pixpdq/generated-stubs:
                             commons/ihe/fhir/r4/qedm/generated-stubs:
                             commons/ihe/hl7v2/generated-stubs:
                             commons/ihe/hl7v2ws/generated-stubs:
                             commons/ihe/hl7v3/generated-stubs:
+                            commons/ihe/hl7v3model/generated-stubs:
                             commons/ihe/hpd/generated-stubs:
                             commons/ihe/ws/generated-stubs:
                             commons/ihe/xacml20/impl/generated-stubs:
@@ -402,6 +408,7 @@
                             platform-camel/ihe/fhir/stu3/pixpdq/generated-stubs:
                             platform-camel/ihe/fhir/stu3/qedm/generated-stubs:
                             platform-camel/ihe/fhir/r4/audit/generated-stubs:
+                            platform-camel/ihe/fhir/r4/chppqm/generated-stubs:
                             platform-camel/ihe/fhir/r4/mhd/generated-stubs:
                             platform-camel/ihe/fhir/r4/pixpdq/generated-stubs:
                             platform-camel/ihe/fhir/r4/qedm/generated-stubs:
@@ -420,7 +427,7 @@
                         <execution>
                             <id>aggregate</id>
                             <goals>
-                                <goal>aggregate</goal>
+                                <goal>aggregate-no-fork</goal>
                             </goals>
                             <phase>site</phase>
                         </execution>
@@ -446,7 +453,7 @@
                     <version>${maven-dsldoc-plugin-version}</version>
                     <configuration>
                         <links>
-                            <java>http://docs.oracle.com/javase/8/docs/api/</java>
+                            <java>http://docs.oracle.com/javase/17/docs/api/</java>
                             <groovy>http://docs.groovy-lang.org/latest/html/api/</groovy>
                             <org.openehealth.ipf>apidocs/org/openehealth/ipf</org.openehealth.ipf>
                             <org.apache.camel>

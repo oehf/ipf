@@ -37,12 +37,16 @@ import java.util.stream.Collectors;
 public enum AuditTransmissionChannel {
 
     UDP("UDP", UDPSyslogSenderProvider.class.getName()),
+    @Deprecated(forRemoval = true, since = "5.0.0")
     NIO_UDP("NIO-UDP", UDPSyslogSenderProvider.class.getName()),
+    @Deprecated(forRemoval = true, since = "5.0.0")
     VERTX_UDP("VERTX-UDP", UDPSyslogSenderProvider.class.getName()),
     TLS("TLS", TLSSyslogSenderProvider.class.getName()),
+    @Deprecated(forRemoval = true, since = "5.0.0")
     NIO_TLS("NIO-TLS", NettyTLSSyslogSenderProvider.class.getName()),
     NETTY_TLS("NETTY-TLS", NettyTLSSyslogSenderProvider.class.getName()),
     REACTOR_NETTY_TLS("REACTOR-NETTY-TLS", ReactorNettyTLSSyslogSenderProvider.class.getName()),
+    @Deprecated(forRemoval = true, since = "5.0.0")
     FHIR_REST_TLS("FHIR-REST-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordApacheSenderProvider"),
     FHIR_REST_APACHE5_TLS("FHIR-REST-APACHE5-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordApache5SenderProvider"),
     FHIR_REST_METHANOL_TLS("FHIR-REST-METHANOL-TLS", "org.openehealth.ipf.commons.ihe.fhir.audit.protocol.FhirRestTLSAuditRecordMethanolSenderProvider"),

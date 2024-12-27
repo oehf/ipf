@@ -26,7 +26,7 @@ import java.io.Serializable;
  * @author Christian Ohr
  * @deprecated
  */
-@Deprecated(forRemoval = true)
+@Deprecated(forRemoval = true, since = "5.0.0")
 public class EhcacheHl7v3ContinuationStorage extends JCacheHl7v3ContinuationStorage {
 
     public EhcacheHl7v3ContinuationStorage(Cache<String, Serializable> cache) {

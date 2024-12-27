@@ -27,7 +27,7 @@ import javax.cache.Cache;
  * @deprecated
  */
 @Slf4j
-@Deprecated(forRemoval = true)
+@Deprecated(forRemoval = true, since = "5.0.0")
 public class EhcachePaginationStorage extends JCachePaginationStorage {
 
     public EhcachePaginationStorage(Cache<String, Object> cache, boolean needSerialization) {

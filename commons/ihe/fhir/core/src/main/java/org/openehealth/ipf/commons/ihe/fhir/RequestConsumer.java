@@ -38,7 +38,7 @@ import java.util.function.Predicate;
  * on searches.
  * <ul>
  * <li>{@link Constants#FHIR_REQUEST_SIZE_ONLY}: if this entry is present, the requester expects only
- * the result size to be returned in an parameter entry with the same name and calls {@link #handleSizeRequest(Object, Map, Map)}
+ * the result size to be returned in an parameter entry with the same name and calls {@link #handleSizeRequest(Object, Map)}
  * to do so. If possible, implementations should only request the result size from the backend rather than
  * a complete result set.</li>
  * <li>{@link Constants#FHIR_FROM_INDEX} and {@link Constants#FHIR_TO_INDEX}: if these entries are present,
@@ -74,7 +74,7 @@ public interface RequestConsumer extends Predicate<RequestDetails> {
      *
      * @param payload    request payload
      * @param inHeaders  request parameters, e.g. search parameters
-     * @param outHeaders map where Camel response headers will be copied into
+     * @param outHeaders map where response headers will be copied into
      * @return result of the action execution
      */
     MethodOutcome handleAction(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders);
@@ -84,7 +84,7 @@ public interface RequestConsumer extends Predicate<RequestDetails> {
      *
      * @param payload    request payload
      * @param inHeaders  request parameters, e.g. search parameters
-     * @param outHeaders map where Camel response headers will be copied into
+     * @param outHeaders map where response headers will be copied into
      * @param resultType type of the returned resource
      * @param <R>        type of the returned resource
      * @return resource to be returned
@@ -101,7 +101,7 @@ public interface RequestConsumer extends Predicate<RequestDetails> {
      *
      * @param payload    request payload
      * @param inHeaders  request parameters, e.g. search parameters or
-     * @param outHeaders map where Camel response headers will be copied into
+     * @param outHeaders map where response headers will be copied into
      * @param <R>        type of the returned resources contained in the bundle
      * @return list of resources to be returned
      */
@@ -124,7 +124,7 @@ public interface RequestConsumer extends Predicate<RequestDetails> {
      *
      * @param payload    request payload
      * @param inHeaders  request parameters
-     * @param outHeaders map where Camel response headers will be copied into
+     * @param outHeaders map where response headers will be copied into
      * @return transaction response bundle
      */
     <T extends IBaseBundle> T handleTransactionRequest(Object payload, Map<String, Object> inHeaders, Map<String, Object> outHeaders, Class<T> bundleClass);

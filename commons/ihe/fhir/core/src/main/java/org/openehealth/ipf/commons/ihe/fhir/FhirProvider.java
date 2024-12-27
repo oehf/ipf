@@ -107,7 +107,6 @@ public abstract class FhirProvider implements Serializable {
         if (cipherSuite != null) {
             enriched.put(Constants.HTTP_X509_CERTIFICATES, httpServletRequest.getAttribute("javax.security.cert.X509Certificate"));
         }
-
         if (parameters != null) {
             enriched.put(Constants.FHIR_REQUEST_PARAMETERS, parameters);
         }
