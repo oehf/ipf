@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+             xmlns:ihe="urn:ihe:iti:svs:2008" targetNamespace="urn:ihe:iti:svs:2008"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" name="SVS_ValueSetRepository">
+
+    <documentation>IHE SVS Value Set Repository = ITI-48 adaptor (SOAP) = Retrieve Value Set</documentation>
+
+    <types>
+        <xs:schema targetNamespace="urn:ihe:iti:svs:2008">
+            <xs:import namespace="urn:ihe:iti:svs:2008" schemaLocation="SVS.xsd"/>
+        </xs:schema>
+    </types>
+    <message name="RetrieveValueSet_Message">
+        <documentation>Retrieve Value Set</documentation>
+        <part name="body" element="ihe:RetrieveValueSetRequest"/>
+    </message>
+    <message name="RetrieveValueSetResponse_Message">
+        <documentation>Retrieve Value Set Response</documentation>
+        <part name="body" element="ihe:RetrieveValueSetResponse"/>
+    </message>
+
+    <portType name="ValueSetRepository_PortType">
+        <operation name="ValueSetRepository_RetrieveValueSet">
+            <input message="ihe:RetrieveValueSet_Message" wsaw:Action="urn:ihe:iti:2008:RetrieveValueSet"/>
+            <output message="ihe:RetrieveValueSetResponse_Message"
+                    wsaw:Action="urn:ihe:iti:2008:RetrieveValueSetResponse"/>
+        </operation>
+    </portType>
+
+    <binding name="ValueSetRepository_Binding_Soap12" type="ihe:ValueSetRepository_PortType">
+        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="ValueSetRepository_RetrieveValueSet">
+            <soap12:operation soapAction="urn:ihe:iti:2008:RetrieveValueSet" soapActionRequired="false"/>
+            <input>
+                <soap12:body use="literal"/>
+            </input>
+            <output>
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+
+    <service name="ValueSetRepository_Service">
+        <port name="ValueSetRepository_Port_Soap12" binding="ihe:ValueSetRepository_Binding_Soap12">
+            <soap12:address location="http://servicelocation/ValueSetRepository_Service"/>
+        </port>
+    </service>
+</definitions>

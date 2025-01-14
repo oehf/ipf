@@ -406,6 +406,7 @@
                             commons/ihe/hl7v3/generated-stubs:
                             commons/ihe/hl7v3model/generated-stubs:
                             commons/ihe/hpd/generated-stubs:
+                            commons/ihe/svs/generated-stubs:
                             commons/ihe/ws/generated-stubs:
                             commons/ihe/xacml20/impl/generated-stubs:
                             commons/ihe/xacml20/model/generated-stubs:
@@ -433,6 +434,7 @@
                             platform-camel/ihe/hl7v3/generated-stubs:
                             platform-camel/ihe/hpd/generated-stubs:
                             platform-camel/ihe/mllp/generated-stubs:
+                            platform-camel/ihe/svs/generated-stubs:
                             platform-camel/ihe/ws/generated-stubs:
                             platform-camel/ihe/xacml20/generated-stubs:
                             platform-camel/ihe/xds/generated-stubs:
