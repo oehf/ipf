@@ -22,10 +22,10 @@ import org.openehealth.ipf.commons.ihe.svs.core.responses.RetrieveValueSetRespon
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
+import org.openehealth.ipf.commons.xml.XmlUtils;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -54,18 +54,12 @@ public class SvsConverters {
     }
 
     @Converter
-    public static String svsQueryToXml(final RetrieveValueSetRequest query) throws JAXBException {
-        var marshaller = JAXB_CONTEXT_SVS_REQUEST.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        var stringWriter = new StringWriter();
-        marshaller.marshal(query, stringWriter);
-        return stringWriter.toString();
+    public static String svsQueryToXml(final RetrieveValueSetRequest query) {
+        return XmlUtils.renderJaxb(JAXB_CONTEXT_SVS_REQUEST, query, true);
     }
 
     @Converter
-    public static InputStream svsQueryToInputStream(final RetrieveValueSetRequest query) throws JAXBException {
+    public static InputStream svsQueryToInputStream(final RetrieveValueSetRequest query) {
         return new ByteArrayInputStream(svsQueryToXml(query).getBytes(StandardCharsets.UTF_8));
     }
 
@@ -76,13 +70,7 @@ public class SvsConverters {
     }
 
     @Converter
-    public static String svsResponseToXml(final RetrieveValueSetResponse response) throws JAXBException {
-        var marshaller = JAXB_CONTEXT_SVS_RESPONSE.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        var stringWriter = new StringWriter();
-        marshaller.marshal(response, stringWriter);
-        return stringWriter.toString();
+    public static String svsResponseToXml(final RetrieveValueSetResponse response) {
+        return XmlUtils.renderJaxb(JAXB_CONTEXT_SVS_RESPONSE, response, true);
     }
 }

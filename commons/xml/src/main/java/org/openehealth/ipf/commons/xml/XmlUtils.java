@@ -30,6 +30,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 /**
@@ -41,16 +42,14 @@ abstract public class XmlUtils {
 
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
             "(?:<\\?xml.+?\\?>)?" +                              // optional prolog
-                    "(?:\\s*<!--.*?-->)*" +                              // optional comments
-                    "\\s*<(?:[\\w.-]+?:)?([\\w.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
+            "(?:\\s*<!--.*?-->)*" +                              // optional comments
+            "\\s*<(?:[\\w.-]+?:)?([\\w.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
             Pattern.DOTALL
     );
-
 
     private XmlUtils() {
         throw new IllegalStateException("Cannot instantiate helper class");
     }
-
 
     /**
      * Creates an XML Source from the given XML String.
@@ -61,7 +60,6 @@ abstract public class XmlUtils {
     public static Source source(String s) {
         return new StreamSource(new StringReader(s));
     }
-
 
     /**
      * Returns local name of the root element of the XML document represented
@@ -92,6 +90,7 @@ abstract public class XmlUtils {
             var marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, prettyPrint);
+            marshaller.setProperty(Marshaller.JAXB_ENCODING, StandardCharsets.UTF_8.name());
             var writer = new StringWriter();
             marshaller.marshal(object, writer);
             return writer.toString();
@@ -112,7 +111,6 @@ abstract public class XmlUtils {
         var serializerOutput = new ByteArrayOutputStream();
         Source sourceObject = new DOMSource(inputNode);
         Result targetObject = new StreamResult(serializerOutput);
-
 
         var serializerFactory = TransformerFactory.newInstance();
         var serializer = serializerFactory.newTransformer();
