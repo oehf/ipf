@@ -20,7 +20,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  *
  */
-@ConfigurationProperties(prefix = "ipf.xacml20")
+@ConfigurationProperties(prefix = "ipf.svs")
 public class IpfSvsConfigurationProperties {
 
 }
