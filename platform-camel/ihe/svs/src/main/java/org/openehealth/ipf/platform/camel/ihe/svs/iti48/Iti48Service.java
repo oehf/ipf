@@ -42,10 +42,10 @@ public class Iti48Service extends AbstractWebService implements Iti48PortType {
         final Exchange result = this.process(body);
         var exception = Exchanges.extractException(result);
         if (exception != null) {
-            log.debug("Iti-48 service failed", exception);
-            if (exception instanceof SoapFault) {
+            log.debug("ITI-48 service failed", exception);
+            if (exception instanceof SoapFault soapFault) {
                 // Pass it through
-                throw (SoapFault) exception;
+                throw soapFault;
             } else if (exception instanceof SvsException) {
                 // Most probably thrown from the validator
                 throw new SoapFault(exception.getMessage(), Soap12.getInstance().getSender());

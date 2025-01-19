@@ -22,11 +22,6 @@
             <artifactId>ipf-commons-ihe-svs</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.platform-camel</groupId>
-            <artifactId>ipf-platform-camel-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 
         <!-- Dependencies for tests -->
         <dependency>
@@ -116,16 +111,6 @@
                     <argLine>-Xms64m -Xmx1024m</argLine>
                 </configuration>
             </plugin>
-            <!--
-            <plugin>
-                <groupId>org.apache.camel</groupId>
-                <artifactId>camel-package-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-            </plugin>
-            -->
         </plugins>
     </build>
 

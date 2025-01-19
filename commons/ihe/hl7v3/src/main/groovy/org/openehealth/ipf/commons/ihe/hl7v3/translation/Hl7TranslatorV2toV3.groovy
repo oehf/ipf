@@ -32,7 +32,7 @@ interface Hl7TranslatorV2toV3 {
     String translateV2toV3(Message messageV2, String initialV3, String charset)
 
     /**
-     * Postprocesses the transaltion
+     * Postprocesses the translation
      */
     void postprocess(Message msg, MarkupBuilder builder)
 }

@@ -16,15 +16,7 @@
         <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-ws</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-jaxb-annotations</artifactId>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

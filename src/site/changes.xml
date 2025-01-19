@@ -25,7 +25,7 @@
     <body>
         <release version="5.0.0" description="" date="">
             <action issue="463" dev="unixoid" type="add">
-                Implement CP-ITI-1301: Support for the option "Target Communities" in XDS   metadata queries.
+                Implement CP-ITI-1301: Support for the option "Target Communities" in XDS metadata queries.
             </action>
             <action issue="461" dev="ohr" type="update">
                 Removed HAPI FHIR dependency from ipf-commons-audit module, replacing it with a more flexible
@@ -78,6 +78,9 @@
             <action issue="414" dev="ohr" type="update">
                 IPF and all major dependencies (including Camel, CXF, Spring Framework, Spring Boot, HAPI FHIR) have been aligned
                 to be compatible with Javarta EE 10 APIs. IPF now also requires JDK 17 as minimum.
+            </action>
+            <action issue="354" dev="qligier" type="add">
+                Support for the IHE SVS transaction ITI-48 "Retrieve Value Set".
             </action>
         </release>
         <release version="4.8.0" description="IPF 4.8.0" date="14 Mar 2024">

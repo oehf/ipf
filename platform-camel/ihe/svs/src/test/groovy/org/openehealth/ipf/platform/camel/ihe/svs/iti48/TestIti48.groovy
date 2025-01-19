@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.openehealth.ipf.platform.camel.ihe.svs.iti48
 
 import org.apache.cxf.binding.soap.SoapFault
@@ -14,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*
 
 /**
  * @author Quentin Ligier
- * */
+ **/
 class TestIti48 extends StandardTestContainer {
 
     static final String CONTEXT_DESCRIPTOR = 'iti-48.xml'
@@ -41,6 +56,7 @@ class TestIti48 extends StandardTestContainer {
             </RetrieveValueSetRequest>
             """)
 
+        // happy case
         def response = sendIt(SERVICE1, request)
         assert response != null
         assert response.valueSet != null
@@ -50,6 +66,7 @@ class TestIti48 extends StandardTestContainer {
 
         assert auditSender.messages.size() == 2
 
+        // unknown language code in request
         SoapFault exception = assertThrows(SoapFault.class, () -> {
             sendIt(SERVICE2, request)
         })
@@ -67,6 +84,7 @@ class TestIti48 extends StandardTestContainer {
             assert message.participantObjectIdentifications[0].participantObjectID == "1.2.840.10008.6.1.308"
         }
 
+        // malformed request
         request.valueSet = new ValueSetRequest()
         exception = assertThrows(SoapFault.class, () -> {
             sendIt(SERVICE2, request)

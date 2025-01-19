@@ -19,7 +19,6 @@ package org.openehealth.ipf.commons.ihe.svs.core;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.util.JAXBSource;
-import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.ihe.svs.core.requests.RetrieveValueSetRequest;
 import org.openehealth.ipf.commons.ihe.svs.core.responses.RetrieveValueSetResponse;
 import org.openehealth.ipf.commons.xml.XsdValidator;

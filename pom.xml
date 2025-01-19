@@ -389,6 +389,7 @@
                             boot/ipf-hl7v3-spring-boot-starter/generated-stubs:
                             boot/ipf-hpd-spring-boot-starter/generated-stubs:
                             boot/ipf-spring-boot-starter/generated-stubs:
+                            boot/ipf-svs-spring-boot-starter/generated-stubs:
                             boot/ipf-xacml20-spring-boot-starter/generated-stubs:
                             boot/ipf-xds-spring-boot-starter/generated-stubs:
                             commons/audit/generated-stubs:
