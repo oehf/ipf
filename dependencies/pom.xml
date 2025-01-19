@@ -583,6 +583,11 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
+                <artifactId>ipf-commons-ihe-svs</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-ws</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -726,6 +731,11 @@
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.platform-camel</groupId>
+                <artifactId>ipf-platform-camel-ihe-svs</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
