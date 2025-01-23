@@ -42,7 +42,7 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 4.0
  */
-class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
+public class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
 
     private static final Logger log = LoggerFactory.getLogger(Rfc5424Decoder.class);
 

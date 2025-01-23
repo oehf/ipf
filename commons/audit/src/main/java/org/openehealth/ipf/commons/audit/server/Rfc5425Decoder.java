@@ -38,7 +38,7 @@ import static java.util.OptionalInt.empty;
  * @author Christian Ohr
  * @since 4.0
  */
-class Rfc5425Decoder extends ByteToMessageDecoder {
+public class Rfc5425Decoder extends ByteToMessageDecoder {
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private OptionalInt frameLength = empty();
