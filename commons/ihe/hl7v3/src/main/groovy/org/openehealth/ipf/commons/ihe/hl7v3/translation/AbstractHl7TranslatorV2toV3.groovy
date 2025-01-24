@@ -102,12 +102,18 @@ abstract class AbstractHl7TranslatorV2toV3 implements Hl7TranslatorV2toV3 {
         translateTelecom(builder, pid[13], homePhoneCode)
         translateTelecom(builder, pid[14], workPhoneCode)
 
-        String gender = (pid[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
+        if (pid[8].value == 'U') {
+            builder.administrativeGenderCode(nullFlavor: 'UNK')
+        } else {
+            String gender = (pid[8].value ?: '').mapReverse('hl7v2v3-bidi-administrativeGender-administrativeGender')
+            if (gender)
+                builder.administrativeGenderCode(code: gender)
+        }
+
         String maritalStatus = (pid[16].value ?: '').mapReverse('hl7v2v3-patient-maritalStatus')
         String religiousAffiliation = pid[17].value ?: ''
 
-        if (gender)
-            builder.administrativeGenderCode(code: gender)
+
         if (pid[7][1].value)
             builder.birthTime(value: pid[7][1].value)
 

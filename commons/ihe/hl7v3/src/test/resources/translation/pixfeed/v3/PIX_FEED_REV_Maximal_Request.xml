@@ -57,7 +57,7 @@
                             <telecom use="MC" value="tel:012-0003"/>
                             <telecom use="H" value="fax:012-0004"/>
                             <telecom value="mailto:marywash@gmx.de"/>
-                            <administrativeGenderCode code="F"/>
+                            <administrativeGenderCode nullFlavor="UNK"/>
                             <birthTime value="19771208"/>
                             <!--deceasedInd/>
                             <deceasedTime/>

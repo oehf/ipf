@@ -40,7 +40,7 @@
                 <family>Hiccock</family>
                 <given>WildBill</given>
               </name>
-              <administrativeGenderCode code="M" />
+              <administrativeGenderCode nullFlavor="UNK" />
               <birthTime value="19770114" />
               <addr>
                 <country>DEU</country>
