@@ -48,7 +48,7 @@ public class FindMedicationListQueryTransformerTest extends AbstractQueryTransfo
         query.getServiceStart().setTo("1983");
         query.getServiceEnd().setFrom("1984");
         query.getServiceEnd().setTo("1985");
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
@@ -67,7 +67,7 @@ public class FindMedicationListQueryTransformerTest extends AbstractQueryTransfo
         assertEquals(Collections.singletonList("1983"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TO.getSlotName()));
         assertEquals(Collections.singletonList("1984"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_END_FROM.getSlotName()));
         assertEquals(Collections.singletonList("1985"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_END_TO.getSlotName()));
-        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
+        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName()));
         assertEquals(Arrays.asList("('code13^^scheme13')", "('code14^^scheme14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));

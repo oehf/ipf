@@ -413,7 +413,7 @@ public abstract class SampleData {
         var query = new FindDocumentsQuery();
         populateDocumentsQuery(query);
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
         query.setDocumentAvailability(Collections.singletonList(DocumentAvailability.ONLINE));
         query.setMetadataLevel(1);
@@ -427,7 +427,7 @@ public abstract class SampleData {
         var query = new FindDocumentsByReferenceIdQuery();
         populateDocumentsQuery(query);
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         var referenceIds = new QueryList<ReferenceId>();
@@ -451,7 +451,7 @@ public abstract class SampleData {
         query.setPatientIds(Arrays.asList(
             new Identifiable("id3", new AssigningAuthority("1.3")),
             new Identifiable("id4", new AssigningAuthority("1.4"))));
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         var referenceIds = new QueryList<ReferenceId>();
@@ -473,7 +473,7 @@ public abstract class SampleData {
         var query = new FindDocumentsByTitleQuery();
         populateDocumentsQuery(query);
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
         query.setTitle(List.of("myTitle"));
 
@@ -573,7 +573,7 @@ public abstract class SampleData {
         query.setPatientIds(Arrays.asList(
                 new Identifiable("id3", new AssigningAuthority("1.3")),
                 new Identifiable("id4", new AssigningAuthority("1.4"))));
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
         return new QueryRegistry(query);
     }
@@ -595,7 +595,7 @@ public abstract class SampleData {
         codes.getOuterList().add(
                 Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setCodes(codes);
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         
         return new QueryRegistry(query);
     }
@@ -617,7 +617,7 @@ public abstract class SampleData {
         codes.getOuterList().add(
                 Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setCodes(codes);
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
 
         return new QueryRegistry(query);
     }
@@ -635,7 +635,7 @@ public abstract class SampleData {
         query.setAuthorPerson("per'son1");
         query.setSourceIds(Arrays.asList("1.2.3", "3.2.1"));
         query.setContentTypeCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         
         return new QueryRegistry(query);
     }
@@ -655,9 +655,9 @@ public abstract class SampleData {
                 Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setConfidentialityCodes(codes);
         query.setFormatCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
-        query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        query.setStatusFolders(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
-        query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
+        query.setStatusFolders(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
+        query.setStatusSubmissionSets(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
         return new QueryRegistry(query);
@@ -818,7 +818,7 @@ public abstract class SampleData {
         query.setConfidentialityCodes(confidentialityCodes);
         query.setAuthorPersons(Arrays.asList("per'son1", "person2"));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
-        //query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        //query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
 
         var queryRegistry = new QueryRegistry(query);
         queryRegistry.setReturnType(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM);
@@ -849,7 +849,7 @@ public abstract class SampleData {
         query.getServiceStartTime().setTo("1983");
         query.getServiceStopTime().setFrom("1984");
         query.getServiceStopTime().setTo("1985");
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setUuids(Arrays.asList("uuid1", "uuid2"));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
@@ -874,7 +874,7 @@ public abstract class SampleData {
         query.getServiceStartTime().setTo("1983");
         query.getServiceStopTime().setFrom("1984");
         query.getServiceStopTime().setTo("1985");
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
         query.setHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
@@ -896,7 +896,7 @@ public abstract class SampleData {
         query.getServiceStart().setTo("1983");
         query.getServiceEnd().setFrom("1984");
         query.getServiceEnd().setTo("1985");
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 

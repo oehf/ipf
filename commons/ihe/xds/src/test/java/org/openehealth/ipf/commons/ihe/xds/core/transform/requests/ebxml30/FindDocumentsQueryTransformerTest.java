@@ -120,7 +120,7 @@ public class FindDocumentsQueryTransformerTest {
         assertEquals(Arrays.asList("('code13^^scheme13')", "('code14^^scheme14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));
         
-        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
+        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName()));
 
         assertEquals(Collections.singletonList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),

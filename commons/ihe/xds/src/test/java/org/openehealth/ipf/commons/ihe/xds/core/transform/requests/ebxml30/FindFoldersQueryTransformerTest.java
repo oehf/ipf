@@ -54,7 +54,7 @@ public class FindFoldersQueryTransformerTest extends AbstractQueryTransformerTes
         codes.getOuterList().add(
                 Collections.singletonList(new Code("code9", null, "scheme9")));
         query.setCodes(codes);
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setHomeCommunityId("12.21.41");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
@@ -79,7 +79,7 @@ public class FindFoldersQueryTransformerTest extends AbstractQueryTransformerTes
         assertEquals(Arrays.asList("('code7^^scheme7')", "('code8^^scheme8')"), slots.get(0).getValueList());
         assertEquals(Collections.singletonList("('code9^^scheme9')"), slots.get(1).getValueList());
         
-        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
+        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_STATUS.getSlotName()));
         
         assertEquals(6, ebXML.getSlots().size());
@@ -89,7 +89,7 @@ public class FindFoldersQueryTransformerTest extends AbstractQueryTransformerTes
     public void testFromEbXMLLineBreakInAValueList() {
         transformer.toEbXML(query, ebXML);
         ebXML.getSlots().get(5).getValueList().clear();
-        ebXML.getSlots().get(5).getValueList().add("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved',\n'urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')");
+        ebXML.getSlots().get(5).getValueList().add("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved',\n'urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')");
         var result = new FindFoldersQuery();
         transformer.fromEbXML(result, ebXML);
         

@@ -54,7 +54,7 @@ public class FindMedicationAdministrationsTransformerTest extends AbstractQueryT
         query.getServiceStartTime().setTo("1983");
         query.getServiceStopTime().setFrom("1984");
         query.getServiceStopTime().setTo("1985");
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setUuids(Arrays.asList("uuid1", "uuid2"));
         query.setUniqueIds(Arrays.asList("uniqueId1", "uniqueId2"));
         query.setPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
@@ -81,7 +81,7 @@ public class FindMedicationAdministrationsTransformerTest extends AbstractQueryT
         assertEquals(Collections.singletonList("1983"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_START_TIME_TO.getSlotName()));
         assertEquals(Collections.singletonList("1984"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_FROM.getSlotName()));
         assertEquals(Collections.singletonList("1985"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_SERVICE_STOP_TIME_TO.getSlotName()));
-        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
+        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName()));
         assertEquals(Arrays.asList("('uuid1')", "('uuid2')"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UUID.getSlotName()));
         assertEquals(Arrays.asList("('uniqueId1')", "('uniqueId2')"), ebXML.getSlotValues(QueryParameter.DOC_ENTRY_UNIQUE_ID.getSlotName()));

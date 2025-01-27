@@ -102,7 +102,7 @@ public class SubmitObjectsRequestValidatorTest {
         classification.setClassifiedObject("lol");
         classification.setClassificationNode(Vocabulary.SUBMISSION_SET_CLASS_NODE);
         ebXML.addClassification(classification);
-        docEntry.setAvailabilityStatus(AvailabilityStatus.SUBMITTED);
+        docEntry.setAvailabilityStatus(AvailabilityStatus.APPROVED);
         expectFailure(EXACTLY_ONE_SUBMISSION_SET_MUST_EXIST, ebXML);
     }
 

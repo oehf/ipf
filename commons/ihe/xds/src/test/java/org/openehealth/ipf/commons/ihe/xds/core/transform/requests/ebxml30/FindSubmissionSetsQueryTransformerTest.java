@@ -50,7 +50,7 @@ public class FindSubmissionSetsQueryTransformerTest extends AbstractQueryTransfo
         query.getSubmissionTime().setFrom("20150102030405");
         query.getSubmissionTime().setTo("20150102030406");
         query.setAuthorPerson("per'son1");
-        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setHomeCommunityId("12.21.41");
 
         ebXML = new EbXMLFactory30().createAdhocQueryRequest();
@@ -76,7 +76,7 @@ public class FindSubmissionSetsQueryTransformerTest extends AbstractQueryTransfo
         assertEquals(Collections.singletonList("'per''son1'"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_AUTHOR_PERSON.getSlotName()));
 
-        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
+        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_STATUS.getSlotName()));
         
         assertEquals(6, ebXML.getSlots().size());

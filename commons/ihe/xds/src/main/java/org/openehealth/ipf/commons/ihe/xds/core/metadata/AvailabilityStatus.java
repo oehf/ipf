@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 import jakarta.xml.bind.annotation.XmlEnum;
 import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
+
 /**
  * Describes the availability of an entry.
  * 
@@ -29,10 +30,8 @@ public enum AvailabilityStatus {
     /** The entry is approved. */
     @XmlEnumValue("Approved") APPROVED("Approved", "urn:oasis:names:tc:ebxml-regrep:StatusType:Approved"),
     /** The entry is deprecated. */
-    @XmlEnumValue("Deprecated") DEPRECATED("Deprecated", "urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated"),
-    /** The entry is submitted. */
-    @XmlEnumValue("Submitted") SUBMITTED("Submitted", "urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted");
-    
+    @XmlEnumValue("Deprecated") DEPRECATED("Deprecated", "urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated");
+
     private final String opcode;
     private final String queryOpcode;
 

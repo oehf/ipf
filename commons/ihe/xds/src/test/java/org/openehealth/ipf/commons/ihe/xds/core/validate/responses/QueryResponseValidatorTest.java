@@ -110,7 +110,7 @@ public class QueryResponseValidatorTest {
 
     @Test
     public void testValidateDocumentEntryHasInvalidAvailabilityStatus() {
-        docEntry.setAvailabilityStatus(AvailabilityStatus.SUBMITTED);
+        docEntry.setAvailabilityStatus(null);
         expectFailure(DOC_ENTRY_INVALID_AVAILABILITY_STATUS);
     }
 

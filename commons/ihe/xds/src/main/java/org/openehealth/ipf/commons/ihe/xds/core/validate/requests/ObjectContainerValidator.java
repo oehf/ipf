@@ -262,8 +262,7 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
             if (profile.isQuery()) {
                 var status = docEntry.getStatus();
-                metaDataAssert(status == AvailabilityStatus.APPROVED || status == AvailabilityStatus.DEPRECATED,
-                        DOC_ENTRY_INVALID_AVAILABILITY_STATUS, status);
+                metaDataAssert(status != null, DOC_ENTRY_INVALID_AVAILABILITY_STATUS, status);
             }
 
             var name = docEntry.getName();

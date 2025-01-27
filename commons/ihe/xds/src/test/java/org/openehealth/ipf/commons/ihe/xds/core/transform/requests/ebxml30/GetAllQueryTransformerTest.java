@@ -50,9 +50,9 @@ public class GetAllQueryTransformerTest extends AbstractQueryTransformerTest<Get
                 Collections.singletonList(new Code("code12", null, "scheme12")));
         query.setConfidentialityCodes(confidentialityCodes);
         query.setFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
-        query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.SUBMITTED));
+        query.setStatusDocuments(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
         query.setStatusFolders(Collections.singletonList(AvailabilityStatus.DEPRECATED));
-        query.setStatusSubmissionSets(Collections.singletonList(AvailabilityStatus.SUBMITTED));
+        query.setStatusSubmissionSets(Collections.singletonList(AvailabilityStatus.DEPRECATED));
         query.setHomeCommunityId("12.21.41");
         query.setDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
 
@@ -76,13 +76,13 @@ public class GetAllQueryTransformerTest extends AbstractQueryTransformerTest<Get
         assertEquals(Arrays.asList("('code13^^scheme13')", "('code14^^scheme14')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_FORMAT_CODE.getSlotName()));
 
-        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
+        assertEquals(Arrays.asList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')", "('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.DOC_ENTRY_STATUS.getSlotName()));
 
         assertEquals(Collections.singletonList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.FOLDER_STATUS.getSlotName()));
 
-        assertEquals(Collections.singletonList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Submitted')"),
+        assertEquals(Collections.singletonList("('urn:oasis:names:tc:ebxml-regrep:StatusType:Deprecated')"),
                 ebXML.getSlotValues(QueryParameter.SUBMISSION_SET_STATUS.getSlotName()));
 
         assertEquals(Collections.singletonList("('urn:uuid:7edca82f-054d-47f2-a032-9b2a5b5186c1')"),
