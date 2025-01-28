@@ -17,17 +17,22 @@ package org.openehealth.ipf.commons.ihe.fhir.atna.translation
 
 import ca.uhn.fhir.context.FhirContext
 import groovy.util.logging.Slf4j
+import org.apache.commons.io.IOUtils
 import org.easymock.EasyMock
+import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator
 import org.hl7.fhir.r4.model.AuditEvent
+import org.hl7.fhir.r4.model.OperationOutcome
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.*
 import org.openehealth.ipf.commons.audit.model.*
+import org.openehealth.ipf.commons.audit.unmarshal.dicom.DICOMAuditParser
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.commons.map.MappingService
 
+import java.nio.charset.StandardCharsets
 import java.time.Instant
 
 /**
@@ -128,6 +133,26 @@ class AuditRecordTranslatorTest {
                         },
                 ]
         )
+    }
+
+    @Test
+    void testAuditTranslation2() {
+        def parser = FHIR_CONTEXT.newJsonParser().setPrettyPrint(true)
+
+        def atnaString = IOUtils.toString(AuditRecordTranslatorTest.class.classLoader.getResourceAsStream('atna-record-2.xml'), StandardCharsets.UTF_8)
+        def atna = new DICOMAuditParser().parse(atnaString, true)
+        def fhir = new AuditRecordTranslator().translate(atna)
+        log.debug('FHIR resource:\n{}', parser.encodeResourceToString(fhir))
+
+        def validator = FHIR_CONTEXT.newValidator()
+        validator.registerValidatorModule(new FhirInstanceValidator(FHIR_CONTEXT))
+
+        def validationResult = validator.validateWithResult(fhir)
+        def operationOutcome = new OperationOutcome()
+        validationResult.populateOperationOutcome(operationOutcome)
+        log.debug('FHIR validation result:\n{}', parser.encodeResourceToString(operationOutcome))
+
+        assert validationResult.successful
     }
 
 }

@@ -1,9 +1,11 @@
 mappings = {
 
     atnaCodingSystem(
-        'DCM'               : 'http://nema.org/dicom/dicm',
-        'IHE Transactions'  : 'http://ihe.net',
-        (ELSE)              : { it }
+        'DCM'               : 'http://dicom.nema.org/resources/ontology/DCM',
+        'IHE Transactions'  : 'urn:oid:1.3.6.1.4.1.19376',
+        'IHE XDS Metadata'  : 'urn:oid:1.3.6.1.4.1.19376.1.2.6',
+        'RFC-3881'          : 'urn:ietf:rfc:3881',
+        (ELSE)              : { (it && it.charAt(0).isDigit()) ? 'urn:oid:' + it : it },
     )
 
 }
