@@ -279,7 +279,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     public void setPoolSize(int poolSize) {
         this.context.getRestfulClientFactory().setPoolMaxPerRoute(poolSize);
-        this.context.getRestfulClientFactory().setPoolMaxPerRoute(poolSize);
     }
 
     /**

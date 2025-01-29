@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="5.0.0" description="" date="">
+            <action issue="466" dev="unixoid" type="add">
+                Early support for Swiss UPI transactions eCH-0213, eCH-0214, eCH-0215.
+            </action>
             <action issue="464" dev="ohr" type="fix">
                 Fix "unknown" gender mapping between HL7v2 and HL7v3
             </action>

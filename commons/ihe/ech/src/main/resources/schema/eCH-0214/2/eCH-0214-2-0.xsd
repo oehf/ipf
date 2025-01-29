@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Bundesamt für Informatik und Telekommunikation (Bundesamt für Informatik und Telekommunikation) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8" xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4" xmlns:eCH-0058="http://www.ech.ch/xmlns/eCH-0058/5" xmlns:eCH-0213-commons="http://www.ech.ch/xmlns/eCH-0213-commons/1" xmlns:eCH-0214="http://www.ech.ch/xmlns/eCH-0214/2" targetNamespace="http://www.ech.ch/xmlns/eCH-0214/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation xml:lang="en"> Query UPI/SPID, last modification timestamp 2017-03-27</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0011/8" schemaLocation="../../eCH-0011/8/eCH-0011-8-1.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0044/4" schemaLocation="../../eCH-0044/4/eCH-0044-4-1.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0058/5" schemaLocation="../../eCH-0058/5/eCH-0058-5-0.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0213-commons/1" schemaLocation="../../eCH-0213-commons/1/eCH-0213-commons-1-0.xsd"/>
+	<xs:simpleType name="algorithmType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="candidateLikelinessType">
+		<xs:restriction base="xs:positiveInteger"/>
+	</xs:simpleType>
+	<xs:simpleType name="detailLevelOfResponseType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="subrequestIdType">
+		<xs:restriction base="xs:integer"/>
+	</xs:simpleType>
+	<xs:complexType name="noticeType">
+		<xs:sequence>
+			<xs:element name="code" type="eCH-0213-commons:codeType"/>
+			<xs:sequence minOccurs="0">
+				<xs:element name="descriptionLanguage" type="eCH-0011:languageType"/>
+				<xs:element name="codeDescription" type="eCH-0213-commons:codeDescriptionType"/>
+			</xs:sequence>
+			<xs:element name="comment" type="eCH-0213-commons:commentType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="request">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="header" type="eCH-0058:headerType"/>
+				<xs:element name="content">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SPIDCategory" type="eCH-0044:personIdCategoryType"/>
+							<xs:element name="responseLanguage" type="eCH-0011:languageType"/>
+							<xs:choice>
+								<xs:element name="getInfoPersonRequest" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="getInfoPersonRequestId" type="eCH-0214:subrequestIdType"/>
+											<xs:element name="detailLevelOfResponse">
+												<xs:simpleType>
+													<xs:restriction base="xs:token">
+														<xs:minLength value="1"/>
+														<xs:maxLength value="20"/>
+													</xs:restriction>
+												</xs:simpleType>
+											</xs:element>
+											<xs:element name="pid">
+												<xs:complexType>
+													<xs:choice>
+														<xs:element name="vn" type="eCH-0044:vnType"/>
+														<xs:element name="SPID" type="eCH-0213-commons:SPIDType"/>
+													</xs:choice>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="searchPersonRequest" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="searchPersonRequestId" type="eCH-0214:subrequestIdType"/>
+											<xs:element name="algorithm" type="eCH-0214:algorithmType" minOccurs="0"/>
+											<xs:element name="searchedPerson" type="eCH-0213-commons:personToUPIType"/>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="compareDataRequest" maxOccurs="unbounded">
+									<xs:complexType>
+										<xs:sequence>
+											<xs:element name="compareDataRequestId" type="eCH-0214:subrequestIdType"/>
+											<xs:element name="pids">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="vn" type="eCH-0044:vnType"/>
+														<xs:element name="SPID" type="eCH-0213-commons:SPIDType"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+										</xs:sequence>
+									</xs:complexType>
+								</xs:element>
+							</xs:choice>
+						</xs:sequence>
+					</xs:complexType>
+					<xs:key name="getInfoPersonRequestKey">
+						<xs:selector xpath="eCH-0214:getInfoPersonRequest"/>
+						<xs:field xpath="eCH-0214:getInfoPersonRequestId"/>
+					</xs:key>
+					<xs:key name="searchPersonRequestKey">
+						<xs:selector xpath="eCH-0214:searchPersonRequest"/>
+						<xs:field xpath="eCH-0214:searchPersonRequestId"/>
+					</xs:key>
+					<xs:key name="compareDataRequestKey">
+						<xs:selector xpath="eCH-0214:compareDataRequest"/>
+						<xs:field xpath="eCH-0214:compareDataRequestId"/>
+					</xs:key>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="minorVersion" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="response">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="header" type="eCH-0058:headerType"/>
+				<xs:choice>
+					<xs:element name="positiveResponse">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="SPIDCategory" type="eCH-0044:personIdCategoryType"/>
+								<xs:sequence minOccurs="0" maxOccurs="unbounded">
+									<xs:element name="globalNotice" type="eCH-0214:noticeType"/>
+								</xs:sequence>
+								<xs:choice>
+									<xs:element name="getInfoPersonResponse" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="getInfoPersonRequestId" type="eCH-0214:subrequestIdType"/>
+												<xs:choice>
+													<xs:sequence>
+														<xs:element name="echoPidRequest">
+															<xs:complexType>
+																<xs:choice>
+																	<xs:element name="vn" type="eCH-0044:vnType"/>
+																	<xs:element name="SPID" type="eCH-0213-commons:SPIDType"/>
+																</xs:choice>
+															</xs:complexType>
+														</xs:element>
+														<xs:sequence minOccurs="0" maxOccurs="unbounded">
+															<xs:element name="notice" type="eCH-0214:noticeType"/>
+														</xs:sequence>
+														<xs:sequence>
+															<xs:element name="pids" type="eCH-0213-commons:pidsFromUPIType"/>
+															<xs:element name="personFromUPI" type="eCH-0213-commons:personFromUPIType" minOccurs="0"/>
+														</xs:sequence>
+													</xs:sequence>
+													<xs:element name="negativReportOnGetInfoPerson" type="eCH-0213-commons:negativeReportType"/>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="searchPersonResponse" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="searchPersonRequestId" type="eCH-0214:subrequestIdType"/>
+												<xs:choice>
+													<xs:sequence>
+														<xs:element name="algorithm" type="eCH-0214:algorithmType" minOccurs="0"/>
+														<xs:sequence minOccurs="0" maxOccurs="unbounded">
+															<xs:element name="notice" type="eCH-0214:noticeType"/>
+														</xs:sequence>
+														<xs:choice>
+															<xs:element name="found">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element name="pids" type="eCH-0213-commons:pidsFromUPIType"/>
+																		<xs:element name="personFromUPI" type="eCH-0213-commons:personFromUPIType"/>
+																	</xs:sequence>
+																</xs:complexType>
+															</xs:element>
+															<xs:element name="maybeFound">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element name="candidate" maxOccurs="unbounded">
+																			<xs:complexType>
+																				<xs:sequence>
+																					<xs:element name="pids" type="eCH-0213-commons:pidsFromUPIType"/>
+																					<xs:element name="personFromUPI" type="eCH-0213-commons:personFromUPIType"/>
+																					<xs:element name="historicalValuesPersonFromUPI" type="eCH-0213-commons:personFromUPIType" minOccurs="0" maxOccurs="unbounded"/>
+																					<xs:element name="candidateLikeliness" type="eCH-0214:candidateLikelinessType" minOccurs="0"/>
+																				</xs:sequence>
+																			</xs:complexType>
+																		</xs:element>
+																	</xs:sequence>
+																</xs:complexType>
+															</xs:element>
+															<xs:element name="notFound"/>
+														</xs:choice>
+													</xs:sequence>
+													<xs:element name="negativReportOnSearchPerson" type="eCH-0213-commons:negativeReportType"/>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+									<xs:element name="compareDataResponse" maxOccurs="unbounded">
+										<xs:complexType>
+											<xs:sequence>
+												<xs:element name="compareDataRequestId" type="eCH-0214:subrequestIdType"/>
+												<xs:choice>
+													<xs:sequence>
+														<xs:element name="echoPidsRequest">
+															<xs:complexType>
+																<xs:sequence>
+																	<xs:element name="vn" type="eCH-0044:vnType"/>
+																	<xs:element name="SPID" type="eCH-0213-commons:SPIDType"/>
+																</xs:sequence>
+															</xs:complexType>
+														</xs:element>
+														<xs:sequence minOccurs="0" maxOccurs="unbounded">
+															<xs:element name="notice" type="eCH-0214:noticeType"/>
+														</xs:sequence>
+														<xs:choice>
+															<xs:element name="identicalData"/>
+															<xs:element name="differentData">
+																<xs:complexType>
+																	<xs:sequence>
+																		<xs:element name="pids" type="eCH-0213-commons:pidsFromUPIType"/>
+																	</xs:sequence>
+																</xs:complexType>
+															</xs:element>
+														</xs:choice>
+													</xs:sequence>
+													<xs:element name="negativReportOnCompareData" type="eCH-0213-commons:negativeReportType"/>
+												</xs:choice>
+											</xs:sequence>
+										</xs:complexType>
+									</xs:element>
+								</xs:choice>
+							</xs:sequence>
+						</xs:complexType>
+						<xs:key name="getInfoPersonResponseKey">
+							<xs:selector xpath="eCH-0214:getInfoPersonResponse"/>
+							<xs:field xpath="eCH-0214:getInfoPersonRequestId"/>
+						</xs:key>
+						<xs:key name="searchPersonResponseKey">
+							<xs:selector xpath="eCH-0214:searchPersonResponse"/>
+							<xs:field xpath="eCH-0214:searchPersonRequestId"/>
+						</xs:key>
+						<xs:key name="compareDataResponseKey">
+							<xs:selector xpath="eCH-0214:compareDataResponse"/>
+							<xs:field xpath="eCH-0214:compareDataRequestId"/>
+						</xs:key>
+					</xs:element>
+					<xs:element name="negativeReport" type="eCH-0213-commons:negativeReportType"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="minorVersion" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

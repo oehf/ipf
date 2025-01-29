@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2006 sp2 U (http://www.altova.com) by Martin Stingelin (Stingelin Informatik GmbH) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by BITUSER (Bundesamt für Informatik und Telekommunikation) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eCH-0006="http://www.ech.ch/xmlns/eCH-0006/2" targetNamespace="http://www.ech.ch/xmlns/eCH-0006/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation xml:lang="de">Ausgabedatum: 29.05.2007</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="residencePermitCategoryType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="06"/>
+			<xs:enumeration value="07"/>
+			<xs:enumeration value="08"/>
+			<xs:enumeration value="09"/>
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="13"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="residencePermitRulingType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="06"/>
+			<xs:enumeration value="07"/>
+			<xs:enumeration value="08"/>
+			<xs:enumeration value="09"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="residencePermitBorderType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="residencePermitShortType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="06"/>
+			<xs:enumeration value="07"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="residencePermitType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="0102"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="0201"/>
+			<xs:enumeration value="0202"/>
+			<xs:enumeration value="03"/>
+			<xs:enumeration value="0301"/>
+			<xs:enumeration value="0302"/>
+			<xs:enumeration value="04"/>
+			<xs:enumeration value="0401"/>
+			<xs:enumeration value="0402"/>
+			<xs:enumeration value="05"/>
+			<xs:enumeration value="0503"/>
+			<xs:enumeration value="06"/>
+			<xs:enumeration value="0601"/>
+			<xs:enumeration value="0602"/>
+			<xs:enumeration value="060101"/>
+			<xs:enumeration value="060201"/>
+			<xs:enumeration value="060102"/>
+			<xs:enumeration value="060202"/>
+			<xs:enumeration value="07"/>
+			<xs:enumeration value="0701"/>
+			<xs:enumeration value="0702"/>
+			<xs:enumeration value="070101"/>
+			<xs:enumeration value="070201"/>
+			<xs:enumeration value="070102"/>
+			<xs:enumeration value="070202"/>
+			<xs:enumeration value="070103"/>
+			<xs:enumeration value="070104"/>
+			<xs:enumeration value="070204"/>
+			<xs:enumeration value="070105"/>
+			<xs:enumeration value="070205"/>
+			<xs:enumeration value="070206"/>
+			<xs:enumeration value="070907"/>
+			<xs:enumeration value="08"/>
+			<xs:enumeration value="0804"/>
+			<xs:enumeration value="09"/>
+			<xs:enumeration value="0905"/>
+			<xs:enumeration value="10"/>
+			<xs:enumeration value="1006"/>
+			<xs:enumeration value="100601"/>
+			<xs:enumeration value="100602"/>
+			<xs:enumeration value="100603"/>
+			<xs:enumeration value="11"/>
+			<xs:enumeration value="1107"/>
+			<xs:enumeration value="12"/>
+			<xs:enumeration value="1208"/>
+			<xs:enumeration value="1300"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="inhabitantControlType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0102"/>
+			<xs:enumeration value="0201"/>
+			<xs:enumeration value="0202"/>
+			<xs:enumeration value="0301"/>
+			<xs:enumeration value="0302"/>
+			<xs:enumeration value="0401"/>
+			<xs:enumeration value="0402"/>
+			<xs:enumeration value="0503"/>
+			<xs:enumeration value="0601"/>
+			<xs:enumeration value="0602"/>
+			<xs:enumeration value="0701"/>
+			<xs:enumeration value="0702"/>
+			<xs:enumeration value="0804"/>
+			<xs:enumeration value="0905"/>
+			<xs:enumeration value="1006"/>
+			<xs:enumeration value="1108"/>
+			<xs:enumeration value="1208"/>
+			<xs:enumeration value="1300"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="residencePermitDetailedType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0102"/>
+			<xs:enumeration value="0201"/>
+			<xs:enumeration value="0202"/>
+			<xs:enumeration value="0301"/>
+			<xs:enumeration value="0302"/>
+			<xs:enumeration value="0401"/>
+			<xs:enumeration value="0402"/>
+			<xs:enumeration value="0503"/>
+			<xs:enumeration value="0601"/>
+			<xs:enumeration value="0602"/>
+			<xs:enumeration value="060101"/>
+			<xs:enumeration value="060201"/>
+			<xs:enumeration value="060102"/>
+			<xs:enumeration value="060202"/>
+			<xs:enumeration value="0701"/>
+			<xs:enumeration value="0702"/>
+			<xs:enumeration value="070101"/>
+			<xs:enumeration value="070201"/>
+			<xs:enumeration value="070102"/>
+			<xs:enumeration value="070202"/>
+			<xs:enumeration value="070103"/>
+			<xs:enumeration value="070104"/>
+			<xs:enumeration value="070204"/>
+			<xs:enumeration value="070105"/>
+			<xs:enumeration value="070205"/>
+			<xs:enumeration value="070206"/>
+			<xs:enumeration value="070907"/>
+			<xs:enumeration value="0804"/>
+			<xs:enumeration value="0905"/>
+			<xs:enumeration value="1006"/>
+			<xs:enumeration value="100601"/>
+			<xs:enumeration value="100602"/>
+			<xs:enumeration value="100603"/>
+			<xs:enumeration value="1107"/>
+			<xs:enumeration value="1208"/>
+			<xs:enumeration value="1300"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="residencePermitToBeRegisteredType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="01"/>
+			<xs:enumeration value="02"/>
+			<xs:enumeration value="03"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="permitRoot">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="residencePermitCategory" type="eCH-0006:residencePermitCategoryType" minOccurs="0"/>
+				<xs:element name="residencePermitRuling" type="eCH-0006:residencePermitRulingType" minOccurs="0"/>
+				<xs:element name="residencePermitBorder" type="eCH-0006:residencePermitBorderType" minOccurs="0"/>
+				<xs:element name="residencePermitShortType" type="eCH-0006:residencePermitShortType" minOccurs="0"/>
+				<xs:element name="residencePermit" type="eCH-0006:residencePermitType" minOccurs="0"/>
+				<xs:element name="inhabitantControl" type="eCH-0006:inhabitantControlType" minOccurs="0"/>
+				<xs:element name="residencePermitDetailedType" type="eCH-0006:residencePermitDetailedType" minOccurs="0"/>
+				<xs:element name="residencePermitToBeRegisteredType" type="eCH-0006:residencePermitToBeRegisteredType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

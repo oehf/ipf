@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8" xmlns:eCH-0021="http://www.ech.ch/xmlns/eCH-0021/7" xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4" xmlns:eCH-0213-commons="http://www.ech.ch/xmlns/eCH-0213-commons/1" targetNamespace="http://www.ech.ch/xmlns/eCH-0213-commons/1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">Common types used by the sectorial person ID (SPID) related schemas, last modification timestamp 2017-02-01</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0011/8" schemaLocation="../../eCH-0011/8/eCH-0011-8-1.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0021/7" schemaLocation="../../eCH-0021/7/eCH-0021-7-0.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0044/4" schemaLocation="../../eCH-0044/4/eCH-0044-4-1.xsd"/>
+	<xs:simpleType name="codeDescriptionType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="300"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="codeType">
+		<xs:restriction base="xs:int"/>
+	</xs:simpleType>
+	<xs:simpleType name="commentType">
+		<xs:restriction base="xs:string">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="5000"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dateOfDeathType">
+		<xs:restriction base="xs:date"/>
+	</xs:simpleType>
+	<xs:simpleType name="SPIDType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="36"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="vnStatusType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="active"/>
+			<xs:enumeration value="inactive"/>
+			<xs:enumeration value="canceled"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="negativeReportType">
+		<xs:sequence>
+			<xs:element name="notice">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="code" type="eCH-0213-commons:codeType"/>
+						<xs:sequence minOccurs="0">
+							<xs:element name="descriptionLanguage" type="eCH-0011:languageType"/>
+							<xs:element name="codeDescription" type="eCH-0213-commons:codeDescriptionType"/>
+						</xs:sequence>
+						<xs:element name="comment" type="eCH-0213-commons:commentType" minOccurs="0"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="data" type="xs:anyType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="personFromUPIType">
+		<xs:sequence>
+			<xs:element name="recordTimestamp" type="xs:dateTime" minOccurs="0"/>
+			<xs:element name="firstName" type="eCH-0044:baseNameType"/>
+			<xs:element name="officialName" type="eCH-0044:baseNameType"/>
+			<xs:element name="originalName" type="eCH-0044:baseNameType" minOccurs="0"/>
+			<xs:element name="nameOnForeignPassport" type="eCH-0011:foreignerNameType" minOccurs="0"/>
+			<xs:element name="sex" type="eCH-0044:sexType"/>
+			<xs:element name="dateOfBirth" type="eCH-0044:datePartiallyKnownType"/>
+			<xs:element name="placeOfBirth" type="eCH-0011:generalPlaceType"/>
+			<xs:sequence minOccurs="0" maxOccurs="2">
+				<xs:element name="mothersName" type="eCH-0021:nameOfParentType"/>
+			</xs:sequence>
+			<xs:sequence minOccurs="0" maxOccurs="2">
+				<xs:element name="fathersName" type="eCH-0021:nameOfParentType"/>
+			</xs:sequence>
+			<xs:element name="nationalityData" type="eCH-0011:nationalityDataType"/>
+			<xs:element name="dateOfDeath" type="eCH-0213-commons:dateOfDeathType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="personToUPIType">
+		<xs:sequence>
+			<xs:element name="firstName" type="eCH-0044:baseNameType"/>
+			<xs:element name="officialName" type="eCH-0044:baseNameType"/>
+			<xs:element name="originalName" type="eCH-0044:baseNameType" minOccurs="0"/>
+			<xs:element name="sex" type="eCH-0044:sexType" minOccurs="0"/>
+			<xs:element name="dateOfBirth" type="eCH-0044:datePartiallyKnownType"/>
+			<xs:element name="placeOfBirth" type="eCH-0011:generalPlaceType" minOccurs="0"/>
+			<xs:sequence minOccurs="0" maxOccurs="2">
+				<xs:element name="mothersName" type="eCH-0021:nameOfParentType"/>
+			</xs:sequence>
+			<xs:sequence minOccurs="0" maxOccurs="2">
+				<xs:element name="fathersName" type="eCH-0021:nameOfParentType"/>
+			</xs:sequence>
+			<xs:element name="nationalityData" type="eCH-0011:nationalityDataType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="pidsFromUPIType">
+		<xs:sequence>
+			<xs:element name="vn" type="eCH-0044:vnType" minOccurs="0"/>
+			<xs:sequence minOccurs="0" maxOccurs="unbounded">
+				<xs:element name="SPID" type="eCH-0213-commons:SPIDType"/>
+			</xs:sequence>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="pidsToUPIType">
+		<xs:choice>
+			<xs:sequence>
+				<xs:element name="vn" type="eCH-0044:vnType"/>
+				<xs:element name="SPID" type="eCH-0213-commons:SPIDType" minOccurs="0"/>
+			</xs:sequence>
+			<xs:sequence>
+				<xs:element name="SPID" type="eCH-0213-commons:SPIDType"/>
+				<xs:element name="vn" type="eCH-0044:vnType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="warningType">
+		<xs:sequence>
+			<xs:element name="code" type="eCH-0213-commons:codeType"/>
+			<xs:sequence minOccurs="0">
+				<xs:element name="descriptionLanguage" type="eCH-0011:languageType"/>
+				<xs:element name="codeDescription" type="eCH-0213-commons:codeDescriptionType"/>
+			</xs:sequence>
+			<xs:element name="comment" type="eCH-0213-commons:commentType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

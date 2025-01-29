@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eCH-0011="http://www.ech.ch/xmlns/eCH-0011/8" xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4" xmlns:eCH-0058="http://www.ech.ch/xmlns/eCH-0058/5" xmlns:eCH-0213="http://www.ech.ch/xmlns/eCH-0213/1" xmlns:eCH-0213-commons="http://www.ech.ch/xmlns/eCH-0213-commons/1" targetNamespace="http://www.ech.ch/xmlns/eCH-0213/1" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">Declaration UPI/SPID interface, last modification timestamp  2016-11-11</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0011/8" schemaLocation="../../eCH-0011/8/eCH-0011-8-1.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0044/4" schemaLocation="../../eCH-0044/4/eCH-0044-4-1.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0058/5" schemaLocation="../../eCH-0058/5/eCH-0058-5-0.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0213-commons/1" schemaLocation="../../eCH-0213-commons/1/eCH-0213-commons-1-0.xsd"/>
+	<xs:simpleType name="additionalInputParameterKeyType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="additionalInputParameterValueType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="100"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="actionOnSPIDType">
+		<xs:restriction base="xs:token">
+			<xs:minLength value="1"/>
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="request">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="header" type="eCH-0058:headerType"/>
+				<xs:element name="content">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SPIDCategory" type="eCH-0044:personIdCategoryType"/>
+							<xs:element name="responseLanguage" type="eCH-0011:languageType"/>
+							<xs:element name="actionOnSPID" type="eCH-0213:actionOnSPIDType"/>
+							<xs:sequence minOccurs="0" maxOccurs="unbounded">
+								<xs:element name="additionalInputParameterKey" type="eCH-0213:additionalInputParameterKeyType"/>
+								<xs:element name="additionalInputParameterValue" type="eCH-0213:additionalInputParameterValueType"/>
+							</xs:sequence>
+							<xs:sequence maxOccurs="2">
+								<xs:element name="pidsToUPI" type="eCH-0213-commons:pidsToUPIType"/>
+							</xs:sequence>
+							<xs:element name="personToUPI" type="eCH-0213-commons:personToUPIType" minOccurs="0"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="minorVersion" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="response">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="header" type="eCH-0058:headerType"/>
+				<xs:choice>
+					<xs:element name="positiveResponse">
+						<xs:complexType>
+							<xs:sequence>
+								<xs:element name="SPIDCategory" type="eCH-0044:personIdCategoryType"/>
+								<xs:sequence minOccurs="0" maxOccurs="unbounded">
+									<xs:element name="warning" type="eCH-0213-commons:warningType"/>
+								</xs:sequence>
+								<xs:element name="pids" type="eCH-0213-commons:pidsFromUPIType"/>
+								<xs:element name="personFromUPI" type="eCH-0213-commons:personFromUPIType"/>
+							</xs:sequence>
+						</xs:complexType>
+					</xs:element>
+					<xs:element name="negativeReport" type="eCH-0213-commons:negativeReportType"/>
+				</xs:choice>
+			</xs:sequence>
+			<xs:attribute name="minorVersion" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

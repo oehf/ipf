@@ -384,6 +384,7 @@
                         <!-- stupid: javadoc:aggregate cannot resolve relative sourcepaths -->
                         <sourcepath>
                             boot/ipf-atna-spring-boot-starter/generated-stubs:
+                            boot/ipf-ech-spring-boot-starter/generated-stubs:
                             boot/ipf-fhir-r4-spring-boot-starter/generated-stubs:
                             boot/ipf-hl7-spring-boot-starter/generated-stubs:
                             boot/ipf-hl7v3-spring-boot-starter/generated-stubs:
@@ -395,6 +396,7 @@
                             commons/audit/generated-stubs:
                             commons/core/generated-stubs:
                             commons/ihe/core/generated-stubs:
+                            commons/ihe/ech/generated-stubs:
                             commons/ihe/fhir/core/generated-stubs:
                             commons/ihe/fhir/r4/core/generated-stubs:
                             commons/ihe/fhir/r4/audit/generated-stubs:
@@ -420,6 +422,7 @@
                             modules/hl7/generated-stubs:
                             platform-camel/cda/generated-stubs:
                             platform-camel/core/generated-stubs:
+                            platform-camel/ech/generated-stubs:
                             platform-camel/hl7/generated-stubs:
                             platform-camel/ihe/atna/generated-stubs:
                             platform-camel/ihe/continua/generated-stubs:

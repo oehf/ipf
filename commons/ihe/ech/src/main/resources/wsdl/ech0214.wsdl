@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions 
+  xmlns="http://schemas.xmlsoap.org/wsdl/"
+  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:soapbind="http://schemas.xmlsoap.org/wsdl/soap/"
+  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:eCH-0214="http://www.ech.ch/xmlns/eCH-0214/2"
+  xmlns:spid-ws="http://www.zas.admin.ch/wupispid/ws/queryService/2"
+  targetNamespace="http://www.zas.admin.ch/wupispid/ws/queryService/2">
+
+  <documentation>
+    This WSDL definition describes the Query UPI/SPID Web Service interface.
+
+    Change history:
+    2018-06-28 - Creation (TQN, ELCA)
+  </documentation>
+  
+  <types>
+    <xs:schema elementFormDefault="qualified">
+      <xs:import namespace="http://www.ech.ch/xmlns/eCH-0214/2" schemaLocation="../schema/eCH-0214/2/eCH-0214-2-0.xsd"/>
+    </xs:schema>
+  </types>
+  
+  <message name="requestMsg">
+    <part name="body" element="eCH-0214:request"/>
+  </message>
+  <message name="responseMsg">
+    <part name="body" element="eCH-0214:response"/>
+  </message>
+
+  <portType name="SpidQueryServicePortTypeV2">
+    <operation name="querySpid">
+      <input message="spid-ws:requestMsg"/>
+      <output message="spid-ws:responseMsg"/>
+    </operation>
+  </portType>
+  
+  <binding name="SpidQueryServiceBindingV2" type="spid-ws:SpidQueryServicePortTypeV2">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <operation name="querySpid">
+      <soap:operation soapAction="http://www.zas.admin.ch"/>
+      <input>
+        <soap:body use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+    </operation>   
+    
+  </binding>
+  
+  <service name="SpidQueryService">
+    <port name="SpidQueryServicePortV2" binding="spid-ws:SpidQueryServiceBindingV2">
+      <soap:address location="http://www.zas.admin.ch/wupispid/ws/queryService/2"/>
+    </port>
+  </service>
+</definitions>

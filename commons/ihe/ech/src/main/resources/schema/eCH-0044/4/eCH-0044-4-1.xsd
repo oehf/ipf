@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Mit XMLSpy v2010 rel. 3 sp1 (http://www.altova.com) von Martin Stingelin (Stingelin Informatik GmbH) bearbeitet -->
+<!-- edited with XMLSpy v2012 rel. 2 sp1 (http://www.altova.com) by Martin Stingelin (Stingelin Informatik GmbH) -->
+<!-- edited with XMLSPY v2004 rel. 3 U (http://www.xmlspy.com) by BITUSER (Bundesamt für Informatik und Telekommunikation) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4" targetNamespace="http://www.ech.ch/xmlns/eCH-0044/4" elementFormDefault="qualified" attributeFormDefault="unqualified" version="4.1">
+	<xs:annotation>
+		<xs:documentation xml:lang="de">Ausgabedatum: 21.01.2014</xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="personIdCategoryType">
+		<xs:restriction base="xs:token">
+			<xs:maxLength value="20"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="namedPersonIdType">
+		<xs:sequence>
+			<xs:element name="personIdCategory" type="eCH-0044:personIdCategoryType"/>
+			<xs:element name="personId">
+				<xs:simpleType>
+					<xs:restriction base="xs:token">
+						<xs:maxLength value="36"/>
+						<xs:minLength value="1"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="personIdentificationType">
+		<xs:sequence>
+			<xs:element name="vn" type="eCH-0044:vnType" minOccurs="0"/>
+			<xs:element name="localPersonId" type="eCH-0044:namedPersonIdType"/>
+			<xs:element name="otherPersonId" type="eCH-0044:namedPersonIdType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="euPersonId" type="eCH-0044:namedPersonIdType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="officialName" type="eCH-0044:baseNameType"/>
+			<xs:element name="firstName" type="eCH-0044:baseNameType"/>
+			<xs:element name="originalName" type="eCH-0044:baseNameType" minOccurs="0"/>
+			<xs:element name="sex" type="eCH-0044:sexType"/>
+			<xs:element name="dateOfBirth" type="eCH-0044:datePartiallyKnownType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="personIdentificationKeyOnlyType">
+		<xs:sequence>
+			<xs:element name="vn" type="eCH-0044:vnType" minOccurs="0"/>
+			<xs:element name="localPersonId" type="eCH-0044:namedPersonIdType"/>
+			<xs:element name="otherPersonId" type="eCH-0044:namedPersonIdType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="euPersonId" type="eCH-0044:namedPersonIdType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="personIdentificationLightType">
+		<xs:sequence>
+			<xs:element name="vn" type="eCH-0044:vnType" minOccurs="0"/>
+			<xs:element name="localPersonId" type="eCH-0044:namedPersonIdType" minOccurs="0"/>
+			<xs:element name="otherPersonId" type="eCH-0044:namedPersonIdType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="officialName" type="eCH-0044:baseNameType"/>
+			<xs:element name="firstName" type="eCH-0044:baseNameType"/>
+			<xs:element name="originalName" type="eCH-0044:baseNameType" minOccurs="0"/>
+			<xs:element name="sex" type="eCH-0044:sexType" minOccurs="0"/>
+			<xs:element name="dateOfBirth" type="eCH-0044:datePartiallyKnownType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="datePartiallyKnownType">
+		<xs:choice>
+			<xs:element name="yearMonthDay" type="xs:date"/>
+			<xs:element name="yearMonth" type="xs:gYearMonth"/>
+			<xs:element name="year" type="xs:gYear"/>
+		</xs:choice>
+	</xs:complexType>
+	<xs:simpleType name="baseNameType">
+		<xs:restriction base="xs:token">
+			<xs:maxLength value="100"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="officialFirstNameType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="100"/>
+			<xs:whiteSpace value="collapse"/>
+			<xs:minLength value="1"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="sexType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1"/>
+			<xs:enumeration value="2"/>
+			<xs:enumeration value="3"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="vnType">
+		<xs:restriction base="xs:unsignedLong">
+			<xs:minInclusive value="7560000000001"/>
+			<xs:maxInclusive value="7569999999999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="personIdentificationRoot">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="personIdentification" type="eCH-0044:personIdentificationType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -38,6 +38,7 @@
         <module>hpd</module>
         <module>xacml20</module>
         <module>svs</module>
+        <module>ech</module>
     </modules>
 
 </project>

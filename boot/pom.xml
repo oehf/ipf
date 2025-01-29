@@ -25,6 +25,7 @@
         <module>ipf-hpd-spring-boot-starter</module>
         <module>ipf-xacml20-spring-boot-starter</module>
         <module>ipf-svs-spring-boot-starter</module>
+        <module>ipf-ech-spring-boot-starter</module>
     </modules>
 
 

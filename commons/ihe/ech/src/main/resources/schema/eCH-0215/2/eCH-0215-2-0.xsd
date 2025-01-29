@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eCH-0044="http://www.ech.ch/xmlns/eCH-0044/4" xmlns:eCH-0058="http://www.ech.ch/xmlns/eCH-0058/5" xmlns:eCH-0213-commons="http://www.ech.ch/xmlns/eCH-0213-commons/1" xmlns:eCH-0215="http://www.ech.ch/xmlns/eCH-0215/2" targetNamespace="http://www.ech.ch/xmlns/eCH-0215/2" elementFormDefault="qualified" attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation xml:lang="en">Broadcast updates UPI/SPID, last modification timestamp 2017-05-15</xs:documentation>
+	</xs:annotation>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0044/4" schemaLocation="http://www.ech.ch/xmlns/eCH-0044/4/eCH-0044-4-1.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0058/5" schemaLocation="http://www.ech.ch/xmlns/eCH-0058/5/eCH-0058-5-0.xsd"/>
+	<xs:import namespace="http://www.ech.ch/xmlns/eCH-0213-commons/1" schemaLocation="http://www.ech.ch/xmlns/eCH-0213-commons/1/eCH-0213-commons-1-0.xsd"/>
+	<xs:simpleType name="cancellationReasonType">
+		<xs:restriction base="xs:token">
+			<xs:enumeration value="notMentioned"/>
+			<xs:enumeration value="generatedByMistake"/>
+			<xs:enumeration value="requestedByOwner"/>
+			<xs:enumeration value="badIdentification"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:element name="broadcast">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="header" type="eCH-0058:headerType"/>
+				<xs:element name="content">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="SPIDCategory" type="eCH-0044:personIdCategoryType"/>
+							<xs:element name="dateInterval">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="from" type="xs:date"/>
+										<xs:element name="till" type="xs:date"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="inactivationOfSPID" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="inactivationTimestamp" type="xs:dateTime"/>
+										<xs:element name="inactiveSPID" type="eCH-0213-commons:SPIDType"/>
+										<xs:element name="activeSPID" type="eCH-0213-commons:SPIDType"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="cancellationOfSPID" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="cancellationTimestamp" type="xs:dateTime"/>
+										<xs:element name="cancellationReason" type="eCH-0215:cancellationReasonType" minOccurs="0"/>
+										<xs:element name="vn" type="eCH-0044:vnType" minOccurs="0"/>
+										<xs:element name="vnStatus" type="eCH-0213-commons:vnStatusType"/>
+										<xs:element name="cancelledSPID" type="eCH-0213-commons:SPIDType"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="multipleActiveSPIDs" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="lastAssociationTimestamp" type="xs:dateTime"/>
+										<xs:element name="vn" type="eCH-0044:vnType" minOccurs="0"/>
+										<xs:element name="activeSPID" type="eCH-0213-commons:SPIDType" minOccurs="2" maxOccurs="unbounded"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="changeInDemographics" minOccurs="0" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="activeSPID" type="eCH-0213-commons:SPIDType" maxOccurs="unbounded"/>
+										<xs:element name="personFromUPIBefore" type="eCH-0213-commons:personFromUPIType" minOccurs="0"/>
+										<xs:element name="personFromUPIAfter" type="eCH-0213-commons:personFromUPIType"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="minorVersion" type="xs:integer" use="required"/>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
