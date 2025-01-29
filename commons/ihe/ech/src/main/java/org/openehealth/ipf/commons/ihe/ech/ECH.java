@@ -48,7 +48,7 @@ public class ECH implements IntegrationProfile {
     }
 
     private final static WsTransactionConfiguration<WsAuditDataset> ECH_0213_CONFIG = new WsTransactionConfiguration<>(
-        "ech-ech0213",
+        "ech-0213",
         "EPR-SPID Management Service",
         false,
         null,
@@ -57,14 +57,14 @@ public class ECH implements IntegrationProfile {
         Ech0213PortType.class,
         new QName("http://www.zas.admin.ch/wupispid/ws/managementService/1", "SpidManagementServiceBindingV1"),
         false,
-        "wsdl/ech0213.wsdl",
+        "wsdl/ech-0213.wsdl",
         true,
         false,
         false,
         false);
 
     private final static WsTransactionConfiguration<WsAuditDataset> ECH_0214_CONFIG = new WsTransactionConfiguration<>(
-        "ech-ech0214",
+        "ech-0214",
         "EPR-SPID Query Service",
         false,
         null,
@@ -73,7 +73,7 @@ public class ECH implements IntegrationProfile {
         Ech0214PortType.class,
         new QName("http://www.zas.admin.ch/wupispid/ws/queryService/2", "SpidQueryServiceBindingV2"),
         false,
-        "wsdl/ech0214.wsdl",
+        "wsdl/ech-0214.wsdl",
         true,
         false,
         false,
