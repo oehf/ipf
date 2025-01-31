@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="5.0.0" description="" date="">
+            <action issue="467" dev="ohr" type="update">
+                Allow to sort by patient author name in ITI-66 and ITI-67 queries
+            </action>
             <action issue="466" dev="unixoid" type="add">
                 Early support for Swiss UPI transactions eCH-0213, eCH-0214, eCH-0215.
             </action>

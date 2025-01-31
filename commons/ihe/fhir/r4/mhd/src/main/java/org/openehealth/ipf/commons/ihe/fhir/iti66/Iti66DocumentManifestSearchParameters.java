@@ -25,6 +25,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hl7.fhir.r4.model.DocumentManifest;
+import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.PractitionerRole;
 
@@ -108,6 +109,11 @@ public class Iti66DocumentManifestSearchParameters extends Iti66SearchParameters
         if (author.getResource() instanceof Practitioner practitioner) {
             if (!practitioner.hasName()) return null;
             var name = practitioner.getNameFirstRep();
+            return name.getFamilyElement().getValueNotNull() + name.getGivenAsSingleString();
+        }
+        if (author.getResource() instanceof Patient patient) {
+            if (!patient.hasName()) return null;
+            var name = patient.getNameFirstRep();
             return name.getFamilyElement().getValueNotNull() + name.getGivenAsSingleString();
         }
         return null;
