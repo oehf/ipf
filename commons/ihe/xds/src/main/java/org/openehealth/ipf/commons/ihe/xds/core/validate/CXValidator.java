@@ -40,7 +40,7 @@ public class CXValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7CX) throws XDSMetaDataException {
-        var identifiable = Hl7v2Based.parse(hl7CX, Identifiable.class);
+        var identifiable = Identifiable.parse(hl7CX);
         metaDataAssert(identifiable != null, CX_NEEDS_ID);
 
         var cx = identifiable.getHapiObject();

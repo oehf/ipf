@@ -263,7 +263,7 @@ public class QuerySlotHelper {
             return null;
         }
         return values.stream()
-                .map(value -> Hl7v2Based.parse(value, Identifiable.class))
+                .map(Identifiable::parse)
                 .toList();
     }
 
@@ -419,7 +419,7 @@ public class QuerySlotHelper {
         var codes = new ArrayList<Code>();
         slotValues.forEach(slotValue ->
                 decodeStringList(slotValue).forEach(hl7CE -> {
-                    var code = Hl7v2Based.parse(hl7CE, Code.class);
+                    var code = Code.parse(hl7CE);
                     if (code == null || isEmpty(code.getCode()) || isEmpty(code.getSchemeName())) {
                         throw new XDSMetaDataException(ValidationMessage.INVALID_QUERY_PARAMETER_VALUE, hl7CE);
                     }

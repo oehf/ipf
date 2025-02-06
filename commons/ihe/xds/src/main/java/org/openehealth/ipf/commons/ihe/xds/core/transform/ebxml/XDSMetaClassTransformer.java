@@ -264,7 +264,7 @@ public abstract class XDSMetaClassTransformer<E extends EbXMLRegistryObject, C e
      */
     protected void addExternalIdentifiersFromEbXML(C metaData, E ebXML) {
         var patientID = ebXML.getExternalIdentifierValue(patientIdExternalId);
-        metaData.setPatientId(Hl7v2Based.parse(patientID, Identifiable.class));
+        metaData.setPatientId(Identifiable.parse(patientID));
         metaData.setUniqueId(ebXML.getExternalIdentifierValue(uniqueIdExternalId));
     }
 }

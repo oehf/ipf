@@ -50,7 +50,7 @@ public class FindFoldersQueryTransformer extends AbstractStoredQueryTransformer<
     protected void fromEbXML(FindFoldersQuery query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
         var patientId = slots.toString(FOLDER_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
+        query.setPatientId(Identifiable.parse(patientId));
         query.setCodes(slots.toCodeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME));
         query.getLastUpdateTime().setFrom(slots.toTimestamp(FOLDER_LAST_UPDATE_TIME_FROM));
         query.getLastUpdateTime().setTo(slots.toTimestamp(FOLDER_LAST_UPDATE_TIME_TO));

@@ -83,6 +83,16 @@ public class ReferenceId extends Hl7v2Based<CX> {
     }
 
     /**
+     * Parses an HL7v2 string into a ReferenceId object.
+     *
+     * @param hl7String HL7v2 representation of a ReferenceId object.
+     * @return parsed ReferenceId object.
+     */
+    public static ReferenceId parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, ReferenceId.class);
+    }
+
+    /**
      * @return the value of the id (CX.1).
      */
     @XmlAttribute

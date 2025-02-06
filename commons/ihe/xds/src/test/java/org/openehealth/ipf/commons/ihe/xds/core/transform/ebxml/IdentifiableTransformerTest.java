@@ -63,7 +63,7 @@ public class IdentifiableTransformerTest {
     @Test
     public void testFromEbXML21SourcePatient() {
         var ebXML = Hl7v2Based.render(identifiable);
-        var result = Hl7v2Based.parse(ebXML, Identifiable.class);
+        var result = Identifiable.parse(ebXML);
         assertNotNull(result);
         
         assertEquals("21&3", result.getId());
@@ -75,12 +75,12 @@ public class IdentifiableTransformerTest {
     
     @Test
     public void testFromEbXML21SourcePatientNull() {
-        assertNull(Hl7v2Based.parse(null, Identifiable.class));
+        assertNull(Identifiable.parse(null));
     }
     
     @Test
     public void testFromEbXML21SourcePatientEmpty() {
-        var result = Hl7v2Based.parse("", Identifiable.class);
+        var result = Identifiable.parse("");
         assertNull(result);
     }
 }

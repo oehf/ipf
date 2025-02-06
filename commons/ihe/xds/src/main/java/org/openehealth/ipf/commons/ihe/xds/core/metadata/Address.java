@@ -51,6 +51,15 @@ public class Address extends Hl7v2Based<XAD> {
         super(xad);
     }
 
+    /**
+     * Parses an HL7v2 string into an Address object.
+     *
+     * @param hl7String HL7v2 representation of an Address object.
+     * @return parsed Address object.
+     */
+    public static Address parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, Address.class);
+    }
 
     /**
      * @return the street address (XAD.1).

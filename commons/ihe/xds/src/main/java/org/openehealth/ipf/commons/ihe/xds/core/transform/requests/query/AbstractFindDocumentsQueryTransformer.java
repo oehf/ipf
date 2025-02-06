@@ -43,7 +43,7 @@ public class AbstractFindDocumentsQueryTransformer<T extends FindDocumentsQuery>
     protected void fromEbXML(T query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
         var patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
+        query.setPatientId(Identifiable.parse(patientId));
         query.setDocumentEntryTypes(slots.toDocumentEntryType(DOC_ENTRY_TYPE));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
         query.setDocumentAvailability(slots.toDocumentAvailability(DOC_ENTRY_DOCUMENT_AVAILABILITY));

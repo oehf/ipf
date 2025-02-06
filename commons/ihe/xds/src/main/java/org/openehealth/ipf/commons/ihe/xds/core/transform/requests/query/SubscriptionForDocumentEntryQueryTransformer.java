@@ -47,7 +47,7 @@ public class SubscriptionForDocumentEntryQueryTransformer extends DocumentsQuery
     protected void fromEbXML(SubscriptionForDocumentEntryQuery query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
         var patientId = slots.toString(DOC_ENTRY_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
+        query.setPatientId(Identifiable.parse(patientId));
         query.setReferenceIds(slots.toStringQueryList(DOC_ENTRY_REFERENCE_IDS));
     }
 }

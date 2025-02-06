@@ -72,6 +72,16 @@ public class Person extends Hl7v2Based<XCN> {
     }
 
     /**
+     * Parses an HL7v2 string into a Person object.
+     *
+     * @param hl7String HL7v2 representation of a Person object.
+     * @return parsed Person object.
+     */
+    public static Person parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, Person.class);
+    }
+
+    /**
      * @return the id of the person (XCN.1 and XCN.9).
      */
     public Identifiable getId() {

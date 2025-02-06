@@ -69,6 +69,15 @@ public class XpnName extends Name<XPN> {
         setDegree(degree);
     }
 
+    /**
+     * Parses an HL7v2 string into an XpnName object.
+     *
+     * @param hl7String HL7v2 representation of an XpnName object.
+     * @return parsed XpnName object.
+     */
+    public static XpnName parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, XpnName.class);
+    }
 
     @Override
     public String getFamilyName() {

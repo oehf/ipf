@@ -63,7 +63,7 @@ public class XdsHl7v2RenderingTest {
     @Test
     public void testTelecomRendering() {
         var xtn = "1^2^3^4^5^6^7^8^9^10^11^12^13^14^^^";
-        var telecom = Hl7v2Based.parse(xtn, Telecom.class);
+        var telecom = Telecom.parse(xtn);
         assertEquals("^2^3^4^5^6^7^8^^^^12", Hl7v2Based.render(telecom));
         assertEquals("1^2^3^4^5^6^7^8^9^10^11^12^13^14", Hl7v2Based.rawRender(telecom));
     }
@@ -71,7 +71,7 @@ public class XdsHl7v2RenderingTest {
     @Test
     public void testIdentifiableRendering() {
         var cx = "1^2^3^41&42&43&44&45&46^51&52^6^^&&^^";
-        var identifiable = Hl7v2Based.parse(cx, Identifiable.class);
+        var identifiable = Identifiable.parse(cx);
         assertEquals("1^^^&42&43", Hl7v2Based.render(identifiable));
         assertEquals("1^2^3^41&42&43&44&45&46^51&52^6", Hl7v2Based.rawRender(identifiable));
     }
@@ -80,10 +80,10 @@ public class XdsHl7v2RenderingTest {
     public void testReferenceIdRendering() {
         try {
             var cx1 = "1^2^3^41&42&43&44&45&46^51&52^^^&&^^";
-            var referenceId1 = Hl7v2Based.parse(cx1, ReferenceId.class);
+            var referenceId1 = ReferenceId.parse(cx1);
             assertEquals("1^^^41&42&43^51", Hl7v2Based.render(referenceId1));
             var cx2 = "1^2^3^41&42&43&44&45&46^51&52^&1.2.40.0.34.3.1.2.99.1000001&ISO^2015^&&^^";
-            var referenceId2 = Hl7v2Based.parse(cx2, ReferenceId.class);
+            var referenceId2 = ReferenceId.parse(cx2);
             String cx2Rendered = Hl7v2Based.render(referenceId2);
             // some other tests classes may have already initialized the Hl7Rendering static rules based on non-existing
             // 'XDS_VALIDATION_CP_1292' property therefore this 'or' check
@@ -100,10 +100,10 @@ public class XdsHl7v2RenderingTest {
     @Test
     public void testEmptyAssignignAuthority() {
         var cx = "1^^^ABCD^^^^";
-        var identifiable = Hl7v2Based.parse(cx, Identifiable.class);
+        var identifiable = Identifiable.parse(cx);
         assertNotNull(identifiable);
         assertNull(identifiable.getAssigningAuthority());
-        var referenceId = Hl7v2Based.parse(cx, ReferenceId.class);
+        var referenceId = ReferenceId.parse(cx);
         assertNotNull(referenceId);
         assertNotNull(referenceId.getAssigningAuthority());
     }
@@ -111,10 +111,10 @@ public class XdsHl7v2RenderingTest {
     @Test
     public void testNonEmptyAssignignAuthority() {
         var cx = "1^^^ABCD&1.2.3&ISO^^^";
-        var identifiable = Hl7v2Based.parse(cx, Identifiable.class);
+        var identifiable = Identifiable.parse(cx);
         assertNotNull(identifiable);
         assertNotNull(identifiable.getAssigningAuthority());
-        var referenceId = Hl7v2Based.parse(cx, ReferenceId.class);
+        var referenceId = Identifiable.parse(cx);
         assertNotNull(referenceId);
         assertNotNull(referenceId.getAssigningAuthority());
     }

@@ -91,7 +91,7 @@ public class AuthorTransformer {
 
         var persons = classification.getSlotValues(SLOT_NAME_AUTHOR_PERSON);
         if (!persons.isEmpty()) {
-            var person = Hl7v2Based.parse(persons.get(0), Person.class);
+            var person = Person.parse(persons.get(0));
             author.setAuthorPerson(person);
         }
 

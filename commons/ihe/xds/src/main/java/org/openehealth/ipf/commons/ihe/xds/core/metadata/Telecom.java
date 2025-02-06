@@ -81,6 +81,16 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
+     * Parses an HL7v2 string into a Telecom object.
+     *
+     * @param hl7String HL7v2 representation of a Telecom object.
+     * @return parsed Telecom object.
+     */
+    public static Telecom parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, Telecom.class);
+    }
+
+    /**
      * @return telecom use code (XTN-2) according to HL7 v.2.5 Table 0201.
      */
     @XmlElement(name = "use")

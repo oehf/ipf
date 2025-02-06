@@ -125,16 +125,16 @@ public class PatientInfo implements Serializable {
                 getIterator().set(s);
                 switch (fieldId) {
                     case "PID-3":
-                        getOtherIterator().set(Hl7v2Based.parse(s, Identifiable.class));
+                        getOtherIterator().set(Identifiable.parse(s));
                         break;
                     case "PID-5":
-                        getOtherIterator().set(Hl7v2Based.parse(s, XpnName.class));
+                        getOtherIterator().set(XpnName.parse(s));
                         break;
                     case "PID-7":
                     case "PID-8":
                         break;
                     case "PID-11":
-                        getOtherIterator().set(Hl7v2Based.parse(s, Address.class));
+                        getOtherIterator().set(Address.parse(s));
                         break;
                     default:
                         throw new IllegalStateException("This line shall be not reachable, please report a bug");
@@ -147,16 +147,16 @@ public class PatientInfo implements Serializable {
                 getIterator().add(s);
                 switch (fieldId) {
                     case "PID-3":
-                        getOtherIterator().add(Hl7v2Based.parse(s, Identifiable.class));
+                        getOtherIterator().add(Identifiable.parse(s));
                         break;
                     case "PID-5":
-                        getOtherIterator().add(Hl7v2Based.parse(s, XpnName.class));
+                        getOtherIterator().add(XpnName.parse(s));
                         break;
                     case "PID-7":
                     case "PID-8":
                         break;
                     case "PID-11":
-                        getOtherIterator().add(Hl7v2Based.parse(s, Address.class));
+                        getOtherIterator().add(Address.parse(s));
                         break;
                     default:
                         throw new IllegalStateException("This line shall be not reachable, please report a bug");

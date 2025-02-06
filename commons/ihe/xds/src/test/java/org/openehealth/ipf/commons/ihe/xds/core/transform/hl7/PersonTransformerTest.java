@@ -69,16 +69,15 @@ public class PersonTransformerTest {
 
     @Test
     public void testFromHL7() {
-        var result = Hl7v2Based.parse(
-                "u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ",
-                Person.class);
+        var result = Person.parse(
+                "u\\S\\fz^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ");
 
         assertEquals(person, result);
     }
 
     @Test
     public void testFromHL7NoIDNumber() {
-        var result = Hl7v2Based.parse("^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.", Person.class);
+        var result = Person.parse("^Seu\\T\\fzer^Em\\T\\il^Ant\\F\\on^der\\T\\7.^D\\T\\r.");
 
         person.setId(null);
         assertEquals(person, result);
@@ -86,7 +85,7 @@ public class PersonTransformerTest {
     
     @Test
     public void testFromHL7NoName() {
-        var result = Hl7v2Based.parse("u\\S\\fz^^^^^^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ", Person.class);
+        var result = Person.parse("u\\S\\fz^^^^^^^^&1.2\\T\\.3.4&he\\T\\llo_WU\\T\\RZ");
 
         person.setName(null);
         assertEquals(person, result);
@@ -94,11 +93,11 @@ public class PersonTransformerTest {
     
     @Test
     public void testFromHL7Empty() {
-        assertNull(Hl7v2Based.parse("", Person.class));
+        assertNull(Person.parse(""));
     }
 
     @Test
     public void testFromHL7WithNullParam() {
-        assertNull(Hl7v2Based.parse(null, Person.class));
+        assertNull(Person.parse(null));
     }    
 }

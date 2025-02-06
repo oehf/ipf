@@ -51,9 +51,8 @@ public class OrganizationTransformerTest {
 
     @Test
     public void testFromHL7() {
-        var organization = Hl7v2Based.parse(
-                "Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number",
-                Organization.class);
+        var organization = Organization.parse(
+                "Untere\\T\\Klinik^^^^^he\\T\\llo&1.2\\T\\.3.4&WU\\T\\RZ^^^^a\\F\\number");
 
         assertEquals("Untere&Klinik", organization.getOrganizationName());
         assertEquals("a|number", organization.getIdNumber());
@@ -63,11 +62,11 @@ public class OrganizationTransformerTest {
 
     @Test
     public void testFromHL7WithNullParam() {
-        assertNull(Hl7v2Based.parse(null, Organization.class));
+        assertNull(Organization.parse(null));
     }    
 
     @Test
     public void testFromHL7WithEmptyParam() {
-        assertNull(Hl7v2Based.parse("", Organization.class));
+        assertNull(Organization.parse(""));
     }    
 }

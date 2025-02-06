@@ -74,6 +74,16 @@ public class Code extends Hl7v2Based<CE> {
     }
 
     /**
+     * Parses an HL7v2 string into a Code object.
+     *
+     * @param hl7String HL7v2 representation of a Code object.
+     * @return parsed Code object.
+     */
+    public static Code parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, Code.class);
+    }
+
+    /**
      * @return the value of this code.
      */
     @XmlAttribute

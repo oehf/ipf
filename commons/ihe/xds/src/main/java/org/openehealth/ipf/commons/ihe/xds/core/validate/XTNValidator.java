@@ -31,7 +31,7 @@ public class XTNValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7XTN) throws XDSMetaDataException {
-        var telecom = Hl7v2Based.parse(hl7XTN, Telecom.class);
+        var telecom = Telecom.parse(hl7XTN);
         metaDataAssert(telecom != null, MISSING_TELECOM_PARAM, hl7XTN);
 
         if ("Internet".equals(telecom.getType())) {

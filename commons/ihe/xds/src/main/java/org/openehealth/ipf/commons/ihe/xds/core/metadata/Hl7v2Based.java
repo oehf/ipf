@@ -127,7 +127,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      *      HL7 v2 representation of the given object, or <code>null</code>
      *      when the given object is <code>null</code> or empty.
      */
-    public static String render(Hl7v2Based xdsModelObject) {
+    public static String render(Hl7v2Based<?> xdsModelObject) {
         return (xdsModelObject != null) ? StringUtils.trimToNull(xdsModelObject.render()) : null;
     }
 
@@ -142,7 +142,7 @@ abstract public class Hl7v2Based<C extends Composite> implements Serializable {
      *      HL7 v2 representation of the given object, or an empty string
      *      when the given object is <code>null</code> or empty.
      */
-    public static String rawRender(Hl7v2Based xdsModelObject) {
+    public static String rawRender(Hl7v2Based<?> xdsModelObject) {
         return (xdsModelObject != null)
                 ? PipeParser.encode(xdsModelObject.getHapiObject(), XdsHl7v2Renderer.ENCODING_CHARACTERS)
                 : "";

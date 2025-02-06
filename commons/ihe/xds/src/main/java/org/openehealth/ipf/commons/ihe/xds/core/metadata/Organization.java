@@ -84,6 +84,16 @@ public class Organization extends Hl7v2Based<XON> {
     }
 
     /**
+     * Parses an HL7v2 string into an Organization object.
+     *
+     * @param hl7String HL7v2 representation of an Organization object.
+     * @return parsed Organization object.
+     */
+    public static Organization parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, Organization.class);
+    }
+
+    /**
      * @return the assigning authority (XON.6).
      */
     public AssigningAuthority getAssigningAuthority() {

@@ -48,7 +48,7 @@ public class SubscriptionForFolderQueryTransformer extends GetByIDQueryTransform
     protected void fromEbXML(SubscriptionForFolderQuery query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
         var patientId = slots.toString(FOLDER_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
+        query.setPatientId(Identifiable.parse(patientId));
         query.setCodes(slots.toCodeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME));
         query.setLogicalUuid(slots.toStringList(FOLDER_LOGICAL_ID));
     }

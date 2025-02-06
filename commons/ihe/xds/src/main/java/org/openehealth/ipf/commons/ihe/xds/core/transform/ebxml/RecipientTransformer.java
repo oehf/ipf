@@ -76,12 +76,12 @@ public class RecipientTransformer {
         var recipient = new Recipient();
 
         var parts = slotValue.split("\\|");
-        recipient.setOrganization(Hl7v2Based.parse(parts[0], Organization.class));
+        recipient.setOrganization(Organization.parse(parts[0]));
         if (parts.length > 1) {
-            recipient.setPerson(Hl7v2Based.parse(parts[1], Person.class));
+            recipient.setPerson(Person.parse(parts[1]));
         }
         if (parts.length > 2) {
-            recipient.setTelecom(Hl7v2Based.parse(parts[2], Telecom.class));
+            recipient.setTelecom(Telecom.parse(parts[2]));
         }
 
         return recipient;

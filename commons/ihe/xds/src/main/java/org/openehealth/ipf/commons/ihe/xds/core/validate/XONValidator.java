@@ -33,7 +33,7 @@ public class XONValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7XON) throws XDSMetaDataException {
-        var organization = Hl7v2Based.parse(hl7XON, Organization.class);
+        var organization = Organization.parse(hl7XON);
         metaDataAssert(organization != null, ORGANIZATION_NAME_MISSING, hl7XON);
 
         var xon = organization.getHapiObject();

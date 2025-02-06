@@ -98,16 +98,16 @@ public class DocumentEntryTransformer extends XDSMetaClassTransformer<EbXMLExtri
         docEntry.setSize(size != null ? Long.parseLong(size) : null);
 
         var hl7LegalAuthenticator = extrinsic.getSingleSlotValue(SLOT_NAME_LEGAL_AUTHENTICATOR);
-        docEntry.setLegalAuthenticator(Hl7v2Based.parse(hl7LegalAuthenticator, Person.class));
+        docEntry.setLegalAuthenticator(Person.parse(hl7LegalAuthenticator));
 
         var sourcePatient = extrinsic.getSingleSlotValue(SLOT_NAME_SOURCE_PATIENT_ID);
-        docEntry.setSourcePatientId(Hl7v2Based.parse(sourcePatient, Identifiable.class));
+        docEntry.setSourcePatientId(Identifiable.parse(sourcePatient));
 
         var slotValues = extrinsic.getSlotValues(SLOT_NAME_SOURCE_PATIENT_INFO);
         docEntry.setSourcePatientInfo(patientInfoTransformer.fromHL7(slotValues));
 
         for (var referenceIdValue : extrinsic.getSlotValues(SLOT_NAME_REFERENCE_ID_LIST)) {
-            docEntry.getReferenceIdList().add(Hl7v2Based.parse(referenceIdValue, ReferenceId.class));
+            docEntry.getReferenceIdList().add(ReferenceId.parse(referenceIdValue));
         }
     }
 

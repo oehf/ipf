@@ -33,7 +33,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.UNIVE
  * <p>
  * This class is based on the HL7 HD data type.
  * <p>
- * Note that most assigning authorities used in XSD only allow the definition of the
+ * Note that most assigning authorities used in XDS only allow the definition of the
  * universal ID. The ID type must be {@code ISO} and the namespace ID has to be empty.
  * The constructor {@link #AssigningAuthority(String)} can be used to create such
  * authorities.
@@ -97,6 +97,16 @@ public class AssigningAuthority extends Hl7v2Based<Holder<HD>> {
         this();
         setUniversalId(universalId.toString());
         setUniversalIdType(UNIVERSAL_ID_TYPE_OID);
+    }
+
+    /**
+     * Parses an HL7v2 string into an AssigningAuthority object.
+     *
+     * @param hl7String HL7v2 representation of an AssigningAuthority object.
+     * @return parsed AssigningAuthority object.
+     */
+    public static AssigningAuthority parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, AssigningAuthority.class);
     }
 
     /**

@@ -69,6 +69,16 @@ public class CXiAssigningAuthority extends AssigningAuthority {
     }
 
     /**
+     * Parses an HL7v2 string into a CXiAssigningAuthority object.
+     *
+     * @param hl7String HL7v2 representation of a CXiAssigningAuthority object.
+     * @return parsed CXiAssigningAuthority object.
+     */
+    public static CXiAssigningAuthority parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, CXiAssigningAuthority.class);
+    }
+
+    /**
      * @return the namespace ID (HD.1).
      */
     @XmlAttribute

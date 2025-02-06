@@ -55,9 +55,8 @@ public class AddressTransformerTest {
 
     @Test
     public void testFromHL7() {
-        var address = Hl7v2Based.parse(
-                "Laliluna Str. 2\\T\\3^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN",
-                Address.class);
+        var address = Address.parse(
+                "Laliluna Str. 2\\T\\3^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN");
         assertEquals("Laliluna Str. 2&3", address.getStreetAddress());
         assertEquals("Sonn^hofen", address.getCity());
         assertEquals("ECU", address.getCountry());
@@ -69,9 +68,8 @@ public class AddressTransformerTest {
 
     @Test
     public void testFromHL7UsingSAD() {
-        var address = Hl7v2Based.parse(
-                "Laliluna Str. 2\\T\\3&whatever^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN",
-                Address.class);
+        var address = Address.parse(
+                "Laliluna Str. 2\\T\\3&whatever^Licht\\T\\Lampen^Sonn\\S\\hofen^Lamp\\F\\ing^123\\T\\WARM^ECU^^^STRAHL\\F\\EMANN");
         assertEquals("Laliluna Str. 2&3", address.getStreetAddress());
         assertEquals("Sonn^hofen", address.getCity());
         assertEquals("ECU", address.getCountry());
@@ -83,11 +81,11 @@ public class AddressTransformerTest {
 
     @Test
     public void testFromHL7Nothing() {
-        assertNull(Hl7v2Based.parse("", Address.class));
+        assertNull(Address.parse(""));
     }
     
     @Test
     public void testFromHL7WithNullParam() {
-        assertNull(Hl7v2Based.parse(null, Address.class));
+        assertNull(Address.parse(null));
     }    
 }

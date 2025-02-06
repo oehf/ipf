@@ -40,7 +40,7 @@ abstract class PharmacyDocumentsQueryTransformer<T extends PharmacyDocumentsQuer
     protected void fromEbXML(T query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
         query.setMetadataLevel(slots.toInteger(METADATA_LEVEL));
-        query.setPatientId(Hl7v2Based.parse(slots.toString(DOC_ENTRY_PATIENT_ID), Identifiable.class));
+        query.setPatientId(Identifiable.parse(slots.toString(DOC_ENTRY_PATIENT_ID)));
         query.setStatus(slots.toStatus(DOC_ENTRY_STATUS));
     }
 }

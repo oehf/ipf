@@ -87,7 +87,17 @@ public class Identifiable extends Hl7v2Based<CX> {
     public Identifiable(String id, Oid assigningAuthorityOid) {
         this(id, new AssigningAuthority(assigningAuthorityOid));
     }
-    
+
+    /**
+     * Parses an HL7v2 string into an Identifiable object.
+     *
+     * @param hl7String HL7v2 representation of an Identifiable object.
+     * @return parsed Identifiable object.
+     */
+    public static Identifiable parse(String hl7String) {
+        return Hl7v2Based.parse(hl7String, Identifiable.class);
+    }
+
     /**
      * @return person ID (CX.1) / Code.
      */

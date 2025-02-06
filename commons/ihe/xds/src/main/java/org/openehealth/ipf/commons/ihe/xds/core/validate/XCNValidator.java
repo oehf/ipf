@@ -33,7 +33,7 @@ public class XCNValidator implements ValueValidator {
 
     @Override
     public void validate(String hl7xcn) throws XDSMetaDataException {
-        var person = Hl7v2Based.parse(hl7xcn, Person.class);
+        var person = Person.parse(hl7xcn);
         metaDataAssert(person != null, PERSON_MISSING_NAME_AND_ID, hl7xcn);
 
         var xcn = person.getHapiObject();

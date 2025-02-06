@@ -81,7 +81,7 @@ public class FindSubmissionSetsQuery extends StoredQuery implements PatientIdBas
      * @return a {@link Person} object.
      */
     public Person getTypedAuthorPerson() {
-        return Hl7v2Based.parse(this.authorPerson, Person.class);
+        return Person.parse(this.authorPerson);
     }
 
 }

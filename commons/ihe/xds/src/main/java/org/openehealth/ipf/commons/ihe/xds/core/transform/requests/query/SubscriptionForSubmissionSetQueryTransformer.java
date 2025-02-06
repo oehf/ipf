@@ -49,7 +49,7 @@ public class SubscriptionForSubmissionSetQueryTransformer extends AbstractStored
     protected void fromEbXML(SubscriptionForSubmissionSetQuery query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
         var patientId = slots.toString(SUBMISSION_SET_PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
+        query.setPatientId(Identifiable.parse(patientId));
         query.setSourceIds(slots.toStringList(SUBMISSION_SET_SOURCE_ID));
         query.setAuthorPersons(slots.toStringList(SUBMISSION_SET_AUTHOR_PERSON));
         query.setIntendedRecipients(slots.toStringList(SUBMISSION_SET_INTENDED_RECIPIENT));

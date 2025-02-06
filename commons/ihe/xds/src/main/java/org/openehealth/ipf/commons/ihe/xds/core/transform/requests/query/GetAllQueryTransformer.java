@@ -53,7 +53,7 @@ public class GetAllQueryTransformer extends AbstractStoredQueryTransformer<GetAl
     protected void fromEbXML(GetAllQuery query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
         var patientId = slots.toString(PATIENT_ID);
-        query.setPatientId(Hl7v2Based.parse(patientId, Identifiable.class));
+        query.setPatientId(Identifiable.parse(patientId));
         query.setStatusDocuments(slots.toStatus(DOC_ENTRY_STATUS));
         query.setStatusFolders(slots.toStatus(FOLDER_STATUS));
         query.setStatusSubmissionSets(slots.toStatus(SUBMISSION_SET_STATUS));
