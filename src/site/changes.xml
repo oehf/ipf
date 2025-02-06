@@ -23,7 +23,7 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="5.0.0" description="" date="">
+        <release version="5.0.0" description="IPF 5.0.0" date="04 Feb 2025">
             <action issue="467" dev="ohr" type="update">
                 Allow to sort by patient author name in ITI-66 and ITI-67 queries
             </action>
