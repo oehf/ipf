@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.HomeCommunityUtils;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
@@ -47,10 +48,11 @@ public abstract class XdsAdhocQueryService extends AbstractWebService {
 
     @SneakyThrows(InvalidPayloadException.class)
     protected AdhocQueryResponse processRequest(AdhocQueryRequest body) {
-        var result = process(body);
-        var exception = Exchanges.extractException(result);
+        var exchange = process(body);
+        var exception = Exchanges.extractException(exchange);
         if (exception != null) {
             log.debug("{} service failed", getClass().getSimpleName(), exception);
+            String homeCommunityId = HomeCommunityUtils.getHomeCommunityId(exchange, this.homeCommunityId);
             var errorResponse = new QueryResponse(
                     exception,
                     ErrorCode.REGISTRY_ERROR,
@@ -59,6 +61,6 @@ public abstract class XdsAdhocQueryService extends AbstractWebService {
             errorResponse.getErrors().get(0).setLocation(homeCommunityId);
             return EbXML30Converters.convert(errorResponse);
         }
-        return result.getMessage().getMandatoryBody(AdhocQueryResponse.class);
+        return exchange.getMessage().getMandatoryBody(AdhocQueryResponse.class);
     }
 }
