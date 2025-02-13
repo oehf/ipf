@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSe
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
+import org.openehealth.ipf.platform.camel.ihe.core.HomeCommunityUtils;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters;
 
@@ -42,10 +43,11 @@ public abstract class XdsRetrieveDocumentSetService<T> extends AbstractWebServic
 
     @SneakyThrows(InvalidPayloadException.class)
     protected RetrieveDocumentSetResponseType processRequest(T body) {
-        var result = process(body);
-        var exception = Exchanges.extractException(result);
+        var exchange = process(body);
+        var exception = Exchanges.extractException(exchange);
         if (exception != null) {
             log.debug("{} service failed", getClass().getSimpleName(), exception);
+            String homeCommunityId = HomeCommunityUtils.getHomeCommunityId(exchange, this.homeCommunityId);
             var errorResponse = new RetrievedDocumentSet(
                     exception,
                     ErrorCode.REPOSITORY_ERROR,
@@ -57,6 +59,6 @@ public abstract class XdsRetrieveDocumentSetService<T> extends AbstractWebServic
             return EbXML30Converters.convert(errorResponse);
         }
 
-        return result.getMessage().getMandatoryBody(RetrieveDocumentSetResponseType.class);
+        return exchange.getMessage().getMandatoryBody(RetrieveDocumentSetResponseType.class);
     }
 }
