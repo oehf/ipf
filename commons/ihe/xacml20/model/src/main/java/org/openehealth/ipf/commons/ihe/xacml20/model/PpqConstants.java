@@ -28,6 +28,8 @@ public class PpqConstants {
         public static final String EHEALTH_SUISSSE_2015_REFERENCED_POLICY_SET   = "urn:e-health-suisse:2015:policy-attributes:referenced-policy-set";
         public static final String EHEALTH_SUISSSE_PRINCIPAL_ID                 = "urn:e-health-suisse:principal-id";
         public static final String EHEALTH_SUISSSE_PRINCIPAL_NAME               = "urn:e-health-suisse:principal-name";
+        public static final String EHEALTH_SUISSSE_START_DATE                   = "urn:e-health-suisse:2023:policy-attributes:start-date";
+        public static final String EHEALTH_SUISSSE_END_DATE                     = "urn:e-health-suisse:2023:policy-attributes:end-date";
 
         public static final String XACML_1_0_ACTION_ID                          = "urn:oasis:names:tc:xacml:1.0:action:action-id";
         public static final String XACML_1_0_CURRENT_DATE                       = "urn:oasis:names:tc:xacml:1.0:environment:current-date";
