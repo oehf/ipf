@@ -15,29 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.model;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 /**
  * @author Dmytro Rud
  */
-@AllArgsConstructor
-@EqualsAndHashCode
-public class CX {
-
-    @Getter private final String id;
-    @Getter private final String assigningAuthorityId;
+public record CX(String id, String assigningAuthorityId) {
 
     public String toHl7String() {
         return id + "^^^&" + assigningAuthorityId + "&ISO";
     }
 
-    @Override
-    public String toString() {
-        return "CX{" +
-                "id='" + id + '\'' +
-                ", assigningAuthorityId='" + assigningAuthorityId + '\'' +
-                '}';
-    }
 }

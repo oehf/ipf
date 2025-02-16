@@ -15,28 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.model;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-
 /**
  * @author Dmytro Rud
  */
-@AllArgsConstructor
-@EqualsAndHashCode
-public class CE {
-    @Getter private final String code;
-    @Getter private final String codeSystem;
-    @Getter private final String codeSystemName;
-    @Getter private final String displayName;
-
-    @Override
-    public String toString() {
-        return "CE{" +
-                "code='" + code + '\'' +
-                ", codeSystem='" + codeSystem + '\'' +
-                ", codeSystemName='" + codeSystemName + '\'' +
-                ", displayName='" + displayName + '\'' +
-                '}';
-    }
+public record CE(String code, String codeSystem, String codeSystemName, String displayName) {
 }

@@ -13,5 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@jakarta.xml.bind.annotation.XmlSchema(namespace = "urn:e-health-suisse:2015:policy-administration", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@XmlSchema(
+    namespace = "urn:e-health-suisse:2015:policy-administration",
+    elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED,
+    xmlns = {@XmlNs(namespaceURI = "urn:e-health-suisse:2015:policy-administration", prefix = "ppq")}
+)
 package org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss;
+
+import jakarta.xml.bind.annotation.XmlNs;
+import jakarta.xml.bind.annotation.XmlSchema;

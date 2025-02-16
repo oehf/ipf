@@ -13,5 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@jakarta.xml.bind.annotation.XmlSchema(namespace = "urn:oasis:names:tc:SAML:2.0:conditions:delegation", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@XmlSchema(
+    namespace = "urn:oasis:names:tc:SAML:2.0:conditions:delegation",
+    elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED,
+    xmlns = {@XmlNs(namespaceURI = "urn:oasis:names:tc:SAML:2.0:conditions:delegation", prefix = "del")}
+)
 package org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.delegation;
+
+import jakarta.xml.bind.annotation.XmlNs;
+import jakarta.xml.bind.annotation.XmlSchema;

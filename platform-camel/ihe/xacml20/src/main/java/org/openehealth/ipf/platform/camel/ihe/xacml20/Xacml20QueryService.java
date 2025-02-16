@@ -17,6 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageCreator;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.RequestAbstractType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.core.HomeCommunityUtils;
@@ -35,16 +36,18 @@ abstract public class Xacml20QueryService extends AbstractWebService {
         this.homeCommunityId = homeCommunityId;
     }
 
-    public ResponseType doProcessRequest(Object request) {
+    public ResponseType doProcessRequest(RequestAbstractType request) {
         var exchange = process(request);
         var exception = Exchanges.extractException(exchange);
         if (exception != null) {
             log.debug("{} service failed", getClass().getSimpleName(), exception);
             var homeCommunityId = HomeCommunityUtils.getHomeCommunityId(exchange, this.homeCommunityId);
             var messageCreator = new Xacml20MessageCreator(homeCommunityId);
-            return messageCreator.createNegativeQueryResponse(exception);
+            return messageCreator.createNegativeQueryResponse(exception, request.getID());
         }
-        return exchange.getMessage().getBody(ResponseType.class);
+        var response = exchange.getMessage().getBody(ResponseType.class);
+        response.setInResponseTo(request.getID());
+        return response;
     }
 
 }

@@ -61,11 +61,12 @@ class Xacml20MessageCreator {
         )
     }
 
-    protected static ResponseType createResponse(Xacml20Status status, String statusMessage, AssertionType assertion) {
+    protected static ResponseType createResponse(Xacml20Status status, String statusMessage, AssertionType assertion, String requestId) {
         return new ResponseType(
             ID: '_' + UUID.randomUUID(),
             issueInstant: XML_OBJECT_FACTORY.newXMLGregorianCalendar(new GregorianCalendar()),
             version: '2.0',
+            inResponseTo: requestId,
             status: new StatusType(
                 statusCode: new StatusCodeType(value: status.code),
                 statusMessage: statusMessage,
@@ -74,14 +75,14 @@ class Xacml20MessageCreator {
         )
     }
 
-    ResponseType createNegativeQueryResponse(Xacml20Status status, String statusMessage) {
-        return createResponse(status, statusMessage, createAssertion())
+    ResponseType createNegativeQueryResponse(Xacml20Status status, String statusMessage, String requestId) {
+        return createResponse(status, statusMessage, createAssertion(), requestId)
     }
 
-    ResponseType createNegativeQueryResponse(Exception exception) {
+    ResponseType createNegativeQueryResponse(Exception exception, String requestId) {
         return (exception instanceof Xacml20Exception)
-            ? createNegativeQueryResponse(exception.status, exception.message)
-            : createNegativeQueryResponse(Xacml20Status.RESPONDER_ERROR, exception.message)
+            ? createNegativeQueryResponse(exception.status, exception.message, requestId)
+            : createNegativeQueryResponse(Xacml20Status.RESPONDER_ERROR, exception.message, requestId)
     }
 
 }

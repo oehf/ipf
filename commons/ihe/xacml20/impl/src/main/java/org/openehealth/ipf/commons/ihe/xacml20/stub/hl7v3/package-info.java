@@ -13,5 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@jakarta.xml.bind.annotation.XmlSchema(namespace = "urn:hl7-org:v3", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@XmlSchema(
+    namespace = "urn:hl7-org:v3",
+    elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED,
+    xmlns = {@XmlNs(namespaceURI = "urn:hl7-org:v3", prefix = "hl7")}
+)
 package org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3;
+
+import jakarta.xml.bind.annotation.XmlNs;
+import jakarta.xml.bind.annotation.XmlSchema;

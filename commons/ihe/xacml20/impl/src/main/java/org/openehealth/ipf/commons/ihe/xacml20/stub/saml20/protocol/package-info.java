@@ -13,5 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@jakarta.xml.bind.annotation.XmlSchema(namespace = "urn:oasis:names:tc:SAML:2.0:protocol", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@XmlSchema(
+    namespace = "urn:oasis:names:tc:SAML:2.0:protocol",
+    elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED,
+    xmlns = {@XmlNs(namespaceURI = "urn:oasis:names:tc:SAML:2.0:protocol", prefix = "samlp")}
+)
 package org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol;
+
+import jakarta.xml.bind.annotation.XmlNs;
+import jakarta.xml.bind.annotation.XmlSchema;

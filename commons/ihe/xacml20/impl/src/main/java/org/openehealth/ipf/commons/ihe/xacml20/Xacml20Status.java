@@ -34,4 +34,13 @@ public enum Xacml20Status {
     @Getter
     private final String code;
 
+    public static Xacml20Status fromCode(String code) {
+        for (Xacml20Status status : values()) {
+            if (status.code.equals(code)) {
+                return status;
+            }
+        }
+        return null;
+    }
+
 }
