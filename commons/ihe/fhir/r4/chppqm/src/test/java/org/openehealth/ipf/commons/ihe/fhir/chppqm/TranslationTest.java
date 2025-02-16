@@ -255,7 +255,7 @@ public class TranslationTest {
                 create202Consent(createUuid(), "123456789012345678", "urn:e-health-suisse:2015:policies:access-level:normal"),
                 create203Consent(createUuid(), "123456789012345678", "urn:e-health-suisse:2015:policies:provide-level:restricted"));
         List<PolicySetType> policySets = consents.stream().map(FHIR_TO_XACML_TRANSLATOR::toPolicySet).collect(Collectors.toList());
-        ResponseType ppq2Response = PPQ_MESSAGE_CREATOR.createPositivePolicyQueryResponse(policySets);
+        ResponseType ppq2Response = PPQ_MESSAGE_CREATOR.createPositivePolicyQueryResponse(policySets, "unknown");
         List<Consent> ppq5Response = XacmlToFhirTranslator.translatePpq2To5Response(ppq2Response);
         assertEquals(consents.size(), ppq5Response.size());
     }
@@ -264,7 +264,7 @@ public class TranslationTest {
     public void testPpq2To5ResponseTranslation2() {
         boolean correct = false;
         try {
-            ResponseType ppq2Response = PPQ_MESSAGE_CREATOR.createNegativeQueryResponse(new Xacml20Exception(Xacml20Status.REQUESTER_ERROR));
+            ResponseType ppq2Response = PPQ_MESSAGE_CREATOR.createNegativeQueryResponse(new Xacml20Exception(Xacml20Status.REQUESTER_ERROR), "unknown");
             XacmlToFhirTranslator.translatePpq2To5Response(ppq2Response);
         } catch (UnclassifiedServerFailureException e) {
             assertEquals(400, e.getStatusCode());

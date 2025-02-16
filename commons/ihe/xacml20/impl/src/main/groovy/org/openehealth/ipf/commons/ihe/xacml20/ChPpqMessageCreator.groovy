@@ -113,12 +113,12 @@ class ChPpqMessageCreator extends Xacml20MessageCreator {
         return query
     }
 
-    ResponseType createPositivePolicyQueryResponse(List<PolicySetType> policySets) {
+  ResponseType createPositivePolicyQueryResponse(List<PolicySetType> policySets, String requestId) {
         def assertion = createAssertion()
         assertion.statementOrAuthnStatementOrAuthzDecisionStatement << new XACMLPolicyStatementType(
                 policyOrPolicySet: policySets,
         )
-        return createResponse(Xacml20Status.SUCCESS, null, assertion)
+        return createResponse(Xacml20Status.SUCCESS, null, assertion, requestId)
     }
 
 }
