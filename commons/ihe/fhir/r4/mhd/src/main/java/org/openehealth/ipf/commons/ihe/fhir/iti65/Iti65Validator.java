@@ -75,7 +75,6 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
         log.info("Initializing Validator for ITI-65 bundles");
         validationSupportv320 = loadStructureDefinitionsv320(new DefaultProfileValidationSupport(fhirContext), "Minimal");
         validationSupportv320 = loadStructureDefinitionsv320(validationSupportv320, "Comprehensive");
-        validationSupportv320 = new CachingValidationSupport(validationSupportv320);
         log.info("Initialized Validator for ITI-65 bundles");
     }
 

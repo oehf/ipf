@@ -60,7 +60,7 @@ public class MhdValidator extends FhirTransactionValidator.Support {
             throw new RuntimeException(e);
         }
 
-        var instanceValidator = new FhirInstanceValidator(new CachingValidationSupport(supportChain));
+        var instanceValidator = new FhirInstanceValidator(supportChain);
         instanceValidator.setNoTerminologyChecks(false);
         instanceValidator.setErrorForUnknownProfiles(true);
         instanceValidator.setBestPracticeWarningLevel(BestPracticeWarningLevel.Hint);

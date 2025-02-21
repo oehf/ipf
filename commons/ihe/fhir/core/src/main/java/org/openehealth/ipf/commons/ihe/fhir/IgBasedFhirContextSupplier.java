@@ -46,11 +46,11 @@ public class IgBasedFhirContextSupplier {
             npmValidationSupport.loadPackageFromClasspath(igResource);
         }
 
-        var validationSupport = new CachingValidationSupport(new ValidationSupportChain(
+        var validationSupport = new ValidationSupportChain(
                 npmValidationSupport,
                 new CommonCodeSystemsTerminologyService(fhirContext),
                 new DefaultProfileValidationSupport(fhirContext),
-                new InMemoryTerminologyServerValidationSupport(fhirContext)));
+                new InMemoryTerminologyServerValidationSupport(fhirContext));
 
         return fhirContext.setFhirValidatorFactory(ctx -> {
             var validator = new FhirValidator(ctx);
