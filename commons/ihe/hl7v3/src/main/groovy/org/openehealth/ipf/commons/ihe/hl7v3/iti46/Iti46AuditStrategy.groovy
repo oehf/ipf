@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti46
 
+import groovy.util.logging.Slf4j
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -28,39 +29,43 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 /**
  * @author Dmytro Rud
  */
+@Slf4j
 class Iti46AuditStrategy extends Hl7v3AuditStrategy {
 
     Iti46AuditStrategy(boolean serverSide) {
         super(serverSide)
     }
 
-
     @Override
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        request = slurp(request)
+        try {
+            request = slurpIfNecessary(request)
 
-        // message ID
-        auditDataset.messageId = idString(request.id)
+            // message ID
+            auditDataset.messageId = idString(request.id)
 
-        // patient IDs
-        Set<String> patientIds = [] as Set<String>
-        addPatientIds(request.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
-        auditDataset.setPatientIds(patientIds as String[])
-        auditDataset
+            // patient IDs
+            Set<String> patientIds = [] as Set<String>
+            addPatientIds(request.controlActProcess.subject[0].registrationEvent.subject1.patient.id, patientIds)
+            auditDataset.setPatientIds(patientIds as String[])
+        } catch (Exception e) {
+            log.warn('Missing or malformed request', e)
+        }
+        return auditDataset
     }
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new DefaultPatientRecordEventBuilder(
+        def builder = new DefaultPatientRecordEventBuilder(
                 auditContext,
                 auditDataset,
-                isServerSide() ? EventActionCode.Update : EventActionCode.Read,
+                serverSide ? EventActionCode.Update : EventActionCode.Read,
                 Hl7v3EventTypeCode.PIXUpdateNotification,
                 auditDataset.purposesOfUse)
-        // Type=II (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
-                .addPatients('II', auditDataset.messageId, auditDataset.getPatientIds())
-                .getMessages()
-    }
 
+        // Type=II (the literal string), Value=the value of MSH-10 (from the message content, base64 encoded)
+        builder.addPatients('II', auditDataset.messageId, auditDataset.patientIds)
+        return builder.messages
+    }
 
 }

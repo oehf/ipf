@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti56
 
+import groovy.util.logging.Slf4j
 import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
@@ -23,20 +24,17 @@ import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBu
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
-import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.PatientLocationQuery
 
 /**
  * Generic audit strategy for ITI-56 (XCPD).
  *
  * @author Dmytro Rud
  */
+@Slf4j
 class Iti56AuditStrategy extends Hl7v3AuditStrategy {
-
-    private static final Logger log = LoggerFactory.getLogger(Iti56AuditStrategy)
 
     Iti56AuditStrategy(boolean serverSide) {
         super(serverSide)
@@ -47,34 +45,39 @@ class Iti56AuditStrategy extends Hl7v3AuditStrategy {
      * is "PatientLocationQueryResponse", SERIOUS_FAILURE otherwise,
      * MAJOR_FAILURE on exception.
      *
-     * @param gpath
+     * @param response
      *      response message as {@link GPathResult}.
      */
     @Override
-    EventOutcomeIndicator getEventOutcomeIndicator(Hl7v3AuditDataset auditDataset,Object gpath) {
+    EventOutcomeIndicator getEventOutcomeIndicator(Hl7v3AuditDataset auditDataset, Object response) {
         try {
-            return ((gpath.name() == 'PatientLocationQueryResponse') &&
-                    (gpath.namespaceURI() == 'urn:ihe:iti:xcpd:2009')) ?
+            return ((response.name() == 'PatientLocationQueryResponse') &&
+                    (response.namespaceURI() == 'urn:ihe:iti:xcpd:2009')) ?
                     EventOutcomeIndicator.Success : EventOutcomeIndicator.SeriousFailure
         } catch (Exception e) {
-            log.error('Exception in ITI-56 audit strategy', e)
+            log.warn('Missing or malformed response', e)
             return EventOutcomeIndicator.MajorFailure
         }
     }
 
     @Override
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        GPathResult patientId = slurp(request).RequestedPatientId
-        auditDataset.setPatientIds([iiToCx(patientId)] as String[])
-        auditDataset
+        try {
+            GPathResult patientId = slurpIfNecessary(request).RequestedPatientId
+            auditDataset.setPatientIds([iiToCx(patientId)] as String[])
+        } catch (Exception e) {
+            log.warn('Missing or malformed request', e)
+        }
+        return auditDataset
     }
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PatientLocationQuery, auditDataset.getPurposesOfUse())
-                .addPatients(auditDataset.patientIds)
-                .setQueryParameters("PatientLocationQueryRequest", PatientLocationQuery, auditDataset.requestPayload)
-                .getMessages()
+        def builder = new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.PatientLocationQuery, auditDataset.purposesOfUse)
+        builder
+            .addPatients(auditDataset.patientIds)
+            .setQueryParameters('PatientLocationQueryRequest', Hl7v3ParticipantObjectIdTypeCode.PatientLocationQuery, auditDataset.requestPayload)
+        return builder.messages
     }
 
 }

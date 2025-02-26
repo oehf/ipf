@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.pcc1
 
+import groovy.util.logging.Slf4j
 import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
@@ -22,46 +23,52 @@ import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBu
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditStrategy
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.render
-import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.QueryExistingData
+
 /**
  * @author Dmytro Rud
  */
+@Slf4j
 class Pcc1AuditStrategy extends Hl7v3AuditStrategy {
 
     Pcc1AuditStrategy(boolean serverSide) {
         super(serverSide)
     }
 
-
     @Override
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        request = slurp(request)
-        GPathResult qbp = request.controlActProcess.queryByParameter
+        try {
+            request = slurpIfNecessary(request)
+            GPathResult qbp = request.controlActProcess.queryByParameter
 
-        // query ID
-        auditDataset.messageId = idString(request.id)
-        auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
+            // query ID
+            auditDataset.messageId = idString(request.id)
+            auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
 
-        // patient IDs from request
-        def patientIds = [] as Set<String>
-        addPatientIds(qbp.parameterList.patientId.value, patientIds)
-        String[] patientIdArray = patientIds.toArray(new String[patientIds.size()])
-        auditDataset.setPatientIds(patientIdArray ?: null)
+            // patient IDs from request
+            def patientIds = [] as Set<String>
+            addPatientIds(qbp.parameterList.patientId.value, patientIds)
+            String[] patientIdArray = patientIds.toArray(new String[patientIds.size()])
+            auditDataset.setPatientIds(patientIdArray ?: null)
 
-        // dump of the "queryByParameter" element
-        auditDataset.requestPayload = render(qbp)
-        auditDataset
+            // dump of the "queryByParameter" element
+            auditDataset.requestPayload = render(qbp)
+        } catch (Exception e) {
+            log.warn('Missing or malformed request', e)
+        }
+        return auditDataset
     }
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.QueryExistingData, auditDataset.getPurposesOfUse())
-                .setQueryParameters(auditDataset.messageId, QueryExistingData, auditDataset.requestPayload)
-                .addPatients(auditDataset.patientIds)
-                .getMessages()
+        def builder = new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.QueryExistingData, auditDataset.purposesOfUse)
+        builder
+            .setQueryParameters(auditDataset.messageId, Hl7v3ParticipantObjectIdTypeCode.QueryExistingData, auditDataset.requestPayload)
+            .addPatients(auditDataset.patientIds)
+        return builder.messages
     }
 
 }

@@ -129,7 +129,7 @@ class Hl7v3Utils {
      */
     static String dropTimeZone(String s) {
         int pos = s.indexOf('+')
-        if (pos == -1) {
+        if (pos < 0) {
             pos = s.indexOf('-')
         }
         return (pos > 0) ? s.substring(0, pos) : s

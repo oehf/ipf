@@ -15,58 +15,62 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.iti55
 
+import groovy.util.logging.Slf4j
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.model.AuditMessage
 import org.openehealth.ipf.commons.ihe.core.atna.event.DefaultQueryInformationBuilder
 import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3EventTypeCode
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode
 import org.openehealth.ipf.commons.ihe.hl7v3.iti47.Iti47AuditStrategy
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.idString
-import static org.openehealth.ipf.commons.ihe.hl7v3.audit.codes.Hl7v3ParticipantObjectIdTypeCode.CrossGatewayPatientDiscovery
 
 /**
  * Generic audit strategy for ITI-55 (XCPD).
  * @author Dmytro Rud
  */
+@Slf4j
 class Iti55AuditStrategy extends Iti47AuditStrategy {
 
     Iti55AuditStrategy(boolean serverSide) {
         super(serverSide)
     }
 
-
     @Override
     Hl7v3AuditDataset enrichAuditDatasetFromRequest(Hl7v3AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
-        request = slurp(request)
-        super.enrichAuditDatasetFromRequest(auditDataset, request, parameters)
+        try {
+            request = slurpIfNecessary(request)
+            super.enrichAuditDatasetFromRequest(auditDataset, request, parameters)
 
-        // query ID
-        auditDataset.messageId = idString(request.id)
-        auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
+            // query ID
+            auditDataset.messageId = idString(request.id)
+            auditDataset.queryId = idString(request.controlActProcess.queryByParameter.queryId)
 
-        // home community ID
-        auditDataset.homeCommunityId =
-                request.sender.device.asAgent.representedOrganization.id.@root.text() ?: null
-        auditDataset
+            // home community ID
+            auditDataset.homeCommunityId = request.sender.device.asAgent.representedOrganization.id.@root.text() ?: null
+        } catch (Exception e) {
+            log.warn('Missing or malformed request', e)
+        }
+        return auditDataset
     }
 
     @Override
     AuditMessage[] makeAuditMessage(AuditContext auditContext, Hl7v3AuditDataset auditDataset) {
-        def builder = new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.CrossGatewayPatientDiscovery, auditDataset.getPurposesOfUse())
+        def builder = new DefaultQueryInformationBuilder(auditContext, auditDataset, Hl7v3EventTypeCode.CrossGatewayPatientDiscovery, auditDataset.purposesOfUse)
         // No patient identifiers are included for the Initiating Gateway
-        if (isServerSide()) {
+        if (serverSide) {
             builder.addPatients(auditDataset.patientIds)
         }
         builder.setQueryParameters(
                 auditDataset.messageId,
-                CrossGatewayPatientDiscovery,
+                Hl7v3ParticipantObjectIdTypeCode.CrossGatewayPatientDiscovery,
                 auditDataset.requestPayload,
-                IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID, auditDataset.homeCommunityId
-        )
+                IHEAuditMessageBuilder.IHE_HOME_COMMUNITY_ID,
+                auditDataset.homeCommunityId)
 
-        builder.getMessages()
+        return builder.messages
     }
 
     /**

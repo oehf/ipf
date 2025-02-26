@@ -97,9 +97,14 @@ abstract class Iti55Utils {
      *      <code>true</code> when the given message uis a positive MCCI ACK.
      */
     static boolean isMcciAck(String responseString) {
-        GPathResult responseXml = Hl7v3Utils.slurp(responseString)
-        return (responseXml.name() == 'MCCI_IN000002UV01') &&
-               (responseXml.acknowledgement.typeCode.@code.text() in ['AA', 'CA'])
+        try {
+            GPathResult responseXml = Hl7v3Utils.slurp(responseString)
+            return (responseXml.name() == 'MCCI_IN000002UV01') &&
+                (responseXml.acknowledgement.typeCode.@code.text() in ['AA', 'CA'])
+        } catch (Exception e) {
+            log.warn('Missing or malformed response', e)
+            return false
+        }
     }
 
 

@@ -21,7 +21,7 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import java.util.Map;
 
 /**
- * ATNA audit strategy base for transactions. This strategy is accompanied with a
+ * ATNA audit strategy base for transactions. This strategy is accompanied by a
  * dedicated subclass of {@link AuditDataset} containing the data for the audit record.
  *
  * @author Christian Ohr

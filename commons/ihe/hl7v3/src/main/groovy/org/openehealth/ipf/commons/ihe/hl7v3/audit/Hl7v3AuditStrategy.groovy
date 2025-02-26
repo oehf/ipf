@@ -15,22 +15,20 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.audit
 
+import groovy.util.logging.Slf4j
 import groovy.xml.slurpersupport.GPathResult
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.iiToCx
 
 /**
  * @author Dmytro Rud
  */
+@Slf4j
 abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset> {
-
-    private static final transient Logger log = LoggerFactory.getLogger(Hl7v3AuditStrategy.class)
 
     Hl7v3AuditStrategy(boolean serverSide) {
         super(serverSide)
@@ -51,13 +49,13 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
      *   <li> in all other cases ('AE' and 'QE') -- "serious failure".
      * </ul>
      *
-     * @param gpath
+     * @param response
      *      response message as {@link GPathResult}.
      */
     @Override
-    EventOutcomeIndicator getEventOutcomeIndicator(Hl7v3AuditDataset auditDataset, Object gpath) {
+    EventOutcomeIndicator getEventOutcomeIndicator(Hl7v3AuditDataset auditDataset, Object response) {
         try {
-            String code = gpath.acknowledgement[0].typeCode.@code.text()
+            String code = response.acknowledgement[0].typeCode.@code.text()
             if (!code) {
                 // code not found -- bad XML
                 return EventOutcomeIndicator.MajorFailure
@@ -67,7 +65,7 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
                     EventOutcomeIndicator.SeriousFailure
 
         } catch (Exception e) {
-            log.error('Exception in audit strategy', e)
+            log.warn('Missing or malformed response', e)
             return EventOutcomeIndicator.MajorFailure
         }
     }
@@ -79,21 +77,24 @@ abstract class Hl7v3AuditStrategy extends AuditStrategySupport<Hl7v3AuditDataset
 
     @Override
     boolean enrichAuditDatasetFromResponse(Hl7v3AuditDataset auditDataset, Object response, AuditContext auditContext) {
-        Object gpath = slurp(response)
-        auditDataset.eventOutcomeIndicator = getEventOutcomeIndicator(auditDataset, gpath)
-        auditDataset.eventOutcomeDescription = getEventOutcomeDescription(auditDataset, gpath)
-        auditDataset.eventOutcomeIndicator == EventOutcomeIndicator.Success
+        try {
+            Object gpath = slurpIfNecessary(response)
+            auditDataset.eventOutcomeIndicator = getEventOutcomeIndicator(auditDataset, gpath)
+            auditDataset.eventOutcomeDescription = getEventOutcomeDescription(auditDataset, gpath)
+            return (auditDataset.eventOutcomeIndicator == EventOutcomeIndicator.Success)
+        } catch (Exception e) {
+            log.warn('Missing or malformed response', e)
+            return false
+        }
     }
 
-
-    static void addPatientIds(GPathResult source, Set<String> target) {
+    protected static void addPatientIds(GPathResult source, Set<String> target) {
         for (node in source) {
             target << iiToCx(node)
         }
     }
 
-
-    static GPathResult slurp(Object message) {
-        return (message instanceof GPathResult) ? message : Hl7v3Utils.slurp((String) message)
+    protected static GPathResult slurpIfNecessary(Object o) {
+        return (o instanceof GPathResult) ? o : Hl7v3Utils.slurp((String) o)
     }
 }
