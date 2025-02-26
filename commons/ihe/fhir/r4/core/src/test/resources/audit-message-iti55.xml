@@ -1,0 +1,23 @@
+<AuditMessage>
+    <EventIdentification EventActionCode="E" EventDateTime="2025-02-25T17:03:42.163Z" EventOutcomeIndicator="0">
+        <EventID csd-code="110112" codeSystemName="DCM" originalText="Query" />
+        <EventTypeCode csd-code="ITI-55" codeSystemName="IHE Transactions" originalText="Cross Gateway Patient Discovery" />
+        <EventOutcomeDescription />
+    </EventIdentification>
+    <ActiveParticipant UserID="unknown" AlternativeUserID="2316" UserIsRequestor="true" NetworkAccessPointID="192.168.42.20" NetworkAccessPointTypeCode="2">
+        <RoleIDCode csd-code="110153" codeSystemName="DCM" originalText="Source Role ID" />
+    </ActiveParticipant>
+    <ActiveParticipant UserID="http://localhost:62086/ipf/iti55" UserIsRequestor="false" NetworkAccessPointID="localhost" NetworkAccessPointTypeCode="1">
+        <RoleIDCode csd-code="110152" codeSystemName="DCM" originalText="Destination Role ID" />
+    </ActiveParticipant>
+    <AuditSourceIdentification AuditEnterpriseSiteID="1.2.3.99" AuditSourceID="IheSpringBootTest">
+        <AuditSourceTypeCode csd-code="4" codeSystemName="DCM" originalText="Application Server Process or Thread" />
+    </AuditSourceIdentification>
+    <ParticipantObjectIdentification ParticipantObjectID="322934b1-49c1-45bf-a365-5a30268d266e@2.25" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="24">
+        <ParticipantObjectIDTypeCode csd-code="ITI-55" codeSystemName="IHE Transactions" originalText="Cross Gateway Patient Discovery" />
+        <ParticipantObjectQuery>PHF1ZXJ5QnlQYXJhbWV0ZXI+CiAgPHF1ZXJ5SWQgLz4KICA8c3RhdHVzQ29kZSBjb2RlPSJuZXciIC8+CiAgPHJlc3BvbnNlTW9kYWxpdHlDb2RlIGNvZGU9IlIiIC8+CiAgPHJlc3BvbnNlUHJpb3JpdHlDb2RlIGNvZGU9IkkiIC8+CiAgPHBhcmFtZXRlckxpc3Q+CiAgICA8bGl2aW5nU3ViamVjdElkPgogICAgICA8dmFsdWUgZXh0ZW5zaW9uPSJQMSIgcm9vdD0iMi4xNi43NTYuNS4zMC4xLjEyNy4zLjEwLjMiIC8+CiAgICAgIDxzZW1hbnRpY3NUZXh0PkxpdmluZ1N1YmplY3QuaWQ8L3NlbWFudGljc1RleHQ+CiAgICA8L2xpdmluZ1N1YmplY3RJZD4KICA8L3BhcmFtZXRlckxpc3Q+CjwvcXVlcnlCeVBhcmFtZXRlcj4=</ParticipantObjectQuery>
+    </ParticipantObjectIdentification>
+    <ParticipantObjectIdentification ParticipantObjectID="00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01" ParticipantObjectTypeCode="4" ParticipantObjectTypeCodeRole="26">
+        <ParticipantObjectIDTypeCode csd-code="traceparent" codeSystemName="e-health-suisse" originalText="traceparent" />
+    </ParticipantObjectIdentification>
+</AuditMessage>
