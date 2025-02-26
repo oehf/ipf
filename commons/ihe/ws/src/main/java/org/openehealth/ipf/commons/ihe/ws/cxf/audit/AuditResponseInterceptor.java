@@ -102,8 +102,15 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
         // check whether the response is relevant for ATNA audit finalization
         var response = extractPojo(message);
         var auditStrategy = getAuditStrategy();
-        if (! auditStrategy.isAuditableResponse(response)) {
-            return;
+        if (response != null) {
+            try {
+                if (!auditStrategy.isAuditableResponse(response)) {
+                    return;
+                }
+            } catch (final Exception e) {
+                // Ignore the XML slurping exception and set the response as unprocessable
+                response = null;
+            }
         }
 
         T auditDataset = null;
