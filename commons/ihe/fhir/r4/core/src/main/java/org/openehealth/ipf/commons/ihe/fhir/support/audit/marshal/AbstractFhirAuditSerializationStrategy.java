@@ -85,8 +85,13 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             .setRecorded(Date.from(eit.getEventDateTime()))
             .setOutcome(getAuditEventOutcome(eit.getEventOutcomeIndicator()))
             .setOutcomeDesc(eit.getEventOutcomeDescription());
-        eit.getEventTypeCode().forEach(etc ->
-            auditEvent.addSubtype(codedValueTypeToCoding(etc)));
+        eit.getEventTypeCode().forEach(etc -> {
+            if ("IHE Transactions".equals(etc.getCodeSystemName())) {
+                auditEvent.addSubtype(codedValueTypeToCoding(etc, IHE_SYSTEM_NAME));
+            } else {
+                auditEvent.addSubtype(codedValueTypeToCoding(etc));
+            }
+        });
         eit.getPurposesOfUse().forEach(pou ->
             auditEvent.addPurposeOfEvent(codedValueTypeToCodeableConcept(pou)));
 
