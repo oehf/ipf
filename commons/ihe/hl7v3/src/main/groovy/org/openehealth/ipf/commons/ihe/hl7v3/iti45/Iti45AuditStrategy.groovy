@@ -75,7 +75,7 @@ class Iti45AuditStrategy extends Hl7v3AuditStrategy {
             }
             return result
         } catch (Exception e) {
-            log.warn('Missing or malformed request', e)
+            log.warn('Missing or malformed response', e)
             return false
         }
     }
