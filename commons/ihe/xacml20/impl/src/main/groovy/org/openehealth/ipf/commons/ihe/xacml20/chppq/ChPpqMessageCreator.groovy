@@ -14,12 +14,14 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.xacml20
+package org.openehealth.ipf.commons.ihe.xacml20.chppq
 
-
+import groovy.transform.CompileStatic
 import org.herasaf.xacml.core.context.impl.*
 import org.herasaf.xacml.core.policy.impl.IdReferenceType
 import org.herasaf.xacml.core.policy.impl.PolicySetType
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageCreator
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.IiDataTypeAttribute
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest
@@ -32,6 +34,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.XACMLPolicyStatementType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType
 
+@CompileStatic
 class ChPpqMessageCreator extends Xacml20MessageCreator {
 
     ChPpqMessageCreator(String homeCommunityId) {
@@ -41,7 +44,7 @@ class ChPpqMessageCreator extends Xacml20MessageCreator {
     private AssertionType createSubmitAssertion(Collection<PolicySetType> policySets) {
         def assertion = createAssertion()
         assertion.statementOrAuthnStatementOrAuthzDecisionStatement << new XACMLPolicyStatementType(
-                policyOrPolicySet: policySets
+                policyOrPolicySet: policySets as List<Object>,
         )
         return assertion
     }
@@ -91,11 +94,11 @@ class ChPpqMessageCreator extends Xacml20MessageCreator {
                                                                 new AttributeValueType(
                                                                         content: [
                                                                                 HL7V3_OBJECT_FACTORY.createInstanceIdentifier(patientId),
-                                                                        ],
+                                                                        ] as List<Object>,
                                                                 ),
                                                         ],
                                                 ),
-                                        ]
+                                        ],
                                 ),
                         ],
                         action: new ActionType(),
@@ -107,16 +110,17 @@ class ChPpqMessageCreator extends Xacml20MessageCreator {
 
     XACMLPolicyQueryType createPolicyQuery(List<String> policySetIds) {
         def query = createPolicyQueryElement()
-        query.getRequestOrPolicySetIdReferenceOrPolicyIdReference().addAll(policySetIds.collect { id ->
-            XACML_POLICY_OBJECT_FACTORY.createPolicySetIdReference(new IdReferenceType(value: id))
-        })
+        for (policySetId in policySetIds) {
+            def reference = XACML_POLICY_OBJECT_FACTORY.createPolicySetIdReference(new IdReferenceType(value: policySetId))
+            query.requestOrPolicySetIdReferenceOrPolicyIdReference << reference
+        }
         return query
     }
 
   ResponseType createPositivePolicyQueryResponse(List<PolicySetType> policySets, String requestId) {
         def assertion = createAssertion()
         assertion.statementOrAuthnStatementOrAuthzDecisionStatement << new XACMLPolicyStatementType(
-                policyOrPolicySet: policySets,
+                policyOrPolicySet: policySets as List<Object>,
         )
         return createResponse(Xacml20Status.SUCCESS, null, assertion, requestId)
     }

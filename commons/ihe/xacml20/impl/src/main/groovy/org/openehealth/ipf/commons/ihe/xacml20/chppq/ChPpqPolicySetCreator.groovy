@@ -13,17 +13,19 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
+package org.openehealth.ipf.commons.ihe.xacml20.chppq
 
-package org.openehealth.ipf.commons.ihe.xacml20
-
+import groovy.transform.CompileStatic
 import jakarta.xml.bind.JAXBElement
 import org.apache.velocity.Template
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
 import org.herasaf.xacml.core.policy.impl.PolicySetType
+import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils
 import org.openehealth.ipf.commons.xml.XmlUtils
 
+@CompileStatic
 class ChPpqPolicySetCreator {
 
     private static final VelocityEngine VELOCITY
@@ -48,7 +50,7 @@ class ChPpqPolicySetCreator {
 
     static PolicySetType createPolicySet(String templateId, VelocityContext substitutions) {
         String s = createPolicySetString(templateId, substitutions)
-        JAXBElement jaxbElement = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller().unmarshal(XmlUtils.source(s))
+        JAXBElement jaxbElement = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller().unmarshal(XmlUtils.source(s)) as JAXBElement
         return jaxbElement.value as PolicySetType
     }
 

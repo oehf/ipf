@@ -36,6 +36,7 @@ import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq4.ChPpq4Validator;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.translation.FhirToXacmlTranslator;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.translation.XacmlToFhirTranslator;
 import org.openehealth.ipf.commons.ihe.xacml20.*;
+import org.openehealth.ipf.commons.ihe.xacml20.chppq.ChPpqMessageCreator;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.DeletePolicyRequest;

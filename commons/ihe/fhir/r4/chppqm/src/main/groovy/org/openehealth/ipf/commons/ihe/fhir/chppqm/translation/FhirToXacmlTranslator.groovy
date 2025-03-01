@@ -25,8 +25,8 @@ import org.hl7.fhir.r4.model.Bundle
 import org.hl7.fhir.r4.model.Consent
 import org.hl7.fhir.r4.model.Patient
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils
-import org.openehealth.ipf.commons.ihe.xacml20.ChPpqMessageCreator
-import org.openehealth.ipf.commons.ihe.xacml20.ChPpqPolicySetCreator
+import org.openehealth.ipf.commons.ihe.xacml20.chppq.ChPpqMessageCreator
+import org.openehealth.ipf.commons.ihe.xacml20.chppq.ChPpqPolicySetCreator
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType
