@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.chppq1;
 
-import org.apache.cxf.annotations.DataBinding;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20JaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.DeletePolicyRequest;
@@ -51,7 +49,6 @@ import jakarta.xml.ws.FaultAction;
         org.apache.xml.security.binding.xop.ObjectFactory.class,
         })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-@DataBinding(Xacml20JaxbDataBinding.class)
 public interface ChPpq1PortType {
 
     @WebMethod(operationName = "PolicyRepository_DeletePolicy")

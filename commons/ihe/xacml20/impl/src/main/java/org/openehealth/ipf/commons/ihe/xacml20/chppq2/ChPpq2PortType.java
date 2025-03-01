@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.chppq2;
 
-import org.apache.cxf.annotations.DataBinding;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20JaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.ObjectFactory;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
@@ -48,7 +46,6 @@ import jakarta.xml.ws.Action;
         org.apache.xml.security.binding.xop.ObjectFactory.class,
         })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-@DataBinding(Xacml20JaxbDataBinding.class)
 public interface ChPpq2PortType {
 
     @WebMethod(operationName = "PolicyRepository_PolicyQuery")

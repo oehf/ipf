@@ -22,8 +22,6 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.ws.Action;
-import org.apache.cxf.annotations.DataBinding;
-import org.openehealth.ipf.commons.ihe.xacml20.Xacml20JaxbDataBinding;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.ObjectFactory;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
@@ -47,7 +45,6 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLA
         org.apache.xml.security.binding.xop.ObjectFactory.class,
         })
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-@DataBinding(Xacml20JaxbDataBinding.class)
 public interface ChAdrPortType {
 
     @WebMethod(operationName = "AuthorizationDecisionsManager_AuthorizationDecisionsQuery")
