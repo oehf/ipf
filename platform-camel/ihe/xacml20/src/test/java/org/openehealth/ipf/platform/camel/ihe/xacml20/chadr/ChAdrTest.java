@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chadr;
 
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.herasaf.xacml.core.context.impl.RequestType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,8 +28,10 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
 import jakarta.xml.bind.JAXBElement;
@@ -75,6 +78,55 @@ public class ChAdrTest extends StandardTestContainer {
             }
         }
         assertNull(value);
+    }
+
+    @Test
+    public void redundantNewLineShowcase() throws Exception {
+        /* ARRANGE **/
+        var expectedII = new II();
+        expectedII.setRoot("2.16.756.5.30.1.127.3.10.3");
+        expectedII.setExtension("765000000000000000");
+
+
+        var chadrQuery = (XACMLAuthzDecisionQueryType) loadFile("chadr-request-1.xml");
+        var requestType = (RequestType) chadrQuery.getRest().get(0).getValue();
+
+        var iiElement = requestType.getResources().get(0).getAttributes().get(1).getAttributeValues().get(0).getContent();
+
+        /* Actual XML for [iiElement]
+
+          ```xml
+                  <Resource>
+                      <Attribute AttributeId="urn:oasis:names:tc:xacml:1.0:resource:resource-id"
+                                 DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                          <AttributeValue>urn:uuid:5a478b92-0b20-40a9-9bee-30ce7d831ca2</AttributeValue>
+                      </Attribute>
+                      <Attribute AttributeId="urn:e-health-suisse:2015:epr-spid" DataType="urn:hl7-org:v3#II">
+                          <AttributeValue>
+                              <ns10:InstanceIdentifier root="2.16.756.5.30.1.127.3.10.3" extension="765000000000000000"/>
+                          </AttributeValue>
+                      </Attribute>
+                      <Attribute AttributeId="urn:e-health-suisse:2015:policy-attributes:referenced-policy-set"
+                                 DataType="http://www.w3.org/2001/XMLSchema#anyURI">
+                          <AttributeValue>urn:e-health-suisse:2015:policies:access-level:full</AttributeValue>
+                      </Attribute>
+                  </Resource>
+          ```
+
+         */
+
+        /* ASSERT **/
+        var actualII = ((JAXBElement<II>) iiElement.get(1)).getValue();
+
+        // Erroneous (?) Behaviour
+        assertEquals(3, iiElement.size());
+        assertTrue(((String) iiElement.get(0)).startsWith("\n"));
+        assertTrue(((String) iiElement.get(2)).startsWith("\n"));
+
+        // Correct Behaviour
+        assertEquals(expectedII.getExtension(), actualII.getExtension());
+        assertEquals(expectedII.getRoot(), actualII.getRoot());
+
     }
 
     @Test
