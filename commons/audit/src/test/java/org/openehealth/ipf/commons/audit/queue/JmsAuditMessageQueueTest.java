@@ -31,6 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jms.listener.SimpleMessageListenerContainer;
 
+import java.net.ServerSocket;
 import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -42,7 +43,7 @@ public class JmsAuditMessageQueueTest {
 
     private static final Logger log = LoggerFactory.getLogger(JmsAuditMessageQueueTest.class);
 
-    private static final String JMS_BROKER_URL = "tcp://localhost:61616";
+    private static final String JMS_BROKER_URL = "tcp://localhost:" + freePort();
     private static final String JMS_QUEUE_NAME = "atna";
 
     private JmsAuditMessageQueue atnaQueue;
@@ -118,5 +119,13 @@ public class JmsAuditMessageQueueTest {
                         .getMessages());
     }
 
+    private static int freePort() {
+        try (var serverSocket = new ServerSocket(0)) {
+            return serverSocket.getLocalPort();
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return -1;
+        }
+    }
 
 }
