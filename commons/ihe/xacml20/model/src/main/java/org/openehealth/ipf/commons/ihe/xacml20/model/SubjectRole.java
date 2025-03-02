@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xacml20.model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import static org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.CodingSystemIds;
+import static org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.CodingSystemIds;
 
 /**
  * @author Dmytro Rud

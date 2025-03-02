@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.xacml20
 import org.apache.commons.lang3.Validate
 import org.herasaf.xacml.core.context.impl.ObjectFactory as XacmlContextObjectFactory
 import org.herasaf.xacml.core.policy.impl.ObjectFactory as XacmlPolicyObjectFactory
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.ObjectFactory as Hl7v3ObjectFactory
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.NameIDType
@@ -47,7 +47,7 @@ class Xacml20MessageCreator {
 
     NameIDType createIssuer() {
         return new NameIDType(
-            nameQualifier: PpqConstants.NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX,
+            nameQualifier: EprConstants.NAME_QUALIFIER_EHEALTH_SUISSSE_COMMUNITY_INDEX,
             value: homeCommunityId,
         )
     }

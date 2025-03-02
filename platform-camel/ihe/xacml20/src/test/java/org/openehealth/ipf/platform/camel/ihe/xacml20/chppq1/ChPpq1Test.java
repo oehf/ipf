@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.StatusCode;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -82,17 +82,17 @@ public class ChPpq1Test extends StandardTestContainer {
 
     @Test
     public void testAddPolicySuccess1() throws Exception {
-        testAddPolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success, null);
+        testAddPolicy("success", StatusCode.SUCCESS, EventOutcomeIndicator.Success, null);
     }
 
     @Test
     public void testAddPolicySuccess2() throws Exception {
-        testAddPolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success, UUID.randomUUID().toString());
+        testAddPolicy("success", StatusCode.SUCCESS, EventOutcomeIndicator.Success, UUID.randomUUID().toString());
     }
 
     @Test
     public void testAddPolicyFailure() throws Exception {
-        testAddPolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, UUID.randomUUID().toString());
+        testAddPolicy("failure", StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, UUID.randomUUID().toString());
     }
 
     private void testAddPolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, String traceContextId) throws Exception {
@@ -144,17 +144,17 @@ public class ChPpq1Test extends StandardTestContainer {
 
     @Test
     public void testUpdatePolicySuccess() throws Exception {
-        testUpdatePolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success, false);
+        testUpdatePolicy("success", StatusCode.SUCCESS, EventOutcomeIndicator.Success, false);
     }
 
     @Test
     public void testUpdatePolicyFailure() throws Exception {
-        testUpdatePolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, false);
+        testUpdatePolicy("failure", StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, false);
     }
 
     @Test
     public void testUpdatePolicyException() throws Exception {
-        testUpdatePolicy("exception", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, true);
+        testUpdatePolicy("exception", StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, true);
     }
 
     private void testUpdatePolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, boolean expectSoapFault) throws Exception {
@@ -168,12 +168,10 @@ public class ChPpq1Test extends StandardTestContainer {
             }
         }
 
-        List messages = getAuditSender().getMessages();
+        List<AuditMessage> messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (var object : messages) {
-            var message = (AuditMessage) object;
-
+        for (var message : messages) {
             var event = message.getEventIdentification();
             assertEquals(EventActionCode.Update, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());
@@ -205,17 +203,17 @@ public class ChPpq1Test extends StandardTestContainer {
 
     @Test
     public void testDeletePolicySuccess() throws Exception {
-        testDeletePolicy("success", PpqConstants.StatusCode.SUCCESS, EventOutcomeIndicator.Success, false);
+        testDeletePolicy("success", StatusCode.SUCCESS, EventOutcomeIndicator.Success, false);
     }
 
     @Test
     public void testDeletePolicyFailure() throws Exception {
-        testDeletePolicy("failure", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, false);
+        testDeletePolicy("failure", StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, false);
     }
 
     @Test
     public void testDeletePolicyException() throws Exception {
-        testDeletePolicy("exception", PpqConstants.StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, true);
+        testDeletePolicy("exception", StatusCode.FAILURE, EventOutcomeIndicator.SeriousFailure, true);
     }
 
     private void testDeletePolicy(String suffix, String statusCode, EventOutcomeIndicator outcomeIndicator, boolean expectException) throws Exception {
@@ -228,12 +226,10 @@ public class ChPpq1Test extends StandardTestContainer {
             }
         }
 
-        List messages = getAuditSender().getMessages();
+        List<AuditMessage> messages = getAuditSender().getMessages();
         assertEquals(2, messages.size());
 
-        for (var object : messages) {
-            var message = (AuditMessage) object;
-
+        for (var message : messages) {
             var event = message.getEventIdentification();
             assertEquals(EventActionCode.Delete, event.getEventActionCode());
             assertEquals(outcomeIndicator, event.getEventOutcomeIndicator());

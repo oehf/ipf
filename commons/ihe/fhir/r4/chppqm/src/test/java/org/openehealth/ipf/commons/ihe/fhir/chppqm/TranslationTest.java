@@ -37,7 +37,8 @@ import org.openehealth.ipf.commons.ihe.fhir.chppqm.translation.FhirToXacmlTransl
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.translation.XacmlToFhirTranslator;
 import org.openehealth.ipf.commons.ihe.xacml20.*;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq.ChPpqMessageCreator;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.CodingSystemIds;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.StatusCode;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.DeletePolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
@@ -175,7 +176,7 @@ public class TranslationTest {
         AddPolicyRequest addRequest = PPQ_MESSAGE_CREATOR.createAddPolicyRequest(Collections.singletonList(policySet));
 
         EprPolicyRepositoryResponse ppq1Response = new EprPolicyRepositoryResponse();
-        ppq1Response.setStatus(PpqConstants.StatusCode.SUCCESS);
+        ppq1Response.setStatus(StatusCode.SUCCESS);
         MethodOutcome methodOutcome = XacmlToFhirTranslator.translatePpq1To3Response(consent, addRequest, ppq1Response);
 
         log.info("");
@@ -229,7 +230,7 @@ public class TranslationTest {
         Bundle ppq4Request = ChPpqmUtils.createPpq4SubmitRequestBundle(consents, Bundle.HTTPVerb.POST);
         AddPolicyRequest ppq1Request = FHIR_TO_XACML_TRANSLATOR.translatePpq4To1Request(ppq4Request);
         EprPolicyRepositoryResponse ppq1Response = new EprPolicyRepositoryResponse();
-        ppq1Response.setStatus(PpqConstants.StatusCode.SUCCESS);
+        ppq1Response.setStatus(StatusCode.SUCCESS);
         Bundle ppq4Response = XacmlToFhirTranslator.translatePpq1To4Response(ppq4Request, ppq1Request, ppq1Response);
         new ChPpq4Validator(ChPpqmUtils.FHIR_CONTEXT).validateResponse(ppq4Response, null);
         log.info("");
@@ -243,7 +244,7 @@ public class TranslationTest {
 
         XACMLPolicyQueryType ppq2Request2 = FHIR_TO_XACML_TRANSLATOR.translatePpq5To2Request(
                 Consent.SP_PATIENT + ':' + Patient.SP_IDENTIFIER + '=' +
-                        PpqConstants.CodingSystemIds.SWISS_PATIENT_ID + "|123456789012345678");
+                CodingSystemIds.SWISS_PATIENT_ID + "|123456789012345678");
         Xacml20MessageValidator.validateChPpq2Request(ppq2Request2);
 
         log.info("");

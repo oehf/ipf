@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.XACMLAuthzDecisionStatementType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType
 
-import static org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.AttributeIds
+import static org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.AttributeIds
 
 @CompileStatic
 class AdrMessageCreator extends Xacml20MessageCreator {

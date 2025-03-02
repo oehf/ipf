@@ -33,7 +33,7 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.CodingSystemIds;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
@@ -71,7 +71,7 @@ public class ChPpq5Test extends FhirTestContainer {
         Bundle response = client.search()
                 .forResource(Consent.class)
                 .where(Consent.IDENTIFIER.exactly().identifier(UUID.randomUUID().toString()))
-                .where(Map.of("patient:identifier", List.of(new TokenParam(PpqConstants.CodingSystemIds.SWISS_PATIENT_ID, "123456789012345678"))))
+                .where(Map.of("patient:identifier", List.of(new TokenParam(CodingSystemIds.SWISS_PATIENT_ID, "123456789012345678"))))
                 .returnBundle(Bundle.class)
                 .encodedJson()
                 .execute();
@@ -85,7 +85,7 @@ public class ChPpq5Test extends FhirTestContainer {
     public void test2() throws Exception {
         ICriterion<?>[] criteria = {
                 Consent.IDENTIFIER.exactly().identifier(UUID.randomUUID().toString()),
-                new TokenClientParam("patient:identifier").exactly().systemAndIdentifier(PpqConstants.CodingSystemIds.SWISS_PATIENT_ID, "123456789012345678")
+                new TokenClientParam("patient:identifier").exactly().systemAndIdentifier(CodingSystemIds.SWISS_PATIENT_ID, "123456789012345678")
         };
 
         Exchange exchange = new DefaultExchange(camelContext, ExchangePattern.InOut);

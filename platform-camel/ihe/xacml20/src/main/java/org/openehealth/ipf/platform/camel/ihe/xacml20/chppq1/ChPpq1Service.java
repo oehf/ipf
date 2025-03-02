@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1PortType;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.StatusCode;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.*;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
@@ -51,7 +51,7 @@ public class ChPpq1Service extends AbstractWebService implements ChPpq1PortType 
 
     private static EprPolicyRepositoryResponse errorResponse() {
         var repositoryResponse = new EprPolicyRepositoryResponse();
-        repositoryResponse.setStatus(PpqConstants.StatusCode.FAILURE);
+        repositoryResponse.setStatus(StatusCode.FAILURE);
         return repositoryResponse;
     }
 

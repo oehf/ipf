@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20ParticipantIdType;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 
@@ -78,7 +78,7 @@ public class Iti79AuditStrategy extends AuditStrategySupport<Iti79AuditDataset> 
         var query = (XACMLAuthzDecisionQueryType) requestObject;
         var request = Xacml20Utils.extractAuthzRequest(query);
         for (var attribute : request.getSubjects().get(0).getAttributes()) {
-            if (PpqConstants.AttributeIds.XACML_1_0_SUBJECT_ID.equals(attribute.getAttributeId())) {
+            if (EprConstants.AttributeIds.XACML_1_0_SUBJECT_ID.equals(attribute.getAttributeId())) {
                 auditDataset.setRequesterId(Xacml20Utils.extractStringAttributeValue(attribute));
             }
         }

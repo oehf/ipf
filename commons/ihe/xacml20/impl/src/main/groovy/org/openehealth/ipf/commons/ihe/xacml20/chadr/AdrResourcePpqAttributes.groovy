@@ -20,7 +20,7 @@ import org.herasaf.xacml.core.context.impl.ResourceType
 import org.herasaf.xacml.core.dataTypeAttribute.impl.AnyURIDataTypeAttribute
 import org.herasaf.xacml.core.dataTypeAttribute.impl.DateDataTypeAttribute
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.IiDataTypeAttribute
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.AttributeIds
 
 import java.time.LocalDate
 
@@ -49,11 +49,11 @@ class AdrResourcePpqAttributes extends AdrAttributes<ResourceType> {
     @Override
     List<ResourceType> createAdrRequestParts() {
         def result = new ResourceType()
-        add(result.attributes, PpqConstants.AttributeIds.XACML_1_0_RESOURCE_ID, new AnyURIDataTypeAttribute(), policySetId)
-        add(result.attributes, PpqConstants.AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID, new IiDataTypeAttribute(), toIi(eprSpid))
-        add(result.attributes, PpqConstants.AttributeIds.EHEALTH_SUISSSE_2015_REFERENCED_POLICY_SET, new AnyURIDataTypeAttribute(), referencedPolicySet)
-        add(result.attributes, PpqConstants.AttributeIds.EHEALTH_SUISSSE_START_DATE, new DateDataTypeAttribute(), fromDate)
-        add(result.attributes, PpqConstants.AttributeIds.EHEALTH_SUISSSE_END_DATE, new DateDataTypeAttribute(), toDate)
+        add(result.attributes, AttributeIds.XACML_1_0_RESOURCE_ID, new AnyURIDataTypeAttribute(), policySetId)
+        add(result.attributes, AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID, new IiDataTypeAttribute(), toIi(eprSpid))
+        add(result.attributes, AttributeIds.EHEALTH_SUISSSE_2015_REFERENCED_POLICY_SET, new AnyURIDataTypeAttribute(), referencedPolicySet)
+        add(result.attributes, AttributeIds.EHEALTH_SUISSSE_START_DATE, new DateDataTypeAttribute(), fromDate)
+        add(result.attributes, AttributeIds.EHEALTH_SUISSSE_END_DATE, new DateDataTypeAttribute(), toDate)
         return [result]
     }
     

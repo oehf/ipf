@@ -33,7 +33,8 @@ import org.hl7.fhir.r4.model.OperationOutcome
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.CodingSystemIds
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.StatusCode
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AssertionBasedRequestType
@@ -75,11 +76,11 @@ class XacmlToFhirTranslator {
         for (subjectMatch in subjectMatches) {
             def cv = subjectMatch.AttributeValue.CodedValue
 
-            if ((cv.@codeSystem.text() == PpqConstants.CodingSystemIds.SWISS_PURPOSE_OF_USE) && (cv.@code.text() == 'EMER')) {
+            if ((cv.@codeSystem.text() == CodingSystemIds.SWISS_PURPOSE_OF_USE) && (cv.@code.text() == 'EMER')) {
                 return create202Consent(id, eprSpid, policyIdReference)
             }
 
-            if (cv.@codeSystem.text() == PpqConstants.CodingSystemIds.SWISS_SUBJECT_ROLE) {
+            if (cv.@codeSystem.text() == CodingSystemIds.SWISS_SUBJECT_ROLE) {
                 if (cv.@code.text() == 'PAT') {
                     return create201Consent(id, eprSpid)
                 }
@@ -140,7 +141,7 @@ class XacmlToFhirTranslator {
             AssertionBasedRequestType ppq1Request,
             EprPolicyRepositoryResponse ppq1Response)
     {
-        if (ppq1Response.status == PpqConstants.StatusCode.SUCCESS) {
+        if (ppq1Response.status == StatusCode.SUCCESS) {
             return new MethodOutcome(
                     id: new IdType(UUID.randomUUID().toString()),
                     responseStatusCode: (ppq1Request instanceof AddPolicyRequest) ? 201 : 200,

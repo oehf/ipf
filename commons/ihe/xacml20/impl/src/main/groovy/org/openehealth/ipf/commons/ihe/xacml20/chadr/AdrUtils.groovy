@@ -20,7 +20,8 @@ import jakarta.xml.bind.JAXBElement
 import org.herasaf.xacml.core.context.impl.*
 import org.herasaf.xacml.core.dataTypeAttribute.DataTypeAttribute
 import org.openehealth.ipf.commons.ihe.xacml20.model.CE
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.AttributeIds
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.CodingSystemIds
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.CV
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.II
 import org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3.ObjectFactory
@@ -61,19 +62,25 @@ class AdrUtils {
     }
 
     static JAXBElement<II> toIi(String eprSpid) {
-        def ii = new II(extension: eprSpid, root: PpqConstants.CodingSystemIds.SWISS_PATIENT_ID)
+        def ii = new II(extension: eprSpid, root: CodingSystemIds.SWISS_PATIENT_ID)
         return HL7V3_OBJECT_FACTORY.createInstanceIdentifier(ii)
     }
 
     static String extractEprSpid(RequestType request) {
-        return request.resources[0].attributes.stream()
-                .filter(attr -> attr.attributeId == PpqConstants.AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID)
-                .findAny()
-                .map(attr -> {
-                    def jaxbElement = attr.attributeValues[0].content[0] as JAXBElement<II>
-                    return jaxbElement.value.extension
-                })
-                .orElseThrow(() -> new IllegalArgumentException('Cannot extract EPR-SPID from ADR request'))
+        for (resource in request.resources) {
+            for (attr in resource.attributes) {
+                if (attr.attributeId == AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID) {
+                    for (value in attr.attributeValues) {
+                        for (content in value.content) {
+                            if (content instanceof JAXBElement<II>) {
+                                return content.value.extension
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        throw new  IllegalArgumentException('Cannot extract EPR-SPID from ADR request')
     }
 
     static ResultType createNotHolderOfPatientPoliciesResult() {

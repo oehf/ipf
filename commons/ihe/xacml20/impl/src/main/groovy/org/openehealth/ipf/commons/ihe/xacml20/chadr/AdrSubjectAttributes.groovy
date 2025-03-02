@@ -21,7 +21,7 @@ import org.herasaf.xacml.core.dataTypeAttribute.impl.AnyURIDataTypeAttribute
 import org.herasaf.xacml.core.dataTypeAttribute.impl.StringDataTypeAttribute
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.CvDataTypeAttribute
 import org.openehealth.ipf.commons.ihe.xacml20.model.NameQualifier
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.AttributeIds
 import org.openehealth.ipf.commons.ihe.xacml20.model.PurposeOfUse
 import org.openehealth.ipf.commons.ihe.xacml20.model.SubjectRole
 
@@ -49,14 +49,14 @@ class AdrSubjectAttributes extends AdrAttributes<SubjectType> {
     @Override
     List<SubjectType> createAdrRequestParts() {
         def result = new SubjectType()
-        add(result.attributes, PpqConstants.AttributeIds.XACML_1_0_SUBJECT_ID, new StringDataTypeAttribute(), subjectId)
-        add(result.attributes, PpqConstants.AttributeIds.XACML_1_0_SUBJECT_ID_QUALIFIER, new StringDataTypeAttribute(), subjectIdQualifier.qualifier)
-        add(result.attributes, PpqConstants.AttributeIds.XCA_2010_HOME_COMMUNITY_ID, new AnyURIDataTypeAttribute(), homeCommunityId)
-        add(result.attributes, PpqConstants.AttributeIds.XACML_2_0_SUBJECT_ROLE, new CvDataTypeAttribute(), toCv(subjectRole.code))
+        add(result.attributes, AttributeIds.XACML_1_0_SUBJECT_ID, new StringDataTypeAttribute(), subjectId)
+        add(result.attributes, AttributeIds.XACML_1_0_SUBJECT_ID_QUALIFIER, new StringDataTypeAttribute(), subjectIdQualifier.qualifier)
+        add(result.attributes, AttributeIds.XCA_2010_HOME_COMMUNITY_ID, new AnyURIDataTypeAttribute(), homeCommunityId)
+        add(result.attributes, AttributeIds.XACML_2_0_SUBJECT_ROLE, new CvDataTypeAttribute(), toCv(subjectRole.code))
         organizationOids?.forEach { orgOid ->
-            add(result.attributes, PpqConstants.AttributeIds.XSPA_1_0_SUBJECT_ORGANIZATION_ID, new AnyURIDataTypeAttribute(), orgOid)
+            add(result.attributes, AttributeIds.XSPA_1_0_SUBJECT_ORGANIZATION_ID, new AnyURIDataTypeAttribute(), orgOid)
         }
-        add(result.attributes, PpqConstants.AttributeIds.XSPA_1_0_SUBJECT_PURPOSE_OF_USE, new CvDataTypeAttribute(), toCv(purposeOfUse.code))
+        add(result.attributes, AttributeIds.XSPA_1_0_SUBJECT_PURPOSE_OF_USE, new CvDataTypeAttribute(), toCv(purposeOfUse.code))
         return [result]
     }
 

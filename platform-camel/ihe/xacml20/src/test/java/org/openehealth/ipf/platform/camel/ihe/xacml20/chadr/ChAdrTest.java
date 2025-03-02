@@ -15,7 +15,9 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chadr;
 
+import jakarta.xml.bind.JAXBElement;
 import org.apache.cxf.transport.servlet.CXFServlet;
+import org.herasaf.xacml.core.context.impl.RequestType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,11 +29,12 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
+import org.openehealth.ipf.commons.ihe.xacml20.chadr.AdrUtils;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
+import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
-import jakarta.xml.bind.JAXBElement;
 import java.util.List;
 import java.util.Map;
 
@@ -153,6 +156,13 @@ public class ChAdrTest extends StandardTestContainer {
                 expectedDecisionsByResourceIds.remove(resourceId);
             }
         }
+    }
+
+    @Test
+    public void testEprSpidExtraction() throws Exception {
+        var chadrQuery = (XACMLAuthzDecisionQueryType) loadFile("chadr-request-1.xml");
+        var request = (RequestType) chadrQuery.getRest().get(0).getValue();
+        assertEquals("765000000000000000", AdrUtils.extractEprSpid(request));
     }
 
 }

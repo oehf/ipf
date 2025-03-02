@@ -20,7 +20,7 @@ import org.herasaf.xacml.core.context.impl.ResourceType
 import org.herasaf.xacml.core.dataTypeAttribute.impl.AnyURIDataTypeAttribute
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.CvDataTypeAttribute
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.IiDataTypeAttribute
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.AttributeIds
 
 import static org.openehealth.ipf.commons.ihe.xacml20.chadr.AdrUtils.toCv
 import static org.openehealth.ipf.commons.ihe.xacml20.chadr.AdrUtils.toIi
@@ -40,10 +40,10 @@ class AdrResourceXdsAttributes extends AdrAttributes<ResourceType> {
     List<ResourceType> createAdrRequestParts() {
         return ConfidentialityCode.values().collect { confCode ->
             def result = new ResourceType()
-            add(result.attributes, PpqConstants.AttributeIds.XACML_1_0_RESOURCE_ID, new AnyURIDataTypeAttribute(), "urn:e-health-suisse:2015:epr-subset:${eprSpid}:${confCode.name().toLowerCase()}".toString())
-            add(result.attributes, PpqConstants.AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID, new IiDataTypeAttribute(), toIi(eprSpid))
-            add(result.attributes, PpqConstants.AttributeIds.XDS_2007_CONFIDENTIALITY_CODE, new CvDataTypeAttribute(), toCv(confCode.code))
-            add(result.attributes, PpqConstants.AttributeIds.XCA_2010_HOME_COMMUNITY_ID, new AnyURIDataTypeAttribute(), homeCommunityId)
+            add(result.attributes, AttributeIds.XACML_1_0_RESOURCE_ID, new AnyURIDataTypeAttribute(), "urn:e-health-suisse:2015:epr-subset:${eprSpid}:${confCode.name().toLowerCase()}".toString())
+            add(result.attributes, AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID, new IiDataTypeAttribute(), toIi(eprSpid))
+            add(result.attributes, AttributeIds.XDS_2007_CONFIDENTIALITY_CODE, new CvDataTypeAttribute(), toCv(confCode.code))
+            add(result.attributes, AttributeIds.XCA_2010_HOME_COMMUNITY_ID, new AnyURIDataTypeAttribute(), homeCommunityId)
             return result
         }
     }

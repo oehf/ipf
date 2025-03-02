@@ -23,7 +23,7 @@ import org.herasaf.xacml.core.policy.impl.PolicySetType
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageCreator
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.types.IiDataTypeAttribute
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.AttributeIds
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.DeletePolicyRequest
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UpdatePolicyRequest
@@ -88,7 +88,7 @@ class ChPpqMessageCreator extends Xacml20MessageCreator {
                                 new ResourceType(
                                         attributes: [
                                                 new AttributeType(
-                                                        attributeId: PpqConstants.AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID,
+                                                        attributeId: AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID,
                                                         dataType: new IiDataTypeAttribute(),
                                                         attributeValues: [
                                                                 new AttributeValueType(

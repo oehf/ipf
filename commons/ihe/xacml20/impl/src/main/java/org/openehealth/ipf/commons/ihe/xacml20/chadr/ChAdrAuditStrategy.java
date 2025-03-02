@@ -29,7 +29,8 @@ import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Status;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20EventTypeCodes;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.codes.Xacml20ParticipantIdType;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.ActionIds;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.AttributeIds;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion.AssertionType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.assertion.XACMLAuthzDecisionStatementType;
@@ -86,10 +87,10 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
         var authzRequest = Xacml20Utils.extractAuthzRequest(query);
         for (var attribute : authzRequest.getSubjects().get(0).getAttributes()) {
             switch (attribute.getAttributeId()) {
-                case PpqConstants.AttributeIds.XACML_1_0_SUBJECT_ID:
+                case AttributeIds.XACML_1_0_SUBJECT_ID:
                     auditDataset.setSubjectId(Xacml20Utils.extractStringAttributeValue(attribute));
                     break;
-                case PpqConstants.AttributeIds.XACML_2_0_SUBJECT_ROLE:
+                case AttributeIds.XACML_2_0_SUBJECT_ROLE:
                     var cv = Xacml20Utils.extractCodeAttributeValue(attribute);
                     if (cv != null) {
                         auditDataset.setSubjectRole(ParticipantObjectIdType.of(cv.getCode(), cv.getCodeSystem(), cv.getDisplayName()));
@@ -99,7 +100,7 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
         }
         for (var resource : authzRequest.getResources()) {
             for (var attribute : resource.getAttributes()) {
-                if (PpqConstants.AttributeIds.XACML_1_0_RESOURCE_ID.equals(attribute.getAttributeId())) {
+                if (AttributeIds.XACML_1_0_RESOURCE_ID.equals(attribute.getAttributeId())) {
                     var resourceId = Xacml20Utils.extractStringAttributeValue(attribute);
                     auditDataset.getDecisionsByResourceIds().put(resourceId, null);
                     break;
@@ -107,23 +108,23 @@ public class ChAdrAuditStrategy extends AuditStrategySupport<ChAdrAuditDataset> 
             }
         }
         for (var attribute : authzRequest.getAction().getAttributes()) {
-            if (PpqConstants.AttributeIds.XACML_1_0_ACTION_ID.equals(attribute.getAttributeId())) {
+            if (AttributeIds.XACML_1_0_ACTION_ID.equals(attribute.getAttributeId())) {
                 var action = Xacml20Utils.extractStringAttributeValue(attribute);
                 if (action != null) {
                     switch (action) {
-                        case PpqConstants.ActionIds.ITI_18:
-                        case PpqConstants.ActionIds.ITI_42:
-                        case PpqConstants.ActionIds.ITI_57:
-                        case PpqConstants.ActionIds.ITI_92:
+                        case ActionIds.ITI_18:
+                        case ActionIds.ITI_42:
+                        case ActionIds.ITI_57:
+                        case ActionIds.ITI_92:
                             auditDataset.setObjectRole(ParticipantObjectTypeCodeRole.Report);
                             break;
-                        case PpqConstants.ActionIds.PPQ_1_ADD:
-                        case PpqConstants.ActionIds.PPQ_1_UPDATE:
-                        case PpqConstants.ActionIds.PPQ_1_DELETE:
-                        case PpqConstants.ActionIds.PPQ_2:
+                        case ActionIds.PPQ_1_ADD:
+                        case ActionIds.PPQ_1_UPDATE:
+                        case ActionIds.PPQ_1_DELETE:
+                        case ActionIds.PPQ_2:
                             auditDataset.setObjectRole(ParticipantObjectTypeCodeRole.SecurityResource);
                             break;
-                        case PpqConstants.ActionIds.ITI_81:
+                        case ActionIds.ITI_81:
                             auditDataset.setObjectRole(ParticipantObjectTypeCodeRole.DataRepository);
                             break;
                     }

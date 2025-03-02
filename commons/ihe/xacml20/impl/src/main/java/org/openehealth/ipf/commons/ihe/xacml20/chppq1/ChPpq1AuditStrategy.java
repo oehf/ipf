@@ -28,7 +28,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.herasaf.functions.IiEqualFunction;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants.StatusCode;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.StatusCode;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.DeletePolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;

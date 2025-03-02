@@ -22,7 +22,7 @@ import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r4.model.codesystems.ConsentScope;
 import org.hl7.fhir.r4.model.codesystems.V3ActCode;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.CodingSystemIds;
 import org.openehealth.ipf.commons.ihe.xacml20.model.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.xacml20.model.SubjectRole;
 
@@ -66,7 +66,7 @@ public class ChPpqmConsentCreator {
                         V3ActCode.INFA.toCode(),
                         V3ActCode.INFA.getDisplay())))
                 .setPatient(new Reference().setIdentifier(new Identifier()
-                        .setSystem("urn:oid:" + PpqConstants.CodingSystemIds.SWISS_PATIENT_ID)
+                        .setSystem("urn:oid:" + CodingSystemIds.SWISS_PATIENT_ID)
                         .setValue(eprSpid)))
                 .setPolicyRule(new CodeableConcept(new Coding()
                         .setSystem(Constants.URN_IETF_RFC_3986)
@@ -139,7 +139,7 @@ public class ChPpqmConsentCreator {
                 "201",
                 eprSpid,
                 "urn:e-health-suisse:2015:policies:access-level:full",
-                createInstanceActor(SubjectRole.PATIENT, "urn:e-health-suisse:2015:epr-spid", eprSpid, "urn:oid:" + PpqConstants.CodingSystemIds.SWISS_PATIENT_ID),
+                createInstanceActor(SubjectRole.PATIENT, "urn:e-health-suisse:2015:epr-spid", eprSpid, "urn:oid:" + CodingSystemIds.SWISS_PATIENT_ID),
                 null,
                 null,
                 Collections.emptyList());

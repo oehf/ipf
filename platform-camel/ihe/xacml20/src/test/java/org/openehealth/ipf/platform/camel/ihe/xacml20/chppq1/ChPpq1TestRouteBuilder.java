@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
 import org.apache.camel.builder.RouteBuilder;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
-import org.openehealth.ipf.commons.ihe.xacml20.model.PpqConstants;
+import org.openehealth.ipf.commons.ihe.xacml20.model.EprConstants.StatusCode;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.UnknownPolicySetIdFaultMessage;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.AddPolicyRequest;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyRepositoryResponse;
@@ -53,7 +53,7 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
                     }
 
                     var response = new EprPolicyRepositoryResponse();
-                    response.setStatus(PpqConstants.StatusCode.SUCCESS);
+                    response.setStatus(StatusCode.SUCCESS);
                     exchange.getMessage().setBody(response);
                     var marshaller = Xacml20Utils.JAXB_CONTEXT.createMarshaller();
                     marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
