@@ -39,7 +39,7 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.7.1</assembly-plugin-version>
         <build-helper-version>3.6.0</build-helper-version>
-        <compiler-plugin-version>3.13.0</compiler-plugin-version>
+        <compiler-plugin-version>3.14.0</compiler-plugin-version>
         <enforcer-plugin-version>3.5.0</enforcer-plugin-version>
         <gmavenplus-plugin-version>4.1.1</gmavenplus-plugin-version>
 
@@ -54,7 +54,7 @@
         <site-plugin-version>3.12.1</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <brave-version>6.0.3</brave-version>
+        <brave-version>6.1.0</brave-version>
         <easymock-version>5.5.0</easymock-version>
         <guava-version>33.3.0-jre</guava-version>
         <lombok-version>1.18.36</lombok-version>
