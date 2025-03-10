@@ -42,17 +42,17 @@ public class HttpClient5Builder {
     private HttpClient5Builder() {
     }
 
-    HttpClient5Builder configureConnectionManager(Consumer<PoolingHttpClientConnectionManagerBuilder> consumer) {
+    public HttpClient5Builder configureConnectionManager(Consumer<PoolingHttpClientConnectionManagerBuilder> consumer) {
         consumer.accept(connectionManagerBuilder);
         return this;
     }
 
-    HttpClient5Builder configureClient(Consumer<HttpClientBuilder> consumer) {
+    public HttpClient5Builder configureClient(Consumer<HttpClientBuilder> consumer) {
         consumer.accept(httpClientBuilder);
         return this;
     }
 
-    HttpClient5Builder configureProxy(HttpHost proxy, String proxyUserName, String proxyPassword) {
+    public HttpClient5Builder configureProxy(HttpHost proxy, String proxyUserName, String proxyPassword) {
         httpClientBuilder.setProxy(proxy);
         if (proxy != null && StringUtils.isNotBlank(proxyUserName) && StringUtils.isNotBlank(proxyPassword)) {
             var credentialsProvider = CredentialsProviderBuilder.create()

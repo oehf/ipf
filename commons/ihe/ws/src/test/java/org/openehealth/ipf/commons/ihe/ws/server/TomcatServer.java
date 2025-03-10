@@ -20,6 +20,7 @@ import jakarta.servlet.ServletContext;
 import org.apache.catalina.Wrapper;
 import org.apache.catalina.authenticator.jaspic.AuthConfigFactoryImpl;
 import org.apache.catalina.startup.Tomcat;
+import org.apache.catalina.webresources.StandardRoot;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,7 +51,10 @@ public class TomcatServer extends ServletServer {
         context.addParameter("contextConfigLocation", getContextResource());
         context.addApplicationListener(ContextLoaderListener.class.getName());
         context.addServletContainerInitializer((c, ctx) -> servletContext = ctx, null);
-
+        if (context.getResources() == null) {
+            context.setResources(new StandardRoot());
+        }
+        context.getResources().setReadOnly(true);
         embedded.getHost().setAppBase("");
 
         // Each servlet should get an unique name, otherwise all servers will reuse
