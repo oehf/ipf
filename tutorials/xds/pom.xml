@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.tutorials</groupId>
         <artifactId>ipf-tutorials</artifactId>
-        <version>5.1-20250314</version>
+        <version>5.1-SNAPSHOT</version>
     </parent>
 
     <properties>

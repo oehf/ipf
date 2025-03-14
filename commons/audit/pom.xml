@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons</artifactId>
-        <version>5.1-20250314</version>
+        <version>5.1-SNAPSHOT</version>
     </parent>
     
     <dependencies>
