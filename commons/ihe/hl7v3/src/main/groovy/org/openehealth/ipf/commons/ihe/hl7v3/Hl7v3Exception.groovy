@@ -63,6 +63,9 @@ class Hl7v3Exception extends RuntimeException {
 
     // value set: AcknowledgementDetailCode
     String acknowledgementDetailCode = 'INTERR'
+    String acknowledgementDetailCodeSystem = '2.16.840.1.113883.5.1100'
+
+    String acknowledgementDetailLocation
 
     // value set: QueryResponse
     String queryResponseCode = 'AE'

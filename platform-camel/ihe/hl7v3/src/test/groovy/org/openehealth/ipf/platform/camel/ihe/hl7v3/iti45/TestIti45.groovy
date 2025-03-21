@@ -21,6 +21,10 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.audit.codes.EventActionCode
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
+import org.openehealth.ipf.commons.ihe.hl7v3.PDQV3
+import org.openehealth.ipf.commons.ihe.hl7v3.PIXV3
+import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
 import javax.xml.parsers.DocumentBuilder
@@ -37,6 +41,7 @@ class TestIti45 extends HL7v3StandardTestContainer {
     
     def SERVICE1 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service1" 
     def SERVICE2 = "pixv3-iti45://localhost:${port}/pixv3-iti45-service2?audit=false" 
+    def SERVICE_NAK1 = "pixv3-iti45://localhost:${port}/pixv3-iti45-serviceNak1?audit=false"
 
     private static final String REQUEST =
         readFile('translation/pixquery/v3/NistPixpdq_Mesa10501-04_Example_01.xml')
@@ -102,5 +107,19 @@ class TestIti45 extends HL7v3StandardTestContainer {
             caught = true
         }
         assert caught
+    }
+
+
+    @Test
+    void testCustomNakGeneration() {
+        String responseString = send(SERVICE_NAK1, REQUEST, String.class)
+        new CombinedXmlValidator().validate(responseString, PIXV3.Interactions.ITI_45.responseValidationProfile)
+        def response = Hl7v3Utils.slurp(responseString)
+        assert response.acknowledgement.acknowledgementDetail.@typeCode == 'E'
+        assert response.acknowledgement.acknowledgementDetail.code.@code == '204'
+        assert response.acknowledgement.acknowledgementDetail.code.@codeSystem == '2.16.840.1.113883.18.217'
+        assert response.acknowledgement.acknowledgementDetail.text.text() == 'ERROR'
+        assert response.acknowledgement.acknowledgementDetail.location.text() == '/PRPA_IN201309UV02/controlActProcess/queryByParameter/parameterList/patientIdentifier[1]'
+        assert response.controlActProcess.queryAck.queryResponseCode.@code == 'AE'
     }
 }
