@@ -48,7 +48,7 @@ class Iti45TestRouteBuilder extends RouteBuilder {
 
         from('pixv3-iti45:pixv3-iti45-serviceNak1?audit=false')
             .process({
-                Hl7v3Exception exception = new Hl7v3Exception("ERROR")
+                Hl7v3Exception exception = new Hl7v3Exception('ERROR')
                 exception.acknowledgementDetailCode = '204'
                 exception.acknowledgementDetailCodeSystem = '2.16.840.1.113883.18.217'
                 exception.acknowledgementDetailLocation = '/PRPA_IN201309UV02/controlActProcess/queryByParameter/parameterList/patientIdentifier[1]'

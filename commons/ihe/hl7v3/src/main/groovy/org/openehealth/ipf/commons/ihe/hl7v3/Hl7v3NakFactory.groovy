@@ -101,7 +101,7 @@ class Hl7v3NakFactory {
         String statusCode0
         String acknowledgementDetailCode0
         String acknowledgementDetailCodeSystem0
-        String acknowledgementDetailLocation
+        String acknowledgementDetailLocation0
         String detectedIssueEventCode0
         String detectedIssueEventCodeSystem0
         String detectedIssueManagementCode0
@@ -119,7 +119,7 @@ class Hl7v3NakFactory {
             typeCode0                          = hl7v3exception.typeCode
             acknowledgementDetailCode0         = hl7v3exception.acknowledgementDetailCode
             acknowledgementDetailCodeSystem0   = hl7v3exception.acknowledgementDetailCodeSystem
-            acknowledgementDetailLocation      = hl7v3exception.acknowledgementDetailLocation
+            acknowledgementDetailLocation0     = hl7v3exception.acknowledgementDetailLocation
             queryResponseCode0                 = hl7v3exception.queryResponseCode
             statusCode0                        = hl7v3exception.statusCode
             detectedIssueEventCode0            = hl7v3exception.detectedIssueEventCode
@@ -164,8 +164,8 @@ class Hl7v3NakFactory {
                     acknowledgementDetail(typeCode: 'E') {
                         code(code: acknowledgementDetailCode0, codeSystem: acknowledgementDetailCodeSystem0)
                         text(throwable.getMessage())
-                        if(acknowledgementDetailLocation) {
-                            location(acknowledgementDetailLocation)
+                        if(acknowledgementDetailLocation0) {
+                            location(acknowledgementDetailLocation0)
                         }
                     }
                 }
