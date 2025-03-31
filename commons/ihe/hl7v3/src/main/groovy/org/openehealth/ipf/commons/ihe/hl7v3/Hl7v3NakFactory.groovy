@@ -100,6 +100,8 @@ class Hl7v3NakFactory {
         // variables below will be used only when the parameter "throwable" is not null
         String statusCode0
         String acknowledgementDetailCode0
+        String acknowledgementDetailCodeSystem0
+        String acknowledgementDetailLocation
         String detectedIssueEventCode0
         String detectedIssueEventCodeSystem0
         String detectedIssueManagementCode0
@@ -116,6 +118,8 @@ class Hl7v3NakFactory {
             Hl7v3Exception hl7v3exception = (Hl7v3Exception) throwable
             typeCode0                          = hl7v3exception.typeCode
             acknowledgementDetailCode0         = hl7v3exception.acknowledgementDetailCode
+            acknowledgementDetailCodeSystem0   = hl7v3exception.acknowledgementDetailCodeSystem
+            acknowledgementDetailLocation      = hl7v3exception.acknowledgementDetailLocation
             queryResponseCode0                 = hl7v3exception.queryResponseCode
             statusCode0                        = hl7v3exception.statusCode
             detectedIssueEventCode0            = hl7v3exception.detectedIssueEventCode
@@ -158,8 +162,11 @@ class Hl7v3NakFactory {
                 }
                 if (throwable) {
                     acknowledgementDetail(typeCode: 'E') {
-                        code(code: acknowledgementDetailCode0, codeSystem: '2.16.840.1.113883.5.1100')
+                        code(code: acknowledgementDetailCode0, codeSystem: acknowledgementDetailCodeSystem0)
                         text(throwable.getMessage())
+                        if(acknowledgementDetailLocation) {
+                            location(acknowledgementDetailLocation)
+                        }
                     }
                 }
             }

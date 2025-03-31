@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti45
 
 import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception
 import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
@@ -44,6 +45,15 @@ class Iti45TestRouteBuilder extends RouteBuilder {
                     <PRPA_IN201310UV02 xmlns="urn:hl7-org:v3" from="PIX Manager"/>
                     <!-- comment 3 -->
                 ''')
+
+        from('pixv3-iti45:pixv3-iti45-serviceNak1?audit=false')
+            .process({
+                Hl7v3Exception exception = new Hl7v3Exception("ERROR")
+                exception.acknowledgementDetailCode = '204'
+                exception.acknowledgementDetailCodeSystem = '2.16.840.1.113883.18.217'
+                exception.acknowledgementDetailLocation = '/PRPA_IN201309UV02/controlActProcess/queryByParameter/parameterList/patientIdentifier[1]'
+                throw exception
+            })
 
     }
 }
