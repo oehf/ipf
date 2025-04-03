@@ -183,7 +183,7 @@ public class DICOMAuditParser implements AuditParser {
             dicom.setEncrypted(Boolean.parseBoolean(element.getChildText(ENCRYPTED)));
         }
         if (element.getChild(ANONYMIZED) != null) {
-            dicom.setEncrypted(Boolean.parseBoolean(element.getChildText(ANONYMIZED)));
+            dicom.setAnonymized(Boolean.parseBoolean(element.getChildText(ANONYMIZED)));
         }
         return dicom;
     }
