@@ -1,0 +1,89 @@
+<PRPA_IN201301UV02 xmlns="urn:hl7-org:v3" ITSVersion="XML_1.0"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="urn:hl7-org:v3 classpath:schema/HL7V3/NE2008/multicacheschemas/PRPA_IN201301UV02.xsd">
+    <id root="2.25.19"/>
+    <creationTime value="20250121142140"/>
+    <interactionId extension="PRPA_IN201301UV02" root="2.16.840.1.113883.1.6"/>
+    <processingCode code="D"/>
+    <processingModeCode code="T"/>
+    <acceptAckCode code="AL"/>
+    <receiver typeCode="RCV">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="2.16.756.5.30.1.191.1.0.2.1"/>
+        </device>
+    </receiver>
+    <sender typeCode="SND">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="2.16.756.5.30.1.1176.19.1"/>
+        </device>
+    </sender>
+    <controlActProcess classCode="CACT" moodCode="EVN">
+        <code code="PRPA_TE201301UV02" codeSystem="2.16.840.1.113883.1.6"/>
+        <subject contextConductionInd="false" typeCode="SUBJ">
+            <registrationEvent classCode="REG" moodCode="EVN">
+                <id nullFlavor="NA"/>
+                <statusCode code="active"/>
+                <subject1 typeCode="SBJ">
+                    <patient classCode="PAT">
+                        <id assigningAuthorityName="dfad" extension="6c1280e3-8125-e911-80d6-00505600020b" root="2.16.756.5.30.1.1176.19.1"/>
+                        <id assigningAuthorityName="SPID" extension="761337618155745564" root="2.16.756.5.30.1.127.3.10.3"/>
+                        <statusCode code="active"/>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
+                            <name>
+                                <given>test1</given>
+                                <family>test2</family>
+                            </name>
+                            <birthTime value="20140424"/>
+                            <addr/>
+                        </patientPerson>
+                        <providerOrganization classCode="ORG" determinerCode="INSTANCE">
+                            <id root="2.16.756.5.30.1.1176.19.1"/>
+                            <id root="2.16.756.5.30.1.127.3.10.3"/>
+                            <contactParty classCode="CON">
+                                <telecom value="076 420 20 20"/>
+                            </contactParty>
+                        </providerOrganization>
+                    </patient>
+                </subject1>
+                <custodian typeCode="CST">
+                    <assignedEntity classCode="ASSIGNED">
+                        <id root="2.16.756.5.30.1.1176.19.1"/>
+                    </assignedEntity>
+                </custodian>
+            </registrationEvent>
+        </subject>
+        <subject contextConductionInd="false" typeCode="SUBJ">
+            <registrationEvent classCode="REG" moodCode="EVN">
+                <id nullFlavor="NA"/>
+                <statusCode code="active"/>
+                <subject1 typeCode="SBJ">
+                    <patient classCode="PAT">
+                        <id assigningAuthorityName="dfad" extension="6c1280e3-8125-e911-80d6-00505600020b" root="2.16.756.5.30.1.1176.19.1"/>
+                        <id assigningAuthorityName="SPID" extension="761337618155745564" root="2.16.756.5.30.1.127.3.10.3"/>
+                        <statusCode code="active"/>
+                        <patientPerson classCode="PSN" determinerCode="INSTANCE">
+                            <name>
+                                <given>test1</given>
+                                <family>test2</family>
+                            </name>
+                            <birthTime value="20140424"/>
+                            <addr/>
+                        </patientPerson>
+                        <providerOrganization classCode="ORG" determinerCode="INSTANCE">
+                            <id root="2.16.756.5.30.1.1176.19.1"/>
+                            <id root="2.16.756.5.30.1.127.3.10.3"/>
+                            <contactParty classCode="CON">
+                                <telecom value="076 420 20 20"/>
+                            </contactParty>
+                        </providerOrganization>
+                    </patient>
+                </subject1>
+                <custodian typeCode="CST">
+                    <assignedEntity classCode="ASSIGNED">
+                        <id root="2.16.756.5.30.1.1176.19.1"/>
+                    </assignedEntity>
+                </custodian>
+            </registrationEvent>
+        </subject>
+    </controlActProcess>
+</PRPA_IN201301UV02>

@@ -220,6 +220,7 @@ The schema allows for only one sender and IHE allows for only one receiver.
       Error: The attribute PRPA_IN201301UV02/controlActProcess/code/@code shall have the trigger event code value PRPA_TE201301UV02.
       See Table 3.44.4.1.2-2.
    </assert>
+            <assert test='count(msg:subject) eq 1'>Exactly one subject shall be present</assert>
 			<assert test='msg:subject/msg:registrationEvent/msg:statusCode/@code="active"'>
       Error: The attribute PRPA_IN201301UV02/controlActProcess/subject/registrationEvent/statuscode/@code shall be set to active.
       See Table 3.44.4.1.2-2.
@@ -307,6 +308,7 @@ The schema allows for only one sender and IHE allows for only one receiver.
       Error: The attribute PRPA_IN201302UV02/controlActProcess/code/@code shall have the trigger event code value PRPA_TE201302UV02.
       See Table 3.44.4.1.2-2.
    </assert>
+            <assert test='count(msg:subject) eq 1'>Exactly one subject shall be present</assert>
 			<assert test='msg:subject/msg:registrationEvent/msg:statusCode/@code="active"'>
       Error: The attribute PRPA_IN201302UV02/controlActProcess/subject/registrationEvent/statuscode/@code shall be set to active.
       See Table 3.44.4.1.2-2.

@@ -82,4 +82,21 @@ public class HL7v3ValidatorTest {
 		var validator = new CombinedXmlValidator();
 		Assertions.assertThrows(ValidationException.class, () -> validator.validate(message, XCPD.Interactions.ITI_55.getResponseValidationProfile()));
 	}
+
+    /**
+     * Multiple patients in an ITI-44 request.
+     */
+    @Test
+    public void testMultiplePatientsIn44Request() throws Exception {
+        var message = IOUtils.readStringFromStream(
+            getClass().getResourceAsStream("/validation/iti44-multipatient-request-1.xml"));
+        var validator = new CombinedXmlValidator();
+        Assertions.assertThrows(ValidationException.class, () -> validator.validate(
+            message,
+            PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile()));
+        Assertions.assertThrows(ValidationException.class, () -> validator.validate(
+            message.replaceAll("IN201301UV02", "IN201302UV02"),
+            PIXV3.Interactions.ITI_44_PIX.getRequestValidationProfile()));
+    }
+
 }
