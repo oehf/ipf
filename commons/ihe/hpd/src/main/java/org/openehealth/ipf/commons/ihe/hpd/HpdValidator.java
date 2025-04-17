@@ -34,7 +34,6 @@ import javax.xml.transform.Source;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 /**
  * @author Dmytro Rud
@@ -54,8 +53,6 @@ public class HpdValidator {
 
     private static final XsdValidator XSD_VALIDATOR = new XsdValidator();
 
-    private static final Pattern DIGITS_PATTERN = Pattern.compile("\\d+");
-
     private static void check(boolean condition, String message) {
         if (! condition) {
             throw new HpdException(message, ErrorType.MALFORMED_REQUEST);
@@ -74,7 +71,7 @@ public class HpdValidator {
     }
 
     private static boolean isUniqueRequestId(String id, Set<String> knownIds) {
-        return (id != null) && DIGITS_PATTERN.matcher(id).matches() && knownIds.add(id);
+        return StringUtils.isNotBlank(id) && knownIds.add(id.trim());
     }
 
     private static void validateBatchRequest(
@@ -85,12 +82,12 @@ public class HpdValidator {
         check(batchRequest.getBatchRequests() != null, "Batch request is null");
         check(!batchRequest.getBatchRequests().isEmpty(), "Batch request is empty");
         Set<String> requestIds = new HashSet<>();
-        check(isUniqueRequestId(batchRequest.getRequestID(), requestIds), "Batch request ID must be a non-negative number");
+        check(isUniqueRequestId(batchRequest.getRequestID(), requestIds), "Batch request ID must be not empty");
 
         for (var dsml : batchRequest.getBatchRequests()) {
             check(dsml != null, "Batch request element is null");
             check(ArrayUtils.contains(allowedElementTypes, dsml.getClass()), "Bad batch request element type " + ClassUtils.getSimpleName(dsml));
-            check(isUniqueRequestId(dsml.getRequestID(), requestIds), "Request ID must be a non-negative number unique in the batch request");
+            check(isUniqueRequestId(dsml.getRequestID(), requestIds), "Request ID must be not empty and unique in the batch request");
             requestValidator.accept(dsml);
         }
     }
@@ -135,7 +132,7 @@ public class HpdValidator {
     public static void validateIti58Response(BatchResponse batchResponse) {
         validateWithXsd(batchResponse, "/schema/DSMLv2.xsd");
         Set<String> requestIds = new HashSet<>();
-        check(isUniqueRequestId(batchResponse.getRequestID(), requestIds), "Batch request ID must be a non-negative number");
+        check(isUniqueRequestId(batchResponse.getRequestID(), requestIds), "Batch request ID must be not empty");
 
         for (var jaxbElement : batchResponse.getBatchResponses()) {
             check(jaxbElement != null, "Batch response element is null");
@@ -143,7 +140,7 @@ public class HpdValidator {
             check(value != null, "Batch response element is null");
 
             var requestId = getRequestId(value);
-            check(isUniqueRequestId(requestId, requestIds), "Request ID must be a non-negative number unique in the batch response");
+            check(isUniqueRequestId(requestId, requestIds), "Request ID must be not empty and unique in the batch response");
         }
     }
 
