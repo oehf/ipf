@@ -20,6 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.support.DefaultProfileValidationSupport;
 import ca.uhn.fhir.validation.FhirValidator;
 import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
 import org.hl7.fhir.common.hapi.validation.support.*;
 import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
 
@@ -31,6 +32,7 @@ import java.io.IOException;
  * @author Dmytro Rud
  */
 @UtilityClass
+@Slf4j
 public class IgBasedFhirContextSupplier {
 
     public static FhirContext getContext(FhirContext fhirContext, String... igResources) throws IOException {
@@ -43,6 +45,7 @@ public class IgBasedFhirContextSupplier {
 
         var npmValidationSupport = new NpmPackageValidationSupport(fhirContext);
         for (var igResource : igResources) {
+            log.debug("Load NPM package {}", igResource);
             npmValidationSupport.loadPackageFromClasspath(igResource);
         }
 
