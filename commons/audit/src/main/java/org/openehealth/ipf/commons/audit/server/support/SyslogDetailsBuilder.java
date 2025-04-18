@@ -94,7 +94,7 @@ class SyslogDetailsBuilder {
         return addField(procId, HEADER_PROC_ID);
     }
 
-    public SyslogDetailsBuilder addMsgid(String msgId) {
+    public SyslogDetailsBuilder addMsgId(String msgId) {
         return addField(msgId, HEADER_MSG_ID);
     }
 

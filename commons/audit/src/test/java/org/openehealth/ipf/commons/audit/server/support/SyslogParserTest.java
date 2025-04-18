@@ -38,7 +38,7 @@ class SyslogParserTest {
 
     @Test
     void shouldParseSimpleSyslogMessage() {
-        var msg = "<34>1 2023-04-18T14:32:52Z host app1 1234 ID47 - Hello World";
+        var msg = "<34>1 2023-04-18T14:32:52Z host app1 1234 ID47 - Hello World I'm here";
         var result = SyslogParser.parse(msg);
 
         assertThat(result, hasPriority(34));
@@ -46,7 +46,7 @@ class SyslogParserTest {
         assertThat(result, hasAppName("app1"));
         assertThat(result, hasProcId("1234"));
         assertThat(result, hasMsgId("ID47"));
-        assertThat(result, hasMessage("Hello World"));
+        assertThat(result, hasMessage("Hello World I'm here"));
         assertThat(result, hasTimestamp(Instant.parse("2023-04-18T14:32:52Z")));
     }
 
@@ -72,6 +72,11 @@ class SyslogParserTest {
     }
 
     // --- Invalid cases using helper ---
+
+    @Test
+    void shouldThrowWithExtraSpaces() {
+        assertSyslogParseFails("<13>1 2023-04-18T14:32:52Z  localhost  logger 321 ID10 - Just a log message");
+    }
 
     @Test
     void shouldThrowWhenVersionIsInvalid() {
