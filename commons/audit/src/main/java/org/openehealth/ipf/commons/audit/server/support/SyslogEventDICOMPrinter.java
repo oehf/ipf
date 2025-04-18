@@ -40,7 +40,7 @@ import static org.openehealth.ipf.commons.audit.server.support.SyslogConstants.R
 public class SyslogEventDICOMPrinter {
 
     private static final Logger log = LoggerFactory.getLogger(SyslogEventDICOMPrinter.class);
-    private static final AuditParser PARSER = new DICOMAuditParser();
+    private static final AuditParser parser = new DICOMAuditParser();
 
     public static EventConsumer newEventConsumer(String channel) {
         return new EventConsumer(channel);
@@ -90,7 +90,7 @@ public class SyslogEventDICOMPrinter {
         }
 
         private static AuditMessage parse(Map<String, Object> syslogMap) {
-            return PARSER.parse(syslogMap.get(MESSAGE).toString(), false);
+            return parser.parse(syslogMap.get(MESSAGE).toString(), false);
         }
     }
 

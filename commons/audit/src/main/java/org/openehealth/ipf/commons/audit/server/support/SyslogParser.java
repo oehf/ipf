@@ -25,14 +25,14 @@ public class SyslogParser {
 
     private static final Logger log = LoggerFactory.getLogger(SyslogParser.class);
     private static final Pattern syslogPattern = Pattern.compile(
-            "^<(\\d{1,3})>(\\d)\\s+" +    // PRI and VERSION
-            "(\\S+)\\s+" +                // TIMESTAMP
-            "(\\S+)\\s+" +                // HOSTNAME
-            "(\\S+)\\s+" +                // APP-NAME
-            "(\\S+)\\s+" +                // PROCID
-            "(\\S+)\\s+" +                // MSGID
-            "(\\[.*?]|-)\\s*" +           // STRUCTURED-DATA
-            "(.*)$"                       // MESSAGE
+            "^<(\\d{1,3})>(\\d)\\s" +    // PRI and VERSION
+            "(\\S+)\\s" +                // TIMESTAMP
+            "(\\S+)\\s" +                // HOSTNAME
+            "(\\S+)\\s" +                // APP-NAME
+            "(\\S+)\\s" +                // PROCID
+            "(\\S+)\\s" +                // MSGID
+            "(\\[.*?]|-)\\s*" +          // STRUCTURED-DATA
+            "(.*)$"                      // MESSAGE
     );
 
     public static Map<String, Object> parse(String syslogMessage) {
@@ -44,7 +44,7 @@ public class SyslogParser {
         try {
             var matcher = syslogPattern.matcher(syslogMessage);
             if (!matcher.matches()) {
-                throw new IllegalArgumentException("Invalid syslog message format");
+                throw new IllegalArgumentException("Syslog message does not match RFC 5424 format");
             }
             return new SyslogDetailsBuilder()
                 .addPriority(matcher.group(1))
@@ -53,7 +53,7 @@ public class SyslogParser {
                 .addHostName(matcher.group(4))
                 .addAppName(matcher.group(5))
                 .addProcId(matcher.group(6))
-                .addMsgid(matcher.group(7))
+                .addMsgId(matcher.group(7))
                 .addStructuredData(matcher.group(8))
                 .addMessage(matcher.group(9))
                 .build();
