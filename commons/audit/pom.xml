@@ -31,11 +31,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.github.palindromicity</groupId>
-            <artifactId>simple-syslog-5424</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>jakarta.jms</groupId>
             <artifactId>jakarta.jms-api</artifactId>
             <optional>true</optional>
