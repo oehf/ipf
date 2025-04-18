@@ -38,7 +38,6 @@
         <ph-schematron-version>7.1.2</ph-schematron-version>
         <ph-commons-version>11.1.0</ph-commons-version>
         <saxon-he-version>12.5</saxon-he-version>
-        <simple-syslog-version>0.0.16</simple-syslog-version>
         <spring-boot-version>3.4.4</spring-boot-version>
         <velocity-version>2.4.1</velocity-version>
         <vibur-version>25.0</vibur-version>
@@ -463,11 +462,6 @@
                 <version>${ph-commons-version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.github.palindromicity</groupId>
-                <artifactId>simple-syslog-5424</artifactId>
-                <version>${simple-syslog-version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.vibur</groupId>
                 <artifactId>vibur-object-pool</artifactId>

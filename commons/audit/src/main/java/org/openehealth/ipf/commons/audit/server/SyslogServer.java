@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 the original author or authors.
+ * Copyright 2025 the original author or authors.
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -29,9 +29,9 @@ import java.util.function.Consumer;
 /**
  * Abstract base class for TLS and UDP syslog servers. Received Syslog frames must be
  * handled by a consumer; the frames are parsed into a Map with keys as specified in
- * {@link com.github.palindromicity.syslog.DefaultKeyProvider}. If parsing fails (e.g.
+ * {@link org.openehealth.ipf.commons.audit.server.support.SyslogConstants}. If parsing fails (e.g.
  * due to incomplete syslog frames, the map is populated with the raw content and the
- * expection that has been thrown by the parser.
+ * exception that has been thrown by the parser.
  * <p>
  * One example for a consumer is {@link org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector}
  * that is practical for tests. With this respect, note that SyslogServer is {@link Closeable}, so it can easily
