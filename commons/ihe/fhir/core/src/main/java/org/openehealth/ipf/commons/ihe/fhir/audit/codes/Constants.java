@@ -19,7 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 public class Constants {
 
     public static final String IHE_SYSTEM_NAME = "urn:ihe:event-type-code";
-    public static final String EHS_SYSTEM_NAME = "e-health-suisse";
+    public static final String EHS_SYSTEM_NAME = "urn:e-health-suisse:event-type-code";
 
     public static final String DCM_SYSTEM_NAME = "http://dicom.nema.org/resources/ontology/DCM";
     public static final String DCM_OCLIENT_CODE = "110150";
