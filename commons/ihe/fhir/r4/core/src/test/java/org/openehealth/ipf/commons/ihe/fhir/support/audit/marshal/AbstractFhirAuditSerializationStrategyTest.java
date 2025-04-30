@@ -64,7 +64,7 @@ class AbstractFhirAuditSerializationStrategyTest {
                        .equalsDeep(entity.getType()));
         assertTrue(new Coding("http://terminology.hl7.org/CodeSystem/object-role", "26", null)
                        .equalsDeep(entity.getRole()));
-        assertEquals("00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01", entity.getWhat().getDisplay());
+        assertEquals("00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01", entity.getWhat().getIdentifier().getValue());
     }
 
     private AuditMessage readAuditMessageResource(final String filename) throws IOException {

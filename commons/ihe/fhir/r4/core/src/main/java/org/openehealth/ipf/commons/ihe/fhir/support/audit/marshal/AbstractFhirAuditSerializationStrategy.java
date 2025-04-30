@@ -125,17 +125,13 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
                 .setType(tvp.getType())
                 .setValue(new Base64BinaryType(tvp.getValue()))));
         if (isNotBlank(poit.getParticipantObjectID())) {
-            if (poit.getParticipantObjectTypeCodeRole() == ParticipantObjectTypeCodeRole.Patient) {
-                var patReference = new Reference(poit.getParticipantObjectID());
-                if (patReference.getReferenceElement().hasResourceType()) {
-                    entity.setWhat(new Reference(poit.getParticipantObjectID()));
-                } else {
-                    entity.setWhat(new Reference().setIdentifier(
-                        new Identifier().setValue(poit.getParticipantObjectID())));
-                }
+            var whatReference = new Reference(poit.getParticipantObjectID());
+            if (whatReference.getReferenceElement().hasResourceType()) {
+                // participantObjectID is a FHIR resource reference, let's use it
+                entity.setWhat(whatReference);
             } else {
-                final var reference = new Reference().setDisplay(poit.getParticipantObjectID());
-                entity.setWhat(reference);
+                entity.setWhat(new Reference().setIdentifier(
+                    new Identifier().setValue(poit.getParticipantObjectID())));
             }
         }
         return entity;
