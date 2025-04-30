@@ -23,6 +23,10 @@ import java.io.Serializable;
  */
 public interface CodedValueType extends Serializable {
 
+    String CODE_SYSTEM_NAME_IHE_TRANSACTIONS = "IHE Transactions";
+    String CODE_SYSTEM_NAME_DCM = "DCM";
+    String CODE_SYSTEM_NAME_EHS = "e-health-suisse";
+
     String getCode();
 
     String getOriginalText();

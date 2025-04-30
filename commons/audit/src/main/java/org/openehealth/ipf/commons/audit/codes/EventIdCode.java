@@ -51,7 +51,7 @@ public enum EventIdCode implements EventId, EnumeratedCodedValue<EventId> {
     private final EventId value;
 
     EventIdCode(String code, String displayName) {
-        this.value = EventId.of(code, "DCM", displayName);
+        this.value = EventId.of(code, CODE_SYSTEM_NAME_DCM, displayName);
     }
 
     public static EventIdCode enumForCode(String code) {

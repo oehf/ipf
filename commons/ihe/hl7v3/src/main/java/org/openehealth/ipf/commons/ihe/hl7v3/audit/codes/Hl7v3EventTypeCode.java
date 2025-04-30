@@ -40,7 +40,7 @@ public enum Hl7v3EventTypeCode implements EventType, EnumeratedCodedValue<EventT
     private final EventType value;
 
     Hl7v3EventTypeCode(String code, String displayName) {
-        this.value = EventType.of(code, "IHE Transactions", displayName);
+        this.value = EventType.of(code, CODE_SYSTEM_NAME_IHE_TRANSACTIONS, displayName);
     }
 
 }

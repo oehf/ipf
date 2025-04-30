@@ -26,10 +26,10 @@ import org.openehealth.ipf.commons.audit.types.EventType;
  * @since 3.5.1
  */
 public enum Xacml20EventTypeCodes implements EventType, EnumeratedCodedValue<EventType> {
-    PrivacyPolicyFeed             ("PPQ-1",  "e-health-suisse",  "Privacy Policy Feed"),
-    PrivacyPolicyRetrieve         ("PPQ-2",  "e-health-suisse",  "Privacy Policy Retrieve"),
-    AuthorizationDecisionsQueryIhe("ITI-79", "IHE Transactions", "Authorization Decisions Query"),
-    AuthorizationDecisionsQueryAdr("ADR",    "e-health-suisse",  "Authorization Decisions Query"),
+    PrivacyPolicyFeed             ("PPQ-1",  CODE_SYSTEM_NAME_EHS,  "Privacy Policy Feed"),
+    PrivacyPolicyRetrieve         ("PPQ-2",  CODE_SYSTEM_NAME_EHS,  "Privacy Policy Retrieve"),
+    AuthorizationDecisionsQueryIhe("ITI-79", CODE_SYSTEM_NAME_IHE_TRANSACTIONS, "Authorization Decisions Query"),
+    AuthorizationDecisionsQueryAdr("ADR",    CODE_SYSTEM_NAME_EHS,  "Authorization Decisions Query"),
     ;
 
     @Getter

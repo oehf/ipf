@@ -50,6 +50,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.openehealth.ipf.commons.audit.types.CodedValueType.CODE_SYSTEM_NAME_IHE_TRANSACTIONS;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.*;
 
 /**
@@ -86,7 +87,7 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             .setOutcome(getAuditEventOutcome(eit.getEventOutcomeIndicator()))
             .setOutcomeDesc(eit.getEventOutcomeDescription());
         eit.getEventTypeCode().forEach(etc -> {
-            if ("IHE Transactions".equals(etc.getCodeSystemName())) {
+            if (CODE_SYSTEM_NAME_IHE_TRANSACTIONS.equals(etc.getCodeSystemName())) {
                 auditEvent.addSubtype(codedValueTypeToCoding(etc, IHE_SYSTEM_NAME));
             } else {
                 auditEvent.addSubtype(codedValueTypeToCoding(etc));

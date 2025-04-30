@@ -51,7 +51,7 @@ public enum ActiveParticipantRoleIdCode implements ActiveParticipantRoleId, Enum
     private final ActiveParticipantRoleId value;
 
     ActiveParticipantRoleIdCode(String code, String displayName) {
-        this.value = ActiveParticipantRoleId.of(code, "DCM", displayName);
+        this.value = ActiveParticipantRoleId.of(code, CODE_SYSTEM_NAME_DCM, displayName);
     }
 
     public static ActiveParticipantRoleIdCode enumForCode(String code) {
