@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2012 rel. 2 sp1 (http://www.altova.com) by Martin Stingelin (Stingelin Informatik GmbH) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:eCH-0072="http://www.ech.ch/xmlns/eCH-0072/2" targetNamespace="http://www.ech.ch/xmlns/eCH-0072/2" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="2.0">
+	<xs:annotation>
+		<xs:documentation xml:lang="de">Ausgabedatum 10.03.2023 
+      eCH-0072 Datenstandard Verzeichnis der Staaten und Gebiete.
+    </xs:documentation>
+		<xs:documentation xml:lang="fr">
+      eCH-0072 Norme concernant les données : Répertoire des Etats et territoires.
+    </xs:documentation>
+		<xs:documentation xml:lang="it">
+      eCH-0072 Standard dei dati : Elenco degli Stati e territori.
+    </xs:documentation>
+		<xs:documentation>
+      Copyright (c) 2007-2008 Swiss Federal Statistical Office. All Rights Reserved.
+      info@bfs.admin.ch
+    </xs:documentation>
+	</xs:annotation>
+	<xs:simpleType name="string60Type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="60"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="string255Type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="token255Type">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="dateType">
+		<xs:restriction base="xs:date">
+			<xs:minInclusive value="1945-01-01"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="countryIdType">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="1000"/>
+			<xs:maxInclusive value="9999"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="countryType">
+		<xs:sequence>
+			<xs:element name="id" type="eCH-0072:countryIdType"/>
+			<xs:element name="unId" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="999"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="iso2Id" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="2"/>
+						<xs:minLength value="1"/>
+						<xs:pattern value="[A-Z]{2}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="iso3Id" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="3"/>
+						<xs:minLength value="1"/>
+						<xs:pattern value="[A-Z]{3}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="shortNameDe" type="eCH-0072:string60Type"/>
+			<xs:element name="shortNameFr" type="eCH-0072:string60Type"/>
+			<xs:element name="shortNameIt" type="eCH-0072:string60Type"/>
+			<xs:element name="shortNameEn" type="eCH-0072:string60Type" minOccurs="0"/>
+			<xs:element name="officialNameDe" type="eCH-0072:string255Type" minOccurs="0"/>
+			<xs:element name="officialNameFr" type="eCH-0072:string255Type" minOccurs="0"/>
+			<xs:element name="officialNameIt" type="eCH-0072:string255Type" minOccurs="0"/>
+			<xs:element name="continent">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="9"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="region">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="1"/>
+						<xs:maxInclusive value="9"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="state" type="xs:boolean"/>
+			<xs:element name="areaState" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:integer">
+						<xs:minInclusive value="0"/>
+						<xs:maxInclusive value="9999"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="unMember" type="xs:boolean"/>
+			<xs:element name="unEntryDate" type="eCH-0072:dateType" minOccurs="0"/>
+			<xs:element name="recognizedCh" type="xs:boolean"/>
+			<xs:element name="recognizedDate" type="eCH-0072:dateType" minOccurs="0"/>
+			<xs:element name="remarkDe" type="eCH-0072:token255Type" minOccurs="0"/>
+			<xs:element name="remarkFr" type="eCH-0072:token255Type" minOccurs="0"/>
+			<xs:element name="remarkIt" type="eCH-0072:token255Type" minOccurs="0"/>
+			<xs:element name="entryValid" type="xs:boolean"/>
+			<xs:element name="dateOfChange" type="eCH-0072:dateType"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="countries">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="validFrom" type="xs:date">
+					<xs:annotation>
+						<xs:documentation xml:lang="de">
+	            Die enthaltenen Daten sind ab diesem Datum gültig.
+	          </xs:documentation>
+						<xs:documentation xml:lang="fr">
+	            Les données sont valables depuis cette date.
+	          </xs:documentation>
+						<xs:documentation xml:lang="it">
+	            I dati sono validi a partire da questa data.
+	          </xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="country" type="eCH-0072:countryType" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+		<xs:unique name="uniqueCountryId">
+			<xs:selector xpath="country"/>
+			<xs:field xpath="id"/>
+		</xs:unique>
+	</xs:element>
+</xs:schema>
