@@ -46,9 +46,9 @@ public enum ParticipantObjectIdTypeCode implements ParticipantObjectIdType, Enum
     URI("12", "URI", "RFC-3881"),
 
     // DCM
-    StudyInstanceUID("110180", "Study Instance UID", "DCM"),
-    SOPClassUID("110181", "SOP Class UID", "DCM"),
-    NodeID("110182", "Node ID", "DCM"),
+    StudyInstanceUID("110180", "Study Instance UID", CODE_SYSTEM_NAME_DCM),
+    SOPClassUID("110181", "SOP Class UID", CODE_SYSTEM_NAME_DCM),
+    NodeID("110182", "Node ID", CODE_SYSTEM_NAME_DCM),
 
     // IHE
     XdsMetadata("urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd", "submission set classificationNode", "IHE XDS Metadata");

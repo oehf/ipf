@@ -70,7 +70,7 @@ public enum EventTypeCode implements EventType, EnumeratedCodedValue<EventType> 
     private final EventType value;
 
     EventTypeCode(String code, String displayName) {
-        this.value = EventType.of(code, "DCM", displayName);
+        this.value = EventType.of(code, CODE_SYSTEM_NAME_DCM, displayName);
     }
 
     public static EventTypeCode enumForCode(String code) {

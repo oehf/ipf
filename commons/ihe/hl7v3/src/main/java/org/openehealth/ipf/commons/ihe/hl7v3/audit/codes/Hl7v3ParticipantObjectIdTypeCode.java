@@ -40,7 +40,7 @@ public enum Hl7v3ParticipantObjectIdTypeCode implements ParticipantObjectIdType,
     private final ParticipantObjectIdType value;
 
     Hl7v3ParticipantObjectIdTypeCode(String code, String displayName) {
-        this.value = ParticipantObjectIdType.of(code, "IHE Transactions", displayName);
+        this.value = ParticipantObjectIdType.of(code, CODE_SYSTEM_NAME_IHE_TRANSACTIONS, displayName);
     }
 
 }
