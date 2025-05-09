@@ -17,8 +17,8 @@ package org.openehealth.ipf.modules.hl7.dsl
 
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Segment
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.*
 import ca.uhn.hl7v2.model.v24.group.ORU_R01_PATIENT
@@ -33,7 +33,7 @@ class GroupTest extends groovy.test.GroovyAssert {
     
     ORU_R01 message
 
-    @Before
+    @BeforeEach
     void setUp() {
         message = load('dsl/msg-02.hl7')
     }
@@ -103,7 +103,7 @@ class GroupTest extends groovy.test.GroovyAssert {
     @Test
 	void testGrep() {
 		// We have three OBX segments somewhere in the message
-		assertEquals(3, message.grep { it.name == 'OBX' }.size())
+		assert 3 == message.grep { it.name == 'OBX' }.size()
 	}
 
     @Test
@@ -122,31 +122,31 @@ class GroupTest extends groovy.test.GroovyAssert {
     @Test
 	void testFindAll() {
 		def obxs = message.findAll { it.name == 'OBX' }
-		assertEquals(3, obxs?.size())
+		assert 3 == obxs?.size()
 		def obxs2 = message.findAllOBX()
-		assertEquals(obxs*.name, obxs2*.name)
+		assert obxs*.name == obxs2*.name
 	}
 
     @Test
 	void testFindIndexOf() {
 		def index = message.findIndexOf { it.name == 'OBX' }
-		assertEquals('PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX', index)		
+		assert 'PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX' == index
 		def index2 = message.findIndexOfOBX()
-		assertEquals(index, index2)
+		assert index == index2
 	}
 
     @Test
 	void testFindLastIndexOf() {
 		def index = message.findLastIndexOf { it.name == 'OBX' }
-		assertEquals('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX', index)
+		assert 'PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX' == index
 		def index2 = message.findLastIndexOfOBX()
-		assertEquals(index, index2)
+		assert index == index2
 	}
 
     @Test
 	void testFindIndexValues() {
 		def indexes = message.findIndexValues { it.name == 'OBX' }
-		assertEquals(3, indexes?.size())
+		assert 3 == indexes?.size()
 		assert indexes.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(0).OBSERVATION(0).OBX')
 		assert indexes.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(0).OBX')
 		assert indexes.contains('PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1).OBX')
@@ -155,15 +155,15 @@ class GroupTest extends groovy.test.GroovyAssert {
     @Test
 	void testSplit() {
 		def (segments, groups) = message.split { it instanceof Segment }
-		assertEquals(27, segments.size())
-		assertEquals(7, groups.size())
+		assert 27 == segments.size()
+		assert 7 == groups.size()
 	}
 
     @Test
 	void testEach() {
 		int numberOfStructures = 0
 		message.each { numberOfStructures++ }
-		assertEquals(34,  numberOfStructures)
+		assert 34 == numberOfStructures
 	}
 
     @Test
@@ -179,7 +179,7 @@ class GroupTest extends groovy.test.GroovyAssert {
 
     @Test
 	void testEvery() {
-		assertFalse message.every { it instanceof Segment }
+		assert ! message.every { it instanceof Segment }
 	}
 
     @Test
@@ -190,7 +190,7 @@ class GroupTest extends groovy.test.GroovyAssert {
     @Test
 	void testSpread() {
 		// Length of all structure names concatenated
-		assertEquals(169,  message*.name.join('').length())
+		assert 169 == message*.name.join('').length()
 	}
 
     @Test
@@ -212,7 +212,7 @@ class GroupTest extends groovy.test.GroovyAssert {
 		for (def s in message) {
 			length += s.name.length()
 		}
-		assertEquals(169, length)
+		assert 169 == length
 	}
 
     @Test
@@ -222,8 +222,8 @@ class GroupTest extends groovy.test.GroovyAssert {
         Segment zntSegment = message.get(znt)
         Segment znt2Segment = message.get(znt2)
 
-        assertEquals(zntSegment, message.ZNT)
-        assertEquals(znt2Segment, message.ZNT2)
+        assert zntSegment == message.ZNT
+        assert znt2Segment == message.ZNT2
     }
     
     private Group observation(message) {

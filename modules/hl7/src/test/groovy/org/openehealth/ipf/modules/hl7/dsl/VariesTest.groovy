@@ -17,8 +17,8 @@ package org.openehealth.ipf.modules.hl7.dsl
 
 import ca.uhn.hl7v2.model.v24.message.ORU_R01
 import ca.uhn.hl7v2.model.v25.message.QBP_Q21
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.*
 
@@ -30,7 +30,7 @@ class VariesTest extends groovy.test.GroovyAssert {
     QBP_Q21 msg1
     ORU_R01 msg2
 
-    @Before
+    @BeforeEach
     void setUp() {
         msg1 = load('dsl/msg-05.hl7')
         msg2 = load('dsl/msg-02.hl7')

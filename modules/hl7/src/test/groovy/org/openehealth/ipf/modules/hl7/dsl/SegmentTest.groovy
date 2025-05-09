@@ -21,8 +21,8 @@ import ca.uhn.hl7v2.model.Varies
 import ca.uhn.hl7v2.model.v24.message.ORU_R01
 import ca.uhn.hl7v2.model.v24.segment.OBX
 import ca.uhn.hl7v2.parser.EncodingCharacters
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.load
 
@@ -39,7 +39,7 @@ class SegmentTest extends groovy.test.GroovyAssert {
     def pv1
     def pv2
 
-    @Before
+    @BeforeEach
     void setUp() {
         def msg1 = load('dsl/msg-01.hl7')
         def msg2 = load('dsl/msg-03.hl7')

@@ -16,13 +16,12 @@
 package org.openehealth.ipf.modules.hl7.dsl
 
 import ca.uhn.hl7v2.model.Composite
-import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.v24.segment.OBX
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.*
 import ca.uhn.hl7v2.model.v24.message.ORU_R01
 
@@ -38,7 +37,7 @@ class TypeTest extends groovy.test.GroovyAssert {
     Segment obr
     ORU_R01 msg2 = load('dsl/msg-02.hl7')
 
-    @Before
+    @BeforeEach
     void setUp() {
         obr = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBR
         obx1 = msg2.PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX
@@ -145,14 +144,14 @@ class TypeTest extends groovy.test.GroovyAssert {
     void assertFieldEquals(String expected, data, int field) {
         String simpleName = data.getClass().getSimpleName()
         assertEquals(expected, data[field].encode())
-        assertFalse("${simpleName}[${field}] must be not empty, but isEmpty() returns true", data[field].empty)
+        assertFalse(data[field].empty, "${simpleName}[${field}] must be not empty, but isEmpty() returns true", )
         assertTrue((boolean)data[field])
     }
 
     void assertFieldsEmpty(Segment segment, int... fields) {
         String simpleName = segment.getClass().getSimpleName()
         for (field in fields) {
-            assertTrue("${simpleName}[${field}] must be empty, but isEmpty() returns false", segment[field].empty)
+            assertTrue(segment[field].empty, "${simpleName}[${field}] must be empty, but isEmpty() returns false")
             if (segment[field]) {
                 fail("${simpleName}[${field}] must be empty, but asBoolean() returns true")
             }

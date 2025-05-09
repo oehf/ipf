@@ -16,9 +16,9 @@
 package org.openehealth.ipf.modules.hl7.validation.model
 
 import ca.uhn.hl7v2.validation.ValidationException
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.*
-import org.junit.Test
+import static org.junit.jupiter.api.Assertions.*
 
 
 /**

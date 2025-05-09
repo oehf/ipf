@@ -15,10 +15,11 @@
  */
 package org.openehealth.ipf.modules.hl7.dsl
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * @author Martin Krasser
@@ -30,7 +31,7 @@ class DoubleQuoteTest extends groovy.test.GroovyAssert {
     def maidenName
     def msg
 
-    @Before
+    @BeforeEach
     void setUp() {
         msg = load('dsl/msg-07.hl7')
         maidenName = msg.PID[6]
