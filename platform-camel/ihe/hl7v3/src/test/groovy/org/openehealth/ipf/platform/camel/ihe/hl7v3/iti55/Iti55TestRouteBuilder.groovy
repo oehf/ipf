@@ -16,6 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 
 import org.apache.camel.builder.RouteBuilder
+import org.apache.cxf.binding.soap.SoapFault
+
+import javax.xml.namespace.QName
 
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
@@ -26,7 +29,6 @@ import javax.xml.datatype.Duration
 
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.slf4j.LoggerFactory
@@ -132,7 +134,13 @@ class Iti55TestRouteBuilder extends RouteBuilder {
             .process {
                 throw new RuntimeException('NAK')
             }
-        
+
+        // generates a SOAP Fault
+        from('xcpd-iti55:iti55service3')
+            .process {
+                throw new SoapFault("fault issue 480", new QName("http://openehealth.org/ipf", "service3"))
+            }
+
     }
 
 }

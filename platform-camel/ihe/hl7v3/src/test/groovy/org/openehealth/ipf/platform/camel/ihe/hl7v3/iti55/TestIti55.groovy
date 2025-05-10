@@ -18,10 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 import org.apache.camel.Exchange
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.support.DefaultExchange
+import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
@@ -43,6 +45,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
     
     final String SERVICE1_URI = "xcpd-iti55://localhost:${port}/iti55service?correlator=#correlator"
     final String SERVICE2_URI = "xcpd-iti55://localhost:${port}/iti55service2"
+    final String SERVICE3_URI = "xcpd-iti55://localhost:${port}/iti55service3"
 
     final String SERVICE1_ASYNC_RESPONSE_URI = "http://localhost:${port}/iti55service-async-response"
     final String SERVICE1_DEFERRED_RESPONSE_URI = "http://localhost:${port}/iti55service-deferred-response"
@@ -220,4 +223,56 @@ class TestIti55 extends HL7v3StandardTestContainer {
                 requestExchange)
         assert MyRejectionHandlingStrategy.count == 1
     }
+
+    /**
+     * See <a href="https://github.com/oehf/ipf/issues/480">GutHub issue 480</a>.
+     */
+    @Test
+    void testIssue480() {
+        def requestExchange = new DefaultExchange(camelContext)
+        requestExchange.in.body = '''\
+<PRPA_IN201305UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3">
+    <id extension="2fbb9b6e-9797-4436-adc4-bf8ab1cac682" root="2.25"/>
+    <creationTime value="20250509125811"/>
+    <interactionId extension="PRPA_IN201305UV02" root="2.16.840.1.113883.1.6"/>
+    <processingCode/>
+    <processingModeCode code="T"/>
+    <acceptAckCode code="AL"/>
+    <receiver typeCode="RCV">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="1.42.1.7.1"/>
+        </device>
+    </receiver>
+    <sender typeCode="SND">
+        <device classCode="DEV" determinerCode="INSTANCE">
+            <id root="1.2.3.1.1.1"/>
+        </device>
+    </sender>
+    <controlActProcess classCode="CACT" moodCode="EVN">
+        <code code="PRPA_TE201305UV02" codeSystem="2.16.840.1.113883.1.6"/>
+        <queryByParameter>
+            <queryId/>
+            <statusCode code="new"/>
+            <responseModalityCode code="R"/>
+            <responsePriorityCode code="I"/>
+            <parameterList>
+                <livingSubjectId>
+                    <value extension="P4" root="2.16.756.5.30.1.127.3.10.3"/>
+                    <semanticsText>LivingSubject.id</semanticsText>
+                </livingSubjectId>
+            </parameterList>
+        </queryByParameter>
+    </controlActProcess>
+</PRPA_IN201305UV02>
+'''
+        producerTemplate.send(SERVICE3_URI, requestExchange)
+        assert requestExchange.exception.cause instanceof SoapFault
+        assert requestExchange.exception.cause.message == 'fault issue 480'
+
+        assert auditSender.messages.size() == 2
+        for (auditMessage in auditSender.messages) {
+            assert auditMessage.eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.SeriousFailure
+        }
+    }
+
 }
