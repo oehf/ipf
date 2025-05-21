@@ -44,7 +44,7 @@ public enum AuditSourceType implements EnumeratedCodedValue<AuditSource>, AuditS
     private final AuditSource value;
 
     AuditSourceType(String code, String displayName) {
-        this.value = AuditSource.of(code, "DCM", displayName);
+        this.value = AuditSource.of(code, CODE_SYSTEM_NAME_DCM, displayName);
     }
 
     public static AuditSourceType enumForCode(String code) {

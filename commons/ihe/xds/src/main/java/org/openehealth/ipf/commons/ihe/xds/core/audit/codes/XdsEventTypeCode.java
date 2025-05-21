@@ -52,7 +52,7 @@ public enum XdsEventTypeCode implements EventType, EnumeratedCodedValue<EventTyp
     private final EventType value;
 
     XdsEventTypeCode(String code, String displayName) {
-        this.value = EventType.of(code, "IHE Transactions", displayName);
+        this.value = EventType.of(code, CODE_SYSTEM_NAME_IHE_TRANSACTIONS, displayName);
     }
 
 }

@@ -15,7 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 
+import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
+import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
+
+import javax.xml.namespace.QName
 
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
@@ -26,7 +30,6 @@ import javax.xml.datatype.Duration
 
 import org.apache.camel.ExchangePattern
 import org.apache.camel.Message
-import org.openehealth.ipf.platform.camel.core.util.Exchanges
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import org.slf4j.LoggerFactory
@@ -41,14 +44,16 @@ class Iti55TestRouteBuilder extends RouteBuilder {
     static final AtomicInteger responseCount = new AtomicInteger()
 
     static final String RESPONSE = StandardTestContainer.readFile('iti55/iti55-sample-response.xml')
-    
+
     static final long ASYNC_DELAY = 10 * 1000L
-    
+
     static boolean errorOccurred = false
+
+    static int jettyPort = ServletServer.freePort
 
     @Override
     public void configure() throws Exception {
-        
+
         // receiver of asynchronous responses
         from('xcpd-iti55-async-response:iti55service-async-response?correlator=#correlator')
             .process(iti55ResponseValidator())
@@ -119,20 +124,77 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                     XcpdTestUtils.setTtl(message, dura.years * 2)
                 }
                 message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
-                    ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
-                
+                    ['MyResponseHeader': ('Re: ' + inHttpHeaders['MyRequestHeader'])]
+
                 responseCount.incrementAndGet()
             }
             .process(iti55ResponseValidator())
             .to("mock:response")
-            
+
 
         // generates NAK
         from('xcpd-iti55:iti55service2')
             .process {
                 throw new RuntimeException('NAK')
             }
-        
+
+        // generate SOAP Faults with different decorations
+        soapFaultEndpoint(1, '')
+        soapFaultEndpoint(2, '''
+              <MessageID xmlns="http://www.w3.org/2005/08/addressing">urn:uuid:f3fe11d6-33a4-4a30-bd9f-5505f683445e</MessageID>
+              <To xmlns="http://www.w3.org/2005/08/addressing">http://www.w3.org/2005/08/addressing/anonymous</To>
+        ''')
+        soapFaultEndpoint(3, '''
+              <Action xmlns="http://www.w3.org/2005/08/addressing">
+                  urn:ihe:iti:xcpd:2009:RespondingGateway_PortType:RespondingGateway_Deferred_PRPA_IN201305UV02:Fault:SoapFault
+              </Action>
+              <MessageID xmlns="http://www.w3.org/2005/08/addressing">urn:uuid:f3fe11d6-33a4-4a30-bd9f-5505f683445e</MessageID>
+              <To xmlns="http://www.w3.org/2005/08/addressing">http://www.w3.org/2005/08/addressing/anonymous</To>
+        ''')
+        soapFaultEndpoint(4, '''
+              <Action xmlns="http://www.w3.org/2005/08/addressing">
+                  Bla-bla-bla
+              </Action>
+              <MessageID xmlns="http://www.w3.org/2005/08/addressing">urn:uuid:f3fe11d6-33a4-4a30-bd9f-5505f683445e</MessageID>
+              <To xmlns="http://www.w3.org/2005/08/addressing">http://www.w3.org/2005/08/addressing/anonymous</To>
+        ''')
+        soapFaultEndpoint(5, '''
+              <Action xmlns="http://www.w3.org/2005/08/addressing">
+                  urn:hl7-org:v3:PRPA_IN201306UV02:Deferred:CrossGatewayPatientDiscovery
+              </Action>
+              <MessageID xmlns="http://www.w3.org/2005/08/addressing">urn:uuid:f3fe11d6-33a4-4a30-bd9f-5505f683445e</MessageID>
+              <To xmlns="http://www.w3.org/2005/08/addressing">http://www.w3.org/2005/08/addressing/anonymous</To>
+        ''')
+
+    }
+
+    private void soapFaultEndpoint(int index, String headers) {
+        from("jetty:http://localhost:${jettyPort}/iti55-fault-${index}")
+            .process {
+                it.message.body = """\
+                    <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">
+                        <soap:Header>
+                            ${headers}
+                        </soap:Header>
+                        <soap:Body>
+                          <soap:Fault>
+                              <soap:Code>
+                                  <soap:Value>soap:Receiver</soap:Value>
+                                  <soap:Subcode>
+                                      <soap:Value>soap:AttachmentIOError</soap:Value>
+                                  </soap:Subcode>
+                              </soap:Code>
+                              <soap:Reason>
+                                  <soap:Text xml:lang="en">fault issue 480</soap:Text>
+                              </soap:Reason>
+                          </soap:Fault>
+                        </soap:Body>
+                    </soap:Envelope>
+                    """.toString()
+
+                it.message.headers[Exchange.HTTP_RESPONSE_CODE] = 500
+                it.message.headers[Exchange.CONTENT_TYPE] = 'application/soap+xml;charset=UTF-8'
+            }
     }
 
 }

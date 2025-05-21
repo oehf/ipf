@@ -50,6 +50,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.openehealth.ipf.commons.audit.types.CodedValueType.CODE_SYSTEM_NAME_EHS;
+import static org.openehealth.ipf.commons.audit.types.CodedValueType.CODE_SYSTEM_NAME_IHE_TRANSACTIONS;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.*;
 
 /**
@@ -85,8 +87,15 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             .setRecorded(Date.from(eit.getEventDateTime()))
             .setOutcome(getAuditEventOutcome(eit.getEventOutcomeIndicator()))
             .setOutcomeDesc(eit.getEventOutcomeDescription());
-        eit.getEventTypeCode().forEach(etc ->
-            auditEvent.addSubtype(codedValueTypeToCoding(etc)));
+        eit.getEventTypeCode().forEach(etc -> {
+            if (CODE_SYSTEM_NAME_IHE_TRANSACTIONS.equals(etc.getCodeSystemName())) {
+                auditEvent.addSubtype(codedValueTypeToCoding(etc, IHE_SYSTEM_NAME));
+            } else if (CODE_SYSTEM_NAME_EHS.equals(etc.getCodeSystemName())) {
+                auditEvent.addSubtype(codedValueTypeToCoding(etc, EHS_SYSTEM_NAME));
+            } else {
+                auditEvent.addSubtype(codedValueTypeToCoding(etc));
+            }
+        });
         eit.getPurposesOfUse().forEach(pou ->
             auditEvent.addPurposeOfEvent(codedValueTypeToCodeableConcept(pou)));
 
@@ -115,11 +124,11 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             entity.addDetail(new AuditEvent.AuditEventEntityDetailComponent()
                 .setType(tvp.getType())
                 .setValue(new Base64BinaryType(tvp.getValue()))));
-        if (poit.getParticipantObjectTypeCodeRole() == ParticipantObjectTypeCodeRole.Patient &&
-            isNotBlank(poit.getParticipantObjectID())) {
-            var patReference = new Reference(poit.getParticipantObjectID());
-            if (patReference.getReferenceElement().hasResourceType()) {
-                entity.setWhat(new Reference(poit.getParticipantObjectID()));
+        if (isNotBlank(poit.getParticipantObjectID())) {
+            var whatReference = new Reference(poit.getParticipantObjectID());
+            if (whatReference.getReferenceElement().hasResourceType()) {
+                // participantObjectID is a FHIR resource reference, let's use it
+                entity.setWhat(whatReference);
             } else {
                 entity.setWhat(new Reference().setIdentifier(
                     new Identifier().setValue(poit.getParticipantObjectID())));

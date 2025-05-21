@@ -82,7 +82,7 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
 
     static AuditEvent.AuditEventAgentComponent participant(ActiveParticipantType atna) {
         AuditEvent.AuditEventAgentComponent fhir = new AuditEvent.AuditEventAgentComponent(new BooleanType(atna.userIsRequestor))
-        atna.roleIDCodes.each { fhir.addRole(codeableConcept(it)) }
+        fhir.setType(codeableConcept(atna.roleIDCodes.first()))
         fhir.who = new Reference(identifier: new Identifier(value: atna.userID))
         fhir.altId = atna.alternativeUserID
         fhir.name = atna.userName

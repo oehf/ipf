@@ -18,10 +18,12 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 import org.apache.camel.Exchange
 import org.apache.camel.component.mock.MockEndpoint
 import org.apache.camel.support.DefaultExchange
+import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
@@ -220,4 +222,24 @@ class TestIti55 extends HL7v3StandardTestContainer {
                 requestExchange)
         assert MyRejectionHandlingStrategy.count == 1
     }
+
+    /**
+     * See <a href="https://github.com/oehf/ipf/issues/480">GutHub issue 480</a>.
+     */
+    @Test
+    void testIssue480() {
+        for (int i = 1; i <= 5; ++i) {
+            def requestExchange = new DefaultExchange(camelContext)
+            requestExchange.in.body = '<PRPA_IN201305UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3"/>'
+            producerTemplate.send("xcpd-iti55://localhost:${Iti55TestRouteBuilder.jettyPort}/iti55-fault-${i}", requestExchange)
+            assert requestExchange.exception.cause instanceof SoapFault
+            assert requestExchange.exception.cause.message == 'fault issue 480'
+
+            assert auditSender.messages.size() == 1
+            assert auditSender.messages[0].eventIdentification.eventOutcomeIndicator == EventOutcomeIndicator.SeriousFailure
+
+            auditSender.clear()
+        }
+    }
+
 }

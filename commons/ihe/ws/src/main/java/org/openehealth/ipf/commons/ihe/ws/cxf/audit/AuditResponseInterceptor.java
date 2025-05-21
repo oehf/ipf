@@ -95,7 +95,8 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
         }
 
         // partial responses are for us out of interest
-        if (MessageUtils.isPartialResponse(message)) {
+        // (CXF wrongly marks SOAP faults as partial responses sometimes, therefore the additional check)
+        if (MessageUtils.isPartialResponse(message) && !MessageUtils.isFault(message)) {
             return;
         }
 

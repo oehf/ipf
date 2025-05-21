@@ -47,7 +47,7 @@ public enum MediaTypeCode implements MediaType, EnumeratedCodedValue<MediaType> 
     private final MediaType value;
 
     MediaTypeCode(String code, String displayName) {
-        this.value = MediaType.of(code, "DCM", displayName);
+        this.value = MediaType.of(code, CODE_SYSTEM_NAME_DCM, displayName);
     }
 
     public static MediaTypeCode enumForCode(String code) {
