@@ -32,14 +32,14 @@
         <kotlin-dokka-version>1.9.20</kotlin-dokka-version>
         <kotlin-version>2.1.20</kotlin-version>
         <kotlin-logging-version>7.0.7</kotlin-logging-version>
-        <micrometer-tracing-version>1.4.5</micrometer-tracing-version>
+        <micrometer-tracing-version>1.4.6</micrometer-tracing-version>
         <methanol-version>1.8.2</methanol-version>
         <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
         <ph-schematron-version>7.1.2</ph-schematron-version>
         <ph-commons-version>11.1.0</ph-commons-version>
         <saxon-he-version>12.6</saxon-he-version>
         <simple-syslog-version>0.0.18</simple-syslog-version>
-        <spring-boot-version>3.4.5</spring-boot-version>
+        <spring-boot-version>3.4.6</spring-boot-version>
         <velocity-version>2.4.1</velocity-version>
         <vibur-version>26.0</vibur-version>
         <woodstox-version>7.1.0</woodstox-version>
