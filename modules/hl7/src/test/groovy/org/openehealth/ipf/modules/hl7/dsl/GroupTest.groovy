@@ -17,8 +17,9 @@ package org.openehealth.ipf.modules.hl7.dsl
 
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Segment
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import static org.junit.jupiter.api.Assertions.*
 
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.*
 import ca.uhn.hl7v2.model.v24.group.ORU_R01_PATIENT
@@ -29,11 +30,11 @@ import ca.uhn.hl7v2.model.v24.message.ORU_R01
  * @author Christian Ohr
  * @author Mitko Kolev
  */
-class GroupTest extends groovy.test.GroovyAssert {
+class GroupTest {
     
     ORU_R01 message
 
-    @Before
+    @BeforeEach
     void setUp() {
         message = load('dsl/msg-02.hl7')
     }

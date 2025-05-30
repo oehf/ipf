@@ -19,7 +19,7 @@ import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.ModelClassFactory
 import ca.uhn.hl7v2.parser.Parser
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.util.Terser

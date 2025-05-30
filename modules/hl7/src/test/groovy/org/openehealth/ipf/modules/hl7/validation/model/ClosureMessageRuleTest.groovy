@@ -18,12 +18,12 @@ package org.openehealth.ipf.modules.hl7.validation.model
 import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.validation.ValidationException
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  * @author Christian Ohr
  */
-public class ClosureMessageRuleTest {
+class ClosureMessageRuleTest {
 	
 		
 	@Test

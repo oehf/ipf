@@ -26,7 +26,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-test</artifactId>
+            <artifactId>groovy-test-junit5</artifactId>
             <scope>test</scope>
         </dependency>		
         <dependency>

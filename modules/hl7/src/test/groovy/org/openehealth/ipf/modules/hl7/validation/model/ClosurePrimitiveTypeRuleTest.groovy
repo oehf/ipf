@@ -17,14 +17,14 @@ package org.openehealth.ipf.modules.hl7.validation.model
 
 import ca.uhn.hl7v2.validation.ValidationException
 
-import static org.junit.Assert.*
-import org.junit.Test
+import static org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Test
 
 
 /**
  * @author Christian Ohr
  */
-public class ClosurePrimitiveTypeRuleTest {
+class ClosurePrimitiveTypeRuleTest {
     
     @Test
     void testCorrect(){

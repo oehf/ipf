@@ -163,7 +163,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.groovy</groupId>
-                <artifactId>groovy-test</artifactId>
+                <artifactId>groovy-test-junit5</artifactId>
                 <version>${groovy-version}</version>
                 <scope>test</scope>
             </dependency>
