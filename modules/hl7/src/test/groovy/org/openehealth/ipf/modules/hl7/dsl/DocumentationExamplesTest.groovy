@@ -23,11 +23,10 @@ import ca.uhn.hl7v2.model.v25.message.ORU_R01
 import ca.uhn.hl7v2.model.v25.segment.MSH
 import ca.uhn.hl7v2.model.v25.segment.NK1
 import ca.uhn.hl7v2.model.v25.segment.PID
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
-import static org.junit.Assert.assertEquals
+import static org.junit.jupiter.api.Assertions.*
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.load
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.make
 
@@ -37,11 +36,11 @@ import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.make
  * @author Mitko Kolev
  *
  */
-class DocumentationExamplesTest extends groovy.test.GroovyAssert {
+class DocumentationExamplesTest {
 
     ORU_R01 message
 	
-	@Before
+	@BeforeEach
 	public void setUp(){
 		message = load('dsl/oru-r01-25.hl7')
 	}

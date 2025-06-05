@@ -29,8 +29,8 @@ import ca.uhn.hl7v2.model.v24.message.ACK
 import ca.uhn.hl7v2.model.v25.segment.NK1
 import ca.uhn.hl7v2.parser.*
 import ca.uhn.hl7v2.util.Terser
-import org.junit.BeforeClass
-import org.junit.Test
+import org.junit.jupiter.api.BeforeAll
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.map.BidiMappingService
@@ -38,7 +38,7 @@ import org.openehealth.ipf.commons.map.MappingService
 import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory
 
 import static org.easymock.EasyMock.*
-import static org.junit.Assert.*
+import static org.junit.jupiter.api.Assertions.*
 
 /**
  * @author Christian Ohr
@@ -48,7 +48,7 @@ class HapiModelExtensionTest {
 	
 	static def customGroovyPackageName = 'org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v25'
 
-    @BeforeClass
+    @BeforeAll
     static void setUp() {
         BidiMappingService mappingService = new BidiMappingService()
         mappingService.setMappingScript(HapiModelExtensionTest.class.getResource("/example2.map"))
@@ -260,9 +260,11 @@ class HapiModelExtensionTest {
         assertEquals '2.16.840.1.113883.5.4', 'encounterType'.valueSystem()
     }
     
-    @Test(expected=IllegalArgumentException)
+    @Test
     void testUnknownKeySystem() {
-        'Y'.keySystem()
+        assertThrows(IllegalArgumentException.class) {
+            'Y'.keySystem()
+        }
     }
 
     @Test

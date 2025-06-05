@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.modules.hl7.dsl
 
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.*
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
@@ -24,12 +24,12 @@ import ca.uhn.hl7v2.model.v22.message.ADT_A01
 /**
  * @author Martin Krasser
  */
-class CompositeTest extends groovy.test.GroovyAssert {
+class CompositeTest {
     
     def composite
     ADT_A01 msg
 
-    @Before
+    @BeforeEach
     void setUp() {
         msg = load('dsl/msg-01.hl7')
         composite = msg.NK1(0)[4]

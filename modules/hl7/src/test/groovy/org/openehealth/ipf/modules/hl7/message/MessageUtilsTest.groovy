@@ -32,8 +32,8 @@ import ca.uhn.hl7v2.model.v25.segment.NK1
 import ca.uhn.hl7v2.model.v251.message.ACK
 import ca.uhn.hl7v2.parser.ModelClassFactory
 import ca.uhn.hl7v2.parser.Parser
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory
 
 /**
@@ -45,7 +45,7 @@ public class MessageUtilsTest {
     private Parser parser
     private HapiContext context
     
-    @Before
+    @BeforeEach
     void setUp() throws Exception {
         ModelClassFactory factory = new CustomModelClassFactory()
         context = new DefaultHapiContext(factory)
