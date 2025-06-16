@@ -20,6 +20,7 @@ import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.HomeCommunityIdValidator;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
@@ -49,9 +50,9 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
 
     @Override
     public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {
-        List<String> targetCommunityIds = request.getSlotValues(QueryParameter.TARGET_COMMUNITY_IDS.getSlotName());
+        List<String> targetCommunityIds = new QuerySlotHelper(request).toStringList(QueryParameter.TARGET_COMMUNITY_IDS);
 
-        if (StringUtils.isNotEmpty(request.getHome()) && !targetCommunityIds.isEmpty()) {
+        if (StringUtils.isNotEmpty(request.getHome()) && (targetCommunityIds != null)) {
             throw new XDSMetaDataException(ValidationMessage.QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, "home, " + QueryParameter.TARGET_COMMUNITY_IDS.getSlotName());
         }
 
@@ -62,7 +63,7 @@ public class HomeCommunityIdValidation implements QueryParameterValidation {
         };
 
         var validator = new HomeCommunityIdValidator(homeCommunityRequired);
-        if (!targetCommunityIds.isEmpty()) {
+        if (targetCommunityIds != null) {
             targetCommunityIds.forEach(validator::validate);
         } else {
             validator.validate(request.getHome());

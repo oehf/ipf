@@ -344,7 +344,7 @@ public class AdhocQueryRequestValidatorTest {
     }
 
     @Test
-    public void testTargetCommunityIds() {
+    public void testTargetCommunityIdsConflict() {
         var query = new FindDocumentsQuery();
         query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
         query.setStatus(List.of(AvailabilityStatus.APPROVED));
@@ -352,6 +352,16 @@ public class AdhocQueryRequestValidatorTest {
         query.setTargetCommunityIds(List.of("urn:oid:2.3.4", "urn:oid:3.4.5"));
         var ebXML = transformer.toEbXML(new QueryRegistry(query));
         expectFailure(QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER, ebXML, ITI_18);
+    }
+
+    @Test
+    public void testTargetCommunityIdList() {
+        var query = new FindDocumentsQuery();
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setStatus(List.of(AvailabilityStatus.APPROVED));
+        query.setTargetCommunityIds(List.of("urn:oid:2.3.4", "urn:oid:3.4.5"));
+        var ebXML = transformer.toEbXML(new QueryRegistry(query));
+        validator.validate(ebXML, ITI_18);
     }
 
 }
