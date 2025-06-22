@@ -1,0 +1,96 @@
+<saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                 ID="_96189571-c72c-4a10-8f1c-6d5b27efa797" IssueInstant="2020-09-21T13:39:23.200Z" Version="2.0">
+    <saml2:Issuer>http://ith-icoserve.com/eHealthSolutionsSTS</saml2:Issuer>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+        <ds:SignedInfo>
+            <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+            <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+            <ds:Reference URI="#_96189571-c72c-4a10-8f1c-6d5b27efa797">
+                <ds:Transforms>
+                    <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+                    <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#">
+                        <ec:InclusiveNamespaces xmlns:ec="http://www.w3.org/2001/10/xml-exc-c14n#" PrefixList="xsd"/>
+                    </ds:Transform>
+                </ds:Transforms>
+                <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+                <ds:DigestValue>dfNQGDWIgHgb2taRa9QumqDHlO0P0brIBDwK0ajqmH4=</ds:DigestValue>
+            </ds:Reference>
+        </ds:SignedInfo>
+        <ds:SignatureValue>omitted for brevity</ds:SignatureValue>
+        <ds:KeyInfo>
+            <ds:X509Data>
+                <ds:X509Certificate>omitted for brevity</ds:X509Certificate>
+            </ds:X509Data>
+        </ds:KeyInfo>
+    </ds:Signature>
+    <saml2:Subject>
+        <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" NameQualifier="urn:gs1:gln">
+            9801000050702
+        </saml2:NameID>
+        <saml2:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+            <saml2:SubjectConfirmationData InResponseTo="Assertion_dbce1232740fcad9e020f927fd25a5d04779b4cc"
+                                           NotOnOrAfter="2020-09-21T13:54:23.200Z"
+                                           Recipient="https://sp.communilty.ch"/>
+        </saml2:SubjectConfirmation>
+    </saml2:Subject>
+    <saml2:Conditions NotBefore="2020-09-21T13:39:22.200Z" NotOnOrAfter="2020-09-21T13:54:23.200Z">
+        <saml2:AudienceRestriction>
+            <saml2:Audience>urn:e-health-suisse:token-audience:all-communities</saml2:Audience>
+        </saml2:AudienceRestriction>
+    </saml2:Conditions>
+    <saml2:AuthnStatement AuthnInstant="2020-09-21T13:39:23.200Z">
+        <saml2:AuthnContext>
+            <saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport
+            </saml2:AuthnContextClassRef>
+        </saml2:AuthnContext>
+    </saml2:AuthnStatement>
+    <saml2:AttributeStatement xmlns:hl7="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+        <saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:organization">
+            <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">Org 1
+                AG
+            </saml2:AttributeValue>
+            <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">Org 2
+                SA
+            </saml2:AttributeValue>
+        </saml2:Attribute>
+        <saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:organization-id">
+            <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:anyURI">
+                urn:oid:1.3.6.1.4.1.21367.2017.2.6.19.100.2
+            </saml2:AttributeValue>
+            <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:anyURI">
+                urn:oid:1.3.6.1.4.1.21367.2017.2.6.19.100.3
+            </saml2:AttributeValue>
+        </saml2:Attribute>
+        <saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:subject-id">
+            <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">Rosa
+                Sestak
+            </saml2:AttributeValue>
+        </saml2:Attribute>
+        <saml2:Attribute Name="urn:oasis:names:tc:xacml:2.0:subject:role">
+            <saml2:AttributeValue>
+                <Role xmlns="urn:hl7-org:v3" code="HCP" codeSystem="2.16.756.5.30.1.127.3.10.6"
+                          codeSystemName="eHealth Suisse EPR Actors"
+                          displayName="Healthcare professional" xsi:type="CE"/>
+            </saml2:AttributeValue>
+        </saml2:Attribute>
+        <saml2:Attribute Name="urn:oasis:names:tc:xspa:1.0:subject:purposeofuse">
+            <saml2:AttributeValue xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">
+                <hl7:PurposeOfUse
+                    xmlns:hl7="urn:hl7-org:v3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    code="NORM" codeSystem="2.16.756.5.30.1.127.3.10.5"
+                    codeSystemName="eHealth Suisse Verwendungszweck" displayName="Normalzugriff" xsi:type="hl7:CE"/>
+            </saml2:AttributeValue>
+        </saml2:Attribute>
+        <saml2:Attribute Name="urn:oasis:names:tc:xacml:2.0:resource:resource-id">
+            <saml2:AttributeValue xsi:type="xsd:token">
+                761337610411353650^^^&amp;2.16.756.5.30.1.127.3.10.3&amp;ISO
+            </saml2:AttributeValue>
+        </saml2:Attribute>
+        <saml2:Attribute Name="urn:ihe:iti:xca:2010:homeCommunityId"
+                         NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+            <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:anyURI">
+                urn:oid:1.3.6.1.4.1.21367.2017.2.6.19
+            </saml2:AttributeValue>
+        </saml2:Attribute>
+    </saml2:AttributeStatement>
+</saml2:Assertion>

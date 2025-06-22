@@ -16,18 +16,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.assertion;
 
+import jakarta.xml.bind.annotation.*;
+
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAnyAttribute;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlSchemaType;
-import jakarta.xml.bind.annotation.XmlType;
-import javax.xml.namespace.QName;
 
 
 /**
@@ -60,7 +55,7 @@ import javax.xml.namespace.QName;
 public class AttributeType {
 
     @XmlElement(name = "AttributeValue", nillable = true)
-    protected List<Object> attributeValue;
+    protected List<AttributeValue> attributeValue;
     @XmlAttribute(name = "Name", required = true)
     protected String name;
     @XmlAttribute(name = "NameFormat")
@@ -93,7 +88,7 @@ public class AttributeType {
      * 
      * 
      */
-    public List<Object> getAttributeValue() {
+    public List<AttributeValue> getAttributeValue() {
         if (attributeValue == null) {
             attributeValue = new ArrayList<>();
         }

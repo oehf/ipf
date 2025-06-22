@@ -523,12 +523,12 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link JAXBElement }{@code <}{@link Object }{@code >}}
+     * Create an instance of {@link JAXBElement }{@code <}{@link AttributeValue }{@code >}}
      * 
      */
     @XmlElementDecl(namespace = "urn:oasis:names:tc:SAML:2.0:assertion", name = "AttributeValue")
-    public JAXBElement<Object> createAttributeValue(Object value) {
-        return new JAXBElement<>(_AttributeValue_QNAME, Object.class, null, value);
+    public JAXBElement<AttributeValue> createAttributeValue(AttributeValue value) {
+        return new JAXBElement<>(_AttributeValue_QNAME, AttributeValue.class, null, value);
     }
 
     /**

@@ -40,6 +40,8 @@ public class ObjectFactory {
 
     private final static QName _CodedValue_QNAME = new QName("urn:hl7-org:v3", "CodedValue");
     private final static QName _InstanceIdentifier_QNAME = new QName("urn:hl7-org:v3", "InstanceIdentifier");
+    private final static QName _PurposeOfUse_QNAME = new QName("urn:hl7-org:v3", "PurposeOfUse");
+    private final static QName _Role_QNAME = new QName("urn:hl7-org:v3", "Role");
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: org.openehealth.ipf.commons.ihe.xacml20.stub.hl7v3
@@ -65,6 +67,13 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CE }
+     */
+    public CE createCE() {
+        return new CE();
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link CV }{@code >}}
      * 
      */
@@ -80,6 +89,16 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "InstanceIdentifier")
     public JAXBElement<II> createInstanceIdentifier(II value) {
         return new JAXBElement<>(_InstanceIdentifier_QNAME, II.class, null, value);
+    }
+
+    @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "PurposeOfUse")
+    public JAXBElement<CE> createPurposeOfUse(CE value) {
+        return new JAXBElement<>(_PurposeOfUse_QNAME, CE.class, Object.class, value);
+    }
+
+    @XmlElementDecl(namespace = "urn:hl7-org:v3", name = "Role")
+    public JAXBElement<CE> createRole(CE value) {
+        return new JAXBElement<>(_Role_QNAME, CE.class, null, value);
     }
 
 }
