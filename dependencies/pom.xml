@@ -21,7 +21,7 @@
         <hapi-fhir-version>8.2.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.1.0</ipf-gazelle-version>
-        <httpclient5-version>5.4.4</httpclient5-version>
+        <httpclient5-version>5.5</httpclient5-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jackson-version>2.19.0</jackson-version>
         <jaxb-version>4.0.5</jaxb-version>
@@ -30,14 +30,14 @@
         <kotlin-dokka-version>1.9.20</kotlin-dokka-version>
         <kotlin-version>2.1.20</kotlin-version>
         <kotlin-logging-version>7.0.7</kotlin-logging-version>
-        <micrometer-tracing-version>1.5.0</micrometer-tracing-version>
+        <micrometer-tracing-version>1.5.1</micrometer-tracing-version>
         <methanol-version>1.8.2</methanol-version>
         <nimbus-jose-jwt-version>9.37.3</nimbus-jose-jwt-version>
         <ph-schematron-version>7.1.2</ph-schematron-version>
         <ph-commons-version>11.1.0</ph-commons-version>
         <saxon-he-version>12.7</saxon-he-version>
         <simple-syslog-version>0.0.18</simple-syslog-version>
-        <spring-boot-version>3.5.0</spring-boot-version>
+        <spring-boot-version>3.5.3</spring-boot-version>
         <velocity-version>2.4.1</velocity-version>
         <vibur-version>26.0</vibur-version>
         <woodstox-version>7.1.1</woodstox-version>
