@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chadr;
 
-import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.JAXBIntrospector;
 import org.apache.cxf.transport.servlet.CXFServlet;
 import org.herasaf.xacml.core.context.impl.RequestType;
 import org.junit.jupiter.api.BeforeAll;
@@ -65,10 +65,7 @@ public class ChAdrTest extends StandardTestContainer {
         var stream = ChAdrTest.class.getClassLoader().getResourceAsStream("messages/chadr/" + fn);
         var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
         var object = unmarshaller.unmarshal(stream);
-        if (object instanceof JAXBElement jaxbElement) {
-            object = jaxbElement.getValue();
-        }
-        return (T) object;
+        return (T) JAXBIntrospector.getValue(object);
     }
 
     private static void checkCodeValueType(CodedValueType value, String[]... allowedCodes) {

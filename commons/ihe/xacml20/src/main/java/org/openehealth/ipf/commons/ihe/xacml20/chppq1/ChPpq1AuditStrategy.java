@@ -55,11 +55,11 @@ abstract public class ChPpq1AuditStrategy extends AuditStrategySupport<ChPpqAudi
         if (request instanceof AddPolicyRequest addPolicyRequest) {
             auditDataset.setAction(EventActionCode.Create);
             Xacml20Utils.toStream(addPolicyRequest).forEach(policy -> auditDataset.getPolicyAndPolicySetIds().add(policy.getId().toString()));
-            auditDataset.setPatientId(extractPatientIdFromPolicy(Xacml20Utils.toStream((AddPolicyRequest) request)));
+            auditDataset.setPatientId(extractPatientIdFromPolicy(Xacml20Utils.toStream(addPolicyRequest)));
         } else if (request instanceof UpdatePolicyRequest updatePolicyRequest) {
             auditDataset.setAction(EventActionCode.Update);
             Xacml20Utils.toStream(updatePolicyRequest).forEach(policy -> auditDataset.getPolicyAndPolicySetIds().add(policy.getId().toString()));
-            auditDataset.setPatientId(extractPatientIdFromPolicy(Xacml20Utils.toStream((UpdatePolicyRequest) request)));
+            auditDataset.setPatientId(extractPatientIdFromPolicy(Xacml20Utils.toStream(updatePolicyRequest)));
         } else if (request instanceof DeletePolicyRequest deletePolicyRequest) {
             auditDataset.setAction(EventActionCode.Delete);
             Xacml20Utils.toStream(deletePolicyRequest).forEach(id -> auditDataset.getPolicyAndPolicySetIds().add(id.getValue()));

@@ -39,9 +39,6 @@ public class MessageValidationTest {
         var stream = MessageValidationTest.class.getClassLoader().getResourceAsStream("messages/" + fn);
         var unmarshaller = Xacml20Utils.JAXB_CONTEXT.createUnmarshaller();
         var object = unmarshaller.unmarshal(stream);
-        if (object instanceof JAXBElement objectValue) {
-            object = objectValue;
-        }
         return (T) JAXBIntrospector.getValue(object);
     }
 
