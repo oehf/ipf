@@ -36,6 +36,9 @@
             <action issue="480" dev="qligier" type="fix">
                 Further improvement to ensure that an AuditMessage generated when receiving a SOAP Fault
             </action>
+            <action issue="479" dev="ohr" type="update">
+                Parse syslog messages without external dependencies
+            </action>
             <action issue="478" dev="ivan1pl" type="fix">
                 DICOMAuditParser incorrectly set encrypted property instead of anonymized
             </action>
