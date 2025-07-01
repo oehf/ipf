@@ -31,13 +31,13 @@ public class RFC5424Protocol {
 
     /**
      * Default syslog priority for this transport, according to
-     * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.6
+     * <a href="http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.6">here</a>
      */
     private static final int TRANSPORT_PRI = 10 * 8 + 5;
 
     /**
      * Default syslog MSGID for this transport, according to
-     * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.6
+     * <a href="http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.6">here</a>
      */
     private static final String TRANSPORT_MSGID = "IHE+RFC-3881";
 

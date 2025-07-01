@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.audit.server.support;
 
-import com.github.palindromicity.syslog.dsl.SyslogFieldKeys;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.unmarshal.AuditParser;
 import org.openehealth.ipf.commons.audit.unmarshal.dicom.DICOMAuditParser;
@@ -103,7 +102,7 @@ public class SyslogEventCollector implements Consumer<Map<String, Object>> {
     }
 
     public static AuditMessage parse(Map<String, Object> syslogMap, boolean validate) {
-        return PARSER.parse(syslogMap.get(SyslogFieldKeys.MESSAGE.getField()).toString(), validate);
+        return PARSER.parse(syslogMap.get(SyslogConstants.MESSAGE).toString(), validate);
     }
 
     //

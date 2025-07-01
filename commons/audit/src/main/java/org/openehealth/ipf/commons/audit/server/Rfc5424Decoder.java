@@ -15,14 +15,11 @@
  */
 package org.openehealth.ipf.commons.audit.server;
 
-import com.github.palindromicity.syslog.NilPolicy;
-import com.github.palindromicity.syslog.SyslogParser;
-import com.github.palindromicity.syslog.SyslogParserBuilder;
-import com.github.palindromicity.syslog.dsl.ParseException;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.handler.codec.MessageToMessageDecoder;
+import org.openehealth.ipf.commons.audit.server.support.SyslogParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +30,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static org.openehealth.ipf.commons.audit.server.support.SyslogConstants.REMOTE_HOST;
+import static org.openehealth.ipf.commons.audit.server.support.SyslogConstants.REMOTE_IP;
+import static org.openehealth.ipf.commons.audit.server.support.SyslogConstants.REMOTE_PORT;
 
 /**
  * Converts a Syslog string into a Map of elements as described by RFC 5424. It also
@@ -45,16 +46,6 @@ import java.util.Map;
 public class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
 
     private static final Logger log = LoggerFactory.getLogger(Rfc5424Decoder.class);
-
-    private static final SyslogParser syslogParser = new SyslogParserBuilder()
-            .withNilPolicy(NilPolicy.OMIT)
-            .build();
-
-    public static final String SYSLOG_RAW_MESSAGE = "syslog.raw.message";
-    public static final String SYSLOG_EXCEPTION = "syslog.exception";
-    public static final String SYSLOG_REMOTE_HOST = "syslog.remote.host";
-    public static final String SYSLOG_REMOTE_PORT = "syslog.remote.port";
-    public static final String SYSLOG_REMOTE_IP = "syslog.remote.ip";
 
     static Map<String, Object> decodeDatagram(DatagramPacket datagramPacket) {
         return decode(datagramPacket.sender(), datagramPacket.content());
@@ -72,9 +63,9 @@ public class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
         var map = parseByteBuf(msg);
         if (socketAddress instanceof InetSocketAddress inetSocketAddress) {
             var enriched = new HashMap<>(map);
-            enriched.put(SYSLOG_REMOTE_HOST, inetSocketAddress.getHostName());
-            enriched.put(SYSLOG_REMOTE_PORT, inetSocketAddress.getPort());
-            enriched.put(SYSLOG_REMOTE_IP, inetSocketAddress.getAddress().getHostAddress());
+            enriched.put(REMOTE_HOST, inetSocketAddress.getHostName());
+            enriched.put(REMOTE_PORT, inetSocketAddress.getPort());
+            enriched.put(REMOTE_IP, inetSocketAddress.getAddress().getHostAddress());
             return Collections.unmodifiableMap(enriched);
         } else {
             return map;
@@ -83,15 +74,7 @@ public class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
 
     private static Map<String, Object> parseByteBuf(ByteBuf byteBuf) {
         var message = byteBuf.toString(StandardCharsets.UTF_8);
-        try {
-            // Get rid of the pesky BOM character
-            return syslogParser.parseLine(message.replace("\uFEFF", ""));
-        } catch (ParseException e) {
-            var map = new HashMap<String, Object>();
-            map.put(SYSLOG_RAW_MESSAGE, message);
-            map.put(SYSLOG_EXCEPTION, e);
-            return map;
-        }
+        return SyslogParser.parse(message.replace("\uFEFF", ""));
     }
 
 }

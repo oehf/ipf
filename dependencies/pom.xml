@@ -466,11 +466,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.github.palindromicity</groupId>
-                <artifactId>simple-syslog-5424</artifactId>
-                <version>${simple-syslog-version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.vibur</groupId>
                 <artifactId>vibur-object-pool</artifactId>
                 <version>${vibur-version}</version>
