@@ -10,7 +10,7 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <bouncycastle-version>1.80</bouncycastle-version>
-        <camel-version>4.10.5</camel-version>
+        <camel-version>4.10.6</camel-version>
         <cxf-version>4.1.2</cxf-version>
         <commons-io-version>2.19.0</commons-io-version>
         <commons-compress-version>1.27.1</commons-compress-version>
@@ -28,7 +28,7 @@
         <jakarta-wsapi-version>4.0.2</jakarta-wsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
         <kotlin-dokka-version>1.9.20</kotlin-dokka-version>
-        <kotlin-version>2.1.20</kotlin-version>
+        <kotlin-version>2.2.0</kotlin-version>
         <kotlin-logging-version>7.0.7</kotlin-logging-version>
         <micrometer-tracing-version>1.5.1</micrometer-tracing-version>
         <methanol-version>1.8.2</methanol-version>

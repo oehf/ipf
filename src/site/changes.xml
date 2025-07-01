@@ -23,6 +23,35 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="5.1.0" description="IPF 5.1.0" date="03 Jul 2025">
+            <action issue="483" dev="unixoid" type="update">
+                Improve parsing structured content of SAML assertions
+            </action>
+            <action issue="482" dev="unixoid" type="fix">
+                Fix OID Validation Fails in targetCommunityIdList. Thanks to prasadmarri for reporting
+            </action>
+            <action issue="481" dev="unixoid" type="fix">
+                Upgrade to JUnit 5
+            </action>
+            <action issue="480" dev="qligier" type="fix">
+                Further improvement to ensure that an AuditMessage generated when receiving a SOAP Fault
+            </action>
+            <action issue="478" dev="ivan1pl" type="fix">
+                DICOMAuditParser incorrectly set encrypted property instead of anonymized
+            </action>
+            <action issue="477" dev="unixoid" type="fix">
+                Fix issue with ITI-44 validator, allowing multiple patients to be present in the same request
+            </action>
+            <action issue="473" dev="rogtrifork" type="fix">
+                Fix issue with serializing XACMLAuthzDecisionQueryType
+            </action>
+            <action issue="471" dev="qligier" type="fix">
+                Ensure that an AuditMessage generated when receiving a SOAP Fault
+            </action>
+            <action issue="469" dev="qligier" type="fix">
+                AuditRecordTranslator and FhirAuditSerializationStrategy now have corresponding translation logic
+            </action>
+        </release>
         <release version="5.0.0" description="IPF 5.0.0" date="04 Feb 2025">
             <action issue="467" dev="ohr" type="update">
                 Allow to sort by patient author name in ITI-66 and ITI-67 queries

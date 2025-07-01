@@ -54,7 +54,7 @@
         <site-plugin-version>3.21.0</site-plugin-version>
 
         <!-- Dependency version properties -->
-        <brave-version>6.1.0</brave-version>
+        <brave-version>6.3.0</brave-version>
         <easymock-version>5.6.0</easymock-version>
         <guava-version>33.3.0-jre</guava-version>
         <lombok-version>1.18.38</lombok-version>
