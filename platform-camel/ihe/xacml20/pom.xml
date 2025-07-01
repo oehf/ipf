@@ -21,7 +21,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-xacml20-impl</artifactId>
+            <artifactId>ipf-commons-ihe-xacml20</artifactId>
             <version>${project.version}</version>
         </dependency>
 
@@ -88,7 +88,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-ihe-xacml20-impl</artifactId>
+            <artifactId>ipf-commons-ihe-xacml20</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
             <type>test-jar</type>

@@ -76,9 +76,9 @@ public class ChPpqmConsentCreator {
                         .addActor(actor)
                         .setPurpose(purposesOfUse.stream()
                                 .map(pou -> new Coding(
-                                        "urn:oid:" + pou.getCode().codeSystem(),
-                                        pou.getCode().code(),
-                                        pou.getCode().displayName()))
+                                        "urn:oid:" + pou.getCode().getCodeSystem(),
+                                        pou.getCode().getCode(),
+                                        pou.getCode().getDisplayName()))
                                 .collect(Collectors.toList())));
 
         consent.setId(consentId);
@@ -102,9 +102,9 @@ public class ChPpqmConsentCreator {
     private static Consent.provisionActorComponent createActor(SubjectRole role) {
         return new Consent.provisionActorComponent()
                 .setRole(new CodeableConcept(new Coding()
-                        .setSystem("urn:oid:" + role.getCode().codeSystem())
-                        .setCode(role.getCode().code())
-                        .setDisplay(role.getCode().displayName())));
+                        .setSystem("urn:oid:" + role.getCode().getCodeSystem())
+                        .setCode(role.getCode().getCode())
+                        .setDisplay(role.getCode().getDisplayName())));
     }
 
     private static Consent.provisionActorComponent createInstanceActor(
