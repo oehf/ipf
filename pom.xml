@@ -50,7 +50,8 @@
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
         <release-plugin-version>3.1.1</release-plugin-version>
         <resources-plugin-version>3.3.1</resources-plugin-version>
-        <sources-plugin-version>3.3.1</sources-plugin-version>
+        <!-- investigate: maven-release-plugin-fails source-artifacts-getting-deployed-twice on version greater than 3.2.1 -->
+        <sources-plugin-version>3.2.1</sources-plugin-version>
         <site-plugin-version>3.21.0</site-plugin-version>
 
         <!-- Dependency version properties -->
