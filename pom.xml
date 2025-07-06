@@ -39,6 +39,7 @@
         <!-- Plugin version properties -->
         <assembly-plugin-version>3.7.1</assembly-plugin-version>
         <build-helper-version>3.6.1</build-helper-version>
+        <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
         <compiler-plugin-version>3.14.0</compiler-plugin-version>
         <enforcer-plugin-version>3.5.0</enforcer-plugin-version>
         <gmavenplus-plugin-version>4.2.0</gmavenplus-plugin-version>
@@ -47,7 +48,6 @@
         <javadoc-plugin-version>3.11.2</javadoc-plugin-version>
         <jaxb-plugin-version>3.3.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
-        <nexus-staging-plugin-version>1.6.13</nexus-staging-plugin-version>
         <release-plugin-version>3.1.1</release-plugin-version>
         <resources-plugin-version>3.3.1</resources-plugin-version>
         <sources-plugin-version>3.3.1</sources-plugin-version>
@@ -728,14 +728,12 @@
             </plugin>
             -->
             <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${nexus-staging-plugin-version}</version>
+                <groupId>org.sonatype.central</groupId>
+                <artifactId>central-publishing-maven-plugin</artifactId>
+                <version>${central-publishing-maven-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <publishingServerId>central</publishingServerId>
                 </configuration>
             </plugin>
             <plugin>
