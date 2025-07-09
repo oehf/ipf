@@ -42,8 +42,8 @@ public interface Iti48PortType {
     @WebResult(name = "RetrieveValueSetResponse",
         targetNamespace = "urn:ihe:iti:svs:2008",
         partName = "body")
-    @Action(input = "urn:ihe:iti:svs:2008:RetrieveValueSet",
-        output = "urn:ihe:iti:svs:2008:RetrieveValueSetResponse")
+    @Action(input = "urn:ihe:iti:2008:RetrieveValueSet",
+        output = "urn:ihe:iti:2008:RetrieveValueSetResponse")
     @WebMethod(operationName = "ValueSetRepository_RetrieveValueSet")
     RetrieveValueSetResponse valueSetRepositoryRetrieveValueSet(
         @WebParam(partName = "body",
