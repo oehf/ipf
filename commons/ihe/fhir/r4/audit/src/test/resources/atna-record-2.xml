@@ -10,11 +10,12 @@
     <ActiveParticipant UserID="1234" AlternativeUserID="1234" UserIsRequestor="false" NetworkAccessPointID="10.0.1.42" NetworkAccessPointTypeCode="2">
         <RoleIDCode codeSystemName="DCM" csd-code="110152" originalText="Destination Role ID" />
     </ActiveParticipant>
-    <ActiveParticipant UserID="7601002860123" UserName="&lt;7601002860123@http://ith-icoserve.com/eHealthSolutionsSTS&gt;" UserIsRequestor="false">
-        <RoleIDCode codeSystemName="2.16.756.5.30.1.127.3.10.6" originalText="Healthcare Professional" csd-code="HCP" />
-    </ActiveParticipant>
+    <ActiveParticipant UserID="7601002860123"
+                       UserName="&lt;7601002860123@http://ith-icoserve.com/eHealthSolutionsSTS&gt;"
+                       UserIsRequestor="false" />
     <ActiveParticipant UserID="7601002860123" UserName="Quentin Ligier" UserIsRequestor="true">
         <RoleIDCode codeSystemName="2.16.756.5.30.1.127.3.10.6" originalText="Healthcare Professional" csd-code="HCP" />
+        <RoleIDCode codeSystemName="2.16.840.1.113883.6.96" originalText="Healthcare professional (occupation)" csd-code="223366009" />
     </ActiveParticipant>
     <AuditSourceIdentification AuditEnterpriseSiteID="2.16.756.1.2.3" AuditSourceID="d7251114" />
     <ParticipantObjectIdentification ParticipantObjectID="2.16.756.5.30.1.191.1.0.12.3.101^e90afe4e-49c8-4140-94b0-b74f68c3678b" ParticipantObjectTypeCode="2" ParticipantObjectTypeCodeRole="3">
