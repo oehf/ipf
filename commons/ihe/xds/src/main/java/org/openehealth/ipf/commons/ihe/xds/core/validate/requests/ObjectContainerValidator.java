@@ -463,6 +463,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         return null;
     }
 
+    private static void exceptionOnInitialVersionInUpdateTransaction(String registryObjectId) {
+        throw new XdsRuntimeException(ErrorCode.INVALID_REQUEST_EXCEPTION,
+            "Initial version of the object was received in an update transaction",
+            Severity.ERROR, registryObjectId);
+    }
+
     private void validateUpdateObject(EbXMLRegistryObject registryObject, EbXMLObjectContainer container, ValidationProfile profile) {
 
         // logicalId is required for ITI-57 and optional for ITI-92
@@ -470,16 +476,10 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         if (logicalId != null) {
             uuidValidator.validate(logicalId);
             if (logicalId.equals(registryObject.getId())) {
-                throw new XdsRuntimeException(ErrorCode.INVALID_REQUEST_EXCEPTION,
-                        "Initial version of the object was received in an update transaction",
-                        Severity.ERROR, registryObject.getId());
+                exceptionOnInitialVersionInUpdateTransaction(registryObject.getId());
             }
         } else if (profile == XDS.Interactions.ITI_57) {
-            throw new XdsRuntimeException(
-                    ErrorCode.METADATA_UPDATE_ERROR,
-                    "logical ID is missing in the XDS Metadata Update request",
-                    Severity.ERROR,
-                    registryObject.getId());
+            exceptionOnInitialVersionInUpdateTransaction(registryObject.getId());
         }
 
         var foundHasMemberAssociation = false;
