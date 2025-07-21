@@ -153,6 +153,24 @@ class AuditRecordTranslatorTest {
         log.debug('FHIR validation result:\n{}', parser.encodeResourceToString(operationOutcome))
 
         assert validationResult.successful
+
+        assert fhir.agent.size() == 4
+
+        assert fhir.agent[0].type.coding[0].code == '110153'
+        assert fhir.agent[0].who.identifier.value == 'https://community.epr.ch/Repository'
+        assert !fhir.agent[0].hasRole()
+
+        assert fhir.agent[1].type.coding[0].code == '110152'
+        assert fhir.agent[1].who.identifier.value == '1234'
+        assert !fhir.agent[1].hasRole()
+
+        assert !fhir.agent[2].hasType()
+        assert fhir.agent[2].who.identifier.value == '7601002860123'
+        assert !fhir.agent[2].hasRole()
+
+        assert fhir.agent[3].type.coding[0].code == 'HCP'
+        assert fhir.agent[3].who.identifier.value == '7601002860123'
+        assert fhir.agent[3].role[0].coding[0].code == '223366009'
     }
 
 }
