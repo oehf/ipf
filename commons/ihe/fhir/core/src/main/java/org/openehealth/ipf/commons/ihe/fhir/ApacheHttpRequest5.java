@@ -73,7 +73,7 @@ public class ApacheHttpRequest5 extends BaseHttpRequest implements IHttpRequest 
     @Override
     public String getRequestBodyFromStream() throws IOException {
         var entity = request.getEntity();
-        if (entity.isRepeatable()) {
+        if (entity != null && entity.isRepeatable()) {
             final var contentTypeHeader = request.getFirstHeader("Content-Type");
             var charset = contentTypeHeader == null
                 ? null
