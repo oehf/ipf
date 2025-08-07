@@ -102,4 +102,9 @@ public class ApacheHttpRequest5 extends BaseHttpRequest implements IHttpRequest 
     public void removeHeaders(String name) {
         request.removeHeaders(name);
     }
+
+    @Override
+    public String toString() {
+        return request.toString();
+    }
 }
