@@ -30,6 +30,7 @@ import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
+import static org.openehealth.ipf.commons.ihe.xds.RMU.Interactions.ITI_92;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_57;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.LOGICAL_ID_SAME;
 
@@ -64,6 +65,15 @@ public class SubmitObjectsRequestForUpdateValidatorTest {
         var request = getRequest("SubmitObjectsRequest_ebrs30_update_nonstandard_association.xml");
 
         validator.validate(request, ITI_57);
+    }
+
+    @Test
+    public void testIti92WithoutHomeCommunityId() throws Exception {
+        var request = getRequest("SubmitObjectsRequest_ebrs30_update.xml");
+        expectXdsMetadataException(ValidationMessage.HOME_COMMUNITY_ID_MUST_BE_SPECIFIED, request, ITI_92);
+
+        request.getRegistryPackages().get(0).setHome("urn:oid:2.3.4.5.6.7");
+        validator.validate(request, ITI_92);
     }
 
     private void expectXdsMetadataException(ValidationMessage expectedMessage, EbXMLSubmitObjectsRequest<SubmitObjectsRequest> ebXML, ValidationProfile profile) {

@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
+import org.openehealth.ipf.commons.ihe.xds.RMU;
 import org.openehealth.ipf.commons.ihe.xds.XCDR;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
@@ -30,7 +31,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
  */
 public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjectsRequest<?>, ValidationProfile> {
     private static final ObjectContainerValidator OBJECT_CONTAINER_VALIDATOR = ObjectContainerValidator.getInstance();
-    private static final HomeCommunityIdValidator HOME_COMMUNITY_ID_VALIDATOR = new HomeCommunityIdValidator(false);
 
     @Getter
     private static final SubmitObjectsRequestValidator instance = new SubmitObjectsRequestValidator();
@@ -48,7 +48,7 @@ public class SubmitObjectsRequestValidator implements Validator<EbXMLSubmitObjec
     @Override
     public void validate(EbXMLSubmitObjectsRequest<?> request, ValidationProfile profile)  {
         OBJECT_CONTAINER_VALIDATOR.validate(request, profile);
-        HOME_COMMUNITY_ID_VALIDATOR.validate(request.getRegistryPackages().get(0).getHome());
+        new HomeCommunityIdValidator(profile.getInteractionId() == RMU.Interactions.ITI_92).validate(request.getRegistryPackages().get(0).getHome());
         new HomeCommunityIdValidator(profile.getInteractionId() == XCDR.Interactions.ITI_80).validate(request.getSingleSlotValue(Vocabulary.SLOT_NAME_HOME_COMMUNITY_ID));
     }
 }
