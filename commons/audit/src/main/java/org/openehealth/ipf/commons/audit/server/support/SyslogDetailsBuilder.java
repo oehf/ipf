@@ -104,7 +104,7 @@ class SyslogDetailsBuilder {
     }
 
     public SyslogDetailsBuilder addMessage(String message) {
-        result.put(MESSAGE, message != null ? message.trim() : "");
+        result.put(MESSAGE, message != null ? message : "");
         return this;
     }
 

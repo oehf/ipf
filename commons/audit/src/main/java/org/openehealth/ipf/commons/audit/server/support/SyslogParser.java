@@ -25,13 +25,13 @@ public class SyslogParser {
 
     private static final Logger log = LoggerFactory.getLogger(SyslogParser.class);
     private static final Pattern syslogPattern = Pattern.compile(
-            "^<(\\d{1,3})>(\\d)\\s" +    // PRI and VERSION
-            "(\\S+)\\s" +                // TIMESTAMP
-            "(\\S+)\\s" +                // HOSTNAME
-            "(\\S+)\\s" +                // APP-NAME
-            "(\\S+)\\s" +                // PROCID
-            "(\\S+)\\s" +                // MSGID
-            "(\\[.*?]|-)\\s*" +          // STRUCTURED-DATA
+            "^<(\\d{1,3})>(\\d{1,3}) " + // PRI and VERSION
+            "(\\S+) " +                  // TIMESTAMP
+            "(\\S{1,255}) " +            // HOSTNAME
+            "(\\S{1,48}) " +             // APP-NAME
+            "(\\S{1,128}) " +            // PROCID
+            "(\\S{1,32}) " +             // MSGID
+            "(\\[.*?]|-) " +             // STRUCTURED-DATA
             "(.*)$"                      // MESSAGE
     );
 

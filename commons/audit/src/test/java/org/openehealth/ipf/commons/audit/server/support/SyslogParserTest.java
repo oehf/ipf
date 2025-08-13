@@ -71,6 +71,14 @@ class SyslogParserTest {
         assertThat(result, hasTimestamp(Instant.parse("2023-04-18T14:32:52Z")));
     }
 
+    @Test
+    void shouldParseMessageWithBom() {
+        var msg = "<13>1 2023-04-18T14:32:52Z localhost logger 321 ID10 - \uFEFFA UTF-8 message with BOM\uD83D\uDC27";
+        var result = SyslogParser.parse(msg);
+
+        assertThat(result, hasMessage("\uFEFFA UTF-8 message with BOM\uD83D\uDC27"));
+    }
+
     // --- Invalid cases using helper ---
 
     @Test
