@@ -33,7 +33,7 @@ public class SyslogParser {
             "(\\S{1,32}) " +             // MSGID
             "(\\[.*?]|-) " +             // STRUCTURED-DATA
             "(.*)$"                      // MESSAGE
-    );
+    , Pattern.DOTALL);
 
     public static Map<String, Object> parse(String syslogMessage) {
         if (syslogMessage == null || syslogMessage.trim().isEmpty()) {
