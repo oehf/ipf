@@ -18,15 +18,9 @@ package org.openehealth.ipf.commons.ihe.fhir.iti119;
 
 import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.model.api.annotation.*;
-import ca.uhn.fhir.rest.gclient.DateClientParam;
-import ca.uhn.fhir.rest.gclient.StringClientParam;
-import ca.uhn.fhir.rest.gclient.TokenClientParam;
 import ca.uhn.fhir.util.ElementUtil;
-import org.hl7.fhir.instance.model.api.IAnyResource;
-import org.hl7.fhir.r4.model.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.hl7.fhir.r4.model.*;
 
 /**
  * Patient as defined by the PDQm specification
@@ -41,21 +35,21 @@ public class PdqmMatchInputPatient extends Patient {
     @Child(name = "mothersMaidenName")
     @Extension(url = "http://hl7.org/fhir/StructureDefinition/patient-mothersMaidenName", definedLocally = false)
     @Description(shortDefinition = "Mother's maiden name of a patient")
-    private HumanName mothersMaidenName;
+    private StringType mothersMaidenName;
 
     @Override
     public boolean isEmpty() {
         return super.isEmpty() && ElementUtil.isEmpty(mothersMaidenName);
     }
 
-    public HumanName getMothersMaidenName() {
+    public StringType getMothersMaidenName() {
         if (mothersMaidenName == null) {
-            mothersMaidenName = new HumanName();
+            mothersMaidenName = new StringType();
         }
         return mothersMaidenName;
     }
 
-    public void setMothersMaidenName(HumanName mothersMaidenName) {
+    public void setMothersMaidenName(StringType mothersMaidenName) {
         this.mothersMaidenName = mothersMaidenName;
     }
 
