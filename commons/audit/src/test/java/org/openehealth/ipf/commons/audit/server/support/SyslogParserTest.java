@@ -79,6 +79,14 @@ class SyslogParserTest {
         assertThat(result, hasMessage("\uFEFFA UTF-8 message with BOM\uD83D\uDC27"));
     }
 
+    @Test
+    void shouldParseMultilineMessage() {
+        var msg = "<13>1 2023-04-18T14:32:52Z localhost logger 321 ID10 - First line\nSecond line\r\nThird line";
+        var result = SyslogParser.parse(msg);
+
+        assertThat(result, hasMessage("First line\nSecond line\r\nThird line"));
+    }
+
     // --- Invalid cases using helper ---
 
     @Test
