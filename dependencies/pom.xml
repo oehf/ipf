@@ -721,6 +721,11 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
+                <artifactId>ipf-platform-camel-ihe-hl7v3model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-mllp</artifactId>
                 <version>${project.version}</version>
             </dependency>
