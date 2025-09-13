@@ -17,30 +17,27 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
           cache: 'maven'
+          server-id: ossrh
+          server-username: ${{ secrets.nexus_username }}
+          server-password: ${{ secrets.nexus_password }}
+          gpg-private-key: ${{ secrets.gpg_private_key }}
+          gpg-passphrase: ${{ secrets.gpg_passphrase }}
+
       - name: Build with Maven
         run: mvn -B clean package --file pom.xml
+
       - name: Submit Dependency Snapshot
-        uses: advanced-security/maven-dependency-submission-action@v3
+        uses: advanced-security/maven-dependency-submission-action@v5
         with:
           ignore-maven-wrapper: true
 
-#   Publish somewhere
-#   Maybe in a separate action file
-#   for publishing/releasing: https://github.com/marketplace/actions/action-maven-publish
-#   see https://github.com/organizations/oehf/settings/secrets/actions
-
-      - name: Deploy to Sonatype Snapshot Repo
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          maven_goals_phases: "deploy"
-          maven_args: "-DskipTests"
-          gpg_private_key: ${{ secrets.gpg_private_key }}
-          gpg_passphrase: ${{ secrets.gpg_passphrase }}
-          nexus_username: ${{ secrets.nexus_username }}
-          nexus_password: ${{ secrets.nexus_password }}
+      - name: Deploy to Sonatype
+        if: github.ref == 'refs/heads/main'
+        run: mvn -B deploy -DskipTests
