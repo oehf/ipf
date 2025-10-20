@@ -64,17 +64,20 @@ class AdrUtils {
         for (resource in request.resources) {
             for (attr in resource.attributes) {
                 if (attr.attributeId == AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID) {
-                    for (value in attr.attributeValues) {
-                        for (content in value.content) {
-                            if (content instanceof JAXBElement<II>) {
-                                return content.value.extension
+                    for (attributeValue in attr.attributeValues) {
+                        for (content in attributeValue.content) {
+                            if (content instanceof JAXBElement) {
+                                def value = content.value
+                                if (value instanceof II) {
+                                    return value.extension
+                                }
                             }
                         }
                     }
                 }
             }
         }
-        throw new  IllegalArgumentException('Cannot extract EPR-SPID from ADR request')
+        throw new IllegalArgumentException('Cannot extract EPR-SPID from ADR request')
     }
 
     static ResultType createNotHolderOfPatientPoliciesResult() {

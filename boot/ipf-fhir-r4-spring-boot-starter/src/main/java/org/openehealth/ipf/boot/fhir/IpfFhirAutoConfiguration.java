@@ -19,15 +19,24 @@ package org.openehealth.ipf.boot.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.narrative.INarrativeGenerator;
 import ca.uhn.fhir.narrative2.NullNarrativeGenerator;
-import ca.uhn.fhir.rest.server.*;
+import ca.uhn.fhir.rest.server.ApacheProxyAddressStrategy;
+import ca.uhn.fhir.rest.server.IPagingProvider;
+import ca.uhn.fhir.rest.server.IServerAddressStrategy;
+import ca.uhn.fhir.rest.server.IServerConformanceProvider;
+import ca.uhn.fhir.rest.server.RestfulServer;
 import jakarta.servlet.Filter;
 import org.hl7.fhir.instance.model.api.IBaseConformance;
+import org.openehealth.ipf.boot.atna.AuditContextCustomizer;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
+import org.openehealth.ipf.boot.atna.IpfAtnaConfigurationProperties;
+import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
 import org.openehealth.ipf.commons.ihe.fhir.support.NamingSystemService;
 import org.openehealth.ipf.commons.ihe.fhir.support.NullsafeServerCapabilityStatementProvider;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpXmlSerializationStrategy;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -44,6 +53,8 @@ import org.springframework.web.filter.CorsFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
 @Configuration
@@ -62,6 +73,19 @@ public class IpfFhirAutoConfiguration {
         var fhirContext = new FhirContext(config.getFhirVersion());
         fhirContextCustomizer.customizeFhirContext(fhirContext);
         return fhirContext;
+    }
+
+    @Bean
+    public AuditContextCustomizer fhirAuditSerializationCustomizer(IpfAtnaConfigurationProperties auditConfig) {
+        return auditContext -> {
+            if (auditContext instanceof DefaultBalpAuditContext balpAuditContext && auditConfig.getBalp() != null) {
+                if (isNotBlank(auditConfig.getBalp().getAuditEventSerializationType())) {
+                    balpAuditContext.setSerializationStrategy(
+                        auditConfig.getBalp().getAuditEventSerializationType().equalsIgnoreCase("json") ?
+                            new BalpJsonSerializationStrategy() : new BalpXmlSerializationStrategy());
+                }
+            }
+        };
     }
 
     @Bean

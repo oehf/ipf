@@ -23,7 +23,8 @@ import org.springframework.test.context.ContextConfiguration
 
 import java.util.concurrent.TimeUnit
 
-import static org.junit.jupiter.api.Assertions.*
+import static org.junit.jupiter.api.Assertions.assertThrows
+import static org.junit.jupiter.api.Assertions.fail
 
 /**
  * Unit tests for the PDQ transaction aka ITI-21.

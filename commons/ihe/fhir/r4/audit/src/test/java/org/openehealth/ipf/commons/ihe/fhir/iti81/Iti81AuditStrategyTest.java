@@ -1,4 +1,4 @@
-package org.openehealth.ipf.commons.fhir.iti81;
+package org.openehealth.ipf.commons.ihe.fhir.iti81;
 
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.codes.EventActionCode;
@@ -8,8 +8,6 @@ import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
-import org.openehealth.ipf.commons.ihe.fhir.iti81.FhirAuditEventQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti81.Iti81AuditStrategy;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

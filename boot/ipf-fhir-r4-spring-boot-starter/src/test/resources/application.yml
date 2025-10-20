@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: atna-test
+
+ipf:
+  atna:
+    audit-enabled: false
+    audit-repository-host: localhost
+    audit-repository-port: 1342
+    audit-repository-transport: TLS
+    audit-enterprise-site-id: mysite
+    audit-queue-class: org.openehealth.ipf.commons.audit.queue.AsynchronousAuditMessageQueue
+    security-domain-name: mydomain
