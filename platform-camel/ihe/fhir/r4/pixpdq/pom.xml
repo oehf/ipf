@@ -27,6 +27,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-fhir-r4-audit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-ws</artifactId>
             <version>${project.version}</version>

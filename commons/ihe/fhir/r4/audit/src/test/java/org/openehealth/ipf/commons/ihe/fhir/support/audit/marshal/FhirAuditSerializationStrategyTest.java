@@ -13,7 +13,7 @@ import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class AbstractFhirAuditSerializationStrategyTest {
+class FhirAuditSerializationStrategyTest {
 
     @Test
     void testSerializationFromAtnaAuditMessage() throws IOException {

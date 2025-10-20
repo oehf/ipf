@@ -1,4 +1,4 @@
-name: Build IPF with Java 21
+name: Build IPF with Java 25
 
 on: [push, pull_request, workflow_dispatch]
 
@@ -13,7 +13,7 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Java 21 build
+    name: Java 25 build
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v5
@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
-          java-version: '21'
+          java-version: '25'
           cache: 'maven'
       - name: Build with Maven
         run: mvn -B clean test --file pom.xml
