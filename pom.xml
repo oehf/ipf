@@ -317,7 +317,7 @@
                         <generateReports>true</generateReports>
                         <inputEncoding>UTF-8</inputEncoding>
                         <outputEncoding>UTF-8</outputEncoding>
-                        <relativizeDecorationLinks>false</relativizeDecorationLinks>
+                        <relativizeSiteLinks>false</relativizeSiteLinks>
                         <skip>false</skip>
                         <skipDeploy>true</skipDeploy>
                     </configuration>
@@ -330,6 +330,7 @@
                         <argLine>-Xms64m -Xmx1024m</argLine>
                         <systemPropertyVariables>
                             <jdk.security.allowNonCaAnchor>true</jdk.security.allowNonCaAnchor>
+                            <jdk.xml.totalEntitySizeLimit>0</jdk.xml.totalEntitySizeLimit>
                         </systemPropertyVariables>
                     </configuration>
                 </plugin>
@@ -598,9 +599,6 @@
             </plugins>
         </pluginManagement>
         <plugins>
-            <!-- When using IntelliJ Idea, make sure to install the gmavenplus
-                 plugin, which adds the groovy source dirs to the build and
-                 removes the generated stubs from the build -->
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
@@ -621,7 +619,7 @@
                 </executions>
                 <configuration>
                     <parallelParsing>true</parallelParsing>
-                    <targetBytecode>11</targetBytecode>
+                    <targetBytecode>17</targetBytecode>
                     <parameters>true</parameters>
                 </configuration>
                 <dependencies>
@@ -638,8 +636,14 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin-version}</version>
                 <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok-version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                     <release>17</release>
-                    <forceLegacyJavacApi>true</forceLegacyJavacApi>
                 </configuration>
             </plugin>
             <plugin>

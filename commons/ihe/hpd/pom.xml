@@ -92,7 +92,7 @@
                             <encoding>UTF-8</encoding>
                             <addOutputDirectory>false</addOutputDirectory>
                             <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                            <outputDirectory>${output-folder}/generated-stubs</outputDirectory>
+                            <outputDirectory>${project.basedir}/generated-stubs</outputDirectory>
                         </configuration>
                         <dependencies>
                             <dependency>

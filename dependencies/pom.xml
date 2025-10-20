@@ -12,13 +12,13 @@
         <bouncycastle-version>1.83</bouncycastle-version>
         <camel-version>4.16.0</camel-version>
         <cxf-version>4.1.3</cxf-version>
-        <commons-io-version>2.21.0</commons-io-version>
+        <commons-io-version>2.20.0</commons-io-version>
         <commons-compress-version>1.28.0</commons-compress-version>
         <equinox-app-version>1.3.200-v20130910-1609</equinox-app-version>
         <equinox-common-version>3.6.200-v20130402-1505</equinox-common-version>
         <groovy-version>5.0.3</groovy-version>
         <hapi-version>2.6.0</hapi-version>
-        <hapi-fhir-version>8.6.0</hapi-fhir-version>
+        <hapi-fhir-version>8.6.1</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.3.0</ipf-gazelle-version>
         <httpclient5-version>5.5.1</httpclient5-version>
@@ -179,18 +179,6 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-ws-security</artifactId>
                 <version>${cxf-version}</version>
-                <exclusions>
-                    <exclusion>
-                        <!-- A newer version is imported by cxf-rt-ws-policy -->
-                        <groupId>org.apache.neethi</groupId>
-                        <artifactId>neethi</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <!-- A newer version is imported by IPF -->
-                        <groupId>org.bouncycastle</groupId>
-                        <artifactId>bcprov-jdk15on</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
 
             <dependency>

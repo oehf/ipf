@@ -74,7 +74,7 @@ class AdrUtils {
                 }
             }
         }
-        throw new  IllegalArgumentException('Cannot extract EPR-SPID from ADR request')
+        throw new IllegalArgumentException('Cannot extract EPR-SPID from ADR request')
     }
 
     static ResultType createNotHolderOfPatientPoliciesResult() {

@@ -16,14 +16,21 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openehealth.ipf.commons.audit.*;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.DefaultAuditContext;
+import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
+import org.openehealth.ipf.commons.audit.FhirAuditDatasetEnricher;
+import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.audit.WsAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpXmlSerializationStrategy;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -33,8 +40,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
-
 @Configuration
 @EnableConfigurationProperties(IpfAtnaConfigurationProperties.class)
 public class IpfAtnaAutoConfiguration {
@@ -42,7 +47,7 @@ public class IpfAtnaAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     public AuditContext auditContext(IpfAtnaConfigurationProperties config,
-                                     AuditContextCustomizer auditContextCustomizer,
+                                     ObjectProvider<AuditContextCustomizer> auditContextCustomizer,
                                      AuditTransmissionProtocol auditTransmissionProtocol,
                                      AuditMessageQueue auditMessageQueue,
                                      TlsParameters tlsParameters,
@@ -62,16 +67,10 @@ public class IpfAtnaAutoConfiguration {
         configureDefaultAuditContext(auditContext, config, auditTransmissionProtocol,
             auditMessageQueue, tlsParameters, auditMetadataProvider, auditExceptionHandler,
             auditMessagePostProcessor, wsAuditDatasetEnricher, fhirAuditDatasetEnricher, appName);
-        auditContextCustomizer.customizeAuditContext(auditContext);
+        auditContextCustomizer.forEach(consumer ->
+            consumer.customizeAuditContext(auditContext));
         return auditContext;
     }
-
-    @Bean
-    @ConditionalOnMissingBean(AuditContextCustomizer.class)
-    public AuditContextCustomizer auditContextCustomizer() {
-        return AuditContextCustomizer.NOOP;
-    }
-
 
     private void configureDefaultAuditContext(DefaultAuditContext auditContext,
                                               IpfAtnaConfigurationProperties config,
@@ -115,11 +114,8 @@ public class IpfAtnaAutoConfiguration {
     private void configureBalpAuditContext(DefaultBalpAuditContext auditContext, IpfAtnaConfigurationProperties config) {
         auditContext.setAuditRepositoryContextPath(config.getBalp().getAuditRepositoryContextPath());
 
-        if (isNotBlank(config.getBalp().getAuditEventSerializationType())) {
-            auditContext.setSerializationStrategy(
-                config.getBalp().getAuditEventSerializationType().equalsIgnoreCase("json") ?
-                    new BalpJsonSerializationStrategy() : new BalpXmlSerializationStrategy());
-        }
+        // FHIR Serialization Strategy is applied via AuditContextCustomizer
+        // in IpfFhirAutoConfiguration
         var oAuth = config.getBalp().getOauth();
         var props = auditContext.getBalpJwtExtractorProperties();
 
