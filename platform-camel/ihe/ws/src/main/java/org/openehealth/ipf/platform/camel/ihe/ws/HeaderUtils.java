@@ -1,12 +1,12 @@
 /*
  * Copyright 2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,14 +19,10 @@ import static org.apache.cxf.message.Message.PROTOCOL_HEADERS;
 
 import javax.xml.namespace.QName;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Supplier;
 
+import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.camel.util.CaseInsensitiveMap;
 import org.apache.cxf.headers.Header;
@@ -35,18 +31,19 @@ import org.apache.cxf.jaxws.context.WrappedMessageContext;
 
 /**
  * Utilities for handling HTTP and SOAP headers in Web Service interactions.
+ *
  * @author Dmytro Rud
  */
 abstract public class HeaderUtils {
-    
+
     private HeaderUtils() {
         throw new IllegalStateException("Cannot instantiate utility class");
     }
 
 
     public static void processIncomingHeaders(
-            Map<String, Object> messageContext, 
-            Message message) 
+        Map<String, Object> messageContext,
+        Message message)
     {
         processIncomingHttpHeaders(messageContext, message);
         processIncomingSoapHeaders(messageContext, message);
@@ -54,9 +51,9 @@ abstract public class HeaderUtils {
 
 
     public static void processUserDefinedOutgoingHeaders(
-            Map<String, Object> messageContext, 
-            Message message,
-            boolean isRequest) 
+        Map<String, Object> messageContext,
+        Message message,
+        boolean isRequest)
     {
         processUserDefinedOutgoingHttpHeaders(messageContext, message, isRequest);
         processUserDefinedOutgoingSoapHeaders(messageContext, message, isRequest);
@@ -65,32 +62,25 @@ abstract public class HeaderUtils {
 
     /**
      * Returns headers of the message represented by the given context.
-     * 
-     * @param <T>
-     *      type of headers' container.
-     * @param messageContext
-     *      Web Service message context.
-     * @param key
-     *      key under which the headers reside in the message context. 
-     * @param useInputMessage
-     *      whether input message should the used.
-     * @param needCreateWhenNotExist
-     *      whether the headers' map should be created when it does 
-     *      not exist.
-     * @param defaultValueFactory
-     *      factory for producing default values.
-     * @return
-     *      either the map of HTTP headers as found in the message context,
-     *      or a newly created map when none found, or <code>null</code> 
-     *      when creation of a new map is not allowed. 
+     *
+     * @param <T>                    type of headers' container.
+     * @param messageContext         Web Service message context.
+     * @param key                    key under which the headers reside in the message context.
+     * @param useInputMessage        whether input message should the used.
+     * @param needCreateWhenNotExist whether the headers' map should be created when it does
+     *                               not exist.
+     * @param defaultValueFactory    factory for producing default values.
+     * @return either the map of HTTP headers as found in the message context,
+     * or a newly created map when none found, or <code>null</code>
+     * when creation of a new map is not allowed.
      */
     @SuppressWarnings("unchecked")
     public static <T> T getHeaders(
-            Map<String, Object> messageContext,
-            String key,
-            boolean useInputMessage,
-            boolean needCreateWhenNotExist, 
-            Supplier<T> defaultValueFactory)
+        Map<String, Object> messageContext,
+        String key,
+        boolean useInputMessage,
+        boolean needCreateWhenNotExist,
+        Supplier<T> defaultValueFactory)
     {
         var wrappedContext = (WrappedMessageContext) messageContext;
         var headersContainer = useInputMessage
@@ -107,24 +97,22 @@ abstract public class HeaderUtils {
 
 
     /**
-     * Stores a map of incoming SOAP headers from the given  
+     * Stores a map of incoming SOAP headers from the given
      * Web Service message context into the Camel header
      * {@link AbstractWsEndpoint#INCOMING_SOAP_HEADERS}
      * of the given Camel message.
-     * 
-     * @param messageContext
-     *      Web Service message contents.
-     * @param message
-     *      Camel message in whose headers the 
-     *      SOAP headers should be stored.
+     *
+     * @param messageContext Web Service message contents.
+     * @param message        Camel message in whose headers the
+     *                       SOAP headers should be stored.
      */
     private static void processIncomingSoapHeaders(
-            Map<String, Object> messageContext, 
-            Message message) 
+        Map<String, Object> messageContext,
+        Message message)
     {
         var userHeaders = new HashMap<QName, Header>();
         List<Header> soapHeaders = getHeaders(
-                messageContext, Header.HEADER_LIST, true, false, null);
+            messageContext, Header.HEADER_LIST, true, false, null);
         if (soapHeaders != null) {
             for (var soapHeader : soapHeaders) {
                 userHeaders.put(soapHeader.getName(), soapHeader);
@@ -135,26 +123,23 @@ abstract public class HeaderUtils {
 
 
     /**
-     * Injects user-defined SOAP headers from the header 
+     * Injects user-defined SOAP headers from the header
      * {@link AbstractWsEndpoint#OUTGOING_SOAP_HEADERS}
-     * of the given Camel message into the given Web Service 
+     * of the given Camel message into the given Web Service
      * message context.
-     * 
-     * @param messageContext
-     *      Web Service message contents.
-     * @param message
-     *      Camel message from whose headers the 
-     *      SOAP headers should be taken.
-     * @param isRequest
-     *      whether the Web Service message under consideration 
-     *      is a request one (<code>false</code> on server side, 
-     *      <code>true</code> on client side). 
+     *
+     * @param messageContext Web Service message contents.
+     * @param message        Camel message from whose headers the
+     *                       SOAP headers should be taken.
+     * @param isRequest      whether the Web Service message under consideration
+     *                       is a request one (<code>false</code> on server side,
+     *                       <code>true</code> on client side).
      */
     @SuppressWarnings("unchecked")
     private static void processUserDefinedOutgoingSoapHeaders(
-            Map<String, Object> messageContext, 
-            Message message,
-            boolean isRequest) 
+        Map<String, Object> messageContext,
+        Message message,
+        boolean isRequest)
     {
         Collection<Header> userHeaders = null;
         var o = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
@@ -164,33 +149,31 @@ abstract public class HeaderUtils {
             userHeaders = ((Map<QName, Header>) o).values();
         }
 
-        if ((userHeaders != null) && ! userHeaders.isEmpty()) {
+        if ((userHeaders != null) && !userHeaders.isEmpty()) {
             List<Header> soapHeaders = getHeaders(
-                    messageContext, Header.HEADER_LIST, isRequest, true, ArrayList::new);
+                messageContext, Header.HEADER_LIST, isRequest, true, ArrayList::new);
             soapHeaders.addAll(userHeaders);
-       }
+        }
     }
 
 
     /**
-     * Stores a map of incoming HTTP headers from the given  
+     * Stores a map of incoming HTTP headers from the given
      * Web Service message context into the Camel header
      * {@link AbstractWsEndpoint#INCOMING_HTTP_HEADERS}
      * of the given Camel message.
-     * 
-     * @param messageContext
-     *      Web Service message contents.
-     * @param message
-     *      Camel message in whose headers the 
-     *      HTTP headers should be stored.
+     *
+     * @param messageContext Web Service message contents.
+     * @param message        Camel message in whose headers the
+     *                       HTTP headers should be stored.
      */
     private static void processIncomingHttpHeaders(
-            Map<String, Object> messageContext, 
-            Message message) 
+        Map<String, Object> messageContext,
+        Message message)
     {
         var userHeaders = new CaseInsensitiveMap();
         Map<String, List<String>> httpHeaders = getHeaders(
-                messageContext, PROTOCOL_HEADERS, true, false, null);
+            messageContext, PROTOCOL_HEADERS, true, false, null);
         if (httpHeaders != null) {
             for (var entry : httpHeaders.entrySet()) {
                 userHeaders.put(entry.getKey(), entry.getValue().get(0));
@@ -201,35 +184,91 @@ abstract public class HeaderUtils {
 
 
     /**
-     * Injects user-defined HTTP headers from the header 
+     * Injects user-defined HTTP headers from the header
      * {@link AbstractWsEndpoint#OUTGOING_HTTP_HEADERS}
-     * of the given Camel message into the given Web Service 
+     * of the given Camel message into the given Web Service
      * message context.
-     * 
-     * @param messageContext
-     *      Web Service message contents.
-     * @param message
-     *      Camel message from whose headers the 
-     *      HTTP headers should be taken.
-     * @param isRequest
-     *      whether the Web Service message under consideration 
-     *      is a request one (<code>false</code> on server side, 
-     *      <code>true</code> on client side). 
+     *
+     * @param messageContext Web Service message contents.
+     * @param message        Camel message from whose headers the
+     *                       HTTP headers should be taken.
+     * @param isRequest      whether the Web Service message under consideration
+     *                       is a request one (<code>false</code> on server side,
+     *                       <code>true</code> on client side).
      */
     private static void processUserDefinedOutgoingHttpHeaders(
-            Map<String, Object> messageContext, 
-            Message message,
-            boolean isRequest) 
+        Map<String, Object> messageContext,
+        Message message,
+        boolean isRequest)
     {
         Map<String, String> headers = CastUtils.cast(
-                message.getHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, Map.class));
-        
-        if ((headers != null) && ! headers.isEmpty()) {
+            message.getHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, Map.class));
+
+        if ((headers != null) && !headers.isEmpty()) {
             Map<String, List<String>> httpHeaders = getHeaders(
-                    messageContext, PROTOCOL_HEADERS, isRequest, true, HashMap::new);
+                messageContext, PROTOCOL_HEADERS, isRequest, true, HashMap::new);
             for (var entry : headers.entrySet()) {
                 httpHeaders.put(entry.getKey(), Collections.singletonList(entry.getValue()));
             }
         }
     }
+
+    /**
+     * Extracts HTTP headers from an incoming message.
+     * @param exchange Camel exchange containing the message.
+     * @return HTTP headers as a map from header name to header value.
+     */
+    public static Map<String, String> getIncomingHttpHeaders(Exchange exchange) {
+        return CastUtils.cast(exchange.getIn().getHeader(AbstractWsEndpoint.INCOMING_HTTP_HEADERS, Map.class));
+    }
+
+    /**
+     * Extracts SOAP headers from an incoming message.
+     * @param exchange Camel exchange containing the message.
+     * @return SOAP headers as a map from header name to header value.
+     */
+    public static Map<QName, Header> getIncomingSoapHeaders(Exchange exchange) {
+        return CastUtils.cast(exchange.getIn().getHeader(AbstractWsEndpoint.INCOMING_SOAP_HEADERS, Map.class));
+    }
+
+    /**
+     * Adds HTTP headers to an outgoing message.
+     * @param exchange Camel exchange containing the message.
+     * @param headers array containing names and values of the headers to add,
+     *                e.g. <code>["X-MyHeader1", "12345", "X-MyHeader2", "tralala"]</code>.
+     */
+    @SuppressWarnings("rawtypes")
+    public static void addOutgoingHttpHeaders(Exchange exchange, String[] headers) {
+        var headersMap = new HashMap<String, String>();
+        for (int i = 0; i < headers.length; i += 2) {
+            headersMap.put(headers[i], headers[i + 1]);
+        }
+        var o = exchange.getMessage().getHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS);
+        if (o instanceof Map m) {
+            CastUtils.cast(m).putAll(headersMap);
+        } else {
+            exchange.getMessage().setHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, headersMap);
+        }
+    }
+
+    /**
+     * Adds SOAP headers to an outgoing message.
+     * @param exchange Camel exchange containing the message.
+     * @param headers SOAP headers to add.
+     */
+    @SuppressWarnings("rawtypes")
+    public static void addOutgoingSoapHeaders(Exchange exchange, Header... headers) {
+        var o = exchange.getMessage().getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
+        if (o instanceof Map m) {
+            var map = CastUtils.cast(m);
+            for (Header header : headers) {
+                map.put(header.getName(), header);
+            }
+        } else if (o instanceof Collection c) {
+            Collections.addAll(CastUtils.cast(c), headers);
+        } else {
+            exchange.getMessage().setHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, Arrays.asList(headers));
+        }
+    }
+
 }
