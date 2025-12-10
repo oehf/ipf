@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.audit;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import reactor.netty.ChannelBindException;
 import org.openehealth.ipf.commons.audit.server.TlsSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegrationTest {
@@ -49,11 +51,18 @@ public class TLSAuditorFailingIntegrationTest extends AbstractAuditorIntegration
         auditContext.setTlsParameters(tlsParameters);
         auditContext.setAuditRepositoryTransport("TLS");
         var consumer = SyslogEventCollector.newInstance().withExpectation(1);
-        try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, TlsParameters.getDefault())
-                .start("localhost", port)) {
-            sendAudit();
-            assertFalse(consumer.await(1, TimeUnit.SECONDS));
+        for (var attempt = 1; attempt <= 3; attempt++) {
+            port = freePort();
+            try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, TlsParameters.getDefault())
+                    .start("localhost", port)) {
+                sendAudit();
+                assertFalse(consumer.await(1, TimeUnit.SECONDS));
+                return;
+            } catch (ChannelBindException ex) {
+                log.warn("Retrying TLS syslog server bind after failure on port {}", port, ex);
+            }
         }
+        fail("Could not bind TLS syslog server after retries");
 
     }
 
