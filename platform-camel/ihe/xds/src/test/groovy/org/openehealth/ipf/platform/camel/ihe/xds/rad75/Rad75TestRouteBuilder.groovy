@@ -16,13 +16,13 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.rad75
 
 import org.apache.camel.ExchangePattern
-import org.apache.camel.Message
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocument
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 import org.slf4j.LoggerFactory
 
 import jakarta.activation.DataHandler
@@ -75,7 +75,7 @@ class Rad75TestRouteBuilder extends RouteBuilder {
             .process(rad75ResponseValidator())
             .process {
                 try {
-                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                    def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(it)
                     assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
@@ -101,7 +101,7 @@ class Rad75TestRouteBuilder extends RouteBuilder {
             .process(rad75RequestValidator())
             .process {
                 // check incoming SOAP and HTTP headers
-                def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(it)
 
                 try {
                     assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
@@ -111,10 +111,8 @@ class Rad75TestRouteBuilder extends RouteBuilder {
                 }
 
                 // create response, inclusive SOAP and HTTP headers
-                Message message = it.message
-                message.body = createRetrievedDocumentSet()
-                message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
-                    ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
+                it.message.body = createRetrievedDocumentSet()
+                HeaderUtils.addOutgoingHttpHeaders(it, 'MyResponseHeader', 'Re: ' + inHttpHeaders['MyRequestHeader'])
                 
                 responseCount.incrementAndGet()
                 countDownLatch.countDown()

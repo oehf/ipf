@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Map;
 
 import jakarta.xml.bind.JAXBException;
@@ -26,9 +24,8 @@ import javax.xml.namespace.QName;
 
 import org.apache.camel.Message;
 import org.apache.cxf.headers.Header;
-import org.apache.cxf.helpers.CastUtils;
 import org.apache.cxf.jaxb.JAXBDataBinding;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.Text;
 
@@ -50,9 +47,7 @@ public class TtlHeaderUtils {
      * with the given message, or <code>null</code>, when none found.
      */
     public static Duration getTtl(Message message) {
-        Map<QName, Header> soapHeaders = CastUtils.cast(message.getHeader(
-                AbstractWsEndpoint.INCOMING_SOAP_HEADERS,
-                Map.class));
+        Map<QName, Header> soapHeaders = HeaderUtils.getIncomingSoapHeaders(message);
         if ((soapHeaders != null) && soapHeaders.containsKey(TTL_HEADER_QNAME)) {
             var o = soapHeaders.get(TTL_HEADER_QNAME).getObject();
             if (o instanceof Element element) {
@@ -76,18 +71,7 @@ public class TtlHeaderUtils {
      * associated with the given message.
      */
     public static void setTtl(Duration dura, Message message) {
-        var soapHeaders = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
-        if (soapHeaders == null) {
-            soapHeaders = new ArrayList<>();
-            message.setHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, soapHeaders);
-        }
-
-        var ttlHeader = new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding());
-        if (soapHeaders instanceof Collection collection) {
-            collection.add(ttlHeader);
-        } else if (soapHeaders instanceof Map map) {
-            map.put(TTL_HEADER_QNAME, ttlHeader);
-        }
+        HeaderUtils.addOutgoingSoapHeaders(message, new Header(TTL_HEADER_QNAME, dura.toString(), getStringDataBinding()));
     }
     
     

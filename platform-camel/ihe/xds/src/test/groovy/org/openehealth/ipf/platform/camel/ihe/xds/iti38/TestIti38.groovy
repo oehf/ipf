@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
 
@@ -101,8 +102,7 @@ class TestIti38 extends XdsStandardTestContainer {
         requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
 
         // set request HTTP headers
-        requestExchange.in.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
-                ['MyRequestHeader': "Number ${n}".toString()]
+        HeaderUtils.addOutgoingHttpHeaders(requestExchange, 'MyRequestHeader', "Number ${n}")
 
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
@@ -114,7 +114,7 @@ class TestIti38 extends XdsStandardTestContainer {
         if (!responseEndpointUri) {
             assert resultMessage.getBody(QueryResponse.class).status == Status.SUCCESS
 
-            def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+            def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(resultMessage)
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
         }
     }

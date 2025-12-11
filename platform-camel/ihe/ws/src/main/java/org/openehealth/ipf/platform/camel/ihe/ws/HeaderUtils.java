@@ -214,51 +214,86 @@ abstract public class HeaderUtils {
     }
 
     /**
+     * Extracts HTTP headers from a message.
+     *
+     * @param message Camel message.
+     * @return HTTP headers as a map from header name to header value.
+     */
+    public static Map<String, String> getIncomingHttpHeaders(Message message) {
+        return CastUtils.cast(message.getHeader(AbstractWsEndpoint.INCOMING_HTTP_HEADERS, Map.class));
+    }
+
+    /**
      * Extracts HTTP headers from an incoming message.
+     *
      * @param exchange Camel exchange containing the message.
      * @return HTTP headers as a map from header name to header value.
      */
     public static Map<String, String> getIncomingHttpHeaders(Exchange exchange) {
-        return CastUtils.cast(exchange.getIn().getHeader(AbstractWsEndpoint.INCOMING_HTTP_HEADERS, Map.class));
+        return getIncomingHttpHeaders(exchange.getIn());
+    }
+
+    /**
+     * Extracts SOAP headers from a message.
+     *
+     * @param message Camel message.
+     * @return SOAP headers as a map from header name to header value.
+     */
+    public static Map<QName, Header> getIncomingSoapHeaders(Message message) {
+        return CastUtils.cast(message.getHeader(AbstractWsEndpoint.INCOMING_SOAP_HEADERS, Map.class));
     }
 
     /**
      * Extracts SOAP headers from an incoming message.
+     *
      * @param exchange Camel exchange containing the message.
      * @return SOAP headers as a map from header name to header value.
      */
     public static Map<QName, Header> getIncomingSoapHeaders(Exchange exchange) {
-        return CastUtils.cast(exchange.getIn().getHeader(AbstractWsEndpoint.INCOMING_SOAP_HEADERS, Map.class));
+        return getIncomingSoapHeaders(exchange.getIn());
     }
 
     /**
-     * Adds HTTP headers to an outgoing message.
-     * @param exchange Camel exchange containing the message.
-     * @param headers array containing names and values of the headers to add,
-     *                e.g. <code>["X-MyHeader1", "12345", "X-MyHeader2", "tralala"]</code>.
+     * Adds HTTP headers to a message.
+     *
+     * @param message Camel message.
+     * @param headers varargs containing names and values of the headers to add,
+     *                e.g. <code>"X-MyHeader1", "12345", "X-MyHeader2", "tralala"</code>.
      */
     @SuppressWarnings("rawtypes")
-    public static void addOutgoingHttpHeaders(Exchange exchange, String[] headers) {
+    public static void addOutgoingHttpHeaders(Message message, String... headers) {
         var headersMap = new HashMap<String, String>();
         for (int i = 0; i < headers.length; i += 2) {
             headersMap.put(headers[i], headers[i + 1]);
         }
-        var o = exchange.getMessage().getHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS);
+        var o = message.getHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS);
         if (o instanceof Map m) {
             CastUtils.cast(m).putAll(headersMap);
         } else {
-            exchange.getMessage().setHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, headersMap);
+            message.setHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, headersMap);
         }
     }
 
     /**
-     * Adds SOAP headers to an outgoing message.
+     * Adds HTTP headers to an outgoing message.
+     *
      * @param exchange Camel exchange containing the message.
+     * @param headers  varargs containing names and values of the headers to add,
+     *                 e.g. <code>"X-MyHeader1", "12345", "X-MyHeader2", "tralala"</code>.
+     */
+    public static void addOutgoingHttpHeaders(Exchange exchange, String... headers) {
+        addOutgoingHttpHeaders(exchange.getMessage(), headers);
+    }
+
+    /**
+     * Adds SOAP headers to a message.
+     *
+     * @param message Camel message.
      * @param headers SOAP headers to add.
      */
     @SuppressWarnings("rawtypes")
-    public static void addOutgoingSoapHeaders(Exchange exchange, Header... headers) {
-        var o = exchange.getMessage().getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
+    public static void addOutgoingSoapHeaders(Message message, Header... headers) {
+        var o = message.getHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS);
         if (o instanceof Map m) {
             var map = CastUtils.cast(m);
             for (Header header : headers) {
@@ -267,8 +302,18 @@ abstract public class HeaderUtils {
         } else if (o instanceof Collection c) {
             Collections.addAll(CastUtils.cast(c), headers);
         } else {
-            exchange.getMessage().setHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, Arrays.asList(headers));
+            message.setHeader(AbstractWsEndpoint.OUTGOING_SOAP_HEADERS, Arrays.asList(headers));
         }
+    }
+
+    /**
+     * Adds SOAP headers to an outgoing message.
+     *
+     * @param exchange Camel exchange containing the message.
+     * @param headers  SOAP headers to add.
+     */
+    public static void addOutgoingSoapHeaders(Exchange exchange, Header... headers) {
+        addOutgoingSoapHeaders(exchange.getMessage(), headers);
     }
 
 }

@@ -24,10 +24,9 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.EprPolicyReposi
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.UnknownPolicySetId;
 
 import jakarta.xml.bind.Marshaller;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils;
 
 import java.io.StringWriter;
-import java.util.Map;
 
 import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidators.chPpq1RequestValidator;
 import static org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20CamelValidators.chPpq1ResponseValidator;
@@ -49,7 +48,7 @@ public class ChPpq1TestRouteBuilder extends RouteBuilder {
                 .process(exchange -> {
                     var request = exchange.getIn().getBody();
                     if (request instanceof AddPolicyRequest) {
-                        exchange.getMessage().setHeader(AbstractWsEndpoint.OUTGOING_HTTP_HEADERS, Map.of("TRACEPARENT", TRACE_CONTEXT_ID));
+                        HeaderUtils.addOutgoingHttpHeaders(exchange, "TRACEPARENT", TRACE_CONTEXT_ID);
                     }
 
                     var response = new EprPolicyRepositoryResponse();

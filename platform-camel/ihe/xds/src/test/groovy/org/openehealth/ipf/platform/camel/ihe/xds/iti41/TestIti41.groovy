@@ -32,6 +32,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocum
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.xml.XmlUtils
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 import org.openehealth.ipf.platform.camel.ihe.xds.MyRejectionHandlingStrategy
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
@@ -237,8 +238,7 @@ class TestIti41 extends XdsStandardTestContainer {
         requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
 
         // set request HTTP headers
-        requestExchange.in.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
-                ['MyRequestHeader': "Number ${n}".toString()]
+        HeaderUtils.addOutgoingHttpHeaders(requestExchange, 'MyRequestHeader', "Number ${n}")
 
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
@@ -250,7 +250,7 @@ class TestIti41 extends XdsStandardTestContainer {
         if (!responseEndpointUri) {
             assert resultMessage.getBody(Response.class).status == SUCCESS
 
-            def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+            def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(resultMessage)
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
         }
     }

@@ -19,7 +19,7 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.cxf.headers.Header
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 
 import javax.xml.namespace.QName
 
@@ -46,7 +46,7 @@ public class Iti92TestRouteBuilder extends RouteBuilder {
         // for testing SOAP headers
         from('rmu-iti92:rmu-iti92-service3')
             .process {
-                Map<QName, Header> soapHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS]
+                Map<QName, Header> soapHeaders = HeaderUtils.getIncomingSoapHeaders(it)
                 RegisterDocumentSet request = it.in.getBody(RegisterDocumentSet.class)
 
                 boolean correct = true

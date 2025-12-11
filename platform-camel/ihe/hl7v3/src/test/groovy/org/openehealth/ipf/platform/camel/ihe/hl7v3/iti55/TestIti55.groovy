@@ -29,6 +29,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.MyRejectionHandlingStrategy
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 import org.springframework.test.annotation.DirtiesContext
 
 import java.util.concurrent.atomic.AtomicInteger
@@ -161,8 +162,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
         }
         
         // set request HTTP headers
-        requestExchange.in.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
-                ['MyRequestHeader': "Number ${n}".toString()]
+        HeaderUtils.addOutgoingHttpHeaders(requestExchange, 'MyRequestHeader', "Number ${n}")
         
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
@@ -180,7 +180,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
                 ttlResponsesCount.incrementAndGet()
             }
 
-            def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+            def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(resultMessage)
             assert inHttpHeaders['MyResponseHeader'] == "Re: Number ${n}"
         }
 

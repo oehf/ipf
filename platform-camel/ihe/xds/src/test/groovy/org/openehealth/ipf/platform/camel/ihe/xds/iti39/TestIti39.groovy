@@ -25,6 +25,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 import org.springframework.test.annotation.DirtiesContext
 
@@ -134,8 +135,7 @@ class TestIti39 extends XdsStandardTestContainer {
         requestExchange.in.headers[AbstractWsEndpoint.CORRELATION_KEY_HEADER_NAME] = "corr ${n}"
         
         // set request HTTP headers
-        requestExchange.in.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
-                ['MyRequestHeader': "Number ${n}".toString()]
+        HeaderUtils.addOutgoingHttpHeaders(requestExchange, 'MyRequestHeader', "Number ${n}")
         
         // send and check timing
         long startTimestamp = System.currentTimeMillis()
@@ -146,8 +146,8 @@ class TestIti39 extends XdsStandardTestContainer {
         // for sync messages -- check acknowledgement code and incoming TTL header
         if (!responseEndpointUri) {
             assert resultMessage.getBody(RetrievedDocumentSet.class).status == Status.SUCCESS
-            
-            def inHttpHeaders = resultMessage.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+
+            def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(resultMessage)
             assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
         }
     }

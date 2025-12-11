@@ -19,7 +19,7 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.cxf.headers.Header
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 
 import javax.xml.namespace.QName
 
@@ -45,7 +45,7 @@ public class Iti57TestRouteBuilder extends RouteBuilder {
         // for testing SOAP headers
         from('xds-iti57:xds-iti57-service3')
             .process {
-                Map<QName, Header> soapHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS]
+                Map<QName, Header> soapHeaders = HeaderUtils.getIncomingSoapHeaders(it)
                 boolean correct = true
                 correct = correct && (soapHeaders != null)
 

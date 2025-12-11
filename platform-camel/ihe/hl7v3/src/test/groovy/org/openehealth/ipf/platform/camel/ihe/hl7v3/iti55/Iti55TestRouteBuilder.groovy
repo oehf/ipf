@@ -18,8 +18,7 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55
 import org.apache.camel.Exchange
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
-
-import javax.xml.namespace.QName
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55RequestValidator
 import static org.openehealth.ipf.platform.camel.ihe.hl7v3.PixPdqV3CamelValidators.iti55ResponseValidator
@@ -59,7 +58,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
             .process(iti55ResponseValidator())
             .process {
                 try {
-                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                    def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(it)
                     assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
@@ -83,7 +82,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
             .process(iti55ResponseValidator())
             .process {
                 try {
-                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                    def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(it)
                     //assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                     assert it.pattern == ExchangePattern.InOnly
@@ -108,7 +107,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
             .process {
                 // check incoming SOAP and HTTP headers
                 Duration dura = TtlHeaderUtils.getTtl(it.in)
-                def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(it)
 
                 try {
                     assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
@@ -123,8 +122,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
                 if (dura) {
                     XcpdTestUtils.setTtl(message, dura.years * 2)
                 }
-                message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
-                    ['MyResponseHeader': ('Re: ' + inHttpHeaders['MyRequestHeader'])]
+                HeaderUtils.addOutgoingHttpHeaders(it, 'MyResponseHeader', 'Re: ' + inHttpHeaders['MyRequestHeader'])
 
                 responseCount.incrementAndGet()
             }

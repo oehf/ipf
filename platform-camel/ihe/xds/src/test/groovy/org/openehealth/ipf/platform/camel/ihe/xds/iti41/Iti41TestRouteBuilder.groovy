@@ -15,11 +15,12 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41
 
+import org.apache.camel.Exchange
 import org.apache.camel.ExchangePattern
-import org.apache.camel.Message
 import org.apache.cxf.binding.soap.SoapFault
 import org.apache.cxf.headers.Header
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer
 
 import javax.xml.namespace.QName
@@ -105,7 +106,7 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
                 .process(iti41RequestValidator())
                 .process {
                     // check incoming SOAP and HTTP headers
-                    def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                    def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(it)
 
                     try {
                         assert inHttpHeaders['MyRequestHeader'].startsWith('Number')
@@ -115,10 +116,8 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
                     }
 
                     // create response, inclusive SOAP and HTTP headers
-                    Message message = it.message
-                    message.body = new Response(status: SUCCESS)
-                    message.headers[AbstractWsEndpoint.OUTGOING_HTTP_HEADERS] =
-                            ['MyResponseHeader' : ('Re: ' + inHttpHeaders['MyRequestHeader'])]
+                    it.message.body = new Response(status: SUCCESS)
+                    HeaderUtils.addOutgoingHttpHeaders(it, 'MyResponseHeader', 'Re: ' + inHttpHeaders['MyRequestHeader'])
 
                     responseCount.incrementAndGet()
                     countDownLatch.countDown()
@@ -136,7 +135,7 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
                 .process(iti41ResponseValidator())
                 .process {
                     try {
-                        def inHttpHeaders = it.in.headers[AbstractWsEndpoint.INCOMING_HTTP_HEADERS]
+                        def inHttpHeaders = HeaderUtils.getIncomingHttpHeaders(it)
                         assert inHttpHeaders['MyResponseHeader'].startsWith('Re: Number')
 
                         assert it.pattern == ExchangePattern.InOnly
@@ -154,15 +153,15 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
     }
 
 
-    void checkValue(exchange, expected, expectedTargetHomeCommunityId) {
+    private static void checkValue(Exchange exchange, String expectedComment, String expectedTargetHomeCommunityId) {
         ProvideAndRegisterDocumentSet request = exchange.in.getBody(ProvideAndRegisterDocumentSet.class)
         def doc = request.documents[0]
         def value = doc.documentEntry.comments.value        
         def status = FAILURE
         def dataHandler = doc.getContent(DataHandler)
-        if (expected == value && dataHandler != null) {
+        if (expectedComment == value && dataHandler != null) {
             Collection attachments = dataHandler.dataSource.attachments
-            dataHandler.inputStream.withStream {inputStream ->
+            dataHandler.inputStream.withStream { inputStream ->
                 if (attachments.size() == 1 && attachments.iterator().next().xop) {
                     def length = 0
                     while (inputStream.read() != -1) {
@@ -179,7 +178,7 @@ public class Iti41TestRouteBuilder extends RouteBuilder {
             status = PARTIAL_SUCCESS
         }
 
-        Header header = exchange.in.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS][XdsSubmissionProducer.TARGET_HCID_HEADER_NAME]
+        Header header = HeaderUtils.getIncomingSoapHeaders(exchange)[XdsSubmissionProducer.TARGET_HCID_HEADER_NAME]
         if (header.object.firstChild.textContent != expectedTargetHomeCommunityId) {
             status = PARTIAL_SUCCESS
         }

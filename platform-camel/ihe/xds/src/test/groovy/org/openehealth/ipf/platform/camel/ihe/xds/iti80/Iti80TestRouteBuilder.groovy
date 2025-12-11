@@ -19,7 +19,7 @@ import org.apache.camel.builder.RouteBuilder
 import org.apache.cxf.headers.Header
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Response
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Status
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
+import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils
 
 import javax.xml.namespace.QName
 
@@ -36,7 +36,7 @@ class Iti80TestRouteBuilder extends RouteBuilder {
         from('xcdr-iti80://xcdr-iti80-service1')
             .process(iti80RequestValidator())
             .process {
-                Map<QName, Header> headers = it.message.headers[AbstractWsEndpoint.INCOMING_SOAP_HEADERS]
+                Map<QName, Header> headers = HeaderUtils.getIncomingSoapHeaders(it)
                 it.message.body = new Response(headers.containsKey(HOME_COMMUNITY_ID_HEADER_NAME)
                         ? Status.SUCCESS
                         : Status.FAILURE)
