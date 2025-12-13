@@ -64,7 +64,7 @@ public class ChPpq3Test extends FhirTestContainer {
         }).registerInterceptor(loggingInterceptor);
     }
 
-    private Exchange send(Object request, String httpMethod) throws Exception {
+    private Exchange sendPpq3Request(Object request, String httpMethod) throws Exception {
         Exchange exchange = new DefaultExchange(camelContext, ExchangePattern.InOut);
         exchange.getMessage().setBody(request);
         exchange.getMessage().setHeader(Constants.HTTP_METHOD, httpMethod);
@@ -85,7 +85,7 @@ public class ChPpq3Test extends FhirTestContainer {
     public void testCreate1() throws Exception {
         Consent consent = create201Consent(createUuid(), "123456789012345678");
 
-        Exchange exchange = send(consent, "POST");
+        Exchange exchange = sendPpq3Request(consent, "POST");
 
         MethodOutcome methodOutcome = exchange.getMessage().getMandatoryBody(MethodOutcome.class);
         assertTrue(methodOutcome.getCreated());
@@ -102,7 +102,7 @@ public class ChPpq3Test extends FhirTestContainer {
         Consent consent = create201Consent(createUuid(), "123456789012345678");
         consent.setId(createUuid());
 
-        Exchange exchange = send(consent, "PUT");
+        Exchange exchange = sendPpq3Request(consent, "PUT");
 
         MethodOutcome methodOutcome = exchange.getMessage().getMandatoryBody(MethodOutcome.class);
 
@@ -185,7 +185,7 @@ public class ChPpq3Test extends FhirTestContainer {
     public void testDelete2() throws Exception {
         String request = createUuid();
 
-        Exchange exchange = send(request, "DELETE");
+        Exchange exchange = sendPpq3Request(request, "DELETE");
 
         MethodOutcome methodOutcome = exchange.getMessage().getMandatoryBody(MethodOutcome.class);
 

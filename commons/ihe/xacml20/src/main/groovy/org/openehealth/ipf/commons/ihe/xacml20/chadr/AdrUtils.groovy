@@ -66,8 +66,8 @@ class AdrUtils {
                 if (attr.attributeId == AttributeIds.EHEALTH_SUISSSE_2015_EPR_SPID) {
                     for (value in attr.attributeValues) {
                         for (content in value.content) {
-                            if (content instanceof JAXBElement<II>) {
-                                return content.value.extension
+                            if ((content instanceof JAXBElement) && (content.value instanceof II)) {
+                                return (content.value as II).extension
                             }
                         }
                     }

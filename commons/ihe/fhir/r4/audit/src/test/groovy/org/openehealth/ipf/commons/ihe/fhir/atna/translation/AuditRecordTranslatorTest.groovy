@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.atna.translation
 
 import ca.uhn.fhir.context.FhirContext
+import groovy.transform.CompileStatic
 import groovy.util.logging.Slf4j
 import org.apache.commons.io.IOUtils
 import org.easymock.EasyMock
@@ -38,6 +39,7 @@ import java.time.Instant
 /**
  * @author Dmytro Rud
  */
+@CompileStatic
 @Slf4j
 class AuditRecordTranslatorTest {
 
@@ -76,60 +78,71 @@ class AuditRecordTranslatorTest {
                 eventIdentification: new EventIdentificationType(
                         EventIdCode.DICOMInstancesTransferred,
                         Instant.ofEpochMilli(System.currentTimeMillis()),
-                        EventOutcomeIndicator.Success).with(true)
+                        EventOutcomeIndicator.Success).with()
                         {
                             eventActionCode = EventActionCode.Create
+                            it
                         },
                 activeParticipants: [
-                        new ActiveParticipantType('123', false).with(true) {
+                        new ActiveParticipantType('123', false).with() {
                             alternativeUserID = 'AETITLE=AEFOO'
                             networkAccessPointID = '192.168.1.2'
                             networkAccessPointTypeCode = NetworkAccessPointTypeCode.IPAddress
                             roleIDCodes << ActiveParticipantRoleIdCode.Source
+                            it
                         },
-                        new ActiveParticipantType('67562', false).with(true) {
+                        new ActiveParticipantType('67562', false).with() {
                             alternativeUserID = 'AETITLE=AEPACS'
                             networkAccessPointID = '192.168.1.5'
                             networkAccessPointTypeCode = NetworkAccessPointTypeCode.IPAddress
                             roleIDCodes << ActiveParticipantRoleIdCode.Destination
+                            it
                         },
-                        new ActiveParticipantType('smitty@readingroom.hospital.org', true).with(true) {
+                        new ActiveParticipantType('smitty@readingroom.hospital.org', true).with() {
                             userName = 'Dr. Smith'
                             alternativeUserID = 'smith@nema'
                             networkAccessPointID = '192.168.1.2'
                             networkAccessPointTypeCode = NetworkAccessPointTypeCode.IPAddress
                             roleIDCodes << ActiveParticipantRoleIdCode.Source
+                            it
                         },
                 ],
-                auditSourceIdentification: new AuditSourceIdentificationType('ReadingRoom').with(true) {
+                auditSourceIdentification: new AuditSourceIdentificationType('ReadingRoom').with() {
                     auditEnterpriseSiteID = 'Hospital'
                     auditSourceType << AuditSourceType.EndUserInterface
+                    it
                 },
                 participantObjectIdentifications: [
                         new ParticipantObjectIdentificationType('1.2.840.10008.2.3.4.5.6.7.78.8', ParticipantObjectIdTypeCode.StudyInstanceUID).with(true) {
                             participantObjectTypeCode = ParticipantObjectTypeCode.System
                             participantObjectTypeCodeRole = ParticipantObjectTypeCodeRole.Report
                             participantObjectDataLifeCycle = ParticipantObjectDataLifeCycle.Origination
-                            participantObjectDescriptions << new DicomObjectDescriptionType().with(true) {
+                            participantObjectDescriptions << new DicomObjectDescriptionType().with() {
                                 getMPPS() << '1.2.840.10008.1.2.3.4.5'
                                 accession << '12341234'
-                                getSOPClasses() << new DicomObjectDescriptionType.SOPClass(1500).with(true) {
+                                getSOPClasses() << new DicomObjectDescriptionType.SOPClass(1500).with() {
                                     uid = '1.2.840.10008.5.1.4.1.1.2'
+                                    it
                                 }
-                                getSOPClasses() << new DicomObjectDescriptionType.SOPClass(3).with(true) {
+                                getSOPClasses() << new DicomObjectDescriptionType.SOPClass(3).with() {
                                     uid = '1.2.840.10008.5.1.4.1.1.11.1'
+                                    it
                                 }
+                                it
                             }
+                            it
                         },
-                        new ParticipantObjectIdentificationType('ptid12345', ParticipantObjectIdTypeCode.PatientNumber).with(true) {
+                        new ParticipantObjectIdentificationType('ptid12345', ParticipantObjectIdTypeCode.PatientNumber).with() {
                             participantObjectTypeCode = ParticipantObjectTypeCode.Person
                             participantObjectTypeCodeRole = ParticipantObjectTypeCodeRole.Patient
                             participantObjectName = 'John Doe'
+                            it
                         },
-                        new ParticipantObjectIdentificationType('queryId', ParticipantObjectIdTypeCode.SearchCriteria).with(true) {
+                        new ParticipantObjectIdentificationType('queryId', ParticipantObjectIdTypeCode.SearchCriteria).with() {
                             participantObjectTypeCode = ParticipantObjectTypeCode.Other
                             participantObjectTypeCodeRole = ParticipantObjectTypeCodeRole.Query
                             participantObjectQuery = 'SELECT * FROM documents WHERE type="TOP SECRET"'.bytes
+                            it
                         },
                 ]
         )

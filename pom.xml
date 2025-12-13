@@ -27,9 +27,9 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-plugin-version>3.5.3</surefire-plugin-version>
+        <surefire-plugin-version>3.5.4</surefire-plugin-version>
         <jxr-plugin-version>3.6.0</jxr-plugin-version>
-        <project-info-reports-plugin-version>3.8.0</project-info-reports-plugin-version>
+        <project-info-reports-plugin-version>3.9.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
         <maven-changes-plugin-version>2.12.1</maven-changes-plugin-version>
 
@@ -37,37 +37,38 @@
         <maven.compiler.target>17</maven.compiler.target>
 
         <!-- Plugin version properties -->
-        <assembly-plugin-version>3.7.1</assembly-plugin-version>
+        <assembly-plugin-version>3.8.0</assembly-plugin-version>
         <build-helper-version>3.6.1</build-helper-version>
-        <central-publishing-maven-plugin.version>0.8.0</central-publishing-maven-plugin.version>
-        <compiler-plugin-version>3.14.0</compiler-plugin-version>
-        <enforcer-plugin-version>3.6.1</enforcer-plugin-version>
+        <central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
+        <compiler-plugin-version>3.14.1</compiler-plugin-version>
+        <enforcer-plugin-version>3.6.2</enforcer-plugin-version>
         <gmavenplus-plugin-version>4.2.1</gmavenplus-plugin-version>
 
-        <jar-plugin-version>3.4.2</jar-plugin-version>
-        <javadoc-plugin-version>3.11.2</javadoc-plugin-version>
-        <jaxb-plugin-version>3.3.0</jaxb-plugin-version>
+        <jar-plugin-version>3.5.0</jar-plugin-version>
+        <javadoc-plugin-version>3.12.0</javadoc-plugin-version>
+        <jaxb-plugin-version>4.0.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
         <release-plugin-version>3.1.1</release-plugin-version>
-        <resources-plugin-version>3.3.1</resources-plugin-version>
+        <resources-plugin-version>3.4.0</resources-plugin-version>
+        <scm-publish-plugin-version>3.3.0</scm-publish-plugin-version>
         <!-- investigate: maven-release-plugin-fails source-artifacts-getting-deployed-twice on version greater than 3.2.1 -->
-        <sources-plugin-version>3.2.1</sources-plugin-version>
+        <source-plugin-version>3.4.0</source-plugin-version>
         <site-plugin-version>3.21.0</site-plugin-version>
 
         <!-- Dependency version properties -->
         <brave-version>6.3.0</brave-version>
         <easymock-version>5.6.0</easymock-version>
-        <guava-version>33.3.0-jre</guava-version>
-        <lombok-version>1.18.38</lombok-version>
+        <guava-version>33.5.0-jre</guava-version>
+        <lombok-version>1.18.42</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>10.1.44</tomcat-version>
-        <xbean-spring-version>4.27</xbean-spring-version>
+        <tomcat-version>10.1.48</tomcat-version>
+        <xbean-spring-version>4.28</xbean-spring-version>
     </properties>
 
     <scm>
         <developerConnection>scm:git:git@github.com:oehf/ipf.git</developerConnection>
-       <tag>HEAD</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <profiles>
@@ -662,7 +663,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>${sources-plugin-version}</version>
+                <version>${source-plugin-version}</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -693,7 +694,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-scm-publish-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>${scm-publish-plugin-version}</version>
                 <inherited>false</inherited>
                 <configuration>
                     <checkoutDirectory>${site.scm.directory}</checkoutDirectory>

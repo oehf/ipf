@@ -120,43 +120,27 @@ class CustomServerInitializerFactory extends ServerInitializerFactory {
             return null;
         }
 
-        SSLContext answer;
-
         // create ssl context once
         if (configuration.getSslContextParameters() != null) {
-            answer = configuration.getSslContextParameters().createSSLContext(camelContext);
+            return configuration.getSslContextParameters().createSSLContext(camelContext);
         } else {
-            if (configuration.getKeyStoreFile() == null && configuration.getKeyStoreResource() == null) {
+            if (configuration.getKeyStoreResource() == null) {
                 log.debug("keystore file is null");
             }
-            if (configuration.getTrustStoreFile() == null && configuration.getTrustStoreResource() == null) {
+            if (configuration.getTrustStoreResource() == null) {
                 log.debug("truststore file is null");
             }
             if (configuration.getPassphrase() == null) {
                 log.debug("passphrase is null");
             }
 
-            SSLEngineFactory sslEngineFactory;
-            if (configuration.getKeyStoreFile() != null || configuration.getTrustStoreFile() != null) {
-                sslEngineFactory = new SSLEngineFactory();
-                answer = sslEngineFactory.createSSLContext(camelContext,
-                        configuration.getKeyStoreFormat(),
-                        configuration.getSecurityProvider(),
-                        "file:" + configuration.getKeyStoreFile().getPath(),
-                        "file:" + configuration.getTrustStoreFile().getPath(),
-                        configuration.getPassphrase().toCharArray());
-            } else {
-                sslEngineFactory = new SSLEngineFactory();
-                answer = sslEngineFactory.createSSLContext(camelContext,
-                        configuration.getKeyStoreFormat(),
-                        configuration.getSecurityProvider(),
-                        configuration.getKeyStoreResource(),
-                        configuration.getTrustStoreResource(),
-                        configuration.getPassphrase().toCharArray());
-            }
+            return new SSLEngineFactory().createSSLContext(camelContext,
+                    configuration.getKeyStoreFormat(),
+                    configuration.getSecurityProvider(),
+                    configuration.getKeyStoreResource(),
+                    configuration.getTrustStoreResource(),
+                    configuration.getPassphrase().toCharArray());
         }
-
-        return answer;
     }
 
     private SslHandler configureServerSSLOnDemand() {

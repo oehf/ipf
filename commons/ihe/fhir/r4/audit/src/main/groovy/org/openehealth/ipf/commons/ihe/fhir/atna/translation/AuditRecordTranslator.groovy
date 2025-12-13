@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.atna.translation
 
+import groovy.transform.CompileStatic
 import org.hl7.fhir.r4.model.*
 import org.hl7.fhir.r4.model.codesystems.AuditEntityTypeEnumFactory
 import org.hl7.fhir.r4.model.codesystems.AuditSourceTypeEnumFactory
@@ -31,6 +32,7 @@ import java.time.Instant
  * @author Dmytro Rud
  * @since 3.6
  */
+@CompileStatic
 class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
 
     static Coding coding(CodedValueType codedValueType) {
@@ -40,14 +42,22 @@ class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
                 system: codedValueType.codeSystemName.map('atnaCodingSystem'))
     }
 
+    @CompileStatic
+    static interface WrappedEnumElement {
+        String toCode()
+        String getDisplay()
+        String getSystem()
+    }
+
     /**
      * For codes returned from FHIR *EnumFactory instances.
      */
     static Coding codingEnum(Enum type) {
+        def wrapped = type as WrappedEnumElement
         return new Coding(
-                code: type.toCode(),
-                display: type.display,
-                system: type.system)
+                code: wrapped.toCode(),
+                display: wrapped.display,
+                system: wrapped.system)
     }
 
     static CodeableConcept codeableConcept(CodedValueType codedValueType) {

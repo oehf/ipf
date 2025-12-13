@@ -128,9 +128,9 @@ class StandardTestContainer {
      *          optional Camel request message headers.
      * @return the output object.
      */
-    def send(endpoint, input, outType, Map headers = null) {
+    static <T> T send(String endpoint, Object input, Class<T> outType, Map headers = null) {
         Exchange result = send(endpoint, input, headers)
-        result.getMessage().getBody(outType)
+        return result.getMessage().getBody(outType)
     }
 
     /**
@@ -143,7 +143,7 @@ class StandardTestContainer {
      *          optional Camel request message headers.
      * @return the resulting exchange.
      */
-    def send(endpoint, input, Map headers = null) {
+    static Exchange send(String endpoint, Object input, Map headers = null) {
         def exchange = new DefaultExchange(camelContext)
         exchange.in.body = input
         if (headers) {

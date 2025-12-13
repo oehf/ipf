@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.chppqm.translation
 
+import groovy.transform.CompileStatic
 import org.apache.commons.lang3.StringUtils
 import org.apache.http.NameValuePair
 import org.apache.http.client.utils.URLEncodedUtils
@@ -34,6 +35,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLP
 import java.nio.charset.StandardCharsets
 import java.text.SimpleDateFormat
 
+@CompileStatic
 class FhirToXacmlTranslator {
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat('yyyy-MM-dd')
