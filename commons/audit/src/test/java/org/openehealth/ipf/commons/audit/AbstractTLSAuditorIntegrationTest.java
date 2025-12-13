@@ -20,6 +20,8 @@ package org.openehealth.ipf.commons.audit;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.server.TlsSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
+import org.openehealth.ipf.commons.audit.protocol.NettyTLSSyslogSenderImpl;
+import org.openehealth.ipf.commons.audit.protocol.ReactorNettyTLSSyslogSenderImpl;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +55,7 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
         auditContext.setAuditRepositoryTransport(transport());
         var count = 500;
         var threads = 2;
+        tuneTlsSender(threads);
         var consumer = SyslogEventCollector.newInstance()
                 .withExpectation(count)
                 .withDelay(100); // even if handling takes artificially long, we're done fast enough
@@ -87,6 +90,17 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
             assertTrue(consumer.await(5, TimeUnit.SECONDS));
         }
 
+    }
+
+    private void tuneTlsSender(int workerThreads) {
+        var protocol = auditContext.getAuditTransmissionProtocol();
+        if (protocol instanceof NettyTLSSyslogSenderImpl netty) {
+            netty.setWorkerThreads(workerThreads);
+            netty.setSendTimeout(30, TimeUnit.SECONDS);
+        } else if (protocol instanceof ReactorNettyTLSSyslogSenderImpl reactorNetty) {
+            reactorNetty.setWorkerThreads(workerThreads);
+            reactorNetty.setSendTimeout(30, TimeUnit.SECONDS);
+        }
     }
 
 }

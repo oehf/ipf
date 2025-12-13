@@ -10,7 +10,7 @@
     <properties>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <bouncycastle-version>1.81</bouncycastle-version>
-        <camel-version>4.10.6</camel-version>
+        <camel-version>4.14.2</camel-version>
         <cxf-version>4.1.3</cxf-version>
         <commons-io-version>2.20.0</commons-io-version>
         <commons-compress-version>1.28.0</commons-compress-version>
