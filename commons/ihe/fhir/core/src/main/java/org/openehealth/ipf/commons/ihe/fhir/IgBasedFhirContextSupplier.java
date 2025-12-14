@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.support.DefaultProfileValidationSupport;
+import ca.uhn.fhir.context.support.IValidationSupport;
 import ca.uhn.fhir.validation.FhirValidator;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -49,11 +50,15 @@ public class IgBasedFhirContextSupplier {
             npmValidationSupport.loadPackageFromClasspath(igResource);
         }
 
+        UnknownCodeSystemWarningValidationSupport unknownCodeSystemWarningValidationSupport = new UnknownCodeSystemWarningValidationSupport(fhirContext);
+        unknownCodeSystemWarningValidationSupport.setNonExistentCodeSystemSeverity(IValidationSupport.IssueSeverity.WARNING);
+
         var validationSupport = new ValidationSupportChain(
                 npmValidationSupport,
                 new CommonCodeSystemsTerminologyService(fhirContext),
                 new DefaultProfileValidationSupport(fhirContext),
-                new InMemoryTerminologyServerValidationSupport(fhirContext));
+                new InMemoryTerminologyServerValidationSupport(fhirContext),
+                unknownCodeSystemWarningValidationSupport);
 
         return fhirContext.setFhirValidatorFactory(ctx -> {
             var validator = new FhirValidator(ctx);
