@@ -131,7 +131,6 @@ public class HpdValidator {
     public static void validateIti58Response(BatchResponse batchResponse) {
         validateWithXsd(batchResponse, "/schema/DSMLv2.xsd");
         Set<String> requestIds = new HashSet<>();
-        check(isUniqueRequestId(batchResponse.getRequestID(), requestIds), "Batch request ID must be not empty");
 
         for (var jaxbElement : batchResponse.getBatchResponses()) {
             check(jaxbElement != null, "Batch response element is null");
