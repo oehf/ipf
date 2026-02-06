@@ -82,7 +82,6 @@ public class HpdValidator {
         check(batchRequest.getBatchRequests() != null, "Batch request is null");
         check(!batchRequest.getBatchRequests().isEmpty(), "Batch request is empty");
         Set<String> requestIds = new HashSet<>();
-        check(isUniqueRequestId(batchRequest.getRequestID(), requestIds), "Batch request ID must be not empty");
 
         for (var dsml : batchRequest.getBatchRequests()) {
             check(dsml != null, "Batch request element is null");
