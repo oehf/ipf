@@ -42,6 +42,6 @@ public abstract class FolderList<T extends FolderList<T>> extends MhdList<T> {
     public static final Coding FOLDER_LIST_CODING = new Coding(
         "https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes",
         "folder",
-        "folder"
+        "Folder as a FHIR List"
     );
 }

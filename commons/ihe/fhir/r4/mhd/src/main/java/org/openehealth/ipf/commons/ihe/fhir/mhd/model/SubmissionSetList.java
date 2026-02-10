@@ -142,6 +142,6 @@ public abstract class SubmissionSetList<T extends SubmissionSetList<T>> extends 
     public static final Coding SUBMISSIONSET_LIST_CODING = new Coding(
         "https://profiles.ihe.net/ITI/MHD/CodeSystem/MHDlistTypes",
         "submissionset",
-        "submissionset"
+        "SubmissionSet as a FHIR List"
     );
 }

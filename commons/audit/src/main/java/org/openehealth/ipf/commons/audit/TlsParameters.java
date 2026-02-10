@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.audit;
 
 /**
  * Abstraction for setting TLS parameters to be used by ATNA sender implementations.
- * Use {@link DefaultAuditContext#setTlsParameters(TlsParameters)} to configure the
+ * Use {@link DefaultAuditContext#setTlsParameters(org.openehealth.ipf.commons.core.ssl.TlsParameters)} (TlsParameters)} to configure the
  * audit context.
  * <p>
  * The default uses the default as defined by javax.net.ssl.* system properties.
