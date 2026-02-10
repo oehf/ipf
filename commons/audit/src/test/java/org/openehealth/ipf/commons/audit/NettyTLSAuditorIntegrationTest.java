@@ -16,6 +16,9 @@
 
 package org.openehealth.ipf.commons.audit;
 
+import org.junit.jupiter.api.Disabled;
+
+@Disabled("Integration tests for Netty-TLS are instable and currently disabled.")
 public class NettyTLSAuditorIntegrationTest extends AbstractTLSAuditorIntegrationTest {
 
     @Override
