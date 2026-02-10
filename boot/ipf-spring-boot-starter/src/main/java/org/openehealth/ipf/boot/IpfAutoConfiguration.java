@@ -1,6 +1,21 @@
+/*
+ * Copyright 2016 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
 package org.openehealth.ipf.boot;
 
-
+import org.apache.camel.CamelContext;
 import org.apache.camel.support.jsse.CipherSuitesParameters;
 import org.apache.camel.support.jsse.ClientAuthentication;
 import org.apache.camel.support.jsse.KeyManagersParameters;
@@ -12,18 +27,26 @@ import org.apache.camel.support.jsse.SecureSocketProtocolsParameters;
 import org.apache.camel.support.jsse.TrustManagersParameters;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
+import org.openehealth.ipf.commons.core.ssl.CustomTlsParameters;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor;
 import org.openehealth.ipf.commons.spring.core.config.SpringRegistry;
 import org.openehealth.ipf.commons.spring.map.SpringBidiMappingService;
 import org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.ssl.NoSuchSslBundleException;
+import org.springframework.boot.ssl.SslBundles;
 import org.springframework.boot.web.server.Ssl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.net.ssl.SSLContext;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -34,11 +57,11 @@ import java.util.Arrays;
 @EnableConfigurationProperties(IpfConfigurationProperties.class)
 public class IpfAutoConfiguration {
 
-    private final IpfConfigurationProperties ipfConfigurationProperties;
+    public static final String SERVER_SSL_CONTEXT_PARAMETERS = "bootSslContextParameters";
+    public static final String SERVER_TLS_PARAMETERS = "bootTlsParameters";
 
-    public IpfAutoConfiguration(IpfConfigurationProperties ipfConfigurationProperties) {
-        this.ipfConfigurationProperties = ipfConfigurationProperties;
-    }
+    private static final Logger log = LoggerFactory.getLogger(IpfAutoConfiguration.class);
+
 
     @Bean
     @ConditionalOnMissingBean(Registry.class)
@@ -73,14 +96,58 @@ public class IpfAutoConfiguration {
     }
 
 
+    @Bean(name = SERVER_TLS_PARAMETERS)
+    @ConditionalOnProperty(prefix = "ipf.commons", name = "reuse-ssl-config", havingValue = "true")
+    public TlsParameters tlsParameters(SslBundles sslBundles, ServerProperties serverProperties) {
+        var sslConfig = serverProperties.getSsl();
+        if (sslConfig.getBundle() != null) {
+            try {
+                return new SslBundleTlsParameters(sslBundles, sslConfig.getBundle());
+            } catch (NoSuchSslBundleException e) {
+                log.info("No Spring Boot server bundle configured, using dedicated TLS attributes for bean {}",
+                    SERVER_TLS_PARAMETERS);
+            }
+        }
+        var tlsParameters = new CustomTlsParameters();
+        tlsParameters.setKeyStoreFile(resolveResourcePath(sslConfig.getKeyStore()));
+        tlsParameters.setKeyStorePassword(sslConfig.getKeyStorePassword());
+        tlsParameters.setKeyStoreType(sslConfig.getKeyStoreType());
+        tlsParameters.setTrustStoreFile(resolveResourcePath(sslConfig.getTrustStore()));
+        tlsParameters.setTrustStorePassword(sslConfig.getTrustStorePassword());
+        tlsParameters.setTrustStoreType(sslConfig.getTrustStoreType());
+        tlsParameters.setEnabledProtocols(String.join(",", sslConfig.getEnabledProtocols()));
+        tlsParameters.setClientAuthentication(sslConfig.getClientAuth() != null ? sslConfig.getClientAuth().name() : null);
+        tlsParameters.setTlsProtocol(sslConfig.getProtocol());
+        tlsParameters.setProvider(sslConfig.getKeyStoreProvider());
+        return tlsParameters;
+    }
+
     // Set up sslContextParameters bean from the Spring Boot server config. Can be used for e.g.
     // serving MLLP endpoints or as producer configuration.
 
-    @Bean(name = "bootSslContextParameters")
-    @ConditionalOnProperty(prefix = "ipf.commons", name = "reuse-ssl-config")
-    public SSLContextParameters sslContextParameters(ServerProperties serverProperties) {
+    @Bean(name = SERVER_SSL_CONTEXT_PARAMETERS)
+    @ConditionalOnProperty(prefix = "ipf.commons", name = "reuse-ssl-config", havingValue = "true")
+    public SSLContextParameters sslContextParameters(SslBundles sslBundles, ServerProperties serverProperties) {
         var sslConfig = serverProperties.getSsl();
+        if (sslConfig.getBundle() != null) {
+            try {
+                var sslBundle = sslBundles.getBundle(sslConfig.getBundle());
+                return new SSLContextParameters() {
+                    @Override
+                    protected void configureSSLContext(SSLContext context) {
+                        throw new UnsupportedOperationException("Static SSLContextParameters cannot be further configured");
+                    }
 
+                    @Override
+                    public SSLContext createSSLContext(CamelContext camelContext) {
+                        return sslBundle.createSslContext();
+                    }
+                };
+            } catch (NoSuchSslBundleException e) {
+                log.info("No Spring Boot server SslBundle configured, using dedicated TLS attributes for {} bean,",
+                    SERVER_SSL_CONTEXT_PARAMETERS);
+            }
+        }
         // Keystore
         var ksp = new KeyStoreParameters();
         ksp.setResource(resourceName(sslConfig.getKeyStore()));
@@ -134,5 +201,29 @@ public class IpfAutoConfiguration {
     private String resourceName(String resource) {
         var i = resource.indexOf(":");
         return i >= 0 ? resource.substring(i + 1) : resource;
+    }
+
+    private String resolveResourcePath(String resource) {
+        if (resource == null) {
+            return null;
+        }
+
+        if (resource.startsWith("classpath:")) {
+            var resourcePath = resource.substring("classpath:".length());
+            try {
+                var url = getClass().getClassLoader().getResource(resourcePath);
+                if (url != null) {
+                    return Paths.get(url.toURI()).toAbsolutePath().toString();
+                }
+                throw new IllegalArgumentException("Classpath resource not found: " + resourcePath);
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to resolve classpath resource: " + resource, e);
+            }
+        } else if (resource.startsWith("file:")) {
+            return resource.substring("file:".length());
+        }
+
+        // Assume it's already a plain file path
+        return resource;
     }
 }

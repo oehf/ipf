@@ -16,10 +16,12 @@
         <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.vibur</groupId>
             <artifactId>vibur-object-pool</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>

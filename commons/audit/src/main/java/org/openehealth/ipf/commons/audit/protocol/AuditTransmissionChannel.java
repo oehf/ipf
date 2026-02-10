@@ -17,12 +17,12 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 import org.openehealth.ipf.commons.audit.AuditException;
-import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.protocol.providers.NettyTLSSyslogSenderProvider;
 import org.openehealth.ipf.commons.audit.protocol.providers.ReactorNettyTLSSyslogSenderProvider;
 import org.openehealth.ipf.commons.audit.protocol.providers.RecordingAuditMessageTransmissionProvider;
 import org.openehealth.ipf.commons.audit.protocol.providers.TLSSyslogSenderProvider;
 import org.openehealth.ipf.commons.audit.protocol.providers.UDPSyslogSenderProvider;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 import java.util.Arrays;
 import java.util.ServiceLoader;

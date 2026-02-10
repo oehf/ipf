@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.core.ssl;
 
 import org.apache.camel.support.jsse.SSLContextParameters;
-import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 public interface CamelTlsParameters extends TlsParameters {
 

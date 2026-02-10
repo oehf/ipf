@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.openehealth.ipf.commons.core.ContentMap;
 
 import jakarta.activation.DataHandler;
 import jakarta.xml.bind.annotation.XmlAccessType;

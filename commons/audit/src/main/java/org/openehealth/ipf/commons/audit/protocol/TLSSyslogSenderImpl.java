@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.audit.protocol;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
-import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

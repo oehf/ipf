@@ -23,7 +23,7 @@ import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.support.jsse.SSLContextServerParameters;
 import org.apache.camel.support.jsse.SecureSocketProtocolsParameters;
 import org.apache.camel.support.jsse.TrustManagersParameters;
-import org.openehealth.ipf.commons.audit.CustomTlsParameters;
+import org.openehealth.ipf.commons.core.ssl.CustomTlsParameters;
 
 import java.util.Arrays;
 

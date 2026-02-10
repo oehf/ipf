@@ -31,6 +31,7 @@ import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

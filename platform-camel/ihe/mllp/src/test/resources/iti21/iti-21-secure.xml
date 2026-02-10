@@ -100,8 +100,8 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
             <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
         </camel:secureSocketProtocols>
         <camel:cipherSuites>
-            <camel:cipherSuite>SSL_RSA_WITH_NULL_SHA</camel:cipherSuite>
-            <camel:cipherSuite>TLS_RSA_WITH_AES_128_CBC_SHA</camel:cipherSuite>
+            <camel:cipherSuite>TLS_DHE_RSA_WITH_AES_256_GCM_SHA384</camel:cipherSuite>
+            <camel:cipherSuite>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</camel:cipherSuite>
         </camel:cipherSuites>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore
@@ -121,7 +121,7 @@ http://camel.apache.org/schema/spring/camel-spring.xsd ">
             <camel:secureSocketProtocol>TLSv1.2</camel:secureSocketProtocol>
         </camel:secureSocketProtocols>
         <camel:cipherSuites>
-            <camel:cipherSuite>TLS_RSA_WITH_AES_128_GCM_SHA256</camel:cipherSuite>
+            <camel:cipherSuite>TLS_DHE_RSA_WITH_AES_128_GCM_SHA256</camel:cipherSuite>
         </camel:cipherSuites>
         <camel:keyManagers keyPassword="changeit" algorithm="SunX509">
             <camel:keyStore

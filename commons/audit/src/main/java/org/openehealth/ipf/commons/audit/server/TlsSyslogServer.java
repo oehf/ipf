@@ -19,7 +19,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.handler.logging.LogLevel;
 import org.openehealth.ipf.commons.audit.NettyUtils;
-import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.netty.DisposableChannel;

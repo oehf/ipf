@@ -16,12 +16,20 @@
 
 package org.openehealth.ipf.boot.atna;
 
-import org.openehealth.ipf.commons.audit.*;
+import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
+import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.DefaultAuditContext;
+import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
+import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
+import org.openehealth.ipf.commons.audit.FhirAuditDatasetEnricher;
+import org.openehealth.ipf.commons.audit.WsAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpXmlSerializationStrategy;
 import org.springframework.beans.factory.annotation.Value;

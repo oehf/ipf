@@ -1,0 +1,379 @@
+/*
+ * Copyright 2020 the original author or authors.
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *         http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ */
+package org.openehealth.ipf.commons.core.ssl;
+
+import lombok.Getter;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+
+import javax.net.ssl.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+import java.security.PrivateKey;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+/**
+ * {@link TlsParameters} that can be set independently of the javax.net.ssl system
+ * properties. Still, a newly instantiated instance of this class defaults to these
+ * properties.
+ */
+@Slf4j
+@Getter
+@Setter
+public class CustomTlsParameters implements TlsParameters {
+
+    protected String provider = "SunJSSE";
+    protected String tlsProtocol = "TLSv1.2";
+    protected String certificateType = "SunX509";
+
+    protected String certAlias;
+
+    protected String keyStoreType;
+    protected String trustStoreType;
+    protected String keyStoreFile;
+    protected String keyStorePassword;
+    protected String trustStoreFile;
+    protected String trustStorePassword;
+
+    protected String enabledClientCipherSuites;
+    protected String enabledServerCipherSuites;
+    protected String enabledProtocols;
+
+    protected int sessionTimeout;
+    protected boolean performDomainValidation;
+    protected List<String> sniHostnames = new ArrayList<>();
+    protected String clientAuthentication;
+
+    static TlsParameters getDefault() {
+        return new CustomTlsParameters();
+    }
+
+    public CustomTlsParameters() {
+        keyStoreType = System.getProperty(JAVAX_NET_SSL_KEYSTORE_TYPE, KeyStore.getDefaultType());
+        trustStoreType = keyStoreType;
+        keyStoreFile = System.getProperty(JAVAX_NET_SSL_KEYSTORE);
+        keyStorePassword = System.getProperty(JAVAX_NET_SSL_KEYSTORE_PASSWORD);
+        trustStoreFile = System.getProperty(JAVAX_NET_SSL_TRUSTSTORE);
+        trustStorePassword = System.getProperty(JAVAX_NET_SSL_TRUSTSTORE_PASSWORD);
+        enabledClientCipherSuites = System.getProperty(JAVAX_TLS_CLIENT_CIPHERSUITES);
+        enabledServerCipherSuites = System.getProperty(JAVAX_TLS_SERVER_CIPHERSUITES);
+        enabledProtocols = System.getProperty(JDK_TLS_CLIENT_PROTOCOLS, "TLSv1.2");
+    }
+
+    private Function<SSLSocketFactory, SSLSocketFactory> sslSocketFactoryConfigurer(boolean serverSide) {
+        return sslSocketFactory -> new SSLSocketFactoryDecorator(sslSocketFactory, sslSocketConfigurer(serverSide));
+    }
+
+    private Function<SSLSocket, SSLSocket> sslSocketConfigurer(boolean serverSide) {
+        return sslSocket -> {
+            if (!serverSide && enabledClientCipherSuites != null) {
+                sslSocket.setEnabledCipherSuites(split(enabledClientCipherSuites));
+            }
+            if (serverSide && enabledServerCipherSuites != null) {
+                sslSocket.setEnabledCipherSuites(split(enabledServerCipherSuites));
+            }
+            if (enabledProtocols != null) {
+                sslSocket.setEnabledProtocols(split(enabledProtocols));
+            }
+            if (!sniHostnames.isEmpty()) {
+                var sslParameters = sslSocket.getSSLParameters();
+                sslParameters.setServerNames(sniHostnames.stream()
+                        .map(SNIHostName::new)
+                        .collect(Collectors.toList()));
+                sslSocket.setSSLParameters(sslParameters);
+            }
+            if (performDomainValidation) {
+                var sslParameters = sslSocket.getSSLParameters();
+                sslParameters.setEndpointIdentificationAlgorithm("HTTPS");
+                sslSocket.setSSLParameters(sslParameters);
+            }
+            return sslSocket;
+        };
+    }
+
+    private Function<SSLEngine, SSLEngine> sslEngineConfigurer(boolean serverSide) {
+        return sslEngine -> {
+            if (!serverSide && enabledClientCipherSuites != null) {
+                sslEngine.setEnabledCipherSuites(split(enabledClientCipherSuites));
+            }
+            if (serverSide && enabledServerCipherSuites != null) {
+                sslEngine.setEnabledCipherSuites(split(enabledServerCipherSuites));
+            }
+            if (enabledProtocols != null) {
+                sslEngine.setEnabledProtocols(split(enabledProtocols));
+            }
+            return sslEngine;
+        };
+    }
+
+    protected String[] split(String s) {
+        return s.split("\\s*,\\s*");
+    }
+
+    @Override
+    public SSLContext getSSLContext(boolean serverSide) {
+        try {
+            var keyStore = getKeyStore(keyStoreType, keyStoreFile, keyStorePassword);
+            var keyManagerFactory = KeyManagerFactory.getInstance(certificateType, provider);
+            keyManagerFactory.init(keyStore, keyStorePassword != null ? keyStorePassword.toCharArray() : null);
+            var keyManagers = keyManagerFactory.getKeyManagers();
+
+            if (keyManagers != null && certAlias != null) {
+                for (var i = 0; i < keyManagers.length; i++) {
+                    if (keyManagers[i] instanceof X509KeyManager x509KeyManager) {
+                        keyManagers[i] = new AliasX509ExtendedKeyManager(x509KeyManager, certAlias);
+                    }
+                }
+            }
+
+            var trustStore = getKeyStore(trustStoreType, trustStoreFile, trustStorePassword);
+            var trustManagerFactory = TrustManagerFactory.getInstance(certificateType, provider);
+            trustManagerFactory.init(trustStore);
+            var trustManagers = trustManagerFactory.getTrustManagers();
+
+            var secureRandom = new SecureRandom();
+            var sslContext = SSLContext.getInstance(tlsProtocol, provider);
+            sslContext.init(keyManagers, trustManagers, secureRandom);
+
+            if (sessionTimeout > 0) {
+                sslContext.getClientSessionContext().setSessionTimeout(sessionTimeout);
+            }
+
+            log.debug("Created SSLContext with protocol: {}, provider: {}, serverSide: {}", tlsProtocol, provider, serverSide);
+
+            return new CustomSSLContext(new SSLContextSpiDecorator(
+                    sslContext,
+                    sslEngineConfigurer(serverSide),
+                    sslSocketFactoryConfigurer(serverSide)));
+        } catch (Exception e) {
+            log.error("Failed to create SSLContext", e);
+            throw new RuntimeException("Failed to create SSLContext", e);
+        }
+    }
+
+    private KeyStore getKeyStore(String type, String storePath, String password) throws KeyStoreException, 
+            IOException, NoSuchAlgorithmException, CertificateException {
+        if (storePath == null || storePath.isEmpty()) {
+            log.debug("No keystore path provided for type: {}", type);
+            return null;
+        }
+        
+        var keyStore = KeyStore.getInstance(type);
+        try (var in = Files.newInputStream(Paths.get(storePath))) {
+            keyStore.load(in, password != null ? password.toCharArray() : null);
+            log.debug("Loaded keystore from: {}", storePath);
+            return keyStore;
+        }
+    }
+
+
+    private static final class CustomSSLContext extends SSLContext {
+
+        CustomSSLContext(SSLContextSpiDecorator sslContextSpiDecorator) {
+            super(sslContextSpiDecorator,
+                    sslContextSpiDecorator.getDelegate().getProvider(),
+                    sslContextSpiDecorator.getDelegate().getProtocol());
+        }
+
+    }
+
+    private static final class SSLContextSpiDecorator extends SSLContextSpi {
+
+        private final SSLContext sslContext;
+        private final Function<SSLEngine, SSLEngine> sslEngineConfigurer;
+        private final Function<SSLSocketFactory, SSLSocketFactory> sslSocketFactoryConfigurer;
+
+        public SSLContextSpiDecorator(SSLContext sslContext,
+                                      Function<SSLEngine, SSLEngine> sslEngineConfigurer,
+                                      Function<SSLSocketFactory, SSLSocketFactory> sslSocketFactoryConfigurer) {
+            this.sslContext = sslContext;
+            this.sslEngineConfigurer = sslEngineConfigurer;
+            this.sslSocketFactoryConfigurer = sslSocketFactoryConfigurer;
+        }
+
+        SSLContext getDelegate() {
+            return sslContext;
+        }
+
+        @Override
+        protected void engineInit(KeyManager[] keyManagers,
+                                  TrustManager[] trustManagers,
+                                  SecureRandom secureRandom) throws KeyManagementException {
+            sslContext.init(keyManagers, trustManagers, secureRandom);
+        }
+
+        @Override
+        protected SSLSocketFactory engineGetSocketFactory() {
+            var factory = sslContext.getSocketFactory();
+            return sslSocketFactoryConfigurer.apply(factory);
+        }
+
+        @Override
+        protected SSLServerSocketFactory engineGetServerSocketFactory() {
+            throw new UnsupportedOperationException("Server socket factory not supported");
+        }
+
+        @Override
+        protected SSLEngine engineCreateSSLEngine() {
+            var engine = sslContext.createSSLEngine();
+            return sslEngineConfigurer.apply(engine);
+        }
+
+        @Override
+        protected SSLEngine engineCreateSSLEngine(String host, int port) {
+            var engine = sslContext.createSSLEngine(host, port);
+            return sslEngineConfigurer.apply(engine);
+        }
+
+        @Override
+        protected SSLSessionContext engineGetServerSessionContext() {
+            return sslContext.getServerSessionContext();
+        }
+
+        @Override
+        protected SSLSessionContext engineGetClientSessionContext() {
+            return sslContext.getClientSessionContext();
+        }
+    }
+
+
+    private static final class SSLSocketFactoryDecorator extends SSLSocketFactory {
+
+        private final SSLSocketFactory delegate;
+        private final Function<SSLSocket, SSLSocket> sslSocketConfigurer;
+
+        public SSLSocketFactoryDecorator(SSLSocketFactory delegate, Function<SSLSocket, SSLSocket> sslSocketConfigurer) {
+            this.delegate = delegate;
+            this.sslSocketConfigurer = sslSocketConfigurer;
+        }
+
+        @Override
+        public String[] getDefaultCipherSuites() {
+            return delegate.getDefaultCipherSuites();
+        }
+
+        @Override
+        public String[] getSupportedCipherSuites() {
+            return delegate.getSupportedCipherSuites();
+        }
+
+        @Override
+        public Socket createSocket() throws IOException {
+            return configureSocket(delegate.createSocket());
+        }
+
+        @Override
+        public Socket createSocket(Socket s, String host, int port, boolean autoClose) throws IOException {
+            return configureSocket(delegate.createSocket(s, host, port, autoClose));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port) throws IOException {
+            return configureSocket(delegate.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException {
+            return configureSocket(delegate.createSocket(host, port, localHost, localPort));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress host, int port) throws IOException {
+            return configureSocket(delegate.createSocket(host, port));
+        }
+
+        @Override
+        public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+            return configureSocket(delegate.createSocket(address, port, localAddress, localPort));
+        }
+
+        public SSLSocketFactory getDelegate() {
+            return this.delegate;
+        }
+
+        private Socket configureSocket(Socket s) {
+            var socket = (SSLSocket) s;
+            return sslSocketConfigurer.apply(socket);
+        }
+    }
+
+
+    private static final class AliasX509ExtendedKeyManager extends X509ExtendedKeyManager {
+        private final String certAlias;
+        private final X509KeyManager keyManager;
+
+        public AliasX509ExtendedKeyManager(X509KeyManager keyManager, String certAlias) {
+            this.keyManager = keyManager;
+            this.certAlias = certAlias;
+        }
+
+        @Override
+        public String chooseClientAlias(String[] keyTypes, Principal[] issuers, Socket socket) {
+            return certAlias != null ? certAlias : keyManager.chooseClientAlias(keyTypes, issuers, socket);
+        }
+
+        @Override
+        public String chooseServerAlias(String keyType, Principal[] issuers, Socket socket) {
+            return certAlias != null ? certAlias : keyManager.chooseServerAlias(keyType, issuers, socket);
+        }
+
+        @Override
+        public String chooseEngineServerAlias(String keyType, Principal[] issuers, SSLEngine engine) {
+            return certAlias != null ? certAlias : super.chooseEngineServerAlias(keyType, issuers, engine);
+        }
+
+        @Override
+        public String chooseEngineClientAlias(String[] keyTypes, Principal[] issuers, SSLEngine engine) {
+            return certAlias != null ? certAlias : super.chooseEngineClientAlias(keyTypes, issuers, engine);
+        }
+
+        @Override
+        public String[] getClientAliases(String keyType, Principal[] issuers) {
+            return keyManager.getClientAliases(keyType, issuers);
+        }
+
+        @Override
+        public String[] getServerAliases(String keyType, Principal[] issuers) {
+            return keyManager.getServerAliases(keyType, issuers);
+        }
+
+        @Override
+        public X509Certificate[] getCertificateChain(String alias) {
+            return keyManager.getCertificateChain(alias);
+        }
+
+        @Override
+        public PrivateKey getPrivateKey(String alias) {
+            return keyManager.getPrivateKey(alias);
+        }
+
+    }
+
+}

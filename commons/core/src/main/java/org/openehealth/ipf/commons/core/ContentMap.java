@@ -27,8 +27,9 @@ import java.util.Map;
  * Content map based on Spring type conversion framework.
  * @author Dmytro Rud
  *
- * TODO this is only used in ipf-commons-ihe-xds
+ * @deprecated moved to ipf-commons-ihe-xds, as it is only used there
  */
+@Deprecated(forRemoval = true)
 @XmlTransient
 public class ContentMap {
     private static final Logger log = LoggerFactory.getLogger(ContentMap.class);

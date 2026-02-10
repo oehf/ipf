@@ -25,7 +25,7 @@
     </Appenders>
     
     <Loggers>
-        <Root level="INFO">
+        <Root level="WARN">
             <AppenderRef ref="CONSOLE"/>
         </Root>
     </Loggers>

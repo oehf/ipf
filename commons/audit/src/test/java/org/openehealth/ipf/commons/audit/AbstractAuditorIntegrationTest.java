@@ -24,6 +24,8 @@ import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
+import org.openehealth.ipf.commons.core.ssl.CustomTlsParameters;
 
 import java.net.ServerSocket;
 import java.nio.file.Paths;

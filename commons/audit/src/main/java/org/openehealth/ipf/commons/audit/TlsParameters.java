@@ -15,41 +15,18 @@
  */
 package org.openehealth.ipf.commons.audit;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import java.security.NoSuchAlgorithmException;
-
 /**
  * Abstraction for setting TLS parameters to be used by ATNA sender implementations.
  * Use {@link DefaultAuditContext#setTlsParameters(TlsParameters)} to configure the
  * audit context.
- *
+ * <p>
  * The default uses the default as defined by javax.net.ssl.* system properties.
  *
  * @author Christian Ohr
+ *
+ * @deprecated use {@link org.openehealth.ipf.commons.core.ssl.TlsParameters}
  */
-public interface TlsParameters {
-
-    static TlsParameters getDefault() {
-        return (serverSide) -> {
-            try {
-                return SSLContext.getDefault();
-            } catch (NoSuchAlgorithmException e) {
-                throw new RuntimeException(e);
-            }
-        };
-    }
-
-    /**
-     * @return the {@link SSLContext}
-     */
-    SSLContext getSSLContext(boolean serverSide);
-
-    /**
-     * @return the {@link SSLSocketFactory}
-     */
-    default SSLSocketFactory getSSLSocketFactory(boolean serverSide) {
-        return getSSLContext(serverSide).getSocketFactory();
-    }
+@Deprecated(forRemoval = true)
+public interface TlsParameters extends org.openehealth.ipf.commons.core.ssl.TlsParameters {
 
 }

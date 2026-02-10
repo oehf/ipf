@@ -21,7 +21,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.logging.LogLevel;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.NettyUtils;
-import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.netty.Connection;
@@ -96,16 +96,16 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
      * Destination abstraction for Netty
      */
     public static final class ReactorNettyDestination implements NioTLSSyslogSenderImpl.Destination<Connection> {
-        private final long sendTimeout;
+        private final long sendTimeoutMillis;
         private final TcpClient tcpClient;
         private Connection connection;
         private final String host;
         private final int port;
 
         ReactorNettyDestination(TlsParameters tlsParameters, String host, int port, int workerThreads,
-                                long connectTimeout, long sendTimeout) {
+                                long connectTimeoutMillis, long sendTimeoutMIllis) {
 
-            this.sendTimeout = sendTimeout;
+            this.sendTimeoutMillis = sendTimeoutMIllis;
             this.host = host;
             this.port = port;
 
@@ -116,7 +116,7 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
                     .host(host)
                     .port(port)
                     .runOn(loop)
-                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int) connectTimeout)
+                    .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int) connectTimeoutMillis)
                     .option(ChannelOption.SO_KEEPALIVE, true)
                     .wiretap(getClass().getName(), LogLevel.TRACE)
                     .metrics(Metrics.isMicrometerAvailable())
@@ -152,7 +152,7 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
             var channel = getHandle().channel();
             log.trace("Writing {} bytes using session: {}", bytes.length, channel);
             try {
-                if (!channel.writeAndFlush(Unpooled.wrappedBuffer(bytes)).await(sendTimeout)) {
+                if (!channel.writeAndFlush(Unpooled.wrappedBuffer(bytes)).await(sendTimeoutMillis)) {
                     throw new AuditException("Could not send audit message to " + host + ":" + port);
                 }
             } catch (InterruptedException e) {

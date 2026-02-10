@@ -24,9 +24,9 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 import java.net.InetAddress;
-import java.util.List;
 import java.util.stream.Stream;
 
 /**

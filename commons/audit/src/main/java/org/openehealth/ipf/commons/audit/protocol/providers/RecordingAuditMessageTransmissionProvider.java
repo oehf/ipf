@@ -15,10 +15,10 @@
  */
 package org.openehealth.ipf.commons.audit.protocol.providers;
 
-import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocolProvider;
 import org.openehealth.ipf.commons.audit.protocol.RecordingAuditMessageTransmission;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 public class RecordingAuditMessageTransmissionProvider implements AuditTransmissionProtocolProvider {
 

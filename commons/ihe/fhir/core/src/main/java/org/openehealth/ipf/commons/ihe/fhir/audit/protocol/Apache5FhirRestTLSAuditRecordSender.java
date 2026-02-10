@@ -2,8 +2,8 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.protocol;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.client.impl.RestfulClientFactory;
-import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareAbstractRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareApacheRestfulClient5Factory;
 

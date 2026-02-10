@@ -15,9 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.audit.protocol;
 
-import org.openehealth.ipf.commons.audit.TlsParameters;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocolProvider;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 public class FhirRestTLSAuditRecordApacheSenderProvider implements AuditTransmissionProtocolProvider {
 

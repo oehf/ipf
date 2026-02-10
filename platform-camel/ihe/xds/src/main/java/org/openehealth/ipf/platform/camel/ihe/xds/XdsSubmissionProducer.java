@@ -15,22 +15,22 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
+import jakarta.xml.ws.BindingProvider;
 import org.apache.cxf.binding.soap.SoapHeader;
 import org.apache.cxf.headers.Header;
-import org.openehealth.ipf.commons.core.DomBuildersPool;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSlotList30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.xml.DomBuildersPool;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils;
 
 import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
-import jakarta.xml.ws.BindingProvider;
 import java.util.ArrayList;
 import java.util.List;
 

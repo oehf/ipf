@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.audit.protocol;
 
-import org.openehealth.ipf.commons.audit.TlsParameters;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 /**
  * A Service Provider interface located and loaded by {@link java.util.ServiceLoader}.

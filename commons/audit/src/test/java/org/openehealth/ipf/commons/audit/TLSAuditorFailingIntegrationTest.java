@@ -22,6 +22,8 @@ import org.junit.jupiter.api.Test;
 import reactor.netty.ChannelBindException;
 import org.openehealth.ipf.commons.audit.server.TlsSyslogServer;
 import org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector;
+import org.openehealth.ipf.commons.core.ssl.CustomTlsParameters;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

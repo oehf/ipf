@@ -16,7 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.continua.hrn.converters;
 
 import lombok.NonNull;
-import org.openehealth.ipf.commons.core.DomBuildersPool;
+import org.openehealth.ipf.commons.xml.DomBuildersPool;
 import org.springframework.core.convert.converter.Converter;
 import org.w3c.dom.Document;
 

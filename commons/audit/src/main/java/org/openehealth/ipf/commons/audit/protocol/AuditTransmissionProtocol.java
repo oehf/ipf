@@ -28,18 +28,6 @@ import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
  */
 public interface AuditTransmissionProtocol {
 
-    String JAVAX_NET_DEBUG = "javax.net.debug";
-    String JAVAX_NET_SSL_TRUSTSTORE = "javax.net.ssl.trustStore";
-    String JAVAX_NET_SSL_TRUSTSTORE_TYPE = "javax.net.ssl.trustStoreType";
-    String JAVAX_NET_SSL_TRUSTSTORE_PASSWORD = "javax.net.ssl.trustStorePassword";
-    String JAVAX_NET_SSL_KEYSTORE = "javax.net.ssl.keyStore";
-    String JAVAX_NET_SSL_KEYSTORE_TYPE = "javax.net.ssl.keyStoreType";
-    String JAVAX_NET_SSL_KEYSTORE_PASSWORD = "javax.net.ssl.keyStorePassword";
-    String JAVAX_TLS_CLIENT_CIPHERSUITES = "jdk.tls.client.cipherSuites";
-    String JAVAX_TLS_SERVER_CIPHERSUITES = "jdk.tls.server.cipherSuites";
-    String HTTPS_CIPHERSUITES = "https.ciphersuites";
-    String JDK_TLS_CLIENT_PROTOCOLS = "jdk.tls.client.protocols";
-
 
     /**
      * Transmits the message

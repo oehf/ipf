@@ -21,6 +21,7 @@ import io.netty.handler.ssl.ClientAuth;
 import io.netty.handler.ssl.JdkSslContext;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SupportedCipherSuiteFilter;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 import java.util.stream.Stream;
 

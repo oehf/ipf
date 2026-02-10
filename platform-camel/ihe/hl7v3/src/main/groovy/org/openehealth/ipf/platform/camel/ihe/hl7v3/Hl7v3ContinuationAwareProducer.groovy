@@ -15,19 +15,20 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3
 
-import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.XmlUtil
+import groovy.xml.slurpersupport.GPathResult
+import jakarta.xml.ws.BindingProvider
 import org.apache.camel.Exchange
 import org.apache.cxf.message.Message
 import org.openehealth.ipf.commons.audit.AuditContext
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator
-import org.openehealth.ipf.commons.core.DomBuildersPool
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy
-import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationsPortType
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
+import org.openehealth.ipf.commons.xml.DomBuildersPool
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer
 import org.slf4j.Logger
@@ -35,8 +36,6 @@ import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import org.w3c.dom.NodeList
-
-import jakarta.xml.ws.BindingProvider
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import static org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils.getElementNS

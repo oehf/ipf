@@ -19,10 +19,12 @@ package org.openehealth.ipf.commons.audit.protocol;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
-import org.openehealth.ipf.commons.audit.TlsParameters;
-import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Consumer;
 
 /**
