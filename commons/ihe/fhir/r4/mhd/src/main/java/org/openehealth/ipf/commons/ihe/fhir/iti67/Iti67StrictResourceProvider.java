@@ -27,6 +27,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceAndListParam;
 import ca.uhn.fhir.rest.param.ReferenceOrListParam;
@@ -34,6 +35,8 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.IdType;
@@ -42,8 +45,6 @@ import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.Set;
 
 /**
@@ -54,6 +55,7 @@ import java.util.Set;
  */
 public class Iti67StrictResourceProvider extends AbstractPlainProvider {
 
+    private static final String SP_CREATION = "creation";
 
     @SuppressWarnings("unused")
     @Search(type = DocumentReference.class)
@@ -61,6 +63,7 @@ public class Iti67StrictResourceProvider extends AbstractPlainProvider {
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @RequiredParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenParam identifier,
+            @OptionalParam(name = SP_CREATION) DateParam creation,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
             @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN }) ReferenceAndListParam author,
             @OptionalParam(name = DocumentReference.SP_CATEGORY) TokenOrListParam category,
@@ -103,6 +106,7 @@ public class Iti67StrictResourceProvider extends AbstractPlainProvider {
         var searchParameters = Iti67SearchParameters.builder()
                 .status(status)
                 .identifier(identifier)
+                .creation(creation)
                 .date(date)
                 .category(category)
                 .type(type)

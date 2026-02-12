@@ -27,6 +27,7 @@ import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import ca.uhn.fhir.rest.param.DateParam;
 import ca.uhn.fhir.rest.param.DateRangeParam;
 import ca.uhn.fhir.rest.param.ReferenceAndListParam;
 import ca.uhn.fhir.rest.param.ReferenceOrListParam;
@@ -69,6 +70,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
     private static final String STU3_RELATED_ID = "related-id";
     private static final String STU3_RELATED_REF = "related-ref";
     private static final String STU3_SECURITY_LABEL = "securitylabel";
+    private static final String SP_CREATION = "creation";
 
     @SuppressWarnings("unused")
     @Search(type = DocumentReference.class)
@@ -76,6 +78,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
             @RequiredParam(name = DocumentReference.SP_PATIENT, chainWhitelist = {"", Patient.SP_IDENTIFIER}) ReferenceParam patient,
             @OptionalParam(name = DocumentReference.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = DocumentReference.SP_IDENTIFIER) TokenParam identifier,
+            @OptionalParam(name = SP_CREATION) DateParam creation,
             @OptionalParam(name = DocumentReference.SP_DATE) DateRangeParam date,
             @OptionalParam(name = STU3_INDEXED) DateRangeParam indexed,
             @OptionalParam(name = DocumentReference.SP_AUTHOR, chainWhitelist = { Practitioner.SP_FAMILY, Practitioner.SP_GIVEN, Practitioner.SP_IDENTIFIER }) ReferenceAndListParam author,
@@ -126,6 +129,7 @@ public class Iti67ResourceProvider extends AbstractPlainProvider {
         var searchParameters = Iti67SearchParameters.builder()
                 .status(status)
                 .identifier(identifier)
+                .creation(creation)
                 .date(dateParam)
                 .category(categoryParam)
                 .type(type)
