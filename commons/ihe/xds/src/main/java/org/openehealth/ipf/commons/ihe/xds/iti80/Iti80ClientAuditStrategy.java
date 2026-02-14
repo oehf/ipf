@@ -38,7 +38,7 @@ public class Iti80ClientAuditStrategy extends Iti80AuditStrategy {
     public AuditMessage[] makeAuditMessage(AuditContext auditContext, XdsSubmitAuditDataset auditDataset) {
         return new XdsPHIExportBuilder(auditContext, auditDataset, XdsEventTypeCode.CrossGatewayDocumentProvide, auditDataset.getPurposesOfUse())
                 .setPatient(auditDataset.getPatientId())
-                .setSubmissionSet(auditDataset)
+                .setSubmissionSetWithHomeCommunityId(auditDataset, true)
                 .getMessages();
     }
 }

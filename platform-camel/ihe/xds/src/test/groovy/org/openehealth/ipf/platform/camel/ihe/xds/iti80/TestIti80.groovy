@@ -20,6 +20,7 @@ import org.apache.cxf.transport.servlet.CXFServlet
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode
@@ -66,6 +67,16 @@ class TestIti80 extends XdsStandardTestContainer {
         assert response.status == Status.SUCCESS
         def auditMessages = auditSender.messages
         assert auditMessages.size() == 2
+        for (auditMessage in auditMessages) {
+            assert auditMessage.participantObjectIdentifications.size() == 2
+            def ssParticipants = auditMessage.findParticipantObjectIdentifications { it.participantObjectIDTypeCode.originalText == 'submission set classificationNode' }
+            assert ssParticipants.size() == 1
+            assert ssParticipants[0].participantObjectDetails.size() == 1
+            ssParticipants[0].participantObjectDetails[0].with {
+                assert type == 'urn:ihe:iti:xca:2010:homeCommunityId'
+                assert value == 'urn:oid:1.2.3.4.5.6.2333.23'.bytes
+            }
+        }
     }
 
     def sendIt(endpoint) {
