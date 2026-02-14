@@ -138,7 +138,7 @@ public enum ErrorCode {
     @XmlEnumValue("TranscodingError") TRANSCODING_ERROR("TranscodingError"),
 
     /* --- codes for MetaDataUpdate/Delete ITI-57/62 --- */
-    /* --- When reporting this errors, the codeContext attribute of the RegistryError element shall ---
+    /* --- When reporting these errors, the codeContext attribute of the RegistryError element shall ---
        --- contain the id attribute of the metadata object causing the error. --- */
 
     /** General metadata update error. Use only when more specific error code is not available or appropriate. */

@@ -23,6 +23,44 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="5.2.0" description="IPF 5.2.0" date="">
+            <action issue="503" dev="unixoid" type="fix">
+                CP-ITI-1014: store homeCommunityId in ITI-80 audit records
+            </action>
+            <action issue="502" dev="ohr" type="fix">
+                Added search parameter "creation" in MHD ITI-67 (reported by Ivan1pl)
+            </action>
+            <action issue="500" dev="ohr" type="add">
+                Support Spring Boot SSL Bundles
+            </action>
+            <action issue="499" dev="ohr" type="fix">
+                Fixed display names for MHD List types (reported by Ivan1pl)
+            </action>
+            <action issue="496" dev="unixoid" type="add">
+                Added convenience methods for handling HTTP and SOAP headers
+            </action>
+            <action issue="493" dev="ohr" type="add">
+                Support for Java 25.
+            </action>
+            <action issue="491" dev="qligier" type="fix">
+                Fixed datatype of mothersMaidenName in PdqmMatchInputPatient
+            </action>
+            <action issue="490" dev="qligier" type="fix">
+                Support multiline messages in SyslogParser
+            </action>
+            <action issue="489" dev="qligier" type="fix">
+                Improved SyslogParser conformance to RFC 5424
+            </action>
+            <action issue="488" dev="cyrillzadra" type="fix">
+                Added ApacheHttpRequest5.toString()
+            </action>
+            <action issue="487" dev="cyrillzadra" type="fix">
+                Fixed potential NullPointerException in ApacheHttpRequest5.getRequestBodyFromStream()
+            </action>
+            <action issue="484" dev="qligier" type="fix">
+                Fixed ATNA roleIDCodes translation
+            </action>
+        </release>
         <release version="5.1.0" description="IPF 5.1.0" date="03 Jul 2025">
             <action issue="483" dev="unixoid" type="update">
                 Improve parsing structured content of SAML assertions
