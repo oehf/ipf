@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
         <gpg-plugin-version>3.2.8</gpg-plugin-version>
         <bouncycastle-version>1.83</bouncycastle-version>
         <camel-version>4.16.0</camel-version>
@@ -20,7 +21,7 @@
         <hapi-version>2.6.0</hapi-version>
         <hapi-fhir-version>8.6.1</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
-        <ipf-gazelle-version>3.3.0</ipf-gazelle-version>
+        <ipf-gazelle-version>3.4.0</ipf-gazelle-version>
         <httpclient5-version>5.5.1</httpclient5-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <jackson-version>2.20.1</jackson-version>
@@ -833,6 +834,15 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${central-publishing-maven-plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
