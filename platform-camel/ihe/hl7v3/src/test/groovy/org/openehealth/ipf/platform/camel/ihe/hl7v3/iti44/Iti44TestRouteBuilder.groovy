@@ -39,5 +39,8 @@ class Iti44TestRouteBuilder extends RouteBuilder {
             .setBody(constant(ACK))
             .process(PixPdqV3CamelValidators.iti44ResponseValidator())
 
+        from('pixv3-iti44:pixv3-iti44-service2')
+            .throwException(new RuntimeException('The queue is full'))
+
     }
 }

@@ -93,6 +93,7 @@ public class XCPD implements IntegrationProfile {
             true,
             ITI_55_REQUEST_VALIDATION_PROFILE,
             ITI_55_RESPONSE_VALIDATION_PROFILE,
+            false,
             false);
 
     private final static Hl7v3WsTransactionConfiguration ITI_55_ASYNC_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
@@ -112,6 +113,7 @@ public class XCPD implements IntegrationProfile {
             false,
             ITI_55_REQUEST_VALIDATION_PROFILE,
             ITI_55_RESPONSE_VALIDATION_PROFILE,
+            false,
             false);
 
     private final static Hl7v3WsTransactionConfiguration ITI_55_DEFERRED_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
@@ -131,6 +133,7 @@ public class XCPD implements IntegrationProfile {
             false,
             ITI_55_REQUEST_VALIDATION_PROFILE,
             ITI_55_RESPONSE_VALIDATION_PROFILE,
+            false,
             false);
 
     private final static Hl7v3WsTransactionConfiguration ITI56_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
@@ -150,6 +153,7 @@ public class XCPD implements IntegrationProfile {
             true,
             ITI_56_REQUEST_VALIDATION_PROFILE,
             ITI_56_RESPONSE_VALIDATION_PROFILE,
+            false,
             false);
 
     private final static Hl7v3WsTransactionConfiguration ITI_56_ASYNC_RESPONSE_WS_CONFIG = new Hl7v3WsTransactionConfiguration(
@@ -169,6 +173,7 @@ public class XCPD implements IntegrationProfile {
             false,
             ITI_56_REQUEST_VALIDATION_PROFILE,
             ITI_56_RESPONSE_VALIDATION_PROFILE,
+            false,
             false);
 
 }

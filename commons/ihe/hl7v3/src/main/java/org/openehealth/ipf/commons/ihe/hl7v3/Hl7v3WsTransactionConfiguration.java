@@ -33,6 +33,7 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
     @Getter private final CombinedXmlValidationProfile requestValidationProfile;
     @Getter private final CombinedXmlValidationProfile responseValidationProfile;
     @Getter private final boolean includeQuantities;
+    @Getter private final boolean useCAckTypeCodes;
 
     /**
      * Constructs the transaction configuration.
@@ -69,6 +70,9 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
      * @param includeQuantities
      *      whether the elements <tt>resultTotalQuantity</tt>, <tt>resultCurrentQuantity</tt>,
      *      <tt>resultRemainingQuantity</tt> will be included into the NAK.
+     * @param useCAckTypeCodes
+     *      whether codes <tt>CE</tt>/<tt>CR</tt> shall be used in automatically
+     *      generated NAKs instead of <tt>AE</tt>/<tt>AR</tt>.
      */
     public Hl7v3WsTransactionConfiguration(
             String name,
@@ -87,7 +91,8 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
             boolean supportAsynchrony,
             CombinedXmlValidationProfile requestValidationProfile,
             CombinedXmlValidationProfile responseValidationProfile,
-            boolean includeQuantities)
+            boolean includeQuantities,
+            boolean useCAckTypeCodes)
     {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy,
                 serviceName, sei, bindingName, mtom, wsdlLocation,
@@ -98,6 +103,7 @@ public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<
         this.requestValidationProfile = requestValidationProfile;
         this.responseValidationProfile = responseValidationProfile;
         this.includeQuantities = includeQuantities;
+        this.useCAckTypeCodes = useCAckTypeCodes;
     }
 
 }

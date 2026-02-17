@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="5.2.0" description="IPF 5.2.0" date="">
+            <action issue="505" dev="unixoid" type="fix">
+                Fix error codes in automatically generated ITI-44 NAKs
+            </action>
             <action issue="503" dev="unixoid" type="fix">
                 CP-ITI-1014: store homeCommunityId in ITI-80 audit records
             </action>
@@ -40,7 +43,7 @@
                 Added convenience methods for handling HTTP and SOAP headers
             </action>
             <action issue="493" dev="ohr" type="add">
-                Support for Java 25.
+                Support for Java 25
             </action>
             <action issue="491" dev="qligier" type="fix">
                 Fixed datatype of mothersMaidenName in PdqmMatchInputPatient

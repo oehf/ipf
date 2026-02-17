@@ -79,6 +79,7 @@ public class PDQV3 implements IntegrationProfile {
             ITI_47_RESPONSE_VALIDATION_PROFILE,
             "PRPA_IN201305UV02",
             "PRPA_IN201306UV02",
-            true);
+            true,
+            false);
 
 }

@@ -102,8 +102,9 @@ class TestIti44 extends HL7v3StandardTestContainer {
 '''
 
     def static CONTEXT_DESCRIPTOR = 'iti-44.xml'
-    
+
     def SERVICE1_PIX = "pixv3-iti44://localhost:${port}/pixv3-iti44-service1"
+    def SERVICE2_PIX = "pixv3-iti44://localhost:${port}/pixv3-iti44-service2"
     def SERVICE1_XDS = "xds-iti44://localhost:${port}/xds-iti44-service1"
 
     private static final String ADD_REQUEST =
@@ -201,6 +202,12 @@ class TestIti44 extends HL7v3StandardTestContainer {
         // restart and check whether actually reactivated
         consumer.start()
         send(SERVICE1_PIX, '<PRPA_IN201301UV02  xmlns="urn:hl7-org:v3"/>', String.class)
+    }
+
+    @Test
+    void testNakGeneration() {
+        def response = send(SERVICE2_PIX, ADD_REQUEST, String.class)
+        assert response.contains('<typeCode code="CE"/>')
     }
     
 }
