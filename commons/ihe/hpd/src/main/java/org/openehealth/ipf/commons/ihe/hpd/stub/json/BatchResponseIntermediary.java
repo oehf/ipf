@@ -28,7 +28,7 @@ import java.util.List;
  * <pre>
  *     ObjectMapper mapper = new ObjectMapper();
  *     BatchResponseIntermediary intermediary = mapper.readValue(json1, BatchResponseIntermediary.class);
- *     BatchResponse batchResponse = batchResponseIntermediary.toBatchResponse();
+ *     BatchResponse batchResponse = intermediary.toBatchResponse();
  * </pre>
  *
  * @author Dmytro Rud

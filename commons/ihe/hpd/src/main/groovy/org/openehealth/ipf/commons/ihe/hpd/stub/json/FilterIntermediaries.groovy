@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.*
 @JsonTypeInfo(use = JsonTypeInfo.Id.MINIMAL_CLASS)
 interface FilterIntermediary<T> {
     T toDsml()
-    //... and there must be a static method with the signature "static Filter2 fromDsml(T dsml)"
+    //... and there must be a static method with the signature "static FilterIntermediary fromDsml(T dsml)"
 }
 
 @CompileStatic
