@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq4;
 
 import ca.uhn.fhir.context.FhirContext;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Resource;
@@ -32,12 +33,12 @@ public class ChPpq4Validator extends IgBasedInstanceValidator {
     }
 
     @Override
-    public void validateRequest(Object payload, Map<String, Object> parameters) {
-        handleOperationOutcome(validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.FEED_REQUEST_BUNDLE));
+    public OperationOutcome validateRequest(IBaseResource payload, Map<String, Object> parameters) {
+        return handleOperationOutcome(validateProfileConformance((Resource) payload, ChPpqmUtils.Profiles.FEED_REQUEST_BUNDLE));
     }
 
     @Override
-    public void validateResponse(Object payload, Map<String, Object> parameters) {
+    public OperationOutcome validateResponse(IBaseResource payload, Map<String, Object> parameters) {
         var bundle = (Bundle) payload;
         var outcome = validateProfileConformance(bundle, "http://hl7.org/fhir/StructureDefinition/Bundle");
         if (bundle.getType() != Bundle.BundleType.TRANSACTIONRESPONSE) {
@@ -46,7 +47,7 @@ public class ChPpq4Validator extends IgBasedInstanceValidator {
                     .setCode(OperationOutcome.IssueType.CODEINVALID)
                     .setDiagnostics("Response bundle type shall be " + Bundle.BundleType.TRANSACTIONRESPONSE.toCode()));
         }
-        handleOperationOutcome(outcome);
+        return handleOperationOutcome(outcome);
     }
 
 }

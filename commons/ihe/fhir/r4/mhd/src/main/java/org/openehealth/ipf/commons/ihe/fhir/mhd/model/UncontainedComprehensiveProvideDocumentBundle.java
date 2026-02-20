@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Binary;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd423;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 
 import java.util.List;
@@ -29,7 +29,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_UNCONTAI
 @ResourceDef(name = "Bundle", id = "mhdUncontainedComprehensiveBundle", profile = ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE)
 public class UncontainedComprehensiveProvideDocumentBundle
     extends AbstractProvideDocumentBundle<UncontainedComprehensiveProvideDocumentBundle>
-    implements Mhd421 {
+    implements Mhd423 {
 
     public UncontainedComprehensiveProvideDocumentBundle() {
         super();

@@ -17,6 +17,8 @@
 package org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq5;
 
 import ca.uhn.fhir.context.FhirContext;
+import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils;
 import org.openehealth.ipf.commons.ihe.fhir.support.IgBasedInstanceValidator;
@@ -54,8 +56,8 @@ public class ChPpq5Validator extends IgBasedInstanceValidator {
 */
 
     @Override
-    public void validateResponse(Object payload, Map<String, Object> parameters) {
-        handleOperationOutcome(validateProfileConformance((Resource) payload, ChPpqmUtils.TEMPLATE_PROFILE_URIS));
+    public OperationOutcome validateResponse(IBaseResource payload, Map<String, Object> parameters) {
+        return handleOperationOutcome(validateProfileConformance((Resource) payload, ChPpqmUtils.TEMPLATE_PROFILE_URIS));
     }
 
 }

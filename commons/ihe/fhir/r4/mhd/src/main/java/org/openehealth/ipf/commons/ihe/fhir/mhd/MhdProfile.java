@@ -27,9 +27,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public enum MhdProfile implements Mhd421 {
+public enum MhdProfile implements Mhd423 {
 
-    // Bundle Profiles V421
+    // Bundle Profiles V423
 
     ITI65_MINIMAL_BUNDLE(
         MhdProfile.ITI65_MINIMAL_BUNDLE_PROFILE,
@@ -67,7 +67,7 @@ public enum MhdProfile implements Mhd421 {
         FindComprehensiveDocumentReferencesResponseBundle.class,
         "IHE.MHD.FindDocumentReferencesComprehensiveResponseMessage"),
 
-    // List profiles v421
+    // List profiles v423
 
     MHD_LIST(
         MhdProfile.MHD_LIST_PROFILE,
@@ -99,7 +99,7 @@ public enum MhdProfile implements Mhd421 {
         ComprehensiveFolderList.class,
         "IHE.MHD.Comprehensive.Folder"),
 
-    // DocumentReference profiles v421
+    // DocumentReference profiles v423
 
     COMPREHENSIVE_DOCUMENT_REFERENCE(
         MhdProfile.COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE,

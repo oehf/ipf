@@ -17,8 +17,13 @@ package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
+
+import java.util.Set;
+
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE;
 
 /**
  * Standard Configuration for Iti67Component.  Supports lazy-loading by default.
@@ -37,7 +42,10 @@ public class Iti67TransactionConfiguration extends FhirTransactionConfiguration<
                 FhirVersionEnum.R4,
                 new Iti67ResourceProvider(),
                 new Iti67ClientRequestFactory(),
-                FhirTransactionValidator.NO_VALIDATION);
+                MhdValidator::new);
         setSupportsLazyLoading(true);
+        setResponseValidationProfiles(Set.of(
+            ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE,
+            ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE_PROFILE));
     }
 }

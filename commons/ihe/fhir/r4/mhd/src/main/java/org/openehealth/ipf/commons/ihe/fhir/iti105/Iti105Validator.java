@@ -17,6 +17,8 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti105;
 
 import ca.uhn.fhir.context.FhirContext;
+import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 import org.openehealth.ipf.commons.ihe.fhir.support.IgBasedInstanceValidator;
@@ -29,7 +31,9 @@ import java.util.Map;
  *
  * @author Boris Stanojevic
  * @since 4.8
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator}
  */
+@Deprecated(forRemoval = true)
 public class Iti105Validator extends IgBasedInstanceValidator {
 
     public static final String ITI105_PROFILE =
@@ -40,7 +44,7 @@ public class Iti105Validator extends IgBasedInstanceValidator {
     }
 
     @Override
-    public void validateRequest(Object payload, Map<String, Object> parameters) {
-         handleOperationOutcome(validateProfileConformance((Resource) payload, MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE));
+    public OperationOutcome validateRequest(IBaseResource payload, Map<String, Object> parameters) {
+         return handleOperationOutcome(validateProfileConformance((Resource) payload, MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE));
     }
 }

@@ -15,43 +15,45 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
-import ca.uhn.fhir.model.api.annotation.Child;
 import ca.uhn.fhir.model.api.annotation.DatatypeDef;
-import ca.uhn.fhir.model.api.annotation.Extension;
-import ca.uhn.fhir.util.ElementUtil;
 import org.hl7.fhir.r4.model.Base;
+import org.hl7.fhir.r4.model.Extension;
 import org.hl7.fhir.r4.model.Reference;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.AUTHOR_ORG_PROFILE;
 
 /**
- * Source data type extension. Unfortunately we cannot register this datatype with the FhirCOntext
+ * Source data type extension. Unfortunately we cannot register this datatype with the FhirContext
  * right now as parsing/rendering won't work anymore afterwards. It can be used, however, to
  * assemble resources.
  */
 @DatatypeDef(name = "Source", profileOf = Reference.class, isSpecialization = true)
 public class Source extends Reference {
 
-    @Child(name = "authorOrg")
-    @Extension(url = AUTHOR_ORG_PROFILE, definedLocally = false)
-    private Reference authorOrg;
 
     @Override
     public boolean isEmpty() {
-        return super.isEmpty() && ElementUtil.isEmpty(authorOrg);
+        return super.isEmpty() && !hasAuthorOrg();
     }
 
     public Source setAuthorOrg(Reference authorOrg) {
-        this.authorOrg = authorOrg;
+        removeExtension(AUTHOR_ORG_PROFILE);
+        if (authorOrg != null) {
+            addExtension(new Extension(AUTHOR_ORG_PROFILE, authorOrg));
+        }
         return this;
     }
 
     public boolean hasAuthorOrg() {
-        return authorOrg != null && !authorOrg.isEmpty();
+        return hasExtension(AUTHOR_ORG_PROFILE);
     }
 
     public Reference getAuthorOrg() {
-        return authorOrg;
+        Extension extension = getExtensionByUrl(AUTHOR_ORG_PROFILE);
+        if (extension != null && extension.hasValue() && extension.getValue() instanceof Reference) {
+            return (Reference) extension.getValue();
+        }
+        return null;
     }
 
     @Override
@@ -61,18 +63,14 @@ public class Source extends Reference {
         return dst;
     }
 
+
     @Override
     public boolean equalsDeep(Base other_) {
         if (!super.equalsDeep(other_))
             return false;
         if (!(other_ instanceof Source o))
             return false;
-        return compareDeep(authorOrg, o.authorOrg, true);
+        return compareDeep(getAuthorOrg(), o.getAuthorOrg(), true);
     }
 
-    @Override
-    public void copyValues(Reference dst) {
-        super.copyValues(dst);
-        ((Source)dst).authorOrg = authorOrg == null ? null : authorOrg.copy();
-    }
 }

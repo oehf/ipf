@@ -16,13 +16,13 @@
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import org.hl7.fhir.r4.model.DocumentReference;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd423;
 
 import java.util.UUID;
 
 abstract class AbstractDocumentReference<T extends AbstractDocumentReference<T>>
     extends DocumentReference
-    implements Mhd421 {
+    implements Mhd423 {
 
     /**
      * Sets the MasterIdentifier to be a Unique Id as required by the profile

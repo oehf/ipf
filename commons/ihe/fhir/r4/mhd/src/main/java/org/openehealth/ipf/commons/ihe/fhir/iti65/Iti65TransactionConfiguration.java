@@ -20,6 +20,9 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider;
 import org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
+
+import java.util.Set;
 
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.*;
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.*;
@@ -41,7 +44,15 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<
                 FhirVersionEnum.R4,
                 BatchTransactionResourceProvider.getInstance(),      // Consumer side. accept registrations
                 BatchTransactionClientRequestFactory.getInstance(),  // Formulate requests
-                Iti65Validator::new);
+                MhdValidator::new);
+        setRequestValidationProfiles(Set.of(
+            ITI65_COMPREHENSIVE_BUNDLE_PROFILE,
+            ITI65_MINIMAL_BUNDLE_PROFILE,
+            ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE
+        ));
+        setResponseValidationProfiles(Set.of(
+            ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE
+        ));
         setStaticConsumerSelector(new BundleProfileSelector(
             ITI65_LEGACY_METADATA_PROFILE,
             ITI65_COMPREHENSIVE_METADATA_PROFILE,

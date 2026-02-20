@@ -17,10 +17,21 @@
 package org.openehealth.ipf.commons.ihe.fhir.support;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.rest.server.exceptions.*;
+import ca.uhn.fhir.rest.server.exceptions.BaseServerResponseException;
+import ca.uhn.fhir.rest.server.exceptions.ForbiddenOperationException;
+import ca.uhn.fhir.rest.server.exceptions.InternalErrorException;
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
+import ca.uhn.fhir.rest.server.exceptions.ResourceNotFoundException;
+import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.instance.model.api.IBaseBundle;
-import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
+import org.hl7.fhir.r4.model.Bundle;
+import org.hl7.fhir.r4.model.CodeableConcept;
+import org.hl7.fhir.r4.model.OperationOutcome;
+import org.hl7.fhir.r4.model.Resource;
+import org.hl7.fhir.r4.model.ResourceType;
+import org.slf4j.Logger;
+import org.slf4j.event.Level;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -165,5 +176,15 @@ public final class FhirUtils {
         var exception = func.apply(String.format(msg, args));
         exception.setOperationOutcome(operationOutcome);
         return exception;
+    }
+
+    public static void logValidationMessage(Logger log, OperationOutcome.OperationOutcomeIssueComponent issue) {
+        Level level = switch (issue.getSeverity()) {
+            case ERROR, FATAL -> Level.ERROR;
+            case WARNING -> Level.WARN;
+            case INFORMATION -> Level.INFO;
+            default -> Level.DEBUG;
+        };
+        log.atLevel(level).log("Validation issue: {} : {}", issue.getSeverity().getDisplay(), issue.getDiagnostics());
     }
 }

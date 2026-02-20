@@ -21,22 +21,30 @@ import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.r4.model.*;
 import org.ietf.jgss.Oid;
 import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveDocumentReference;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveProvideDocumentBundle;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveSubmissionSetList;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.Source;
+import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.security.MessageDigest;
-import java.util.Collections;
 import java.util.Date;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.URN_IETF_RFC_3986;
 
 /**
  * @author Christian Ohr
  */
 public class MhdValidatorTest {
+
+    private static final Logger log = LoggerFactory.getLogger(MhdValidatorTest.class);
 
     private static final String BINARY_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
     private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bc";
@@ -48,12 +56,16 @@ public class MhdValidatorTest {
         MhdProfile.registerDefaultTypes(context);
         var bundle = provideAndRegister();
         try {
-            var iti65Validator = new MhdValidator(context);
-            iti65Validator.validateRequest(bundle, Collections.emptyMap());
+            var mhdValidator = new MhdValidator(context);
+            var outcome = mhdValidator.validateRequest(bundle, Map.of(
+                Constants.INTERACTION_REQUEST_VALIDATION_PROFILES,
+                Set.of(MhdProfile.ITI65_COMPREHENSIVE_BUNDLE_PROFILE)));
         } catch (UnprocessableEntityException e) {
-            var oo = (OperationOutcome) e.getOperationOutcome();
-            oo.getIssue()
-                    .forEach(ooc -> System.out.println(ooc.getSeverity().getDisplay() + " : " + ooc.getDiagnostics()));
+            var issues = ((OperationOutcome) e.getOperationOutcome()).getIssue();
+            issues.forEach(issue -> FhirUtils.logValidationMessage(log, issue));
+            assertFalse(issues.stream()
+                .anyMatch(i -> i.getSeverity() == OperationOutcome.IssueSeverity.ERROR),
+                "There are validation errors in the bundle");
         }
     }
 
@@ -68,16 +80,18 @@ public class MhdValidatorTest {
         sourcePatient.getText().setDivAsString("<div>empty</div>");
 
         var submissionSetList = new ComprehensiveSubmissionSetList();
+        var authorOrg = new Reference();
+        authorOrg.setResource(new Organization().setName("myOrg"));
         var source = new Source();
         source
-            .setAuthorOrg(new Reference(new Organization()))
+            .setAuthorOrg(authorOrg)
             .setResource(new Practitioner());
         submissionSetList
             .linkDocumentReference(REFERENCE_FULL_URL)
             .setSubmissionSetUniqueIdIdentifier(new Oid("1.2.58.92.23"))
             .setEntryUuidIdentifier(UUID.randomUUID())
             .setSourceId(new Oid("1.2.58.92.24"))
-            .addDesignationType(new CodeableConcept(
+            .setDesignationType(new CodeableConcept(
                 new Coding("http://snomed.info/sct", "225728007", "")
             ))
             .addIntendedRecipient(new Reference(practitioner))
@@ -99,6 +113,10 @@ public class MhdValidatorTest {
                 new Coding("http://terminology.hl7.org/CodeSystem/v3-Confidentiality", "N", "normal")
             ))
             .setContext(new DocumentReference.DocumentReferenceContextComponent()
+                .addEncounter(new Reference(
+                    new Encounter()
+                        .setStatus(Encounter.EncounterStatus.PLANNED)
+                        .setClass_(new Coding("http://terminology.hl7.org/CodeSystem/v3-ActCode", "IMP", "inpatient"))))
                 .addEvent(new CodeableConcept(
                     new Coding("http://terminology.hl7.org/CodeSystem/v3-ActCode", "PATDOC", "PATDOC")))
                 .setPracticeSetting(new CodeableConcept(
@@ -119,7 +137,7 @@ public class MhdValidatorTest {
                 new Attachment()
                     .setCreation(new Date())
                     .setContentType("text/plain")
-                    .setLanguage("en/us")
+                    .setLanguage("en-US")
                     .setSize(documentContent.length)
                     .setHash(MessageDigest.getInstance("SHA-1").digest(documentContent))
                     .setUrl(BINARY_FULL_URL))

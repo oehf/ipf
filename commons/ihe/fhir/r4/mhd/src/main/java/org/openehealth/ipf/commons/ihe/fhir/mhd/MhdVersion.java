@@ -23,6 +23,6 @@ public interface MhdVersion {
     Version supportsVersion();
 
     enum Version {
-        v320, v421
+        v320, v423
     }
 }

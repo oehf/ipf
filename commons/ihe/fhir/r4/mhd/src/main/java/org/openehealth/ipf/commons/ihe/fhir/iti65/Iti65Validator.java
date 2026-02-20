@@ -22,22 +22,17 @@ import ca.uhn.fhir.context.support.IValidationSupport;
 import ca.uhn.fhir.context.support.ValidationSupportContext;
 import ca.uhn.fhir.rest.api.EncodingEnum;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import org.hl7.fhir.common.hapi.validation.support.*;
+import org.hl7.fhir.common.hapi.validation.support.CommonCodeSystemsTerminologyService;
+import org.hl7.fhir.common.hapi.validation.support.InMemoryTerminologyServerValidationSupport;
+import org.hl7.fhir.common.hapi.validation.support.PrePopulatedValidationSupport;
+import org.hl7.fhir.common.hapi.validation.support.SnapshotGeneratingValidationSupport;
+import org.hl7.fhir.common.hapi.validation.support.ValidationSupportChain;
 import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
-import org.hl7.fhir.r4.model.Binary;
-import org.hl7.fhir.r4.model.Bundle;
-import org.hl7.fhir.r4.model.DocumentManifest;
-import org.hl7.fhir.r4.model.DocumentReference;
-import org.hl7.fhir.r4.model.ListResource;
-import org.hl7.fhir.r4.model.OperationOutcome;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.Resource;
-import org.hl7.fhir.r4.model.ResourceType;
-import org.hl7.fhir.r4.model.StructureDefinition;
+import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.r4.model.*;
 import org.hl7.fhir.r5.utils.validation.constants.BestPracticeWarningLevel;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd423;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.slf4j.Logger;
@@ -52,16 +47,20 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
 
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.*;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MINIMAL_SUBMISSIONSET_TYPE_LIST;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.UNCONTAINED_COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST;
 
 /**
  * Validator for ITI-65 transactions.
  *
- * THIS does not work properly yet!
+ * THIS does not work properly!
  *
  * @author Christian Ohr
  * @since 3.6
+ * @deprecated use {@link org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator}
  */
+@Deprecated(forRemoval = true)
 public class Iti65Validator extends FhirTransactionValidator.Support {
 
     private static final Logger log = LoggerFactory.getLogger(Iti65Validator.class);
@@ -79,11 +78,11 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     }
 
     @Override
-    public void validateRequest(Object payload, Map<String, Object> parameters) {
+    public OperationOutcome validateRequest(IBaseResource payload, Map<String, Object> parameters) {
 
         var transactionBundle = (Bundle) payload;
-        if (transactionBundle instanceof Mhd421) {
-            validateBundleConsistency421(transactionBundle);
+        if (transactionBundle instanceof Mhd423) {
+            validateBundleConsistency423(transactionBundle);
         } else {
             validateBundleConsistency320(transactionBundle);
         }
@@ -101,6 +100,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
             var operationOutcome = validationResult.toOperationOutcome();
             throw FhirUtils.exception(UnprocessableEntityException::new, operationOutcome, "Validation Failed");
         }
+        return (OperationOutcome) validationResult.toOperationOutcome();
     }
 
     public ValidationSupportChain loadStructureDefinitionsv320(IValidationSupport baseValidationSupport, String kind) {
@@ -275,7 +275,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
      *
      * @param bundle transaction bundle
      */
-    protected void validateBundleConsistency421(Bundle bundle) {
+    protected void validateBundleConsistency423(Bundle bundle) {
 
         var entries = FhirUtils.getBundleEntries(bundle);
 

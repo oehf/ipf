@@ -15,19 +15,12 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
-import ca.uhn.fhir.model.api.annotation.Child;
-import ca.uhn.fhir.model.api.annotation.Description;
-import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import ca.uhn.fhir.util.ElementUtil;
 import org.hl7.fhir.r4.model.Base;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.ListResource;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd423;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MHD_LIST;
@@ -35,7 +28,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.MHD_LIST_PROFI
 
 @SuppressWarnings("unchecked")
 @ResourceDef(name = "List", id = "mhdList", profile = MHD_LIST_PROFILE)
-public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd421 {
+public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd423 {
 
     public MhdList() {
         super();
@@ -43,58 +36,6 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
         setStatus(ListStatus.CURRENT);
         setMode(ListMode.WORKING);
         MHD_LIST.setProfile(this);
-    }
-
-    @Child(name = "designationType")
-    @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-designationType", definedLocally = false)
-    @Description(shortDefinition = "Clinical code of the List")
-    private List<CodeableConcept> designationType;
-
-    @Override
-    public boolean isEmpty() {
-        return super.isEmpty() && ElementUtil.isEmpty(designationType);
-    }
-
-    public List<CodeableConcept> getDesignationType() {
-        if (designationType == null) {
-            designationType = new ArrayList<>();
-        }
-        return designationType;
-    }
-
-    public CodeableConcept addDesignationType() {
-        var codeableConcept = new CodeableConcept();
-        addDesignationType(codeableConcept);
-        return codeableConcept;
-    }
-
-    public T addDesignationType(CodeableConcept codeableConcept) {
-        if (codeableConcept != null) {
-            if (this.designationType == null)
-                this.designationType = new ArrayList<>();
-            this.designationType.add(codeableConcept);
-        }
-        return (T)this;
-    }
-
-    /**
-     * @return The first repetition of repeating field {@link #note}, creating it if
-     *         it does not already exist
-     */
-    public CodeableConcept getDesignationTypeFirstRep() {
-        if (getDesignationType().isEmpty()) {
-            addDesignationType();
-        }
-        return getDesignationType().get(0);
-    }
-
-    public boolean hasDesignationType() {
-        if (this.designationType == null)
-            return false;
-        for (var item : this.designationType)
-            if (!item.isEmpty())
-                return true;
-        return false;
     }
 
     /**
@@ -108,24 +49,10 @@ public class MhdList<T extends MhdList<T>> extends ListResource implements Mhd42
     }
 
     @Override
-    public void copyValues(ListResource dst) {
-        super.copyValues(dst);
-        var mhdList = (MhdList<T>) dst;
-        if (designationType != null) {
-            mhdList.designationType = new ArrayList<>();
-            for (var i : designationType)
-                mhdList.designationType.add(i.copy());
-        }
-    }
-
-    @Override
     public boolean equalsDeep(Base other_) {
         if (!super.equalsDeep(other_))
             return false;
-        if (!(other_ instanceof MhdList))
-            return false;
-        var o = (MhdList<T>) other_;
-        return compareDeep(designationType, o.designationType, true);
+        return other_ instanceof MhdList;
     }
 
 }

@@ -30,6 +30,8 @@ public interface Constants {
     // Request parameter information
     String FHIR_REQUEST_PARAMETERS = "FhirRequestParameters";
     String FHIR_REQUEST_DETAILS = "FhirRequestDetails";
+    String INTERACTION_REQUEST_VALIDATION_PROFILES = "ipf.requestValidaionProfiles";
+    String INTERACTION_RESPONSE_VALIDATION_PROFILES = "ipf.responseValidaionProfiles";
 
     // Parameter information from the HttpServletRequest
     String HTTP_AUTHORIZATION = "Authorization";

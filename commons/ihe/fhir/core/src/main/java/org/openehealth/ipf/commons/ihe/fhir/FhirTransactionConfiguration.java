@@ -18,12 +18,15 @@ package org.openehealth.ipf.commons.ihe.fhir;
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
+import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -36,15 +39,24 @@ import java.util.function.Supplier;
  */
 public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends TransactionConfiguration<T> {
 
+    @Getter
     private final FhirVersionEnum fhirVersion;
     private final FhirContextProvider fhirContextProvider;
     private final List<? extends FhirProvider> staticResourceProviders;
+    @Getter
     private final ClientRequestFactory<?> staticClientRequestFactory;
     private final Supplier<FhirTransactionValidator> fhirValidatorSupplier;
 
     private transient FhirTransactionValidator fhirValidator;
+
+    @Getter @Setter
     private boolean supportsLazyLoading;
+    @Getter @Setter
     private Predicate<RequestDetails> staticConsumerSelector = o -> true;
+    @Getter @Setter
+    private Set<String> requestValidationProfiles = Set.of();
+    @Getter @Setter
+    private Set<String> responseValidationProfiles = Set.of();
 
     public FhirTransactionConfiguration(
             String name,
@@ -114,18 +126,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         return staticResourceProviders;
     }
 
-    public ClientRequestFactory<?> getStaticClientRequestFactory() {
-        return staticClientRequestFactory;
-    }
-
-    public void setStaticConsumerSelector(Predicate<RequestDetails> staticConsumerSelector) {
-        this.staticConsumerSelector = staticConsumerSelector;
-    }
-
-    public Predicate<RequestDetails> getStaticConsumerSelector() {
-        return staticConsumerSelector;
-    }
-
     /**
      * Initializes the FHIR context. Note that this method
      * is only called when the endpoint does not configure its custom (pre-initialized) FhirContext
@@ -157,10 +157,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
         };
     }
 
-    public FhirVersionEnum getFhirVersion() {
-        return fhirVersion;
-    }
-
     public synchronized FhirTransactionValidator getFhirValidator() {
         if (fhirValidator == null) {
             if (fhirValidatorSupplier != null) {
@@ -168,20 +164,6 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             }
         }
         return fhirValidator;
-    }
-
-    /**
-     * Determines if the component and backend implementation does support lazy-loading of search result sets.
-     * Even if true, the endpoint URI, however, must be explicitly configured to use lazy-loading.
-     *
-     * @param supportsLazyLoading true if this component support lazy-loading
-     */
-    public void setSupportsLazyLoading(boolean supportsLazyLoading) {
-        this.supportsLazyLoading = supportsLazyLoading;
-    }
-
-    public boolean supportsLazyLoading() {
-        return supportsLazyLoading;
     }
 
 }

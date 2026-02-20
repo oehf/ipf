@@ -19,7 +19,14 @@ import org.hl7.fhir.r4.model.Binary;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Resource;
 
+import java.util.Date;
+
 abstract class AbstractProvideDocumentBundle<T extends AbstractProvideDocumentBundle<T>> extends Bundle {
+
+    public AbstractProvideDocumentBundle() {
+        super();
+        setTimestamp(new Date());
+    }
 
     public T addEntry(String fullUrl, Resource resource) {
         addEntry()

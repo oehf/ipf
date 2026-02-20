@@ -18,10 +18,10 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd;
 /**
  * Marker interface for MHD 4.2.1 classes
  */
-public interface Mhd421 extends MhdVersion {
+public interface Mhd423 extends MhdVersion {
 
     @Override
     default Version supportsVersion() {
-        return Version.v421;
+        return Version.v423;
     }
 }

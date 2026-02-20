@@ -100,6 +100,13 @@ public class IpfAtnaConfigurationProperties {
     @Getter @Setter
     private String auditValueIfMissing = "UNKNOWN";
 
+    /*
+     * Whether all ATNA audit events shall also be published as Spring Audit events. Requires a
+     * @{link org.springframework.boot.actuate.audit.AuditEventRepository} bean to be available.
+     */
+    @Getter @Setter
+    private boolean springAuditEventEnabled = false;
+
     /**
      * Class of the optional audit dataset enricher for Web Service based transactions.
      */

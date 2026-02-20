@@ -17,6 +17,7 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.context.FhirContext;
+import lombok.Setter;
 import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.support.DefaultComponent;
@@ -37,6 +38,7 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.1
  */
+@Setter
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         extends DefaultComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
@@ -95,7 +97,7 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         var config = createConfig(remaining, parameters);
         // Component configuration determines if lazy loading is allowed or not. Otherwise the endpoint has
         // the choice to do so.
-        if (!fhirInteractionId.getFhirTransactionConfiguration().supportsLazyLoading() &&
+        if (!fhirInteractionId.getFhirTransactionConfiguration().isSupportsLazyLoading() &&
                 parameters.containsKey(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES) &&
                 Boolean.parseBoolean((String) parameters.get(FhirEndpointConfiguration.LAZY_LOAD_BUNDLES))) {
             throw new IllegalArgumentException("The FHIR component " + getClass().getSimpleName() +
@@ -134,11 +136,4 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         return fhirInteractionId;
     }
 
-    /**
-     * Sets the FHIR interactionID.
-     * @param fhirInteractionId interactionID
-     */
-    public void setFhirInteractionId(FhirInteractionId<AuditDatasetType> fhirInteractionId) {
-        this.fhirInteractionId = fhirInteractionId;
-    }
 }

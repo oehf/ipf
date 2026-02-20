@@ -20,6 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
@@ -32,7 +33,7 @@ import java.util.Set;
  *
  * @author Dmytro Rud
  */
-abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.Support {
+abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.Support{
 
     private static final String STANDARD_PREFIX = "http://hl7.org/fhir/StructureDefinition/";
     private final FhirContext fhirContext;
@@ -60,7 +61,7 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
             }
         } else {
             for (var profile : resource.getMeta().getProfile()) {
-                if (allowedProfileUris.contains(profile.asStringValue())) {
+                if (allowedProfileUris.contains(profile.getValueAsString())) {
                     return doValidate(resource);
                 }
             }
@@ -77,7 +78,7 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
         return validateProfileConformance(resource, Set.of(allowedProfileUri));
     }
 
-    private OperationOutcome doValidate(Resource resource) {
+    private OperationOutcome doValidate(IBaseResource resource) {
         var validator = fhirContext.newValidator();
         var validationResult = validator.validateWithResult(resource);
         return validationResult.isSuccessful()
@@ -85,9 +86,9 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
                 : (OperationOutcome) validationResult.toOperationOutcome();
     }
 
-    protected void handleOperationOutcome(OperationOutcome outcome) {
+    protected OperationOutcome handleOperationOutcome(OperationOutcome outcome) {
         if (outcome == null) {
-            return;
+            return null;
         }
         outcome.getIssue().sort(Comparator.comparing(OperationOutcome.OperationOutcomeIssueComponent::getSeverity));
         for (var issue : outcome.getIssue()) {
@@ -95,6 +96,7 @@ abstract public class IgBasedInstanceValidator extends FhirTransactionValidator.
                 throw FhirUtils.exception(UnprocessableEntityException::new, outcome, "Validation Failed");
             }
         }
+        return outcome;
     }
 
 }

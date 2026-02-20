@@ -17,15 +17,21 @@
 package org.openehealth.ipf.boot.atna;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.springframework.core.Ordered;
 
 /**
  * Customizer that can be used to manipulate auto-configured {@link AuditContext} beans
  *
  * @author Christian Ohr
  */
-public interface AuditContextCustomizer {
+public interface AuditContextCustomizer extends Ordered {
 
     void customizeAuditContext(AuditContext auditContext);
+
+    @Override
+    default int getOrder() {
+        return 0;
+    }
 
     AuditContextCustomizer NOOP = auditContext -> {
     };

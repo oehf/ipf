@@ -191,6 +191,10 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
                 getEndpoint().getInterceptableConfiguration().getContext());
         exchange.getIn().setHeader(org.openehealth.ipf.commons.ihe.core.Constants.INTERACTION_ID_NAME,
                 getEndpoint().getInterceptableComponent().getInteractionId());
+        exchange.getIn().setHeader(Constants.INTERACTION_REQUEST_VALIDATION_PROFILES,
+            getEndpoint().getInterceptableComponent().getFhirTransactionConfiguration().getRequestValidationProfiles());
+        exchange.getIn().setHeader(Constants.INTERACTION_RESPONSE_VALIDATION_PROFILES,
+            getEndpoint().getInterceptableComponent().getFhirTransactionConfiguration().getResponseValidationProfiles());
 
         try {
             createUoW(exchange);

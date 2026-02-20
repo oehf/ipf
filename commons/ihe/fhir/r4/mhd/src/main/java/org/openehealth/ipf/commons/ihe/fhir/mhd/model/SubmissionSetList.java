@@ -34,19 +34,36 @@ public abstract class SubmissionSetList<T extends SubmissionSetList<T>> extends 
         setCode(new CodeableConcept().addCoding(SUBMISSIONSET_LIST_CODING));
     }
 
-    @Child(name = "sourceId")
+    @Child(name = "designationType", type = CodeableConcept.class, order = 1)
+    @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-designationType", definedLocally = false)
+    @Description(shortDefinition = "Clinical code of the List")
+    private CodeableConcept designationType;
+
+    @Child(name = "sourceId", type = Identifier.class, order = 2)
     @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-sourceId", definedLocally = false)
     @Description(shortDefinition = "Publisher organization identity of the SubmissionSet")
     private Identifier sourceId;
 
-    @Child(name = "intendedRecipient", max = Child.MAX_UNLIMITED)
+    @Child(name = "intendedRecipient", type = Reference.class, order = 3, max = Child.MAX_UNLIMITED)
     @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-intendedRecipient", definedLocally = false)
     @Description(shortDefinition = "Intended recipient of the SubmissionSet")
     private List<Reference> intendedRecipient;
 
-    @Override
-    public boolean isEmpty() {
-        return super.isEmpty() && ElementUtil.isEmpty(sourceId, intendedRecipient);
+
+    public CodeableConcept getDesignationType() {
+        if (designationType == null) {
+            designationType = new CodeableConcept();
+        }
+        return designationType;
+    }
+
+    public boolean hasDesignationType() {
+        return this.designationType != null;
+    }
+
+    public T setDesignationType(CodeableConcept designationType) {
+        this.designationType = designationType;
+        return (T)this;
     }
 
     public Identifier getSourceId() {
@@ -66,19 +83,10 @@ public abstract class SubmissionSetList<T extends SubmissionSetList<T>> extends 
         return (T)this;
     }
 
-    /**
-     * Adds an identifier to be a UniqueId as required by the profile
-     * @param oid oid
-     * @return this object
-     */
-    public T setSubmissionSetUniqueIdIdentifier(Oid oid) {
-        getIdentifier().add(new SubmissionSetUniqueIdIdentifier(oid));
-        return (T)this;
-    }
-
     public boolean hasSourceId() {
         return this.sourceId != null && !this.sourceId.isEmpty();
     }
+
 
     public List<Reference> getIntendedRecipient() {
         if (intendedRecipient == null) {
@@ -113,11 +121,6 @@ public abstract class SubmissionSetList<T extends SubmissionSetList<T>> extends 
         return (T)this;
     }
 
-    public T linkDocumentReference(String fullUrl) {
-        addEntry().setItem(new Reference(fullUrl));
-        return (T)this;
-    }
-
     public boolean hasIntendedRecipient() {
         if (this.intendedRecipient == null)
             return false;
@@ -127,10 +130,31 @@ public abstract class SubmissionSetList<T extends SubmissionSetList<T>> extends 
         return false;
     }
 
+    /**
+     * Adds an identifier to be a UniqueId as required by the profile
+     * @param oid oid
+     * @return this object
+     */
+    public T setSubmissionSetUniqueIdIdentifier(Oid oid) {
+        getIdentifier().add(new SubmissionSetUniqueIdIdentifier(oid));
+        return (T)this;
+    }
+
+    public T linkDocumentReference(String fullUrl) {
+        addEntry().setItem(new Reference(fullUrl));
+        return (T)this;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return super.isEmpty() && ElementUtil.isEmpty(designationType, sourceId, intendedRecipient);
+    }
+
     @Override
     public void copyValues(ListResource dst) {
         super.copyValues(dst);
         var submissionSetList = (SubmissionSetList<?>)dst;
+        submissionSetList.designationType = designationType == null ? null : designationType.copy();
         submissionSetList.sourceId = sourceId == null ? null : sourceId.copy();
         if (intendedRecipient != null) {
             submissionSetList.intendedRecipient = new ArrayList<>();

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3;
 
 import ca.uhn.fhir.context.FhirContext;
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r4.model.OperationOutcome;
 import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
@@ -33,8 +34,8 @@ public class ChPpq3Validator extends IgBasedInstanceValidator {
     }
 
     @Override
-    public void validateRequest(Object payload, Map<String, Object> parameters) {
-        handleOperationOutcome(doValidateRequest(payload, parameters));
+    public OperationOutcome validateRequest(IBaseResource payload, Map<String, Object> parameters) {
+        return handleOperationOutcome(doValidateRequest(payload, parameters));
     }
 
     private OperationOutcome doValidateRequest(Object payload, Map<String, Object> parameters) {

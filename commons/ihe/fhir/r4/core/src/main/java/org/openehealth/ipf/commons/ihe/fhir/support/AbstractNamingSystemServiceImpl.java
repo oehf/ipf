@@ -13,39 +13,37 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-
 package org.openehealth.ipf.commons.ihe.fhir.support;
-
 
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.NamingSystem;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Abstract Implementation that holds naming systems in memory as a map of {@link NamingSystem} sets. Before an
+ * Abstract Implementation that holds naming systems in memory as a map of {@link NamingSystem}s. Before an
  * instance can be used, one of the adder methods of implementations must be called to initialize the
  * bundle.
+ * Since 5.2, the NamingSystems are collected in a List to maintain the order of addition.
  *
  * @author Christian Ohr
  * @since 3.6
  */
 public class AbstractNamingSystemServiceImpl implements NamingSystemService {
 
-    protected final transient Map<String, Set<NamingSystem>> namingSystems = new HashMap<>();
+    protected final transient Map<String, Collection<NamingSystem>> namingSystems = new HashMap<>();
 
     public void addNamingSystems(Bundle bundle) {
-        this.namingSystems.merge(bundle.getIdElement().getIdPart(), setOfNamingSystems(bundle), (set1, set2) -> {
-            var result = new HashSet<>(set1);
-            result.addAll(set2);
-            return result;
-        });
+        this.namingSystems.merge(
+            bundle.getIdElement().getIdPart(),
+            listOfNamingSystems(bundle),
+            this::mergeNamingSystems);
     }
 
     @Override
@@ -56,10 +54,16 @@ public class AbstractNamingSystemServiceImpl implements NamingSystemService {
         return namingSystems.get(id).stream().filter(predicate);
     }
 
-    private Set<NamingSystem> setOfNamingSystems(Bundle bundle) {
+    private List<NamingSystem> listOfNamingSystems(Bundle bundle) {
         return bundle.getEntry().stream()
-                .map(bec -> (NamingSystem) bec.getResource())
-                .collect(Collectors.toSet());
+            .map(bec -> (NamingSystem) bec.getResource())
+            .toList();
+    }
+
+    private List<NamingSystem> mergeNamingSystems(Collection<NamingSystem> c1, Collection<NamingSystem> c2) {
+        var result = new ArrayList<>(c1);
+        result.addAll(c2);
+        return result;
     }
 
 }

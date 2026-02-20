@@ -29,9 +29,11 @@ import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionChannel;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
+import org.openehealth.ipf.commons.audit.queue.CompositeAuditMessageQueue;
 import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.actuate.audit.AuditEventRepository;
 import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -39,6 +41,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.List;
 
 @Configuration
 @EnableConfigurationProperties(IpfAtnaConfigurationProperties.class)
@@ -67,7 +71,7 @@ public class IpfAtnaAutoConfiguration {
         configureDefaultAuditContext(auditContext, config, auditTransmissionProtocol,
             auditMessageQueue, tlsParameters, auditMetadataProvider, auditExceptionHandler,
             auditMessagePostProcessor, wsAuditDatasetEnricher, fhirAuditDatasetEnricher, appName);
-        auditContextCustomizer.forEach(consumer ->
+        auditContextCustomizer.orderedStream().forEach(consumer ->
             consumer.customizeAuditContext(auditContext));
         return auditContext;
     }
@@ -165,13 +169,27 @@ public class IpfAtnaAutoConfiguration {
         }
     }
 
-    // The following beans configure aud strategies (formats, queues, exception handlers) and
+    // The following beans configure audit strategies (formats, queues, exception handlers) and
     // can all be overwritten
 
+    /**
+     * Returns an AuditMessageQueue bean. If "ipf.atna-spring-audit-event-enabled" is true and an
+     * {@link AuditEventRepository} is configured, it returns a {@link CompositeAuditMessageQueue} instead
+     * that also publishes audit events to this AuditEventRepository, using {@link AuditApplicationEventMessageQueue}.
+     */
     @Bean
     @ConditionalOnMissingBean
-    public AuditMessageQueue auditMessageQueue(IpfAtnaConfigurationProperties config) throws Exception {
-        return config.getAuditQueueClass().getConstructor().newInstance();
+    public AuditMessageQueue auditMessageQueue(
+        IpfAtnaConfigurationProperties config,
+        ObjectProvider<AuditEventRepository> auditEventRepository) throws Exception {
+        var primaryAuditMessageQueue = config.getAuditQueueClass().getConstructor().newInstance();
+        if (config.isSpringAuditEventEnabled() && auditEventRepository.getIfAvailable() != null) {
+            return new CompositeAuditMessageQueue(List.of(
+                new AuditApplicationEventMessageQueue(),
+                primaryAuditMessageQueue
+            ));
+        }
+        return primaryAuditMessageQueue;
     }
 
     @Bean

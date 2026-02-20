@@ -20,16 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.context.support.IValidationSupport;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
 import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
-import org.hl7.fhir.dstu3.model.Binary;
-import org.hl7.fhir.dstu3.model.Bundle;
-import org.hl7.fhir.dstu3.model.DocumentManifest;
-import org.hl7.fhir.dstu3.model.DocumentReference;
-import org.hl7.fhir.dstu3.model.ListResource;
-import org.hl7.fhir.dstu3.model.OperationOutcome;
-import org.hl7.fhir.dstu3.model.Patient;
-import org.hl7.fhir.dstu3.model.Reference;
-import org.hl7.fhir.dstu3.model.Resource;
-import org.hl7.fhir.dstu3.model.ResourceType;
+import org.hl7.fhir.dstu3.model.*;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.hl7.fhir.r5.utils.validation.constants.BestPracticeWarningLevel;
 import org.openehealth.ipf.commons.ihe.fhir.CustomValidationSupport;
@@ -74,7 +65,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
     }
 
     @Override
-    public void validateRequest(Object payload, Map<String, Object> parameters) {
+    public OperationOutcome validateRequest(IBaseResource payload, Map<String, Object> parameters) {
         var transactionBundle = (Bundle) payload;
         validateTransactionBundle(transactionBundle);
         validateBundleConsistency(transactionBundle);
@@ -91,6 +82,7 @@ public class Iti65Validator extends FhirTransactionValidator.Support {
                 }
             }
         }
+        return new OperationOutcome();
     }
 
 

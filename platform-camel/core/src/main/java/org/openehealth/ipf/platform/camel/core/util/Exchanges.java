@@ -149,7 +149,7 @@ public class Exchanges {
             exception = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
             if (cleanup) {
                 exchange.removeProperty(Exchange.EXCEPTION_CAUGHT);
-                exchange.removeProperty(Exchange.ERRORHANDLER_HANDLED);
+                exchange.removeProperty(Exchange.EXCEPTION_HANDLED);
             }
         }
         return exception;

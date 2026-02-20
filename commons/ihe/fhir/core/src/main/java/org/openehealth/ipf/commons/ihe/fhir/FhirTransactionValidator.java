@@ -17,6 +17,8 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.context.FhirContext;
+import org.hl7.fhir.instance.model.api.IBaseOperationOutcome;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -37,7 +39,7 @@ public interface FhirTransactionValidator {
      * @param payload    request payload
      * @param parameters request parameters
      */
-    void validateRequest(Object payload, Map<String, Object> parameters);
+    IBaseOperationOutcome validateRequest(IBaseResource payload, Map<String, Object> parameters);
 
     /**
      * Validates a FHIR response, throwing an appropriate subclass of
@@ -47,16 +49,18 @@ public interface FhirTransactionValidator {
      * @param payload    response payload
      * @param parameters response parameters
      */
-    void validateResponse(Object payload, Map<String, Object> parameters);
+    IBaseOperationOutcome validateResponse(IBaseResource payload, Map<String, Object> parameters);
 
     class Support implements FhirTransactionValidator {
 
         @Override
-        public void validateRequest(Object payload, Map<String, Object> parameters) {
+        public IBaseOperationOutcome validateRequest(IBaseResource payload, Map<String, Object> parameters) {
+            return null;
         }
 
         @Override
-        public void validateResponse(Object payload, Map<String, Object> parameters) {
+        public IBaseOperationOutcome validateResponse(IBaseResource payload, Map<String, Object> parameters) {
+            return null;
         }
     }
 }

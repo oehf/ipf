@@ -17,13 +17,13 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Bundle;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd423;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE;
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE;
 
 @ResourceDef(name = "Bundle", id = "mhdProvideDocumentBundleResponse", profile = ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE)
-public class ProvideDocumentBundleResponse extends Bundle implements Mhd421 {
+public class ProvideDocumentBundleResponse extends Bundle implements Mhd423 {
 
     public ProvideDocumentBundleResponse() {
         super();

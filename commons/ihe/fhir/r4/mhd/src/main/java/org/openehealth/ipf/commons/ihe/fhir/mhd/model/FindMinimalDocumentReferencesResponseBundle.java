@@ -17,7 +17,7 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Bundle;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd421;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd423;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI67_FIND_DOC
 import static org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils.getResources;
 
 @ResourceDef(name = "Bundle", id = "mhdMinimalDocumentReferenceResponseBundle", profile = ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE)
-public class FindMinimalDocumentReferencesResponseBundle extends Bundle implements Mhd421 {
+public class FindMinimalDocumentReferencesResponseBundle extends Bundle implements Mhd423 {
 
     public FindMinimalDocumentReferencesResponseBundle() {
         super();

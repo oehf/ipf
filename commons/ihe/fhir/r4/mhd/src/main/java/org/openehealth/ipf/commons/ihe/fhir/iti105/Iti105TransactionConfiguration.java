@@ -17,6 +17,12 @@ package org.openehealth.ipf.commons.ihe.fhir.iti105;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
+
+import java.util.Set;
+
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE;
 
 /**
  * Standard Configuration for Iti105Component.
@@ -35,7 +41,13 @@ public class Iti105TransactionConfiguration extends FhirTransactionConfiguration
                 FhirVersionEnum.R4,
                 new Iti105DocumentReferenceResourceProvider(),
                 new Iti105RequestFactory(),
-                Iti105Validator::new);
+                MhdValidator::new);
+        setRequestValidationProfiles(Set.of(
+            SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE
+        ));
+        setResponseValidationProfiles(Set.of(
+            ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE
+        ));
     }
 
 }
