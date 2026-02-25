@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="5.2.0" description="IPF 5.2.0" date="">
+            <action issue="508" dev="razvanTri" type="fix">
+                Fix status code in automatically generated HL7v3 NAKs
+            </action>
             <action issue="505" dev="unixoid" type="fix">
                 Fix error codes in automatically generated ITI-44 NAKs
             </action>
