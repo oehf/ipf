@@ -111,6 +111,7 @@ class Hl7v3NakFactory {
         if (throwable) {
             acknowledgementDetailCode0         = 'INTERR'
             queryResponseCode0                 = 'AE'
+            statusCode0                        = 'aborted'
             detectedIssueEventCodeSystem0      = '2.16.840.1.113883.5.4'
             detectedIssueManagementCodeSystem0 = '2.16.840.1.113883.5.4'
         }
