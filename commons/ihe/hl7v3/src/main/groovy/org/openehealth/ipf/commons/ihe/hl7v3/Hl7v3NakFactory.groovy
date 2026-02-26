@@ -132,7 +132,7 @@ class Hl7v3NakFactory {
             typeCode0                    = 'AE'
             acknowledgementDetailCode0   = 'SYN113'
             queryResponseCode0           = 'QE'
-            detectedIssueEventCode0      = 'ActAdministrativeDetectedIssueCode'
+            detectedIssueEventCode0      = '_ActAdministrativeDetectedIssueManagementCode'
             detectedIssueManagementCode0 = 'VALIDAT'
         }
 

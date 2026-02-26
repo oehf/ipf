@@ -198,7 +198,7 @@ class TestIti47 extends HL7v3StandardTestContainer {
         def response = Hl7v3Utils.slurp(responseString)
         assert response.acknowledgement.typeCode.@code == 'AE'
         assert response.acknowledgement.acknowledgementDetail.code.@code == 'SYN113'
-        assert response.controlActProcess.reasonOf.detectedIssueEvent.code.@code == 'ActAdministrativeDetectedIssueCode'
+        assert response.controlActProcess.reasonOf.detectedIssueEvent.code.@code == '_ActAdministrativeDetectedIssueManagementCode'
         assert response.controlActProcess.reasonOf.detectedIssueEvent.mitigatedBy.detectedIssueManagement.code.@code == 'VALIDAT'
         assert response.controlActProcess.queryAck.statusCode.@code == 'aborted'
         assert response.controlActProcess.queryAck.queryResponseCode.@code == 'QE'
