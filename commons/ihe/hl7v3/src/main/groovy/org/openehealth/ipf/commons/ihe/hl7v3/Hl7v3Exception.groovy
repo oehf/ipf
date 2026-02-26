@@ -39,7 +39,7 @@ class Hl7v3Exception extends RuntimeException {
                                String statusCode = 'aborted',
                                String acknowledgementDetailCode = 'INTERR',
                                String queryResponseCode = 'AE',
-                               String detectedIssueEventCode = 'ActAdministrativeDetectedIssueCode',
+                               String detectedIssueEventCode = '_ActAdministrativeDetectedIssueManagementCode',
                                String detectedIssueManagementCode = null) {
         Hl7v3Exception e = new Hl7v3Exception(message, cause)
         e.typeCode = typeCode
@@ -79,7 +79,7 @@ class Hl7v3Exception extends RuntimeException {
     // value set: QueryStatusCode
     String statusCode = 'aborted'
 
-    String detectedIssueEventCode = 'ActAdministrativeDetectedIssueCode'
+    String detectedIssueEventCode = '_ActAdministrativeDetectedIssueManagementCode'
     String detectedIssueEventCodeSystem = '2.16.840.1.113883.5.4'
     String detectedIssueManagementCode
     String detectedIssueManagementCodeSystem = '2.16.840.1.113883.5.4'

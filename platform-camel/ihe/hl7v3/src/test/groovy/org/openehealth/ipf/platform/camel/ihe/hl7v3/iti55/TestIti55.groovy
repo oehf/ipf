@@ -200,7 +200,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
 
         assert response.acknowledgement.typeCode.@code == 'AE'
         assert response.acknowledgement.acknowledgementDetail.code.@code == 'INTERR'
-        assert response.controlActProcess.reasonOf.detectedIssueEvent.code.@code == 'ActAdministrativeDetectedIssueCode'
+        assert response.controlActProcess.reasonOf.detectedIssueEvent.code.@code == '_ActAdministrativeDetectedIssueManagementCode'
         assert response.controlActProcess.reasonOf.detectedIssueEvent.mitigatedBy.detectedIssueManagement.code.@code == 'InternalError'
         assert response.controlActProcess.reasonOf.detectedIssueEvent.mitigatedBy.detectedIssueManagement.code.@codeSystem == '1.3.6.1.4.1.19376.1.2.27.3'
         assert response.controlActProcess.queryAck.statusCode.@code == 'aborted'
