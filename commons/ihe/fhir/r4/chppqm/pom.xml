@@ -19,7 +19,7 @@
     <parent>
         <artifactId>ipf-commons-ihe-fhir-r4</artifactId>
         <groupId>org.openehealth.ipf.commons</groupId>
-        <version>5.2-SNAPSHOT</version>
+        <version>5.2-rc2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
