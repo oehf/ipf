@@ -11,7 +11,7 @@
         <central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
         <gpg-plugin-version>3.2.8</gpg-plugin-version>
         <bouncycastle-version>1.83</bouncycastle-version>
-        <camel-version>4.18.0</camel-version>
+        <camel-version>4.17.0</camel-version>
         <cxf-version>4.1.5</cxf-version>
         <commons-io-version>2.21.0</commons-io-version>
         <commons-compress-version>1.28.0</commons-compress-version>
