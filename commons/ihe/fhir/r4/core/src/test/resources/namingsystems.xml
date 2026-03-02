@@ -30,7 +30,12 @@
                 </uniqueId>
                 <uniqueId>
                     <type value="uri"/>
+                    <value value="http://org.openehealth/ipf/commons/ihe/fhir/old/1"/>
+                </uniqueId>
+                <uniqueId>
+                    <type value="uri"/>
                     <value value="http://org.openehealth/ipf/commons/ihe/fhir/1"/>
+                    <preferred value="true"/>
                 </uniqueId>
                 <uniqueId>
                     <type value="other"/>

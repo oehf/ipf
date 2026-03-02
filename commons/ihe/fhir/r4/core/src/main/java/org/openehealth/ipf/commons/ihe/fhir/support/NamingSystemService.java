@@ -20,6 +20,7 @@ package org.openehealth.ipf.commons.ihe.fhir.support;
 import org.hl7.fhir.r4.model.Enumerations;
 import org.hl7.fhir.r4.model.NamingSystem;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.BinaryOperator;
@@ -40,7 +41,7 @@ public interface NamingSystemService {
      * Finds all {@link NamingSystem} instances that match the provided {@link Predicate} and returns
      * a stream of these matches.
      *
-     * @param id ID of a NamingSystem bundle
+     * @param id        ID of a NamingSystem bundle
      * @param predicate predicate selecting a naming system
      * @return a stream of {@link NamingSystem} instances that match the provided {@link Predicate}
      */
@@ -49,7 +50,7 @@ public interface NamingSystemService {
     /**
      * Returns the first {@link NamingSystem} instances that match the provided {@link Predicate}
      *
-     * @param id ID of a NamingSystem bundle
+     * @param id        ID of a NamingSystem bundle
      * @param predicate predicate selecting a naming system
      * @return {@link NamingSystem} instance that match the provided {@link Predicate}
      */
@@ -60,15 +61,15 @@ public interface NamingSystemService {
     /**
      * Returns the first active {@link NamingSystem} instances that match the provided type and value
      *
-     * @param id ID of a NamingSystem bundle
+     * @param id    ID of a NamingSystem bundle
      * @param type  NamingSystem identifier type (oid, uuid, ...)
      * @param value value
      * @return {@link NamingSystem} instance that match the provided type and value
      */
     default Optional<? extends NamingSystem> findActiveNamingSystemByTypeAndValue(String id, NamingSystem.NamingSystemIdentifierType type, String value) {
         return findFirstNamingSystem(id, allOf(
-                byTypeAndValue(type, value),
-                byStatus(Enumerations.PublicationStatus.ACTIVE)));
+            byTypeAndValue(type, value),
+            byStatus(Enumerations.PublicationStatus.ACTIVE)));
     }
 
     // Predicates
@@ -86,14 +87,14 @@ public interface NamingSystemService {
     @SafeVarargs
     static Predicate<NamingSystem> combine(BinaryOperator<Predicate<NamingSystem>> op, Predicate<NamingSystem>... predicates) {
         return predicates != null ?
-                Stream.of(predicates).reduce(op).orElse(namingSystem -> false) :
-                namingSystem -> false;
+            Stream.of(predicates).reduce(op).orElse(namingSystem -> false) :
+            namingSystem -> false;
     }
 
     static Predicate<NamingSystem> byTypeAndValue(NamingSystem.NamingSystemIdentifierType type, String value) {
         return namingSystem -> namingSystem.getUniqueId().stream()
-                .anyMatch(uniqueId -> uniqueId.getType() == type
-                        && value.equals(uniqueId.getValue()));
+            .anyMatch(uniqueId -> uniqueId.getType() == type
+                && value.equals(uniqueId.getValue()));
     }
 
     static Predicate<NamingSystem> byId(String id) {
@@ -116,9 +117,17 @@ public interface NamingSystemService {
 
     static Function<NamingSystem, String> getValueOfType(NamingSystem.NamingSystemIdentifierType type) {
         return namingSystem -> namingSystem.getUniqueId().stream()
-                .filter(uniqueId -> type == uniqueId.getType())
-                .findFirst()
-                .map(NamingSystem.NamingSystemUniqueIdComponent::getValue)
-                .orElse(null);
+            .filter(uniqueId -> type == uniqueId.getType())
+            .min((u1, u2) -> Boolean.compare(u2.getPreferred(), u1.getPreferred()))
+            .map(NamingSystem.NamingSystemUniqueIdComponent::getValue)
+            .orElse(null);
+    }
+
+    static Function<? super NamingSystem, List<String>> getValuesOfType(NamingSystem.NamingSystemIdentifierType type) {
+        return namingSystem -> namingSystem.getUniqueId().stream()
+            .filter(uniqueId -> type == uniqueId.getType())
+            .sorted((u1, u2) -> Boolean.compare(u2.getPreferred(), u1.getPreferred()))
+            .map(NamingSystem.NamingSystemUniqueIdComponent::getValue)
+            .toList();
     }
 }

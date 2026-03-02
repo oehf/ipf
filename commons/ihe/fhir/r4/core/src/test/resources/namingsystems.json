@@ -17,7 +17,13 @@
           },
           {
             "type":"uri",
-            "value":"http://org.openehealth/ipf/commons/ihe/fhir/1"
+            "value":"http://org.openehealth/ipf/commons/ihe/fhir/old/1",
+            "preferred":false
+          },
+          {
+            "type":"uri",
+            "value":"http://org.openehealth/ipf/commons/ihe/fhir/1",
+            "preferred":true
           },
           {
             "type":"other",

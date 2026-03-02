@@ -52,6 +52,19 @@ abstract class AbstractSystemUriMapperTest {
     }
 
     @Test
+    public void testTranslateOidToUri() {
+        var oid = "1.2.3.4";
+        var uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
+        assertEquals(uri, uriMapper.oidToUri(oid));
+    }
+
+    @Test
+    public void testTranslateOidToUrnOid() {
+        var oid = "1.2.3.5";
+        assertEquals("urn:oid:" + oid, uriMapper.oidToUri(oid));
+    }
+
+    @Test
     public void testTranslateUriToOidFails() {
         var uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
         assertFalse(uriMapper.uriToOid(uri).isPresent());
