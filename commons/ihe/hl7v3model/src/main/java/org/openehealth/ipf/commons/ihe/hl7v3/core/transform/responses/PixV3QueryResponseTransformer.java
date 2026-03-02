@@ -120,7 +120,7 @@ public class PixV3QueryResponseTransformer {
 
         final var registrationEvent =
                 new PRPAIN201310UV02MFMIMT700711UV01RegistrationEvent();
-        registrationEvent.setStatusCode(new CS("ACTIVE", null, null));
+        registrationEvent.setStatusCode(new CS("active", null, null));
         registrationEvent.setClassCode(ActClass.REG);
         registrationEvent.setMoodCode(ActMood.EVN);
         subject.setRegistrationEvent(registrationEvent);
@@ -131,7 +131,7 @@ public class PixV3QueryResponseTransformer {
 
         final var patient = new PRPAMT201304UV02Patient();
         patient.setClassCode("PAT");
-        patient.setStatusCode(new CS("ACTIVE", null, null));
+        patient.setStatusCode(new CS("active", null, null));
         patient.setId(simpleResponse.getPatientIds());
         patient.setProviderOrganization(simpleResponse.getProviderOrganization());
         subject1.setPatient(patient);
