@@ -17,16 +17,20 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
-import org.hl7.fhir.r4.model.*;
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.Parameters;
+import org.hl7.fhir.r4.model.Patient;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersIn;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * Base test class for ITI-83 (PIX Query for Mobile) tests
  */
 abstract class AbstractTestIti83 extends FhirTestContainer {
 
@@ -35,62 +39,58 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
     public static void startServer(String contextDescriptor) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, false, DEMO_APP_PORT, "FhirServlet");
+        PixmProfile.registerDefaultTypes(serverFhirContext);
         startClient(String.format("http://localhost:%d/", DEMO_APP_PORT));
     }
 
-    protected Parameters validQueryParameters() {
-        var inParams = new Parameters();
-        inParams.addParameter()
-                .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(new StringType("urn:oid:1.2.3.4|0815"));
-        inParams.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(new UriType("urn:oid:1.2.3.4.6"));
-        return inParams;
+    protected PixmQueryParametersIn validQueryParameters() {
+        var identifier = new Identifier()
+                .setSystem("urn:oid:1.2.3.4")
+                .setValue("0815");
+        
+        return new PixmQueryParametersIn()
+                .setSourceIdentifier(identifier)
+                .addTargetSystem("urn:oid:1.2.3.4.6");
     }
 
-    protected Parameters validReadParameters() {
-        var inParams = new Parameters();
-        inParams.addParameter()
-                .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(new StringType("|0815"));
-        inParams.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(new UriType("urn:oid:1.2.3.4.6"));
-        return inParams;
+    protected PixmQueryParametersIn validReadParameters() {
+        var identifier = new Identifier()
+                .setValue("0815");
+        
+        return new PixmQueryParametersIn()
+                .setSourceIdentifier(identifier)
+                .addTargetSystem("urn:oid:1.2.3.4.6");
     }
 
-    protected Parameters validTargetSystemParameters() {
-        var inParams = new Parameters();
-        inParams.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(new UriType("urn:oid:1.2.3.4.6"));
-        return inParams;
+    protected PixmQueryParametersIn validTargetSystemParameters() {
+        return new PixmQueryParametersIn()
+                .addTargetSystem("urn:oid:1.2.3.4.6");
     }
 
-    protected Parameters sendManuallyOnType(Parameters queryParameters) {
+    protected Parameters sendManuallyOnType(PixmQueryParametersIn queryParameters) {
         return client.operation()
                 .onType(Patient.class)
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
                 .encodedXml()
+                .returnResourceType(Parameters.class)
                 .execute();
     }
 
-    protected Parameters sendManuallyOnInstance(String resourceId, Parameters queryParameters) {
+    protected Parameters sendManuallyOnInstance(String resourceId, PixmQueryParametersIn queryParameters) {
         return client.operation()
                 .onInstance(new IdType("Patient", resourceId))
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
                 .withParameters(queryParameters)
                 .useHttpGet()
                 .encodedXml()
+                .returnResourceType(Parameters.class)
                 .execute();
     }
 
-    protected Parameters sendViaProducer(Parameters requestData) {
+    protected Parameters sendViaProducer(PixmQueryParametersIn requestData) {
         return producerTemplate.requestBody("direct:input", requestData, Parameters.class);
     }
-
 
 }

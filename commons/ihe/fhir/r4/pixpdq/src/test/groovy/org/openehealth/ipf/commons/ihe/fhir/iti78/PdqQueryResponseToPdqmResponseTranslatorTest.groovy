@@ -22,12 +22,12 @@ import org.easymock.EasyMock
 import org.hl7.fhir.r4.model.ContactPoint
 import org.hl7.fhir.r4.model.Enumerations
 import org.hl7.fhir.r4.model.HumanName
-import org.hl7.fhir.r4.model.codesystems.AdministrativeGender
 import org.hl7.fhir.r4.model.codesystems.GenderIdentity
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmPatient
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
@@ -72,17 +72,17 @@ class PdqQueryResponseToPdqmResponseTranslatorTest {
     @Test
     void testTranslateRegularSearchResponse() {
         RSP_K21 message = loadMessage('ok-1_Response')
-        List<PdqPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
+        List<PdqmPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(9, patients.size())
     }
 
     @Test
     void testTranslateRegularGetResponse() {
         RSP_K21 message = loadMessage('ok-2_Response')
-        List<PdqPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
+        List<PdqmPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
         assertEquals(1, patients.size())
 
-        PdqPatient patient = ++patients.iterator()
+        PdqmPatient patient = ++patients.iterator()
 
         assertEquals('http://org.openehealth/ipf/commons/ihe/fhir/1', patient.identifier[0].system)
         assertEquals('79007', patient.identifierFirstRep.value)
@@ -103,10 +103,10 @@ class PdqQueryResponseToPdqmResponseTranslatorTest {
         assertEquals(ContactPoint.ContactPointUse.MOBILE, patient.telecomFirstRep.use)
         assertEquals(ContactPoint.ContactPointSystem.PHONE, patient.telecomFirstRep.system)
         assertEquals(Enumerations.AdministrativeGender.MALE, patient.gender)
-        assertEquals(GenderIdentity.MALE.toCode(), patient.genderIdentity.codingFirstRep.code)
-        assertEquals('http://hl7.org/fhir/StructureDefinition/patient-genderIdentity', patient.genderIdentity.codingFirstRep.system)
+        assertEquals(GenderIdentity.MALE.toCode(), patient.genderIdentityFirstRep.value.codingFirstRep.code)
+        assertEquals('http://hl7.org/fhir/StructureDefinition/patient-genderIdentity', patient.genderIdentityFirstRep.value.codingFirstRep.system)
         assertEquals('01511134556', patient.telecomFirstRep.value)
-        assertEquals('Paukenbecker', patient.mothersMaidenName.family)
+        assertEquals('Paukenbecker', patient.mothersMaidenName)
         assertEquals('Passau', patient.birthPlace.city)
         assertEquals('deu',patient.citizenshipFirstRep.code.codingFirstRep.code)
         assertEquals('1041', patient.religionFirstRep.codingFirstRep.code)

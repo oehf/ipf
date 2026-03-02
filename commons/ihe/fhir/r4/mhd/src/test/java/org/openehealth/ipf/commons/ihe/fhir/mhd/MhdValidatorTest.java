@@ -57,7 +57,7 @@ public class MhdValidatorTest {
         var bundle = provideAndRegister();
         try {
             var mhdValidator = new MhdValidator(context);
-            var outcome = mhdValidator.validateRequest(bundle, Map.of(
+            mhdValidator.validateRequest(bundle, Map.of(
                 Constants.INTERACTION_REQUEST_VALIDATION_PROFILES,
                 Set.of(MhdProfile.ITI65_COMPREHENSIVE_BUNDLE_PROFILE)));
         } catch (UnprocessableEntityException e) {

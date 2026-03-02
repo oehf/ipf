@@ -15,13 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti83
 
+import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import ca.uhn.hl7v2.model.Message
 import org.hl7.fhir.r4.model.Identifier
 import org.hl7.fhir.r4.model.Parameters
+import org.hl7.fhir.r4.model.StringType
 import org.hl7.fhir.r4.model.UriType
-import org.hl7.fhir.instance.model.api.IBaseResource
-import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersIn
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.PIX
@@ -30,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
 import static java.util.Objects.requireNonNull
 
 /**
- * Translates a {@link IBaseResource} into a HL7v2 PIX Query message
+ * Translates a {@link org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersIn} into a HL7v2 PIX Query message
  *
  * @author Christian Ohr
  * @since 3.6
@@ -59,7 +60,7 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
     }
 
     /**
-     * @param pdqSupplierResourceIdentifierUri the URI of the resource identifier system
+     * @param pixSupplierResourceIdentifierUri the URI of the resource identifier system
      */
     void setPixSupplierResourceIdentifierUri(String pixSupplierResourceIdentifierUri) {
         requireNonNull(pixSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
@@ -68,7 +69,7 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
 
     @Override
     QBP_Q21 translateFhir(Object request, Map<String, Object> parameters) {
-        Parameters inParams = (Parameters) request
+        PixmQueryParametersIn inParams = convertToPixmQueryParametersIn(request)
         QBP_Q21 qry = PIX.QueryInteractions.ITI_9.hl7v2TransactionConfiguration.request('Q23')
 
         qry.MSH[3] = senderDeviceName
@@ -82,19 +83,15 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
         qry.QPD[1] = this.queryName
         qry.QPD[2] = UUID.randomUUID().toString()
 
-        def map = new HashMap<String, Object>()
-        def parts = inParams.parameter
-        for (Parameters.ParametersParameterComponent part : parts) {
-            map.put(part.name, part.value)
-        }
+        handleSourceIdentifier(qry, inParams.sourceIdentifierAsIdentifier)
 
-        handleSourceIdentifier(qry, map[Constants.SOURCE_IDENTIFIER_NAME])
-
-        UriType requestedDomain = map[Constants.TARGET_SYSTEM_NAME]
-        if (requestedDomain) {
-            if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[4]), uriMapper, requestedDomain.value)) {
-                // UriMapper is not able to derive a PIX OID/Namespace for the target domain URI, Error Case 5
-                throw Utils.unknownTargetDomainCode(requestedDomain.value)
+        var targetSystems = inParams.targetSystems
+        if (targetSystems && !targetSystems.isEmpty()) {
+            targetSystems.eachWithIndex { targetSystem, index ->
+                if (!Utils.populateIdentifier(Utils.nextRepetition(qry.QPD[4]), uriMapper, targetSystem)) {
+                    // UriMapper is not able to derive a PIX OID/Namespace for the target domain URI, Error Case 5
+                    throw Utils.unknownTargetDomainCode(targetSystem)
+                }
             }
         }
 
@@ -102,7 +99,51 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
         return qry
     }
 
+    /**
+     * Converts a generic Parameters object or PixmQueryParametersIn to PixmQueryParametersIn.
+     * This allows backward compatibility with code that uses generic Parameters.
+     *
+     * @param request the request object (Parameters or PixmQueryParametersIn)
+     * @return PixmQueryParametersIn instance
+     */
+    protected PixmQueryParametersIn convertToPixmQueryParametersIn(Object request) {
+        if (request instanceof PixmQueryParametersIn) {
+            return (PixmQueryParametersIn) request
+        }
+        
+        if (request instanceof Parameters) {
+            Parameters params = (Parameters) request
+            PixmQueryParametersIn pixmParams = new PixmQueryParametersIn()
+            
+            // Extract sourceIdentifier parameter
+            params.parameter.each { param ->
+                if (PixmQueryParametersIn.SOURCE_IDENTIFIER == param.name) {
+                    if (param.value instanceof StringType) {
+                        pixmParams.setSourceIdentifier(((StringType) param.value).value)
+                    } else if (param.value instanceof Identifier) {
+                        pixmParams.setSourceIdentifier((Identifier) param.value)
+                    }
+                } else if (PixmQueryParametersIn.TARGET_SYSTEM == param.name) {
+                    if (param.value instanceof UriType) {
+                        pixmParams.addTargetSystem(((UriType) param.value).value)
+                    }
+                } else if (PixmQueryParametersIn._FORMAT == param.name) {
+                    if (param.value instanceof StringType) {
+                        pixmParams.setFormat(((StringType) param.value).value)
+                    }
+                }
+            }
+            
+            return pixmParams
+        }
+        
+        throw new InvalidRequestException("Request must be either Parameters or PixmQueryParametersIn, but was: ${request?.class?.name}")
+    }
+
     protected void handleSourceIdentifier(QBP_Q21 qry, Identifier sourceIdentifier) {
+        if (!sourceIdentifier) {
+            throw new InvalidRequestException("sourceIdentifier parameter is required")
+        }
         Identifier id = sourceIdentifier.copy()
 
         if (!id.system) {

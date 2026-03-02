@@ -16,25 +16,11 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti119;
 
-import org.openehealth.ipf.commons.ihe.fhir.Constants;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author Christian Ohr
  * @since 5.0
  */
 public interface Iti119Constants {
-
-    String RESOURCE = "resource";
-    String ONLY_CERTAIN_MATCHES = "onlyCertainMatches";
-    String COUNT = "count";
-
-    Set<String> ITI119_PARAMETERS = new HashSet<>(Arrays.asList(
-        ONLY_CERTAIN_MATCHES,
-        COUNT));
 
     String PDQM_MATCH_OPERATION_NAME = "$match";
 }

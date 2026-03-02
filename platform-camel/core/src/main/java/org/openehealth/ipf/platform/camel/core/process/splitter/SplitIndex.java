@@ -22,7 +22,7 @@ import java.util.Objects;
  * This class contains all necessary information about the an index of an
  * exchange that was split off. This includes the actual index as well as a
  * flag indicating that the index is the last in the collection of sub exchanges.
- * 
+ * <p>
  * - Immutable
  * - fully thread-safe
  * - not for subclassing

@@ -23,6 +23,7 @@ import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.ListResource;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public abstract class FolderList<T extends FolderList<T>> extends MhdList<T> {
     }
 
     @Child(name = "designationType", type = { CodeableConcept.class }, order = 1)
-    @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-designationType", definedLocally = false)
+    @Extension(url = MhdProfile.DESIGNATION_TYPE_PROFILE, definedLocally = false)
     @Description(shortDefinition = "Clinical code of the List")
     private List<CodeableConcept> designationType;
 

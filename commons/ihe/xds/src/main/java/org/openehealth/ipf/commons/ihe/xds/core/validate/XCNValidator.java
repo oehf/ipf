@@ -15,14 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Person;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PERSON_MISSING_NAME_AND_ID;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PERSON_HD_INOPPORTUNE;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.HL7ValidationUtils.isNotEmptyField;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PERSON_HD_INOPPORTUNE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PERSON_MISSING_NAME_AND_ID;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
  * Validates a XCN string.

@@ -138,7 +138,7 @@ public class Hl7v2MarshalUtils {
      * @param message     Camel message
      * @param charsetName charset name
      * @return byte array
-     * @throws Exception
+     * @throws Exception on IO errors
      */
     public static byte[] convertMessageToByteArray(
             Message message,
@@ -185,7 +185,7 @@ public class Hl7v2MarshalUtils {
      * @param defaultCharsetName default character set.
      * @param parser             HL7 parser.
      * @return a {@link Message} or <code>null</code> when it was impossible to get or create one.
-     * @throws Exception
+     * @throws Exception on IO errors
      */
     public static ca.uhn.hl7v2.model.Message convertBodyToMessage(
             Message message,

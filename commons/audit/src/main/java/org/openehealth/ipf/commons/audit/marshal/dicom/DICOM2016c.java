@@ -22,8 +22,8 @@ import static org.openehealth.ipf.commons.audit.XMLNames.*;
 
 /**
  * CP 1362: Correct AuditSourceIdentification in DICOM audit message
- * http://dicom.nema.org/Dicom/News/January2016/docs/cpack86/cp1362.pdf
- *
+ * <a href="http://dicom.nema.org/Dicom/News/January2016/docs/cpack86/cp1362.pdf">...</a>
+ * <p>
  * Correct AuditSourceIdentification in DICOM audit message
  *
  * @author Christian Ohr

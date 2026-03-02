@@ -28,7 +28,7 @@ import java.util.Iterator;
  * This class can be used within a split rule expression to extract each line
  * of a given file and generate a new exchange via the {@link Splitter}.
  * E.g. in Groovy, you can use this iterator like this:
- * 
+ * <p>
  * <code>
  *       ...
  *            .split { exchange -> 
@@ -37,7 +37,7 @@ import java.util.Iterator;
  *            }
  *       ...
  * </code>
- * 
+ * <p>
  * The intention of this class is to read long text files without loading the
  * whole file into memory. The largest portion of the file that is kept in 
  * memory is an individual line as read by {@link BufferedReader#readLine()}.

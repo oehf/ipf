@@ -18,20 +18,30 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import ca.uhn.fhir.model.api.Include;
 import ca.uhn.fhir.model.api.annotation.Description;
-import ca.uhn.fhir.rest.annotation.*;
+import ca.uhn.fhir.rest.annotation.IdParam;
+import ca.uhn.fhir.rest.annotation.IncludeParam;
+import ca.uhn.fhir.rest.annotation.OptionalParam;
+import ca.uhn.fhir.rest.annotation.Read;
+import ca.uhn.fhir.rest.annotation.Search;
+import ca.uhn.fhir.rest.annotation.Sort;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
-import ca.uhn.fhir.rest.param.*;
+import ca.uhn.fhir.rest.param.DateAndListParam;
+import ca.uhn.fhir.rest.param.StringAndListParam;
+import ca.uhn.fhir.rest.param.StringParam;
+import ca.uhn.fhir.rest.param.TokenAndListParam;
+import ca.uhn.fhir.rest.param.TokenParam;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
-import org.hl7.fhir.r4.model.IdType;
-import org.hl7.fhir.r4.model.Patient;
-import org.hl7.fhir.instance.model.api.IAnyResource;
-import org.hl7.fhir.r4.model.ResourceType;
-import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.hl7.fhir.instance.model.api.IAnyResource;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Patient;
+import org.hl7.fhir.r4.model.ResourceType;
+import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmPatient;
+
 import java.util.Set;
 
 /**
@@ -49,7 +59,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
      * @param active              the active state indicates whether the patient record is active
      * @param family              family name search parameter(s)
      * @param given               family name search parameter(s)
-     * @param birthDate           birth date search parameter
+     * @param birthDate           birthdate search parameter
      * @param address             address search parameter
      * @param gender              gender search parameter
      * @param resourceId          _id search parameter
@@ -62,7 +72,7 @@ public class Iti78ResourceProvider extends AbstractPlainProvider {
      * @return {@link IBundleProvider} instance that manages retrieving patients
      */
     @SuppressWarnings("unused")
-    @Search(type = PdqPatient.class)
+    @Search(type = PdqmPatient.class)
     public IBundleProvider pdqmSearch(
             @Description(shortDefinition = "Logical id of this artifact")
             @OptionalParam(name = Patient.SP_IDENTIFIER)

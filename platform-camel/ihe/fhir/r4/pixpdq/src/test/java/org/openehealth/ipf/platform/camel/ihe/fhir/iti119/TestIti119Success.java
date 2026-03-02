@@ -24,12 +24,14 @@ import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputPatient;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119Constants.COUNT;
-import static org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119Constants.RESOURCE;
 import static org.openehealth.ipf.commons.ihe.fhir.iti119.MatchGradeEnumInterceptor.MATCH_GRADE_EXTENSION_URL;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters.COUNT_PARAM;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters.RESOURCE_PARAM;
 
 /**
  *
@@ -51,14 +53,11 @@ public class TestIti119Success extends AbstractTestIti119 {
 
     @Test
     public void sendManualPdqmMatch() {
-
-        var p = new Parameters();
-        p.addParameter()
-            .setName(RESOURCE)
-            .setResource(new Patient().addName(new HumanName().setFamily("Test")));
-        p.addParameter()
-            .setName(COUNT)
-            .setValue(new IntegerType(1));
+        var resource = new PdqmMatchInputPatient();
+        resource.addName(new HumanName().setFamily("Test"));
+        var p = new PdqmMatchInputParameters()
+            .setResourceParameter(resource)
+            .setCount(1);
         var result = sendManually(p);
 
         // printAsXML(result);
@@ -124,10 +123,10 @@ public class TestIti119Success extends AbstractTestIti119 {
     public void sendEndpointParametersResource() {
         var p = new Parameters();
         p.addParameter()
-            .setName(RESOURCE)
+            .setName(RESOURCE_PARAM)
             .setResource(new Patient().addName(new HumanName().setFamily("Test")));
         p.addParameter()
-            .setName(COUNT)
+            .setName(COUNT_PARAM)
             .setValue(new IntegerType(1));
         var result = sendViaProducer(p);
         // printAsXML(result);

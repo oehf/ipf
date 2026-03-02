@@ -108,7 +108,7 @@ public abstract class MllpAuditDataset extends AuditDataset {
 
     /**
      * The identity of the Destination Actor facility and receiving application
-     *
+     * <p>
      * from the HL7 message; concatenated together, separated by the | character
      * @return identity of the Destination Actor facility
      */

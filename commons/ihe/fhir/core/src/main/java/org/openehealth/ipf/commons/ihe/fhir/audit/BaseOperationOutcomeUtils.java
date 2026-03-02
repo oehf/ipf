@@ -32,7 +32,7 @@ public class BaseOperationOutcomeUtils {
     }
 
     public static String getDiagnostics(FhirContext fhirContext, IBaseOperationOutcome operationOutcome) {
-        return OperationOutcomeUtil.getFirstIssueDetails(fhirContext, operationOutcome);
+        return OperationOutcomeUtil.getFirstIssueDiagnostics(fhirContext, operationOutcome);
     }
 
     public static String getWorstIssueSeverity(FhirContext fhirContext, IBaseOperationOutcome operationOutcome) {

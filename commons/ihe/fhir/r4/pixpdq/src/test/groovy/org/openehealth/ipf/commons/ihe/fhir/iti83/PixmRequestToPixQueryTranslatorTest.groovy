@@ -18,13 +18,11 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83
 
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException
 import org.hl7.fhir.r4.model.Identifier
-import org.hl7.fhir.r4.model.Parameters
-import org.hl7.fhir.r4.model.UriType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.BeforeEach
 import org.openehealth.ipf.commons.core.URN
-import org.openehealth.ipf.commons.ihe.fhir.Constants
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersIn
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
@@ -34,7 +32,7 @@ import org.openehealth.ipf.commons.map.MappingService
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 /**
- *
+ * Tests for PixmRequestToPixQueryTranslator
  */
 class PixmRequestToPixQueryTranslatorTest {
 
@@ -55,19 +53,16 @@ class PixmRequestToPixQueryTranslatorTest {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('urn:oid:1.2.3.4')
                 .setValue('4711ABC')
-        UriType domainsReturned = new UriType('urn:oid:1.2.3.4.5.6')
-        Parameters params = new Parameters()
-        params.addParameter()
-                .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(systemIdentifier)
-        params.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(domainsReturned)
+
+        PixmQueryParametersIn params = new PixmQueryParametersIn()
+                .setSourceIdentifier(systemIdentifier)
+                .addTargetSystem('urn:oid:1.2.3.4.5.6')
+        
         QBP_Q21 translated = translator.translateFhir(params, null)
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(URN.create(systemIdentifier.system).namespaceSpecificString, translated.QPD[3][4][2].value)
-        assertEquals(URN.create(domainsReturned.value).namespaceSpecificString, translated.QPD[4][4][2].value)
+        assertEquals(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString, translated.QPD[4][4][2].value)
     }
 
     @Test
@@ -75,19 +70,34 @@ class PixmRequestToPixQueryTranslatorTest {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('http://org.openehealth/ipf/commons/ihe/fhir/1')
                 .setValue('4711ABC')
-        UriType domainsReturned = new UriType('http://org.openehealth/ipf/commons/ihe/fhir/2')
-        Parameters params = new Parameters()
-        params.addParameter()
-                .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(systemIdentifier)
-        params.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(domainsReturned)
+        
+        PixmQueryParametersIn params = new PixmQueryParametersIn()
+                .setSourceIdentifier(systemIdentifier)
+                .addTargetSystem('http://org.openehealth/ipf/commons/ihe/fhir/2')
+        
         QBP_Q21 translated = translator.translateFhir(params, null)
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(mappingService.get('uriToOid', systemIdentifier.system), translated.QPD[3][4][2].value)
-        assertEquals(mappingService.get('uriToOid', domainsReturned.value), translated.QPD[4][4][2].value)
+        assertEquals(mappingService.get('uriToOid', 'http://org.openehealth/ipf/commons/ihe/fhir/2'), translated.QPD[4][4][2].value)
+    }
+
+    @Test
+    void testSuccessfulTranslateWithMultipleTargetSystems() {
+        Identifier systemIdentifier = new Identifier()
+                .setSystem('urn:oid:1.2.3.4')
+                .setValue('4711ABC')
+        
+        PixmQueryParametersIn params = new PixmQueryParametersIn()
+                .setSourceIdentifier(systemIdentifier)
+                .setTargetSystems(['urn:oid:1.2.3.4.5.6', 'urn:oid:1.2.3.4.5.7'])
+        
+        QBP_Q21 translated = translator.translateFhir(params, null)
+
+        assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
+        assertEquals(URN.create(systemIdentifier.system).namespaceSpecificString, translated.QPD[3][4][2].value)
+        assertEquals(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString, translated.QPD[4](0)[4][2].value)
+        assertEquals(URN.create('urn:oid:1.2.3.4.5.7').namespaceSpecificString, translated.QPD[4](1)[4][2].value)
     }
 
     @Test
@@ -95,19 +105,31 @@ class PixmRequestToPixQueryTranslatorTest {
         // System is taken from pixSupplierResourceIdentifierUri
         Identifier systemIdentifier = new Identifier().setValue('4711ABC')
 
-        UriType domainsReturned = new UriType('http://org.openehealth/ipf/commons/ihe/fhir/2')
-        Parameters params = new Parameters()
-        params.addParameter()
-                .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(systemIdentifier)
-        params.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(domainsReturned)
+        PixmQueryParametersIn params = new PixmQueryParametersIn()
+                .setSourceIdentifier(systemIdentifier)
+                .addTargetSystem('http://org.openehealth/ipf/commons/ihe/fhir/2')
+        
         QBP_Q21 translated = translator.translateFhir(params, null)
 
         assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
         assertEquals(mappingService.get('uriToOid', translator.pixSupplierResourceIdentifierUri), translated.QPD[3][4][2].value)
-        assertEquals(mappingService.get('uriToOid', domainsReturned.value), translated.QPD[4][4][2].value)
+        assertEquals(mappingService.get('uriToOid', 'http://org.openehealth/ipf/commons/ihe/fhir/2'), translated.QPD[4][4][2].value)
+    }
+
+    @Test
+    void testSuccessfulTranslateWithNoTargetSystem() {
+        Identifier systemIdentifier = new Identifier()
+                .setSystem('urn:oid:1.2.3.4')
+                .setValue('4711ABC')
+        
+        PixmQueryParametersIn params = new PixmQueryParametersIn()
+                .setSourceIdentifier(systemIdentifier)
+        
+        QBP_Q21 translated = translator.translateFhir(params, null)
+
+        assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
+        assertEquals(URN.create(systemIdentifier.system).namespaceSpecificString, translated.QPD[3][4][2].value)
+        // QPD[4] should not be populated when no target systems are specified
     }
 
     @Test
@@ -115,14 +137,19 @@ class PixmRequestToPixQueryTranslatorTest {
         Identifier systemIdentifier = new Identifier()
                 .setSystem('urn:isbn:1.2.3.4')
                 .setValue('4711ABC')
-        UriType domainsReturned = new UriType('urn:oid:1.2.3.5.6')
-        Parameters params = new Parameters()
-        params.addParameter()
-                .setName(Constants.SOURCE_IDENTIFIER_NAME)
-                .setValue(systemIdentifier)
-        params.addParameter()
-                .setName(Constants.TARGET_SYSTEM_NAME)
-                .setValue(domainsReturned)
+        
+        PixmQueryParametersIn params = new PixmQueryParametersIn()
+                .setSourceIdentifier(systemIdentifier)
+                .addTargetSystem('urn:oid:1.2.3.5.6')
+        
+        Assertions.assertThrows(InvalidRequestException.class, () -> translator.translateFhir(params, null))
+    }
+
+    @Test
+    void testMissingSourceIdentifier() {
+        PixmQueryParametersIn params = new PixmQueryParametersIn()
+                .addTargetSystem('urn:oid:1.2.3.4.5.6')
+        
         Assertions.assertThrows(InvalidRequestException.class, () -> translator.translateFhir(params, null))
     }
 }

@@ -18,162 +18,132 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd;
 import ca.uhn.fhir.context.FhirContext;
 import lombok.Getter;
 import org.hl7.fhir.instance.model.api.IBaseResource;
-import org.hl7.fhir.instance.model.api.IPrimitiveType;
-import org.hl7.fhir.r4.model.CanonicalType;
-import org.hl7.fhir.r4.model.Resource;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.*;
+import org.openehealth.ipf.commons.ihe.fhir.support.IheFhirProfile;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
-public enum MhdProfile implements Mhd423 {
+public enum MhdProfile implements Mhd423, IheFhirProfile {
 
     // Bundle Profiles V423
 
     ITI65_MINIMAL_BUNDLE(
         MhdProfile.ITI65_MINIMAL_BUNDLE_PROFILE,
-        MinimalProvideDocumentBundle.class,
-        "IHE.MHD.Minimal.ProvideBundle"),
+        MinimalProvideDocumentBundle.class),
 
     ITI65_COMPREHENSIVE_BUNDLE(
         MhdProfile.ITI65_COMPREHENSIVE_BUNDLE_PROFILE,
-        ComprehensiveProvideDocumentBundle.class,
-        "IHE.MHD.Comprehensive.ProvideBundle"),
+        ComprehensiveProvideDocumentBundle.class),
 
     ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE(
         MhdProfile.ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE,
-        UncontainedComprehensiveProvideDocumentBundle.class,
-        "IHE.MHD.UnContained.Comprehensive.ProvideBundle"),
+        UncontainedComprehensiveProvideDocumentBundle.class),
 
     ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE(
         MhdProfile.ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE,
-        ProvideDocumentBundleResponse.class,
-        "IHE.MHD.ProvideDocumentBundleResponse"),
+        ProvideDocumentBundleResponse.class),
 
     ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE(
         MhdProfile.ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE_PROFILE,
-        FindDocumentListsResponseBundle.class,
-        "IHE.MHD.FindDocumentListsResponseMessage"),
+        FindDocumentListsResponseBundle.class),
 
     ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE(
         MhdProfile.ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE,
-        FindMinimalDocumentReferencesResponseBundle.class,
-        "IHE.MHD.FindDocumentReferencesResponseMessage"
+        FindMinimalDocumentReferencesResponseBundle.class
     ),
 
     ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE(
         MhdProfile.ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE_PROFILE,
-        FindComprehensiveDocumentReferencesResponseBundle.class,
-        "IHE.MHD.FindDocumentReferencesComprehensiveResponseMessage"),
+        FindComprehensiveDocumentReferencesResponseBundle.class
+    ),
 
     // List profiles v423
 
     MHD_LIST(
         MhdProfile.MHD_LIST_PROFILE,
-        MhdList.class,
-        "IHE.MHD.List"),
+        MhdList.class),
 
     COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST(
         MhdProfile.COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST_PROFILE,
-        ComprehensiveSubmissionSetList.class,
-        "IHE.MHD.Comprehensive.SubmissionSet"),
+        ComprehensiveSubmissionSetList.class),
 
     UNCONTAINED_COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST(
         MhdProfile.UNCONTAINED_COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST_PROFILE,
-        UncontainedComprehensiveProvideDocumentBundle.class,
-        "IHE.MHD.UnContained.Comprehensive.SubmissionSet"),
+        UncontainedComprehensiveProvideDocumentBundle.class),
 
     MINIMAL_SUBMISSIONSET_TYPE_LIST(
         MhdProfile.MINIMAL_SUBMISSIONSET_TYPE_LIST_PROFILE,
-        MinimalSubmissionSetList.class,
-        "IHE.MHD.Minimal.SubmissionSet"),
+        MinimalSubmissionSetList.class),
 
     MINIMAL_FOLDER_TYPE_LIST(
         MhdProfile.MINIMAL_FOLDER_TYPE_LIST_PROFILE,
-        MinimalFolderList.class,
-        "IHE.MHD.Minimal.Folder"),
+        MinimalFolderList.class),
 
     COMPREHENSIVE_FOLDER_TYPE_LIST(
         MhdProfile.COMPREHENSIVE_FOLDER_TYPE_LIST_PROFILE,
-        ComprehensiveFolderList.class,
-        "IHE.MHD.Comprehensive.Folder"),
+        ComprehensiveFolderList.class),
 
     // DocumentReference profiles v423
 
     COMPREHENSIVE_DOCUMENT_REFERENCE(
         MhdProfile.COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE,
-        ComprehensiveDocumentReference.class,
-        "IHE.MHD.Comprehensive.DocumentReference"),
+        ComprehensiveDocumentReference.class),
 
     UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE(
         MhdProfile.UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE,
-        UncontainedComprehensiveDocumentReference.class,
-        "IHE.MHD.UnContained.Comprehensive.DocumentReference"),
+        UncontainedComprehensiveDocumentReference.class),
 
     MINIMAL_DOCUMENT_REFERENCE(
         MhdProfile.MINIMAL_DOCUMENT_REFERENCE_PROFILE,
-        MinimalDocumentReference.class,
-        "IHE.MHD.Minimal.DocumentReference"),
+        MinimalDocumentReference.class),
 
     SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE(
         MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE,
-        SimplifiedPublishDocumentReference.class,
-        "IHE.MHD.SimplifiedPublish.DocumentReference"),
+        SimplifiedPublishDocumentReference.class),
 
     // Parameters
 
     DOCUMENT_REFERENCE_PATCH_PARAMETERS(
         MhdProfile.DOCUMENT_REFERENCE_PATCH_PARAMETERS_PROFILE,
-        DocumentReferencePatchParameters.class,
-        "IHE.MHD.Patch.Parameters"),
+        DocumentReferencePatchParameters.class),
 
     GENERATE_METADATA_PARAMETERS_IN(
         MhdProfile.GENERATE_METADATA_PARAMETERS_IN_PROFILE,
-        GenerateMetadataInParameters.class,
-        "IHE.MHD.GenerateMetadata.Parameters.In"),
+        GenerateMetadataInParameters.class),
 
     GENERATE_METADATA_PARAMETERS_OUT(
         MhdProfile.GENERATE_METADATA_PARAMETERS_OUT_PROFILE,
-        GenerateMetadataOutParameters.class,
-        "IHE.MHD.GenerateMetadata.Parameters.Out"),
+        GenerateMetadataOutParameters.class),
 
     // Datatypes etc.
 
     DESIGNATION_TYPE(
         MhdProfile.DESIGNATION_TYPE_PROFILE,
-        null,
-        "ihe-designationType"),
+        null),
 
     AUTHOR_ORG(
         MhdProfile.AUTHOR_ORG_PROFILE,
-        null,
-        "ihe-authorOrg"),
+        null),
 
     INTENDED_RECIPIENT(
         MhdProfile.INTENDED_RECIPIENT_PROFILE,
-        null,
-        "ihe-intendedRecipient"),
+        null),
 
     SOURCE_ID(
         MhdProfile.SOURCE_ID_PROFILE,
-        null,
-        "ihe-sourceId"),
+        null),
 
     SUBMISSIONSET_UNIQUE_IDENTIFIER(
         MhdProfile.SUBMISSIONSET_UNIQUE_IDENTIFIER_PROFILE,
-        null,
-        "IHE.MHD.SubmissionSetUniqueIdIdentifier"),
+        null),
 
     UNIQUE_ID_IDENTIFIER(
         MhdProfile.UNIQUE_ID_IDENTIFIER_PROFILE,
-        null,
-        "IHE.MHD.UniqueIdIdentifier"),
+        null),
 
     ENTRY_UUID_IDENTIFIER(
         MhdProfile.ENTRY_UUID_IDENTIFIER_PROFILE,
-        null,
-        "IHE.MHD.EntryUUID.Identifier");
+        null);
 
 
     // Bundle Profiles V4
@@ -225,33 +195,13 @@ public enum MhdProfile implements Mhd423 {
     @Getter
     private final String url;
 
+    @Getter
     private final Class<? extends IBaseResource> resourceClass;
 
-    @Getter
-    private final String structureDefinitionName;
 
-
-    MhdProfile(String url, Class<? extends IBaseResource> resourceClass, String structureDefinitionName) {
+    MhdProfile(String url, Class<? extends IBaseResource> resourceClass) {
         this.url = url;
         this.resourceClass = resourceClass;
-        this.structureDefinitionName = structureDefinitionName;
-    }
-
-    /**
-     * Set the Meta/Profile of the resource
-     *
-     * @param resource FHIR resource
-     */
-    public void setProfile(Resource resource) {
-        resource.getMeta().setProfile(List.of(new CanonicalType(url)));
-    }
-
-    public boolean hasProfile(Resource resource) {
-        return resource.getMeta().hasProfile(url);
-    }
-
-    public String getStructureDefinitionResourceName() {
-        return "StructureDefinition-" + structureDefinitionName + ".xml";
     }
 
     /**
@@ -260,26 +210,17 @@ public enum MhdProfile implements Mhd423 {
      * @param fhirContext FhirContext
      */
     public static void registerDefaultTypes(FhirContext fhirContext) {
-        Arrays.stream(MhdProfile.values())
-            .filter(profile -> profile.resourceClass != null)
-            .forEach(profile -> fhirContext.setDefaultTypeForProfile(profile.url, profile.resourceClass));
-        fhirContext.registerCustomTypes(Arrays.asList(
+        IheFhirProfile.registerProfiles(fhirContext, MhdProfile.class,
             EntryUuidIdentifier.class, SubmissionSetUniqueIdIdentifier.class, UniqueIdIdentifier.class
-            // , Source.class
-        ));
+        );
     }
 
     public static Optional<MhdProfile> profileForResource(IBaseResource resource) {
-        return resource.getMeta().getProfile().stream()
-            .map(IPrimitiveType::getValue)
-            .findFirst()
-            .flatMap(MhdProfile::profileForUrl);
+        return IheFhirProfile.profileForResource(resource, MhdProfile.class);
     }
 
     public static Optional<MhdProfile> profileForUrl(String url) {
-        return Arrays.stream(MhdProfile.values())
-            .filter(p -> p.url.equalsIgnoreCase(url))
-            .findFirst();
+        return IheFhirProfile.profileForUrl(url, MhdProfile.class);
     }
 
 }

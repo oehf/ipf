@@ -17,8 +17,11 @@ package org.openehealth.ipf.commons.ihe.fhir.iti78;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmValidator;
+
+import java.util.Set;
 
 /**
  * Standard Configuration for Iti78Component. Supports lazy-loading by default.
@@ -37,7 +40,10 @@ public class Iti78TransactionConfiguration extends FhirTransactionConfiguration<
                 FhirVersionEnum.R4,
                 new Iti78ResourceProvider(),                    // Consumer side. accept patient searches
                 new Iti78QueryResourceClientRequestFactory(),
-                FhirTransactionValidator.NO_VALIDATION);
+                PdqmValidator::new);
+        setResponseValidationProfiles(Set.of(
+            PdqmProfile.ITI78_QUERY_PATIENT_RESOURCE_RESPONSE_MESSAGE_PROFILE
+        ));
         setSupportsLazyLoading(true);
     }
 }

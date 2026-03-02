@@ -20,7 +20,8 @@ import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import org.hl7.fhir.r4.model.Bundle;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmPatient;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,7 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
     public static void startServer(String contextDescriptor, boolean secure) {
         var servlet = new IpfFhirServlet(FhirVersionEnum.R4);
         startServer(servlet, contextDescriptor, secure, FhirTestContainer.DEMO_APP_PORT, "FhirServlet");
+        PdqmProfile.registerDefaultTypes(serverFhirContext);
     }
 
     public static void startClient() {
@@ -42,12 +44,12 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
     }
 
     protected ICriterion<?> familyParameters() {
-        return PdqPatient.FAMILY.matches().value("Test");
+        return PdqmPatient.FAMILY.matches().value("Test");
     }
 
     protected Bundle sendManually(ICriterion<?> requestData) {
         return client.search()
-                .forResource(PdqPatient.class)
+                .forResource(PdqmPatient.class)
                 .where(requestData)
                 .returnBundle(Bundle.class)
                 .encodedXml()
@@ -56,11 +58,11 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
 
     protected Bundle sendManuallyWithCountAndOrder(ICriterion<?> requestData, int count) {
         return client.search()
-                .forResource(PdqPatient.class)
+                .forResource(PdqmPatient.class)
                 .where(requestData)
                 .count(count)
-                .sort().ascending(PdqPatient.FAMILY)
-                .sort().ascending(PdqPatient.GIVEN)
+                .sort().ascending(PdqmPatient.FAMILY)
+                .sort().ascending(PdqmPatient.GIVEN)
                 .returnBundle(Bundle.class)
                 .encodedXml()
                 .execute();
@@ -77,14 +79,14 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
     protected Bundle nextPage(Bundle bundle) {
         return client.loadPage()
                 .next(bundle)
-                .preferResponseType(PdqPatient.class)
+                .preferResponseType(PdqmPatient.class)
                 .execute();
     }
 
     protected Bundle previousPage(Bundle bundle) {
         return client.loadPage()
                 .previous(bundle)
-                .preferResponseType(PdqPatient.class)
+                .preferResponseType(PdqmPatient.class)
                 .execute();
     }
 

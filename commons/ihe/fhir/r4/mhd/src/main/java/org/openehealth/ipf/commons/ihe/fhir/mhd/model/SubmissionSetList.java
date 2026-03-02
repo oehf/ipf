@@ -22,6 +22,7 @@ import ca.uhn.fhir.util.ElementUtil;
 import org.hl7.fhir.r4.model.*;
 import org.ietf.jgss.Oid;
 import org.openehealth.ipf.commons.core.URN;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,17 +36,17 @@ public abstract class SubmissionSetList<T extends SubmissionSetList<T>> extends 
     }
 
     @Child(name = "designationType", type = CodeableConcept.class, order = 1)
-    @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-designationType", definedLocally = false)
+    @Extension(url = MhdProfile.DESIGNATION_TYPE_PROFILE, definedLocally = false)
     @Description(shortDefinition = "Clinical code of the List")
     private CodeableConcept designationType;
 
     @Child(name = "sourceId", type = Identifier.class, order = 2)
-    @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-sourceId", definedLocally = false)
+    @Extension(url = MhdProfile.SOURCE_ID_PROFILE, definedLocally = false)
     @Description(shortDefinition = "Publisher organization identity of the SubmissionSet")
     private Identifier sourceId;
 
     @Child(name = "intendedRecipient", type = Reference.class, order = 3, max = Child.MAX_UNLIMITED)
-    @Extension(url = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-intendedRecipient", definedLocally = false)
+    @Extension(url = MhdProfile.INTENDED_RECIPIENT_PROFILE, definedLocally = false)
     @Description(shortDefinition = "Intended recipient of the SubmissionSet")
     private List<Reference> intendedRecipient;
 

@@ -30,6 +30,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchAndSortParameters;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmPatient;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,7 +48,7 @@ import static java.util.Comparator.nullsLast;
 @Builder
 @ToString
 @AllArgsConstructor
-public class Iti78SearchParameters extends FhirSearchAndSortParameters<PdqPatient> {
+public class Iti78SearchParameters extends FhirSearchAndSortParameters<PdqmPatient> {
 
     @Getter @Setter private TokenAndListParam identifiers;
     @Getter @Setter private TokenParam active;
@@ -82,17 +83,17 @@ public class Iti78SearchParameters extends FhirSearchAndSortParameters<PdqPatien
     }
 
     @Override
-    public Optional<Comparator<PdqPatient>> comparatorFor(String paramName) {
+    public Optional<Comparator<PdqmPatient>> comparatorFor(String paramName) {
         return switch (paramName) {
-            case PdqPatient.SP_BIRTHDATE -> Optional.of(CP_DATE);
-            case PdqPatient.SP_FAMILY -> Optional.of(CP_FAMILY);
-            case PdqPatient.SP_GIVEN -> Optional.of(CP_GIVEN);
+            case PdqmPatient.SP_BIRTHDATE -> Optional.of(CP_DATE);
+            case PdqmPatient.SP_FAMILY -> Optional.of(CP_FAMILY);
+            case PdqmPatient.SP_GIVEN -> Optional.of(CP_GIVEN);
             default -> Optional.empty();
         };
     }
 
-    private static final Comparator<PdqPatient> CP_DATE = nullsLast(comparing(PdqPatient::getBirthDate));
-    private static final Comparator<PdqPatient> CP_FAMILY = nullsLast(comparing(patient -> patient.getNameFirstRep().getFamily()));
-    private static final Comparator<PdqPatient> CP_GIVEN = nullsLast(comparing(patient -> patient.getNameFirstRep().getGivenAsSingleString()));
+    private static final Comparator<PdqmPatient> CP_DATE = nullsLast(comparing(PdqmPatient::getBirthDate));
+    private static final Comparator<PdqmPatient> CP_FAMILY = nullsLast(comparing(patient -> patient.getNameFirstRep().getFamily()));
+    private static final Comparator<PdqmPatient> CP_GIVEN = nullsLast(comparing(patient -> patient.getNameFirstRep().getGivenAsSingleString()));
 
 }

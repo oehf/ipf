@@ -173,7 +173,7 @@ public class AttributeType {
      * <p>
      * the map is keyed by the name of the attribute and 
      * the value is the string value of the attribute.
-     * 
+     * <p>
      * the map returned by this method is live, and you can add new attribute
      * by updating the map directly. Because of this design, there's no setter.
      * 

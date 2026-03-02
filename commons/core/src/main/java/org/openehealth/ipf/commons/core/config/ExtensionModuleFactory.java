@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Extension module that wraps the registration inside logging
  * statements so that the extension process can be observed if necessary.
- *
+ * <p>
  * In order to load the extensions with this class,
  * the extension module descriptor must contain a corresponding line:
  * <p>

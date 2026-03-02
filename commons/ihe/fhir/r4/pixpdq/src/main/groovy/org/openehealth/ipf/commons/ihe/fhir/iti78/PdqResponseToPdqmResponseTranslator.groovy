@@ -29,7 +29,9 @@ import org.hl7.fhir.r4.model.HumanName.NameUse
 import org.hl7.fhir.r4.model.codesystems.V3MaritalStatus
 import org.hl7.fhir.r4.model.codesystems.V3NullFlavor
 import org.hl7.fhir.r4.model.codesystems.V3ReligiousAffiliation
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.GenderIdentity
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmPatient
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UnmappableUriException
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
@@ -75,7 +77,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         requireNonNull(pdqSupplierResourceIdentifierUri, "Resource Identifier URI must not be null")
         this.pdqSupplierResourceIdentifierUri = pdqSupplierResourceIdentifierUri
         this.pdqSupplierResourceIdentifierOid = uriMapper.uriToOid(pdqSupplierResourceIdentifierUri)
-                .orElseThrow({new UnmappableUriException(pdqSupplierResourceIdentifierUri)})
+            .orElseThrow({ new UnmappableUriException(pdqSupplierResourceIdentifierUri) })
     }
 
     void setNationalIdentifierUri(String nationalIdentifierUri) {
@@ -83,7 +85,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
     }
 
     @Override
-    List<PdqPatient> translateToFhir(Message message, Map<String, Object> parameters) {
+    List<PdqmPatient> translateToFhir(Message message, Map<String, Object> parameters) {
         String ackCode = message.QAK[2].value
         switch (ackCode) {
             case 'OK': return handleRegularSearchResponse(message.QUERY_RESPONSE()) // Case 1,2
@@ -98,11 +100,11 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      * @param responseCollection query responses
      * @return Patient resource list
      */
-    protected List<PdqPatient> handleRegularSearchResponse(responseCollection) {
-        def resultList = new ArrayList<PdqPatient>()
+    protected List<PdqmPatient> handleRegularSearchResponse(responseCollection) {
+        def resultList = new ArrayList<PdqmPatient>()
         if (responseCollection) {
             for (response in responseCollection) {
-                PdqPatient patient = pidToPatient(response)
+                PdqmPatient patient = pidToPatient(response)
                 addSearchScore(patient, response)
                 resultList.add(patient)
             }
@@ -110,7 +112,7 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         resultList
     }
 
-    protected static void addSearchScore(PdqPatient pdqPatient, response) {
+    protected static void addSearchScore(PdqmPatient pdqPatient, response) {
         ResourceMetadataKeyEnum.ENTRY_SEARCH_MODE.put(pdqPatient, BundleEntrySearchModeEnum.MATCH)
         /*
         String searchScoreString = response.QRI[1]?.value
@@ -121,15 +123,15 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
         */
     }
 
-    protected PdqPatient pidToPatient(response) {
-        PdqPatient patient = new PdqPatient()
+    protected PdqmPatient pidToPatient(response) {
+        PdqmPatient patient = new PdqmPatient()
         PID pid = response.PID
 
         // This assigns the resource ID. It is taken from the PID-3 identifier list where the
         // namespace matches pdqSupplierResourceIdentifierOid
-        def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2].value }
+        def resourcePid = pid[3]().find { pid3 -> pdqSupplierResourceIdentifierOid == pid3[4][2]?.value }
         if (resourcePid) {
-            patient.setId(new IdType('Patient', resourcePid[1].value))
+            patient.setId(new IdType('Patient', resourcePid[1]?.value))
         } else {
             log.warn("No ID found with resource system URI {}", pdqSupplierResourceIdentifierUri)
         }
@@ -141,9 +143,11 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
             convertNames(pid[5](), patient.getName())
         }
         if (!pid[6].empty) {
-            patient.setMothersMaidenName(convertName(pid[6]))
+            patient.setMothersMaidenName(pid[6][1]?.value)
         }
-        if (pid[7]?.value) patient.setBirthDateElement(DateType.parseV3(pid[7].value))
+        if (pid[7]?.value) {
+            patient.setBirthDateElement(DateType.parseV3(pid[7].value))
+        }
 
         String gender = pid[8]?.value
         convertGender(gender, patient)
@@ -172,15 +176,17 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     mappedMaritalStatus = V3NullFlavor.UNK; break
                 case "U":
                     mappedMaritalStatus = new Coding()
-                            .setSystem('http://hl7.org/fhir/marital-status')
-                            .setCode('U')
-                            .setDisplay('Unmarried'); break
+                        .setSystem('http://hl7.org/fhir/marital-status')
+                        .setCode('U')
+                        .setDisplay('Unmarried'); break
                 default: mappedMaritalStatus = V3MaritalStatus.fromCode(mapped)
             }
             patient.setMaritalStatus(makeCodeableConcept(mapped, mappedMaritalStatus.system, mappedMaritalStatus.display))
         }
 
-        if (pid[17].value) {
+        // Not part of PDQm profile
+
+        if (pid[17]?.value) {
             String mapped = pid[17].value.map('hl7v2fhir-patient-religion')
             def mappedReligion
             switch (mapped) {
@@ -189,38 +195,39 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                 default: mappedReligion = V3ReligiousAffiliation.fromCode(mapped)
             }
             patient.addReligion(makeCodeableConcept(mapped, mappedReligion.system, mappedReligion.display))
-
-
         }
 
-        if (pid[18].value) {
+        if (pid[18]?.value) {
             patient.addIdentifier(convertIdentifier(pid[18]))
         }
 
-        if (pid[19].value) {
+        if (pid[19]?.value) {
             patient.addIdentifier(new Identifier()
-                    .setSystem(nationalIdentifierUri)
-                    .setValue(pid[19].value))
+                .setSystem(nationalIdentifierUri)
+                .setValue(pid[19].value))
         }
 
         // No ethnicity (22) in the default FHIR patient resource (but in the US Core profile). Conversion not implemented yet
 
-        // No birth place in the default FHIR patient resource
-        if (!pid[23].empty) {
+        // Not part of PDQm profile
+
+        if (!pid[23]?.empty) {
             XAD xad = new XAD(null)
             xad[3] = pid[23].value
             patient.setBirthPlace(convertAddress(xad))
         }
 
         // Multiple Birth
-        if (pid[25].value) {
+        if (pid[25]?.value) {
             patient.setMultipleBirth(new IntegerType(pid[25].value))
-        } else if (pid[24].value) {
+        } else if (pid[24]?.value) {
             patient.setMultipleBirth(new BooleanType(pid[24].value == 'Y'))
         }
 
+        // Not part of PDQm profile
+
         // Citizenship
-        if (pid[26].value) {
+        if (pid[26]?.value) {
             String mapped = pid[26].value.map('hl7v2fhir-patient-citizenship')
             def mappedCitizenship
             switch (mapped) {
@@ -232,44 +239,44 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
                     .setDisplay(mapped)
             }
             patient.addCitizenship()
-                    .setCode(makeCodeableConcept(mapped, mappedCitizenship.system, mappedCitizenship.display))
+                .setCode(makeCodeableConcept(mapped, mappedCitizenship.system, mappedCitizenship.display))
         }
 
         // Death Indicators
-        if (pid[29].value) {
+        if (pid[29]?.value) {
             patient.setDeceased(DateTimeType.parseV3(pid[29].value))
-        } else if (pid[30].value) {
+        } else if (pid[30]?.value) {
             patient.setDeceased(new BooleanType(pid[30].value == 'Y'))
         }
 
         patient
     }
 
-    protected void convertGender(String gender, PdqPatient patient) {
+    protected void convertGender(String gender, PdqmPatient patient) {
         if (gender) {
             patient.setGender(
-                    Enumerations.AdministrativeGender.fromCode(gender.map('hl7v2fhir-patient-administrativeGender').toString()))
-            patient.setGenderIdentity(
-                    makeCodeableConcept(
-                            gender.map('hl7v2fhir-patient-genderIdentity').toString(),
-                            'hl7v2fhir-patient-genderIdentity'.valueSystem(),
-                            null
-                    ))
+                Enumerations.AdministrativeGender.fromCode(gender.map('hl7v2fhir-patient-administrativeGender').toString()))
+            patient.addGenderIdentity(new GenderIdentity().setValue(
+                makeCodeableConcept(
+                    gender.map('hl7v2fhir-patient-genderIdentity').toString(),
+                    'hl7v2fhir-patient-genderIdentity'.valueSystem(),
+                    null
+                )))
         }
     }
 
     protected static CodeableConcept makeCodeableConcept(String code, String system, String display) {
         CodeableConcept codeableConcept = new CodeableConcept()
         codeableConcept.addCoding()
-                .setCode(code)
-                .setSystem(system)
-                .setDisplay(display)
+            .setCode(code)
+            .setSystem(system)
+            .setDisplay(display)
         codeableConcept
     }
 
 
     // Handle an error response from the Cross-reference manager
-    protected static List<PdqPatient> handleErrorResponse(RSP_K21 message) {
+    protected static List<PdqmPatient> handleErrorResponse(RSP_K21 message) {
 
         // Check error locations
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
@@ -298,9 +305,9 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      */
     protected Identifier convertIdentifier(cx) {
         Identifier identifier = new Identifier()
-                .setUse(Identifier.IdentifierUse.OFFICIAL)
-                .setSystem(uriMapper.oidToUri(cx[4][2]?.value))
-                .setValue(cx[1]?.value)
+            .setUse(Identifier.IdentifierUse.OFFICIAL)
+            .setSystem(uriMapper.oidToUri(cx[4][2]?.value))
+            .setValue(cx[1]?.value)
         identifier
     }
 
@@ -317,12 +324,12 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      */
     protected Address convertAddress(xad) {
         Address address = new Address()
-                .setCity(xad[3]?.value)
-                .setCountry(xad[6]?.value)
-                .setPostalCode(xad[5]?.value)
-                .setState(xad[4]?.value)
-                .setDistrict(xad[9]?.value)
-                .setUse(addressUse(xad[7], AddressUse.HOME))
+            .setCity(xad[3]?.value)
+            .setCountry(xad[6]?.value)
+            .setPostalCode(xad[5]?.value)
+            .setState(xad[4]?.value)
+            .setDistrict(xad[9]?.value)
+            .setUse(addressUse(xad[7], AddressUse.HOME))
         if (xad[1]?.value) address.addLine(xad[1]?.value)
         if (xad[2]?.value) address.addLine(xad[2]?.value)
         address
@@ -362,12 +369,12 @@ class PdqResponseToPdqmResponseTranslator implements ToFhirTranslator<Message> {
      */
     protected ContactPoint convertTelecom(xtn, ContactPointUse defaultUse, ContactPointSystem defaultSystem) {
         ContactPoint telecom = new ContactPoint()
-                .setUse(telecomUse(xtn[2], defaultUse))
-                .setSystem(telecomSystem(xtn[3], defaultSystem))
-                .setValue(xtn[1]?.value)
+            .setUse(telecomUse(xtn[2], defaultUse))
+            .setSystem(telecomSystem(xtn[3], defaultSystem))
+            .setValue(xtn[1]?.value)
         if (xtn[4]?.value) {
             telecom.setSystem(ContactPointSystem.EMAIL)
-                    .setValue(xtn[4].value)
+                .setValue(xtn[4].value)
         }
         if ("CP" == xtn[3]?.value) {
             telecom.setUse(ContactPointUse.MOBILE)

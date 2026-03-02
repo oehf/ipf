@@ -15,12 +15,14 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Telecom;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
-import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INCONSISTENT_TELECOM_PARAM;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_TELECOM_PARAM;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_TELECOM_TYPE;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.WRONG_TELECOM_USE;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**

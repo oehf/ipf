@@ -16,9 +16,9 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti119;
 
 import org.hl7.fhir.r4.model.HumanName;
-import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.codesystems.MatchGrade;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersIn;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,7 +32,7 @@ public enum ResponseCase {
 
     OK;
 
-    public List<Patient> populateResponse(Parameters request) {
+    public List<Patient> populateResponse(PixmQueryParametersIn request) {
         var patient = new Patient()
             .addName(new HumanName().setFamily("Test"));
         patient.setId("Patient/4711");

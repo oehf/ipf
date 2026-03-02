@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate;
 
 import org.apache.commons.lang3.BooleanUtils;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.ReferenceId;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;

@@ -17,12 +17,15 @@ package org.openehealth.ipf.commons.ihe.fhir.iti119;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78QueryResourceClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmValidator;
+
+import java.util.Set;
 
 /**
- * Standard Configuration for Iti119Component. Supports lazy-loading by default.
+ * Standard Configuration for Iti119Component (Patient Demographics Match).
+ * This transaction uses the $match operation with input Parameters and returns a Bundle of matching patients.
  *
  * @author Christian Ohr
  * @since 5.0
@@ -36,9 +39,15 @@ public class Iti119TransactionConfiguration extends FhirTransactionConfiguration
                 new Iti119ClientAuditStrategy(),
                 new Iti119ServerAuditStrategy(),
                 FhirVersionEnum.R4,
-                new Iti119ResourceProvider(),                    // Consumer side. Accept patient searches
+                new Iti119ResourceProvider(),                    // Consumer side. Accept patient match requests
                 new Iti119ClientRequestFactory(),
-                FhirTransactionValidator.NO_VALIDATION);
+                PdqmValidator::new);
+        setRequestValidationProfiles(Set.of(
+            PdqmProfile.ITI119_MATCH_INPUT_PARAMETERS_PROFILE
+        ));
+        setResponseValidationProfiles(Set.of(
+            PdqmProfile.ITI119_MATCH_OUTPUT_BUNDLE_PROFILE
+        ));
         setSupportsLazyLoading(true);
     }
 }

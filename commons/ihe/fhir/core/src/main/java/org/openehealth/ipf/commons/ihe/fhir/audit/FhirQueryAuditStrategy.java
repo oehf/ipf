@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.audit;
 
+import ca.uhn.fhir.rest.param.BaseParam;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
@@ -61,7 +62,7 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
             if (tokenParams != null) {
                 dataset.getPatientIds().addAll(
                         tokenParams.stream()
-                                .map(t -> t.getValueAsQueryToken(searchParameter.getFhirContext()))
+                                .map(BaseParam::getValueAsQueryToken)
                                 .toList());
             }
         }

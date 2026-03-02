@@ -53,7 +53,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.UNCONTAINED_CO
 
 /**
  * Validator for ITI-65 transactions.
- *
+ * <p>
  * THIS does not work properly!
  *
  * @author Christian Ohr

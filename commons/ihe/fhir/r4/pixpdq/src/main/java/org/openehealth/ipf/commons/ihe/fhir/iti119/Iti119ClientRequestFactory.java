@@ -27,7 +27,9 @@ import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 
 import java.util.Map;
 
-import static org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119Constants.RESOURCE;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters.COUNT_PARAM;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters.ONLY_CERTAIN_MATCHES_PARAM;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters.RESOURCE_PARAM;
 
 /**
  * Request Factory for Iti-119 requests
@@ -47,11 +49,11 @@ public class Iti119ClientRequestFactory implements ClientRequestFactory<IOperati
         var p = new Parameters();
         if (requestData instanceof Patient patient) {
             p.addParameter().setResource(patient);
-        } else if (parameters.containsKey(RESOURCE) && parameters.get(RESOURCE) instanceof Patient patient) {
+        } else if (parameters.containsKey(RESOURCE_PARAM) && parameters.get(RESOURCE_PARAM) instanceof Patient patient) {
             p.addParameter().setResource(patient);
         }
         parameters.entrySet().stream()
-            .filter(entry -> Iti119Constants.ITI119_PARAMETERS.contains(entry.getKey()))
+            .filter(entry -> ONLY_CERTAIN_MATCHES_PARAM.equals(entry.getKey()) || COUNT_PARAM.equals(entry.getKey()))
             .forEach(entry -> p.addParameter()
                 .setName(entry.getKey())
                 .setValue(new StringType(entry.getValue().toString())));

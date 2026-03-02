@@ -17,7 +17,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti119;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.support.ExpressionAdapter;
-import org.hl7.fhir.r4.model.Parameters;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersIn;
 
 public class Iti119Responder extends ExpressionAdapter {
 
@@ -29,7 +29,7 @@ public class Iti119Responder extends ExpressionAdapter {
 
     @Override
     public Object evaluate(Exchange exchange) {
-        Parameters request = exchange.getIn().getBody(Parameters.class);
+        var request = exchange.getIn().getBody(PixmQueryParametersIn.class);
         return responseCase.populateResponse(request);
     }
 }

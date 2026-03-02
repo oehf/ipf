@@ -32,11 +32,14 @@ import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.PositiveIntType;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmPatient;
 
 import java.util.Set;
 
-import static org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119Constants.*;
+import static org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119Constants.PDQM_MATCH_OPERATION_NAME;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters.COUNT_PARAM;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters.ONLY_CERTAIN_MATCHES_PARAM;
+import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters.RESOURCE_PARAM;
 
 /**
  * Resource Provider for PDQm Match (ITI-119) for R4
@@ -61,11 +64,11 @@ public class Iti119ResourceProvider extends AbstractPlainProvider {
      * @return {@link IBundleProvider} instance that manages retrieving patients
      */
     @SuppressWarnings("unused")
-    @Operation(name = PDQM_MATCH_OPERATION_NAME, type = PdqPatient.class, bundleType = BundleTypeEnum.SEARCHSET)
+    @Operation(name = PDQM_MATCH_OPERATION_NAME, type = PdqmPatient.class, bundleType = BundleTypeEnum.SEARCHSET)
     public IBundleProvider pdqmMatch(
-        @OperationParam(name = RESOURCE, type = Patient.class) Patient resource,
-        @OperationParam(name = ONLY_CERTAIN_MATCHES, type = BooleanType.class) BooleanType onlyCertainMatches,
-        @OperationParam(name = COUNT, type = PositiveIntType.class) PositiveIntType count,
+        @OperationParam(name = RESOURCE_PARAM, type = Patient.class) Patient resource,
+        @OperationParam(name = ONLY_CERTAIN_MATCHES_PARAM, type = BooleanType.class) BooleanType onlyCertainMatches,
+        @OperationParam(name = COUNT_PARAM, type = PositiveIntType.class) PositiveIntType count,
         @Sort SortSpec sortSpec,
         @IncludeParam Set<Include> includeSpec,
         RequestDetails requestDetails,

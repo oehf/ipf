@@ -32,7 +32,7 @@ import java.util.regex.Pattern;
  * URN abstraction, following the pattern of URI and URL classes. This is not meant as a generic
  * URN representation as defined in RFC 2141, but limited to its uses in healthcare domain,
  * specifically for encoding UUIDs and OIDs.
- *
+ * <p>
  * Note that in URNs the namespace identifier is case-insensitive
  */
 public final class URN implements Comparable<URN>, Serializable {

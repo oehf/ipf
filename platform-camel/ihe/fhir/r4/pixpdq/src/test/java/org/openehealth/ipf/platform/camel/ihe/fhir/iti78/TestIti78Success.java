@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirParticipantObjectIdTypeCode;
-import org.openehealth.ipf.commons.ihe.fhir.iti78.PdqPatient;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmPatient;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
 
 import java.nio.charset.StandardCharsets;
@@ -61,7 +61,7 @@ public class TestIti78Success extends AbstractTestIti78 {
         assertTrue(result.hasEntry());
 
 
-        var p = (PdqPatient)result.getEntry().get(0).getResource();
+        var p = (PdqmPatient)result.getEntry().get(0).getResource();
         assertEquals("Test", p.getName().get(0).getFamily());
         assertEquals("http://localhost:8999/Patient/4711", p.getId());
 
@@ -116,7 +116,7 @@ public class TestIti78Success extends AbstractTestIti78 {
     @Test
     public void testGetResource() {
         var p = client.read()
-                .resource(PdqPatient.class)
+                .resource(PdqmPatient.class)
                 .withId("4711")
                 .execute();
         assertEquals("Test", p.getName().get(0).getFamily());

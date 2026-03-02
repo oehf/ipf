@@ -93,8 +93,8 @@ public class Pharm5SearchParameters extends FhirSearchAndSortParameters<Document
         return Optional.empty();
     }
 
-    public String getQueryString(FhirContext context) {
-        return this.patientIdentifier.getValueAsQueryToken(context);
+    public String getQueryString() {
+        return this.patientIdentifier.getValueAsQueryToken();
     }
 
 
@@ -106,65 +106,67 @@ public class Pharm5SearchParameters extends FhirSearchAndSortParameters<Document
 
         if (this.getPatientIdentifier() != null) {
             parameters.addParameter(Pharm5ResourceProvider.SP_PATIENT_IDENTIFIER,
-                    new StringType(this.getPatientIdentifier().getValueAsQueryToken(fhirContext)));
+                    new StringType(this.getPatientIdentifier().getValueAsQueryToken()));
         }
         if (this.getDate() != null) {
-            this.getDate().getValuesAsQueryTokens().forEach(dateParam -> parameters.addParameter(DocumentReference.SP_DATE, new StringType(dateParam.getValueAsQueryToken(fhirContext))));
+            this.getDate().getValuesAsQueryTokens().forEach(dateParam ->
+                parameters.addParameter(DocumentReference.SP_DATE, new StringType(dateParam.getValueAsQueryToken())));
         }
         if (this.getAuthorFamilyName() != null) {
             parameters.addParameter(Pharm5ResourceProvider.SP_AUTHOR_FAMILY,
-                    new StringType(this.getAuthorFamilyName().getValueAsQueryToken(fhirContext)));
+                    new StringType(this.getAuthorFamilyName().getValueAsQueryToken()));
         }
         if (this.getAuthorGivenName() != null) {
             parameters.addParameter(Pharm5ResourceProvider.SP_AUTHOR_GIVEN,
-                    new StringType(this.getAuthorGivenName().getValueAsQueryToken(fhirContext)));
+                    new StringType(this.getAuthorGivenName().getValueAsQueryToken()));
         }
         if (this.getIdentifier() != null) {
             parameters.addParameter(DocumentReference.SP_IDENTIFIER,
-                    new StringType(this.getIdentifier().getValueAsQueryToken(fhirContext)));
+                    new StringType(this.getIdentifier().getValueAsQueryToken()));
         }
         if (this.getStatus() != null) {
             parameters.addParameter(DocumentReference.SP_STATUS, new StringType(
                     this.getStatus().getValuesAsQueryTokens().stream()
-                            .map(tokenParam -> tokenParam.getValueAsQueryToken(fhirContext))
+                            .map(BaseParam::getValueAsQueryToken)
                             .collect(Collectors.joining(","))
             ));
         }
         if (this.getSetting() != null) {
             parameters.addParameter(DocumentReference.SP_SETTING, new StringType(
                     this.getSetting().getValuesAsQueryTokens().stream()
-                            .map(tokenParam -> tokenParam.getValueAsQueryToken(fhirContext))
+                            .map(BaseParam::getValueAsQueryToken)
                             .collect(Collectors.joining(","))
             ));
         }
         if (this.getPeriod() != null) {
-            this.getPeriod().getValuesAsQueryTokens().forEach(dateParam -> parameters.addParameter(DocumentReference.SP_PERIOD, new StringType(dateParam.getValueAsQueryToken(fhirContext))));
+            this.getPeriod().getValuesAsQueryTokens().forEach(dateParam ->
+                parameters.addParameter(DocumentReference.SP_PERIOD, new StringType(dateParam.getValueAsQueryToken())));
         }
         if (this.getFacility() != null) {
             parameters.addParameter(DocumentReference.SP_FACILITY, new StringType(
                     this.getFacility().getValuesAsQueryTokens().stream()
-                            .map(tokenParam -> tokenParam.getValueAsQueryToken(fhirContext))
+                            .map(BaseParam::getValueAsQueryToken)
                             .collect(Collectors.joining(","))
             ));
         }
         if (this.getEvent() != null) {
             parameters.addParameter(DocumentReference.SP_EVENT, new StringType(
                     this.getEvent().getValuesAsQueryTokens().stream()
-                            .map(tokenParam -> tokenParam.getValueAsQueryToken(fhirContext))
+                            .map(BaseParam::getValueAsQueryToken)
                             .collect(Collectors.joining(","))
             ));
         }
         if (this.getSecurityLabel() != null) {
             parameters.addParameter(DocumentReference.SP_SECURITY_LABEL, new StringType(
                     this.getSecurityLabel().getValuesAsQueryTokens().stream()
-                            .map(tokenParam -> tokenParam.getValueAsQueryToken(fhirContext))
+                            .map(BaseParam::getValueAsQueryToken)
                             .collect(Collectors.joining(","))
             ));
         }
         if (this.getFormat() != null) {
             parameters.addParameter(DocumentReference.SP_FORMAT, new StringType(
                     this.getFormat().getValuesAsQueryTokens().stream()
-                            .map(tokenParam -> tokenParam.getValueAsQueryToken(fhirContext))
+                            .map(BaseParam::getValueAsQueryToken)
                             .collect(Collectors.joining(","))
             ));
         }

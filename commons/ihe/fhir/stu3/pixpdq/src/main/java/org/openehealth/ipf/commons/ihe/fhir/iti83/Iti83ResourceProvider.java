@@ -35,7 +35,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.TARGET_SYSTEM_NAME;
 /**
  * According to the PIXM specification, this resource provider must handle requests in the form
  * GET [base]/Patient/$ihe-pix?sourceIdentifier=[token]]{&targetSystem=[uri]}{&_format=[mime-type]}
- *
+ * <p>
  * Also allows a non-standard read with GET [base]/Patient/[id]/$ihe-pix
  *
  * @author Christian Ohr

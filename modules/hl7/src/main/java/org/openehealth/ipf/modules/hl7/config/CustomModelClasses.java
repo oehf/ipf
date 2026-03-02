@@ -22,8 +22,7 @@ import java.util.Map;
  * This class should be used to define the custom HL7 model classes
  * in the spring context definition.
  * 
- * <pre class="code">
- *
+ * <pre class="code">*
  *  &lt;bean id="customClasses" 
  *    class="org.openehealth.ipf.modules.hl7.config.CustomModelClasses"&gt;
  *    &lt;property name="modelClasses"&gt;

@@ -68,7 +68,7 @@ public abstract class SslAwareAbstractRestfulClientFactory<T> extends RestfulCli
     /**
      * Possibility to instantiate a subclassed builder for building Http Clients. This can be useful
      * if e.g. created Http Clients need to be instrumented or specially configured.
-     *
+     * <p>
      * The default implementation uses (if present) {@link #httpClientBuilder} or else calls {@link #newHttpClientBuilder()}.
      *
      * @return HttpClientBuilder instance

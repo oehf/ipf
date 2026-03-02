@@ -64,22 +64,16 @@ public class Association implements Serializable, ExtraMetadataHolder {
     @Getter @Setter private Code docCode;
     @Getter @Setter private String previousVersion;
     /**
-     * @return original status slot value
-     * @param originalStatus
-     *           value of originalStatus in update availabilityStatus
+     * original status slot value
      */
     @Getter @Setter private AvailabilityStatus originalStatus;
     /**
-     * @return new status slot value
-     * @param newStatus value of newStatus in update availabilityStatus
+     * new status slot value
      */
     @Getter @Setter private AvailabilityStatus newStatus;
     @Getter @Setter private Boolean associationPropagation;
     /**
-    *
-    * @return availabilityStatus value in XDS metadata update association
-    * @param availabilityStatus
-    *           value of availabilityStatus in XDS metadata update association
+    * availabilityStatus value in XDS metadata update association
     */
     @Getter @Setter private AvailabilityStatus availabilityStatus;
 

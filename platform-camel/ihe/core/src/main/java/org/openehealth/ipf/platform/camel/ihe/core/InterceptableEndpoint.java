@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * Interface for endpoints that use the Interceptor framework defined in this module.
- *
+ * <p>
  * This has been changed to an interface with default methods as of IPF 3.2 so that it
  * can also be used when extending other endpoint types than DefaultEndpoint.
  *

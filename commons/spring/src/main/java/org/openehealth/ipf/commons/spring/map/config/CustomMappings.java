@@ -38,8 +38,7 @@ import java.util.Collections;
  *                &lt;value&gt;classpath:configurer2.map&lt;/value&gt;
  *            &lt;/list&gt;
  *        &lt;/property&gt;
- *    &lt;/bean&gt;
- *
+ *    &lt;/bean&gt;*
  *    &lt;!-- or as a single mapping definition --&gt;
  *    &lt;bean id="customMappingSingle"
  *        class="org.openehealth.ipf.commons.map.config.CustomMappings"&gt;

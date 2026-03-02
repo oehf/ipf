@@ -17,11 +17,16 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmValidator;
+
+import java.util.Set;
 
 /**
- * Standard Configuration for Iti83Component. Lazy-loading of results is by default not supported.
+ * Standard Configuration for Iti83Component (PIX Query for Mobile).
+ * This transaction uses the $ihe-pix operation with input Parameters and returns output Parameters.
+ * Lazy-loading of results is by default not supported.
  *
  * @author Christian Ohr
  * @since 3.6
@@ -38,7 +43,13 @@ public class Iti83TransactionConfiguration extends FhirTransactionConfiguration<
                 FhirVersionEnum.R4,
                 new Iti83ResourceProvider(),        // Consumer side. accept $ihe-pix operation
                 new Iti83ClientRequestFactory(),
-                FhirTransactionValidator.NO_VALIDATION);
+                PixmValidator::new);
+        setRequestValidationProfiles(Set.of(
+            PixmProfile.PIXM_QUERY_PARAMETERS_IN_PROFILE
+        ));
+        setResponseValidationProfiles(Set.of(
+            PixmProfile.PIXM_QUERY_PARAMETERS_OUT_PROFILE
+        ));
         setSupportsLazyLoading(false);
     }
 

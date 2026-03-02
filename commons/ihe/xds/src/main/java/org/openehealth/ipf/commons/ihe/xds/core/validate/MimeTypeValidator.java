@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 
 /**
  * Validate the basic format of a the document mime type.
- * 
+ * <p>
  * Mime type must consist of type and subtype, separated by a /
  */
 public class MimeTypeValidator implements ValueValidator {

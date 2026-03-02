@@ -30,6 +30,9 @@
             <action issue="508" dev="razvanTri" type="fix">
                 Fix status code in automatically generated HL7v3 NAKs
             </action>
+            <action issue="507" dev="ohr" type="fix">
+                Update PDQm and PIXm support to their respective recent version. Add validation rules to transaction (reported by Ivan1pl)
+            </action>
             <action issue="505" dev="unixoid" type="fix">
                 Fix error codes in automatically generated ITI-44 NAKs
             </action>
@@ -39,11 +42,17 @@
             <action issue="502" dev="ohr" type="fix">
                 Added search parameter "creation" in MHD ITI-67 (reported by Ivan1pl)
             </action>
+            <action issue="501" dev="ohr" type="update">
+                Migrated FHIR AuditRecordTranslator from Groovy to Java
+            </action>
             <action issue="500" dev="ohr" type="add">
                 Support Spring Boot SSL Bundles
             </action>
             <action issue="499" dev="ohr" type="fix">
                 Fixed display names for MHD List types (reported by Ivan1pl)
+            </action>
+            <action issue="497" dev="ohr" type="update">
+                Updated MHD transaction and validation to MHD v4.3.2 (reported by Ivan1pl)
             </action>
             <action issue="496" dev="unixoid" type="add">
                 Added convenience methods for handling HTTP and SOAP headers

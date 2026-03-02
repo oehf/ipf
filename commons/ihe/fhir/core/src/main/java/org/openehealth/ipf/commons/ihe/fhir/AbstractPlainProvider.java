@@ -35,7 +35,7 @@ import java.util.Optional;
  * Abstract plain provider that allows subclasses to forward the received payload into the
  * Camel route served by the consumer. Note that this can be subclassed for writing so-called
  * plain providers, while resource-specific providers should extend from {@link AbstractResourceProvider}.
- *
+ * <p>
  * Providers that inherit from this class may only be connected to one consumer.
  *
  * @author Christian Ohr
@@ -154,8 +154,7 @@ public abstract class AbstractPlainProvider extends FhirProvider {
         if (resourceType != null) {
             inHeaders.put(Constants.FHIR_RESOURCE_TYPE_HEADER, resourceType);
         }
-        IBundleProvider bundleProvider = consumer.handleBundleProviderRequest(payload, inHeaders, httpServletResponse);
-        return bundleProvider;
+        return consumer.handleBundleProviderRequest(payload, inHeaders, httpServletResponse);
     }
 
     /**

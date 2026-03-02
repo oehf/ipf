@@ -18,9 +18,9 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83
 import ca.uhn.fhir.rest.server.exceptions.InternalErrorException
 import ca.uhn.hl7v2.model.Message
 import org.hl7.fhir.r4.model.Identifier
-import org.hl7.fhir.r4.model.Parameters
 import org.hl7.fhir.r4.model.Reference
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Utils
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersOut
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
@@ -28,9 +28,9 @@ import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
 import static java.util.Objects.requireNonNull
 
 /**
- * Translates HL7v2 PIX Query Response message into a {@link Parameters} resource
+ * Translates HL7v2 PIX Query Response message into a {@link org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersOut} resource.
  * Also cares about error responses and throws the appropriate Exceptions for the
- * FHIR framework
+ * FHIR framework.
  *
  * @author Christian Ohr
  * @since 3.6
@@ -49,7 +49,7 @@ class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Messa
     }
 
     @Override
-    Parameters translateToFhir(Message message, Map<String, Object> parameters) {
+    PixmQueryParametersOut translateToFhir(Message message, Map<String, Object> parameters) {
         String ackCode = message.QAK[2].value
         switch (ackCode) {
             case 'OK': return handleRegularResponse(message.QUERY_RESPONSE.PID[3]()) // Case 1
@@ -59,36 +59,48 @@ class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Messa
         }
     }
 
-    // Handle a regular response
-    protected Parameters handleRegularResponse(pid3collection) {
-        Parameters parameters = new Parameters()
+    /**
+     * Handles a regular response by converting PID-3 identifiers to target identifiers.
+     *
+     * @param pid3collection collection of PID-3 identifier components
+     * @return PixmQueryParametersOut with target identifiers and optional target IDs
+     */
+    protected PixmQueryParametersOut handleRegularResponse(pid3collection) {
+        PixmQueryParametersOut parametersOut = new PixmQueryParametersOut()
         if (pid3collection) {
             for (pid3 in pid3collection) {
                 Identifier identifier = new Identifier()
                         .setSystem(uriMapper.oidToUri(pid3[4][2]?.value))
                         .setValue(pid3[1].value)
                         .setUse(Identifier.IdentifierUse.OFFICIAL)
-                parameters.addParameter()
-                        .setName('targetIdentifier')
-                        .setValue(identifier)
+                
+                parametersOut.addTargetIdentifier(identifier)
+                
+                // If this identifier matches the resource identifier system, also add a targetId reference
                 if (pixSupplierResourceIdentifierUri && identifier.system == pixSupplierResourceIdentifierUri) {
-                    parameters.addParameter()
-                        .setName('targetId')
-                        .setValue(new Reference("Patient/${identifier.value}"))
+                    parametersOut.addTargetId(new Reference("Patient/${identifier.value}"))
                 }
             }
         }
-        parameters
+        parametersOut
     }
 
-    // Handle an empty response
-    protected Parameters handleEmptyResponse() {
+    /**
+     * Handles an empty response (no matching identifiers found).
+     *
+     * @return empty PixmQueryParametersOut
+     */
+    protected PixmQueryParametersOut handleEmptyResponse() {
         return handleRegularResponse(null)
     }
 
-    // Handle an error response from the Cross-reference manager
-    protected static Parameters handleErrorResponse(RSP_K23 message) {
-
+    /**
+     * Handles an error response from the Cross-reference manager by analyzing
+     * the ERR segment and throwing appropriate FHIR exceptions.
+     *
+     * @param message the RSP_K23 error response message
+     */
+    protected static PixmQueryParametersOut handleErrorResponse(RSP_K23 message) {
         // Check error locations
         int errorField = message.ERR[2][3]?.value ? Integer.parseInt(message.ERR[2][3]?.value) : 0
         int errorComponent = message.ERR[2][5]?.value ? Integer.parseInt(message.ERR[2][5]?.value) : 0
@@ -105,7 +117,6 @@ class PixQueryResponseToPixmResponseTranslator implements ToFhirTranslator<Messa
         } else {
             throw Utils.unexpectedProblem()
         }
-
     }
 
 }
