@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="5.2.0" description="IPF 5.2.0" date="">
+            <action issue="511" dev="qligier" type="fix">
+                Fix case of HL7v3 statusCodes in transformers
+            </action>
             <action issue="510" dev="razvanTri" type="fix">
                 Fix detected issue event code in automatically generated HL7v3 NAKs
             </action>
