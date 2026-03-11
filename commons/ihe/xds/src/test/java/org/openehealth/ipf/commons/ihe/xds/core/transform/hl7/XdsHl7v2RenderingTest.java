@@ -69,6 +69,19 @@ public class XdsHl7v2RenderingTest {
     }
 
     @Test
+    public void testTelecomLeadingZeros() {
+        var xtn = "^PRN^PH^^0038^063^0569999^^";
+        var telecom = Telecom.parse(xtn);
+        assertEquals("0038", telecom.getCountryCodeAsString());
+        assertEquals(38, telecom.getCountryCode());
+        assertEquals("063", telecom.getAreaCityCodeAsString());
+        assertEquals(63, telecom.getAreaCityCode());
+        assertEquals("0569999", telecom.getLocalNumberAsString());
+        assertEquals(569999, telecom.getLocalNumber());
+        assertEquals("^PRN^PH^^0038^063^0569999", Hl7v2Based.render(telecom));
+    }
+
+    @Test
     public void testIdentifiableRendering() {
         var cx = "1^2^3^41&42&43&44&45&46^51&52^6^^&&^^";
         var identifiable = Identifiable.parse(cx);

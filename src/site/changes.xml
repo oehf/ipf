@@ -54,6 +54,9 @@
             <action issue="499" dev="ohr" type="fix">
                 Fixed display names for MHD List types (reported by Ivan1pl)
             </action>
+            <action issue="498" dev="unixoid" type="add">
+                Allow usage of strings instead of long integers for phone number components
+            </action>
             <action issue="497" dev="ohr" type="update">
                 Updated MHD transaction and validation to MHD v4.3.2 (reported by Ivan1pl)
             </action>
