@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="" description="" date="">
+            <action issue="498" dev="unixoid" type="add">
+                Allow usage of strings instead of long integers for phone number components
+            </action>
             <action issue="451" dev="unixoid" type="fix">
                 Improved translation between DSMLv2 and JSON
             </action>

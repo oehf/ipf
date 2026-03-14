@@ -19,6 +19,7 @@ import ca.uhn.hl7v2.model.v25.datatype.XTN;
 
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 import java.util.Objects;
 
@@ -34,8 +35,8 @@ import java.util.Objects;
  * @author Dmytro Rud
  */
 @XmlAccessorType
-@XmlType(name = "Telecom", propOrder = {"use", "type", "email", "countryCode",
-        "areaCityCode", "localNumber", "extension", "unformattedPhoneNumber"})
+@XmlType(name = "Telecom", propOrder = {"use", "type", "email", "countryCodeAsString",
+    "areaCityCodeAsString", "localNumberAsString", "extensionAsString", "unformattedPhoneNumber"})
 public class Telecom extends Hl7v2Based<XTN> {
     private static final long serialVersionUID = 526836203236101658L;
 
@@ -68,6 +69,24 @@ public class Telecom extends Hl7v2Based<XTN> {
      * @param extension    extension of the phone number (XTN-8), can be <code>null</code>.
      */
     public Telecom(Long countryCode, Long areaCityCode, Long localNumber, Long extension) {
+        this();
+        setUse("PRN");
+        setType("PH");
+        setCountryCode(countryCode);
+        setAreaCityCode(areaCityCode);
+        setLocalNumber(localNumber);
+        setExtension(extension);
+    }
+
+    /**
+     * Creates a telecom object containing a phone number.
+     *
+     * @param countryCode  country code of phone number (XTN-5), can be <code>null</code>.
+     * @param areaCityCode area/city code of phone number (XTN-6), can be <code>null</code>.
+     * @param localNumber  local part of the phone number (XTN-7).
+     * @param extension    extension of the phone number (XTN-8), can be <code>null</code>.
+     */
+    public Telecom(String countryCode, String areaCityCode, String localNumber, String extension) {
         this();
         setUse("PRN");
         setType("PH");
@@ -123,63 +142,123 @@ public class Telecom extends Hl7v2Based<XTN> {
     }
 
     /**
-     * @return country code of phone number (XTN-5).
+     * @return country code of phone number (XTN-5) as a {@link Long}.
      */
-    @XmlElement(name = "countryCode")
+    @XmlTransient
     public Long getCountryCode() {
         return getLongValue(getHapiObject().getXtn5_CountryCode());
     }
 
     /**
-     * @param countryCode country code of phone number (XTN-5).
+     * @return country code of phone number (XTN-5).
+     */
+    @XmlElement(name = "countryCode")
+    public String getCountryCodeAsString() {
+        return getHapiObject().getXtn5_CountryCode().getValue();
+    }
+
+    /**
+     * @param countryCode country code of phone number (XTN-5) as a {@link Long}.
      */
     public void setCountryCode(Long countryCode) {
         setValue(getHapiObject().getXtn5_CountryCode(), countryCode == null ? null : countryCode.toString());
     }
 
     /**
-     * @return area/city code of phone number (XTN-6).
+     * @param countryCode country code of phone number (XTN-5).
      */
-    @XmlElement(name = "areaCityCode")
+    public void setCountryCode(String countryCode) {
+        setValue(getHapiObject().getXtn5_CountryCode(), countryCode);
+    }
+
+    /**
+     * @return area/city code of phone number (XTN-6) as a {@link Long}.
+     */
+    @XmlTransient
     public Long getAreaCityCode() {
         return getLongValue(getHapiObject().getXtn6_AreaCityCode());
     }
 
     /**
-     * @param areaCityCode area/city code of phone number (XTN-6).
+     * @return area/city code of phone number (XTN-6).
+     */
+    @XmlElement(name = "areaCityCode")
+    public String getAreaCityCodeAsString() {
+        return getHapiObject().getXtn6_AreaCityCode().getValue();
+    }
+
+    /**
+     * @param areaCityCode area/city code of phone number (XTN-6) as a {@link Long}.
      */
     public void setAreaCityCode(Long areaCityCode) {
         setValue(getHapiObject().getXtn6_AreaCityCode(), areaCityCode == null ? null : areaCityCode.toString());
     }
 
     /**
-     * @return local part of the phone number (XTN-7).
+     * @param areaCityCode area/city code of phone number (XTN-6).
      */
-    @XmlElement(name = "localNumber")
+    public void setAreaCityCode(String areaCityCode) {
+        setValue(getHapiObject().getXtn6_AreaCityCode(), areaCityCode);
+    }
+
+    /**
+     * @return local part of the phone number (XTN-7) as a {@link Long}.
+     */
+    @XmlTransient
     public Long getLocalNumber() {
         return getLongValue(getHapiObject().getXtn7_LocalNumber());
     }
 
     /**
-     * @param localNumber local part of the phone number (XTN-7).
+     * @return local part of the phone number (XTN-7).
+     */
+    @XmlElement(name = "localNumber")
+    public String getLocalNumberAsString() {
+        return getHapiObject().getXtn7_LocalNumber().getValue();
+    }
+
+    /**
+     * @param localNumber local part of the phone number (XTN-7) as a {@link Long}.
      */
     public void setLocalNumber(Long localNumber) {
-        setValue(getHapiObject().getXtn7_LocalNumber(), localNumber == null ? null : localNumber.toString() );
+        setValue(getHapiObject().getXtn7_LocalNumber(), localNumber == null ? null : localNumber.toString());
+    }
+
+    /**
+     * @param localNumber local part of the phone number (XTN-7).
+     */
+    public void setLocalNumber(String localNumber) {
+        setValue(getHapiObject().getXtn7_LocalNumber(), localNumber);
+    }
+
+    /**
+     * @return extension of the phone number (XTN-8) as a {@link Long}.
+     */
+    @XmlTransient
+    public Long getExtension() {
+        return getLongValue(getHapiObject().getXtn8_Extension());
     }
 
     /**
      * @return extension of the phone number (XTN-8).
      */
     @XmlElement(name = "extension")
-    public Long getExtension() {
-        return getLongValue(getHapiObject().getXtn8_Extension());
+    public String getExtensionAsString() {
+        return getHapiObject().getXtn8_Extension().getValue();
+    }
+
+    /**
+     * @param extension extension of the phone number (XTN-8) as a {@link Long}.
+     */
+    public void setExtension(Long extension) {
+        setValue(getHapiObject().getXtn8_Extension(), extension == null ? null : extension.toString());
     }
 
     /**
      * @param extension extension of the phone number (XTN-8).
      */
-    public void setExtension(Long extension) {
-        setValue(getHapiObject().getXtn8_Extension(), extension == null ? null : extension.toString());
+    public void setExtension(String extension) {
+        setValue(getHapiObject().getXtn8_Extension(), extension);
     }
 
     /**
@@ -205,17 +284,18 @@ public class Telecom extends Hl7v2Based<XTN> {
         return Objects.equals(getUse(), that.getUse()) &&
                 Objects.equals(getType(), that.getType()) &&
                 Objects.equals(getEmail(), that.getEmail()) &&
-                Objects.equals(getCountryCode(), that.getCountryCode()) &&
-                Objects.equals(getAreaCityCode(), that.getAreaCityCode()) &&
-                Objects.equals(getLocalNumber(), that.getLocalNumber()) &&
-                Objects.equals(getExtension(), that.getExtension()) &&
+                Objects.equals(getCountryCodeAsString(), that.getCountryCodeAsString()) &&
+                Objects.equals(getAreaCityCodeAsString(), that.getAreaCityCodeAsString()) &&
+                Objects.equals(getLocalNumberAsString(), that.getLocalNumberAsString()) &&
+                Objects.equals(getExtensionAsString(), that.getExtensionAsString()) &&
                 Objects.equals(getUnformattedPhoneNumber(), that.getUnformattedPhoneNumber());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUse(), getType(), getEmail(), getCountryCode(),
-                getAreaCityCode(), getLocalNumber(), getExtension(), getUnformattedPhoneNumber());
+        return Objects.hash(getUse(), getType(), getEmail(), getCountryCodeAsString(),
+            getAreaCityCodeAsString(), getLocalNumberAsString(), getExtensionAsString(),
+            getUnformattedPhoneNumber());
     }
 
     @Override
@@ -224,10 +304,10 @@ public class Telecom extends Hl7v2Based<XTN> {
                 "use=" + getUse() +
                 ", type=" + getType() +
                 ", email=" + getEmail() +
-                ", countryCode=" + getCountryCode() +
-                ", areaCityCode=" + getAreaCityCode() +
-                ", localNumber=" + getLocalNumber() +
-                ", extension=" + getExtension() +
+                ", countryCode=" + getCountryCodeAsString() +
+                ", areaCityCode=" + getAreaCityCodeAsString() +
+                ", localNumber=" + getLocalNumberAsString() +
+                ", extension=" + getExtensionAsString() +
                 ", unformattedPhoneNumber=" + getUnformattedPhoneNumber() +
                 ')';
     }
