@@ -25,7 +25,7 @@ class SampleRouteBuilder extends RouteBuilder {
 
     void configure() {
         
-        from('jetty:http://0.0.0.0:7799/tutorial')
+        from('netty-http:http://0.0.0.0:7799/tutorial')
             .convertBodyTo(String.class)
             .to('direct:input1')
        

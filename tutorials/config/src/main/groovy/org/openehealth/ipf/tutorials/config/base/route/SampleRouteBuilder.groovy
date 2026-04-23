@@ -25,14 +25,14 @@ class SampleRouteBuilder extends CustomRouteBuilder {
 
     void configure() {
 
-        from('jetty:http://0.0.0.0:8800/reverse')
+        from('netty-http:http://0.0.0.0:8800/reverse')
             .convertBodyTo(String.class)
             .multicast().to('direct:file-save','direct:reverse-response')
 
         from('direct:reverse-response')
             .transmogrify{'reversed response: ' + it.reverse()}
 		
-		from('jetty:http://0.0.0.0:8800/map')
+		from('netty-http:http://0.0.0.0:8800/map')
             .convertBodyTo(String.class)
             .unmarshal().hl7()
 			.to('direct:map')

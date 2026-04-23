@@ -61,8 +61,9 @@
         <lombok-version>1.18.46</lombok-version>
         <mockserver-version>5.15.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
-        <tomcat-version>10.1.55</tomcat-version>
-        <xbean-spring-version>4.28</xbean-spring-version>
+        <tomcat-version>11.0.24</tomcat-version>
+        <undertow-version>2.3.24.Final</undertow-version>
+        <xbean-spring-version>4.30</xbean-spring-version>
     </properties>
 
     <scm>
@@ -274,6 +275,11 @@
                 <groupId>org.mock-server</groupId>
                 <artifactId>mockserver-client-java</artifactId>
                 <version>${mockserver-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.undertow</groupId>
+                <artifactId>undertow-servlet</artifactId>
+                <version>${undertow-version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

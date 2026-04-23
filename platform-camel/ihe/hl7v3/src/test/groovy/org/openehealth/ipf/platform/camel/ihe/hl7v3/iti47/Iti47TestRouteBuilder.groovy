@@ -76,7 +76,7 @@ class Iti47TestRouteBuilder extends RouteBuilder {
              '&continuationStorage=#hl7v3ContinuationStorage' +
              '&validationOnContinuation=true')
             .process(PixPdqV3CamelValidators.iti47RequestValidator())
-            .streamCaching()
+            .streamCache(true)
             .setBody(constant(V3_RESPONSE.bytes))
             .process(PixPdqV3CamelValidators.iti47ResponseValidator())
 
@@ -90,7 +90,7 @@ class Iti47TestRouteBuilder extends RouteBuilder {
                 '&continuationStorage=#hl7v3ContinuationStorage' +
                 '&validationOnContinuation=true')
                 .process(PixPdqV3CamelValidators.iti47RequestValidator())
-                .streamCaching()
+                .streamCache(true)
                 .setBody(constant(V3_EMPTY_RESPONSE.bytes))
                 .process(PixPdqV3CamelValidators.iti47ResponseValidator())
 

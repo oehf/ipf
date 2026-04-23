@@ -33,6 +33,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <optional>true</optional>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- dependencies for test -->
@@ -45,6 +51,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>

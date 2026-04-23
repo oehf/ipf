@@ -16,9 +16,14 @@
 package org.openehealth.ipf.commons.ihe.ws.server;
 
 import jakarta.servlet.ServletContext;
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
-import org.eclipse.jetty.ee10.servlet.ServletHolder;
-import org.eclipse.jetty.server.*;
+import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.servlet.ServletHolder;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.springframework.web.context.ContextLoaderListener;

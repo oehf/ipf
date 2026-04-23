@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.protocol.RecordingAuditMessageTransmission;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
-import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.boot.restclient.RestTemplateBuilder;
 import org.springframework.web.client.RestClientException;
 
 import java.net.ServerSocket;

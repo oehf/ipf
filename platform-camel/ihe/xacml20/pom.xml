@@ -30,6 +30,12 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -82,8 +88,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jetty.ee10</groupId>
-            <artifactId>jetty-ee10-servlet</artifactId>
+            <groupId>org.eclipse.jetty.ee11</groupId>
+            <artifactId>jetty-ee11-servlet</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

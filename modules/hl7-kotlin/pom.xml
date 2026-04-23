@@ -32,12 +32,6 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-stdlib-common</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -62,17 +56,13 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-stdlib-jdk8</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-stdlib-common</artifactId>
+                    <artifactId>kotlin-stdlib</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-common</artifactId>
+            <artifactId>kotlin-stdlib</artifactId>
         </dependency>
 
         <!-- dependencies for test -->
