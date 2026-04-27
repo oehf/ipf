@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
 
     <properties>
+        <central-publishing-maven-plugin.version>0.9.0</central-publishing-maven-plugin.version>
         <gpg-plugin-version>1.6</gpg-plugin-version>
         <bouncycastle-version>1.77</bouncycastle-version>
         <brave-version>5.17.0</brave-version>
@@ -894,6 +895,15 @@
             <id>release</id>
             <build>
                 <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${central-publishing-maven-plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                        </configuration>
+                    </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
