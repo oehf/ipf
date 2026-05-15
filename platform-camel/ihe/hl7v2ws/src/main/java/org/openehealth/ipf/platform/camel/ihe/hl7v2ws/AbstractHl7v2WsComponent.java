@@ -15,9 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v2ws;
 
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2ws.Hl7v2WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2ConfigurationHolder;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -26,11 +24,16 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
  * @author Dmytro Rud
  */
 abstract public class AbstractHl7v2WsComponent
-        extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, Hl7v2WsInteractionId>
-        implements Hl7v2ConfigurationHolder<MllpAuditDataset> {
+        extends AbstractWsComponent<WsAuditDataset>
+        implements Hl7v2ConfigurationHolder {
 
     public AbstractHl7v2WsComponent(Hl7v2WsInteractionId interactionId) {
         super(interactionId);
+    }
+
+    @Override
+    public Hl7v2WsInteractionId getInteractionId() {
+        return (Hl7v2WsInteractionId) super.getInteractionId();
     }
 
 }

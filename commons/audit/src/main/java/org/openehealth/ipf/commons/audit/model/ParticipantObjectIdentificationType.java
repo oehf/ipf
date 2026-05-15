@@ -146,6 +146,10 @@ public class ParticipantObjectIdentificationType implements Serializable, Valida
      */
     @Override
     public void validate() {
+        // CP-2399 - either object name or query must be present
+        if (participantObjectName == null && participantObjectQuery == null) {
+            throw new AuditException("Either participantObjectName or participantObjectQuery must be set");
+        }
         if (participantObjectIDTypeCode == ParticipantObjectIdTypeCode.StudyInstanceUID &&
                 getParticipantObjectDescriptions().isEmpty())
             throw new AuditException("DICOM Object Descriptions must be present for StudyInstanceUID participant object ID types");

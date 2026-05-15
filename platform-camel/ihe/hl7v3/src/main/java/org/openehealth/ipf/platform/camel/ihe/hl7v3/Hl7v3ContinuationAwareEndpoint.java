@@ -15,15 +15,15 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
-import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
+import lombok.Getter;
+import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ClientFactory;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
+import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 
@@ -35,10 +35,11 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-public class Hl7v3ContinuationAwareEndpoint
-        extends Hl7v3Endpoint<Hl7v3ContinuationAwareWsTransactionConfiguration> {
+@Setter
+@Getter
+public class Hl7v3ContinuationAwareEndpoint extends Hl7v3Endpoint {
     /**
-     * Whether this endpoint should support HL7v3 continuation.
+     * Whether this endpoint should support HL7v3 continuation. <code>true</code> when this endpoint supports HL7v3 continuation.
      */
     private boolean supportContinuation = false;
 
@@ -46,6 +47,8 @@ public class Hl7v3ContinuationAwareEndpoint
      * Producer-side only: Whether a "cancel continuation" message should
      * be automatically sent to the server when all continuation fragments
      * have been read.
+     * <p/>
+     * This parameter is relevant only on producer side.
      */
     private boolean autoCancel = false;
 
@@ -54,99 +57,37 @@ public class Hl7v3ContinuationAwareEndpoint
      * response fragment, when the request does not contain "initialQuantity"
      * element.  Negative values mean "no continuation, when initialQuantity
      * is not specified".
+     * <p/>
+     * This parameter is relevant only on consumer side.
      */
     private int defaultContinuationThreshold = -1;
 
     /**
      * Consumer-side only: Storage bean for continuation fragments.
+     * <p/>
+     * This parameter is relevant only on consumer side.
      */
     private Hl7v3ContinuationStorage continuationStorage = null;
 
     /**
      * Whether the system should validate messages which are internally handled
-     * when performing HL7v3 interactive continuation.
+     * when performing HL7v3 interactive continuation. <code>true</code> when messages, which are internally handled
+     * when performing HL7v3 interactive continuation, should be validated.
      */
     private boolean validationOnContinuation = false;
 
 
     protected Hl7v3ContinuationAwareEndpoint(
-            String endpointUri,
-            String address,
-            AbstractWsComponent<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration, ? extends WsInteractionId<Hl7v3ContinuationAwareWsTransactionConfiguration>> component,
-            Map<String, Object> parameters) {
+        String endpointUri,
+        String address,
+        Hl7v3Component component,
+        Map<String, Object> parameters) {
         super(endpointUri, address, component, parameters, null);
     }
 
     @Override
-    public AbstractWsProducer<Hl7v3AuditDataset,Hl7v3ContinuationAwareWsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset,Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint, JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+    public AbstractWsProducer<Hl7v3AuditDataset, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset> endpoint, JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
         return new Hl7v3ContinuationAwareProducer(this, getJaxWsClientFactory());
-    }
-
-    /**
-     * Returns <code>true</code> when this endpoint supports HL7v3 continuation.
-     */
-    public boolean isSupportContinuation() {
-        return supportContinuation;
-    }
-
-    public void setSupportContinuation(boolean supportContinuation) {
-        this.supportContinuation = supportContinuation;
-    }
-
-    /**
-     * Returns default count of data records to be sent in the first response
-     * fragment, when the request does not contain "initialQuantity" element.
-     * Negative values mean "no continuation, when initialQuantity is not
-     * specified".
-     * <p/>
-     * This parameter is relevant only on consumer side.
-     */
-    public int getDefaultContinuationThreshold() {
-        return defaultContinuationThreshold;
-    }
-
-    public void setDefaultContinuationThreshold(int defaultContinuationThreshold) {
-        this.defaultContinuationThreshold = defaultContinuationThreshold;
-    }
-
-    /**
-     * Returns storage bean for continuation fragments.
-     * <p/>
-     * This parameter is relevant only on consumer side.
-     */
-    public Hl7v3ContinuationStorage getContinuationStorage() {
-        return continuationStorage;
-    }
-
-    public void setContinuationStorage(Hl7v3ContinuationStorage continuationStorage) {
-        this.continuationStorage = continuationStorage;
-    }
-
-    /**
-     * Returns <code>true</code> when a "cancel continuation" message should
-     * be automatically sent to the server after all continuation fragments
-     * have been read.
-     * <p/>
-     * This parameter is relevant only on producer side.
-     */
-    public boolean isAutoCancel() {
-        return autoCancel;
-    }
-
-    public void setAutoCancel(boolean autoCancel) {
-        this.autoCancel = autoCancel;
-    }
-
-    /**
-     * @return <code>true</code> when messages, which are internally handled
-     * when performing HL7v3 interactive continuation, should be validated.
-     */
-    public boolean isValidationOnContinuation() {
-        return validationOnContinuation;
-    }
-
-    public void setValidationOnContinuation(boolean validationOnContinuation) {
-        this.validationOnContinuation = validationOnContinuation;
     }
 
 
@@ -163,27 +104,27 @@ public class Hl7v3ContinuationAwareEndpoint
     @Override
     public JaxWsClientFactory<Hl7v3AuditDataset> getJaxWsClientFactory() {
         return new Hl7v3ClientFactory(
-                getComponent().getWsTransactionConfiguration(),
-                getServiceUrl(),
-                isManualAudit() ? null : getComponent().getClientAuditStrategy(),
-                getAuditContext(),
-                getCustomCxfInterceptors(),
-                getFeatures(),
-                getProperties(),
-                getCorrelator(),
-                getSecurityInformation(),
-                getHttpClientPolicy());
+            (Hl7v3WsTransactionConfiguration) getComponent().getWsTransactionConfiguration(),
+            getServiceUrl(),
+            isManualAudit() ? null : getComponent().getClientAuditStrategy(),
+            getAuditContext(),
+            getCustomCxfInterceptors(),
+            getFeatures(),
+            getProperties(),
+            getCorrelator(),
+            getSecurityInformation(),
+            getHttpClientPolicy());
     }
 
 
     @Override
     public JaxWsServiceFactory<Hl7v3AuditDataset> getJaxWsServiceFactory() {
         return new Hl7v3ServiceFactory(
-                getComponent().getWsTransactionConfiguration(),
-                getServiceAddress(),
-                isManualAudit() ? null : getComponent().getServerAuditStrategy(),
-                getAuditContext(),
-                getCustomCxfInterceptors(),
-                getRejectionHandlingStrategy());
+            (Hl7v3WsTransactionConfiguration) getComponent().getWsTransactionConfiguration(),
+            getServiceAddress(),
+            isManualAudit() ? null : getComponent().getServerAuditStrategy(),
+            getAuditContext(),
+            getCustomCxfInterceptors(),
+            getRejectionHandlingStrategy());
     }
 }

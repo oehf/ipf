@@ -44,14 +44,14 @@ import java.util.function.Predicate;
  * @author Christian Ohr
  * @since 3.1
  */
-public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, ComponentType extends FhirComponent<AuditDatasetType>>
+public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset>
         extends DefaultEndpoint
-        implements InterceptableEndpoint<FhirEndpointConfiguration<AuditDatasetType>, ComponentType>, AuditableEndpoint<AuditDatasetType> {
+        implements InterceptableEndpoint<FhirEndpointConfiguration, FhirComponent<AuditDatasetType>>, AuditableEndpoint<AuditDatasetType> {
 
-    private final FhirEndpointConfiguration<AuditDatasetType> config;
-    private final ComponentType fhirComponent;
+    private final FhirEndpointConfiguration config;
+    private final FhirComponent<AuditDatasetType> fhirComponent;
 
-    public FhirEndpoint(String uri, ComponentType fhirComponent, FhirEndpointConfiguration<AuditDatasetType> config) {
+    public FhirEndpoint(String uri, FhirComponent<AuditDatasetType> fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent);
         this.fhirComponent = fhirComponent;
         this.config = config;
@@ -59,7 +59,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     @Override
-    public ComponentType getInterceptableComponent() {
+    public FhirComponent<AuditDatasetType> getInterceptableComponent() {
         return fhirComponent;
     }
 
@@ -134,7 +134,7 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
     }
 
     @Override
-    public FhirEndpointConfiguration<AuditDatasetType> getInterceptableConfiguration() {
+    public FhirEndpointConfiguration getInterceptableConfiguration() {
         return config;
     }
 
@@ -168,8 +168,8 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset, Co
         return providers;
     }
 
-    public ClientRequestFactory<?> getClientRequestFactory() {
-        ClientRequestFactory<?> factory = config.getClientRequestFactory();
+    public ClientRequestFactory getClientRequestFactory() {
+        ClientRequestFactory factory = config.getClientRequestFactory();
         if (factory == null) {
             factory = fhirComponent.getFhirTransactionConfiguration().getStaticClientRequestFactory();
         }

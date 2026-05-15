@@ -23,10 +23,11 @@ import org.openehealth.ipf.commons.ihe.hpd.chcidd.ChCiddPortType;
 import org.openehealth.ipf.commons.ihe.hpd.chciq.ChCiqPortType;
 import org.openehealth.ipf.commons.ihe.hpd.chpidd.ChPiddPortType;
 import org.openehealth.ipf.commons.ihe.hpd.iti58.Iti58PortType;
-import org.openehealth.ipf.commons.ihe.hpd.iti59.*;
+import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59PortType;
+import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
@@ -40,22 +41,22 @@ import java.util.List;
 public class HPD implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum ReadInteractions implements WsInteractionId<WsTransactionConfiguration<WsAuditDataset>> {
+    public enum ReadInteractions implements WsInteractionId {
         ITI_58(ITI_58_WS_CONFIG),
         CH_PIDD(CH_PIDD_WS_CONFIG),
         CH_CIQ(CH_CIQ_WS_CONFIG),
         CH_CIDD(CH_CIDD_WS_CONFIG);
 
         @Getter
-        private final WsTransactionConfiguration<WsAuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @AllArgsConstructor
-    public enum FeedInteractions implements WsInteractionId<WsTransactionConfiguration<Iti59AuditDataset>> {
+    public enum FeedInteractions implements WsInteractionId {
         ITI_59(ITI_59_WS_CONFIG);
 
         @Getter
-        private final WsTransactionConfiguration<Iti59AuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @Override
@@ -66,7 +67,7 @@ public class HPD implements IntegrationProfile {
         return Collections.unmodifiableList(interactions);
     }
 
-    private final static WsTransactionConfiguration<WsAuditDataset> ITI_58_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_58_WS_CONFIG = new WsTransactionConfiguration(
             "hpd-iti58",
             "Provider Information Query",
             true,
@@ -82,7 +83,7 @@ public class HPD implements IntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<Iti59AuditDataset> ITI_59_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_59_WS_CONFIG = new WsTransactionConfiguration(
             "hpd-iti59",
             "Provider Information Feed",
             true,
@@ -98,7 +99,7 @@ public class HPD implements IntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<WsAuditDataset> CH_PIDD_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration CH_PIDD_WS_CONFIG = new WsTransactionConfiguration(
             "ch-pidd",
             "Provider Information Delta Download (Swiss HPD extension)",
             true,
@@ -114,7 +115,7 @@ public class HPD implements IntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<WsAuditDataset> CH_CIQ_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration CH_CIQ_WS_CONFIG = new WsTransactionConfiguration(
             "ch-ciq",
             "Community Information Query (Swiss EPR transaction)",
             true,
@@ -130,7 +131,7 @@ public class HPD implements IntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<WsAuditDataset> CH_CIDD_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration CH_CIDD_WS_CONFIG = new WsTransactionConfiguration(
             "ch-cidd",
             "Community Information Delta Download (Swiss EPR transaction)",
             true,

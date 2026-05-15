@@ -20,14 +20,12 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.StrictErrorHandler;
 import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.client.api.ServerValidationModeEnum;
-import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import lombok.Getter;
 import org.apache.camel.spi.UriParam;
 import org.apache.camel.spi.UriParams;
 import org.apache.camel.support.EndpointHelper;
 import org.apache.camel.support.jsse.SSLContextParameters;
 import org.openehealth.ipf.commons.ihe.fhir.*;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.translation.FhirSecurityInformation;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpointConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
@@ -45,8 +43,9 @@ import java.util.stream.Stream;
  * @author Christian Ohr
  * @since 3.1
  */
+@Getter
 @UriParams
-public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset> extends AuditableEndpointConfiguration {
+public class FhirEndpointConfiguration extends AuditableEndpointConfiguration {
 
     static final String STRICT = "strict";
     static final String LENIENT = "lenient";
@@ -56,31 +55,25 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     static final String CONSUMER_SELECTOR = "consumerSelector";
     static final String SORT = "sort";
 
-    @Getter
     private final String path;
 
-    @Getter
     private final FhirContext context;
 
-    @Getter
     @UriParam(defaultValue = IpfFhirServlet.DEFAULT_SERVLET_NAME)
     private final String servletName;
 
-    @Getter
     @UriParam
     private final List<? extends FhirProvider> resourceProvider;
 
     // Producer only
 
     @UriParam
-    private final ClientRequestFactory<? extends IClientExecutable<?, ?>> clientRequestFactory;
+    private final ClientRequestFactory clientRequestFactory;
 
 
-    @Getter
     @UriParam
     private final List<HapiClientInterceptorFactory> hapiClientInterceptorFactories;
 
-    @Getter
     @UriParam
     private final List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
 
@@ -88,7 +81,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      * If this is true, all paging requests are routed into the route (see {@link LazyBundleProvider}
      * fo details. Otherwise, all results are fetched once and cached in order to serve subsequent paging requests.
      */
-    @Getter
     @UriParam
     private final boolean lazyLoadBundles;
 
@@ -97,25 +89,21 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
      * be implemented in {@link FhirSearchParameters} implementations. If this is false,
      * the Camel route is expected to return sorted results if the query has requested this.
      */
-    @Getter
     @UriParam
     private final boolean sort;
 
-    @Getter
     private final FhirSecurityInformation<?> securityInformation;
 
-    @Getter
     private final Predicate<RequestDetails> consumerSelector;
 
     /**
      * Only considered if {@link #lazyLoadBundles} is true. The (partial) results of paging requests are cached so that subsequent
      * requests only fetch resources that have not yet been requested.
      */
-    @Getter
     @UriParam
     private final boolean cacheBundles;
 
-    protected FhirEndpointConfiguration(FhirComponent<AuditDatasetType> component, String path, Map<String, Object> parameters) throws Exception {
+    protected FhirEndpointConfiguration(FhirComponent<?> component, String path, Map<String, Object> parameters) throws Exception {
         super(component, parameters);
 
         this.path = path;
@@ -243,7 +231,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
                 password);
     }
 
-    public <T> List<T> getAndRemoveOrResolveReferenceParameters(FhirComponent<AuditDatasetType> component, Map<String, Object> parameters, String key, Class<T> type) {
+    public <T> List<T> getAndRemoveOrResolveReferenceParameters(FhirComponent<?> component, Map<String, Object> parameters, String key, Class<T> type) {
         var values = component.getAndRemoveParameter(parameters, key, String.class);
         if (values == null) {
             return null;
@@ -259,10 +247,6 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     public SslAwareAbstractRestfulClientFactory<?> getRestfulClientFactory() {
         return (SslAwareAbstractRestfulClientFactory<?>) this.context.getRestfulClientFactory();
-    }
-
-    public <T extends IClientExecutable<?, ?>> ClientRequestFactory<T> getClientRequestFactory() {
-        return (ClientRequestFactory<T>) clientRequestFactory;
     }
 
     public void setConnectTimeout(int connectTimeout) {

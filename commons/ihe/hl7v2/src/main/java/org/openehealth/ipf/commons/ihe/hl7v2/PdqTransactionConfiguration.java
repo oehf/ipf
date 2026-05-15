@@ -28,7 +28,7 @@ import java.util.List;
  *
  * @author Dmytro Rud
  */
-public class PdqTransactionConfiguration extends Hl7v2TransactionConfiguration<QueryAuditDataset> {
+public class PdqTransactionConfiguration extends Hl7v2TransactionConfiguration{
    
     public PdqTransactionConfiguration(
             String name,

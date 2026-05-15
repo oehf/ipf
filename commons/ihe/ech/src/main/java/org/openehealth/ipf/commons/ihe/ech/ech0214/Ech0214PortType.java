@@ -46,7 +46,7 @@ public interface Ech0214PortType {
 
     @WebMethod(operationName = "querySpid")
     @WebResult(name = "response", targetNamespace = "http://www.ech.ch/xmlns/eCH-0214/2", partName = "body")
-    public Response querySpid(
+    Response querySpid(
         @WebParam(name = "request", targetNamespace = "http://www.ech.ch/xmlns/eCH-0214/2", partName = "body")
         Request body);
 

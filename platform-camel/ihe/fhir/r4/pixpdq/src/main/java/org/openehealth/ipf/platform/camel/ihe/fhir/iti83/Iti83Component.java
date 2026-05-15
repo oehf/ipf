@@ -41,7 +41,7 @@ public class Iti83Component extends FhirComponent<FhirQueryAuditDataset> {
     }
 
     @Override
-    protected Iti83Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<FhirQueryAuditDataset> config) {
+    protected Iti83Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration config) {
         return new Iti83Endpoint(uri, this, config);
     }
 

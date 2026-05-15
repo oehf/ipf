@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xds.iti41;
 
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -29,7 +28,7 @@ import org.openehealth.ipf.platform.camel.ihe.xds.XdsSubmissionProducer;
  */
 public class Iti41Producer extends XdsSubmissionProducer<ProvideAndRegisterDocumentSetRequestType, RegistryResponseType> {
 
-    public Iti41Producer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
+    public Iti41Producer(AbstractWsEndpoint<XdsSubmitAuditDataset> endpoint,
                          JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
         super(endpoint, clientFactory, ProvideAndRegisterDocumentSetRequestType.class, RegistryResponseType.class);
     }

@@ -54,7 +54,7 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         implements SuspendableService, RequestConsumer {
 
 
-    public FhirConsumer(FhirEndpoint<AuditDatasetType, ? extends FhirComponent<AuditDatasetType>> endpoint, Processor processor) {
+    public FhirConsumer(FhirEndpoint<AuditDatasetType> endpoint, Processor processor) {
         super(endpoint, processor);
     }
 
@@ -85,9 +85,10 @@ public class FhirConsumer<AuditDatasetType extends FhirAuditDataset> extends Def
         super.doStop();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>> getEndpoint() {
-        return (FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>) super.getEndpoint();
+    public FhirEndpoint<AuditDatasetType> getEndpoint() {
+        return (FhirEndpoint<AuditDatasetType>) super.getEndpoint();
     }
 
     /**

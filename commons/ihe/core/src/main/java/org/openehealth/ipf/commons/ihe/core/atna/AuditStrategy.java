@@ -27,12 +27,12 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.1
  */
-public interface AuditStrategy<T extends AuditDataset> {
+public interface AuditStrategy<AuditDatasetType extends AuditDataset> {
 
     /**
      * Creates a new audit dataset instance.
      */
-    T createAuditDataset();
+    AuditDatasetType createAuditDataset();
 
     /**
      * Enriches the given audit dataset with transaction-specific
@@ -42,7 +42,7 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param request      {@link Object} representing the request.
      * @param parameters   additional parameters
      */
-    T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters);
+    AuditDatasetType enrichAuditDatasetFromRequest(AuditDatasetType auditDataset, Object request, Map<String, Object> parameters);
 
 
     /**
@@ -53,7 +53,7 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param response     {@link Object} representing the responded resource.
      * @return true if response indicates success, false otherwise
      */
-    default boolean enrichAuditDatasetFromResponse(T auditDataset, Object response) {
+    default boolean enrichAuditDatasetFromResponse(AuditDatasetType auditDataset, Object response) {
         return enrichAuditDatasetFromResponse(auditDataset, response, null);
     }
 
@@ -66,7 +66,7 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param auditContext audit context, if relevant
      * @return true if response indicates success, false otherwise
      */
-    boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext);
+    boolean enrichAuditDatasetFromResponse(AuditDatasetType auditDataset, Object response, AuditContext auditContext);
 
 
     /**
@@ -75,7 +75,7 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param auditContext audit context used for auditing
      * @param auditDataset Collected audit dataset.
      */
-    void doAudit(AuditContext auditContext, T auditDataset);
+    void doAudit(AuditContext auditContext, AuditDatasetType auditDataset);
 
 
     /**
@@ -96,7 +96,7 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param response POJO
      * @return event outcome code
      */
-    default EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object response) {
+    default EventOutcomeIndicator getEventOutcomeIndicator(AuditDatasetType auditDataset, Object response) {
         return auditDataset.getEventOutcomeIndicator();
     }
 
@@ -107,7 +107,7 @@ public interface AuditStrategy<T extends AuditDataset> {
      * @param response POJO
      * @return event outcome description
      */
-    default String getEventOutcomeDescription(T auditDataset, Object response) {
+    default String getEventOutcomeDescription(AuditDatasetType auditDataset, Object response) {
         return auditDataset.getEventOutcomeDescription();
     }
 }

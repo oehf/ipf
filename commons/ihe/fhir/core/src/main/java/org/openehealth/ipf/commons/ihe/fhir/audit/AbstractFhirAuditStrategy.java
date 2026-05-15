@@ -37,7 +37,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_URL;
  * @author Christian Ohr
  * @since 3.2
  */
-public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O extends IBaseOperationOutcome> extends AuditStrategySupport<T> {
+public abstract class AbstractFhirAuditStrategy<AuditDatasetType extends FhirAuditDataset, O extends IBaseOperationOutcome> extends AuditStrategySupport<AuditDatasetType> {
 
 
     protected AbstractFhirAuditStrategy(boolean serverSide) {
@@ -45,7 +45,7 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
     }
 
     @Override
-    public void doAudit(AuditContext auditContext, T auditDataset) {
+    public void doAudit(AuditContext auditContext, AuditDatasetType auditDataset) {
         try {
             FhirContextHolder.setCurrentContext(auditDataset.getFhirContext());
             super.doAudit(auditContext, auditDataset);
@@ -55,7 +55,7 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
     }
 
     @Override
-    public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters) {
+    public AuditDatasetType enrichAuditDatasetFromRequest(AuditDatasetType auditDataset, Object request, Map<String, Object> parameters) {
 
         if (parameters.get(HTTP_URI) != null) {
             auditDataset.setSourceUserId((String) parameters.get(HTTP_URI));
@@ -76,7 +76,7 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
+    public boolean enrichAuditDatasetFromResponse(AuditDatasetType auditDataset, Object response, AuditContext auditContext) {
         if (response instanceof IBaseResource) {
             var eventOutcomeIndicator = getEventOutcomeIndicator(auditDataset, response);
             auditDataset.setEventOutcomeIndicator(eventOutcomeIndicator);
@@ -88,7 +88,7 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
 
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object response) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(AuditDatasetType auditDataset, Object response) {
         return getEventOutcomeCodeFromResource(auditDataset, (IBaseResource) response);
     }
 
@@ -98,14 +98,14 @@ public abstract class AbstractFhirAuditStrategy<T extends FhirAuditDataset, O ex
      * @param resource FHIR resource
      * @return event outcome code
      */
-    protected EventOutcomeIndicator getEventOutcomeCodeFromResource(T auditDataset, IBaseResource resource) {
+    protected EventOutcomeIndicator getEventOutcomeCodeFromResource(AuditDatasetType auditDataset, IBaseResource resource) {
         return resource instanceof IBaseOperationOutcome outcome ?
                 getEventOutcomeCodeFromOperationOutcome(auditDataset.getFhirContext(), (O)outcome) :
                 EventOutcomeIndicator.Success;
     }
 
     @Override
-    public String getEventOutcomeDescription(T auditDataset, Object response) {
+    public String getEventOutcomeDescription(AuditDatasetType auditDataset, Object response) {
         return response instanceof IBaseOperationOutcome outcome ?
                 getEventOutcomeDescriptionFromOperationOutcome(auditDataset.getFhirContext(), (O)outcome) :
                 null;

@@ -19,9 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti38.Iti38PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti38.asyncresponse.Iti38AsyncResponsePortType;
@@ -50,7 +47,7 @@ public class XCA implements XdsIntegrationProfile {
         ITI_39_ASYNC_RESPONSE(ITI_39_ASYNC_RESPONSE_WS_CONFIG);
 
         @Getter
-        private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -68,7 +65,7 @@ public class XCA implements XdsIntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_38_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_38_WS_CONFIG = new WsTransactionConfiguration(
             "xca-iti38",
             "Cross Gateway Query",
             true,
@@ -84,7 +81,7 @@ public class XCA implements XdsIntegrationProfile {
             true,
             true);
 
-    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_38_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_38_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
             "xca-iti38-async-response",
             "Cross Gateway Query",
             true,
@@ -100,7 +97,7 @@ public class XCA implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> ITI_39_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_39_WS_CONFIG = new WsTransactionConfiguration(
             "xca-iti39",
             "Cross Gateway Retrieve",
             false,
@@ -116,7 +113,7 @@ public class XCA implements XdsIntegrationProfile {
             false,
             true);
 
-    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> ITI_39_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_39_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
             "xca-iti39-async-response",
             "Cross Gateway Retrieve",
             false,

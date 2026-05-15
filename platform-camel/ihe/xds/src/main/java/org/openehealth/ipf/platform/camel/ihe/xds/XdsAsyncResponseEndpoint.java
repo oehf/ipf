@@ -30,14 +30,14 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> {
+public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType> {
 
     public XdsAsyncResponseEndpoint(
-            String endpointUri,
-            String address,
-            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ? extends WsInteractionId<WsTransactionConfiguration<AuditDatasetType>>> component,
-            Map<String, Object> parameters,
-            Class<? extends AbstractWebService> serviceClass) {
+        String endpointUri,
+        String address,
+        AbstractWsComponent<AuditDatasetType> component,
+        Map<String, Object> parameters,
+        Class<? extends AbstractWebService> serviceClass) {
         super(endpointUri, address, component, parameters, serviceClass);
     }
 
@@ -50,17 +50,17 @@ public class XdsAsyncResponseEndpoint<AuditDatasetType extends XdsAuditDataset> 
     @Override
     public JaxWsServiceFactory<AuditDatasetType> getJaxWsServiceFactory() {
         return new JaxWsAsyncResponseServiceFactory<>(
-                getComponent().getWsTransactionConfiguration(),
-                getServiceAddress(),
-                isAudit() ? getComponent().getServerAuditStrategy() : null,
-                getAuditContext(),
-                getCustomCxfInterceptors(),
-                getCorrelator());
+            getComponent().getWsTransactionConfiguration(),
+            getServiceAddress(),
+            isAudit() ? getComponent().getServerAuditStrategy() : null,
+            getAuditContext(),
+            getCustomCxfInterceptors(),
+            getCorrelator());
     }
 
     @Override
-    public AbstractWsProducer<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> endpoint,
-                                                                                                                JaxWsClientFactory<AuditDatasetType> clientFactory) {
+    public AbstractWsProducer<AuditDatasetType, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType> endpoint,
+                                                                  JaxWsClientFactory<AuditDatasetType> clientFactory) {
         throw new IllegalStateException("No producer support for asynchronous response endpoints");
     }
 }

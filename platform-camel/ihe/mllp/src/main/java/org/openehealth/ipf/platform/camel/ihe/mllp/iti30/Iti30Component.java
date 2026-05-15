@@ -20,8 +20,8 @@ import org.openehealth.ipf.commons.ihe.core.TransactionOptionsUtils;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptions;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti30OptionsProvider;
 import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti30Options;
+import org.openehealth.ipf.commons.ihe.hl7v2.options.Iti30OptionsProvider;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionEndpointConfiguration;
 
@@ -52,7 +52,7 @@ public class Iti30Component extends MllpTransactionComponent<FeedAuditDataset> {
     @Override
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
         var config = super.createConfig(uri, parameters);
-        Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider =
+        Hl7v2TransactionOptionsProvider<? extends Hl7v2TransactionOptions> optionsProvider =
                 getAndRemoveOrResolveReferenceParameter(parameters, "iheOptionsProvider", Hl7v2TransactionOptionsProvider.class, new Iti30OptionsProvider());
         var options = getAndRemoveParameter(parameters, "iheOptions", String.class, optionsProvider.getDefaultOption().name());
         List<? extends Hl7v2TransactionOptions> iti30Options = TransactionOptionsUtils.split(options, Iti30Options.class);

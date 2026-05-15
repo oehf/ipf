@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.client.interceptor.BasicAuthInterceptor;
-import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.apache.camel.Endpoint;
 import org.apache.camel.Exchange;
 import org.apache.camel.support.DefaultProducer;
@@ -74,9 +73,10 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
         return client;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>> getEndpoint() {
-        return (FhirEndpoint<AuditDatasetType, FhirComponent<AuditDatasetType>>) super.getEndpoint();
+    public FhirEndpoint<AuditDatasetType> getEndpoint() {
+        return (FhirEndpoint<AuditDatasetType>) super.getEndpoint();
     }
 
     /**
@@ -89,7 +89,7 @@ public class FhirProducer<AuditDatasetType extends FhirAuditDataset> extends Def
     @Override
     public void process(Exchange exchange) {
         var requestFactory = getEndpoint().getClientRequestFactory();
-        IClientExecutable<?, ?> executableClient = requestFactory.getClientExecutable(
+        var executableClient = requestFactory.getClientExecutable(
                 getClient(exchange),
                 exchange.getIn().getBody(),
                 exchange.getIn().getHeaders());

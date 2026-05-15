@@ -65,12 +65,12 @@ public class PatientInfo implements Serializable {
      *     <li>for non-repeatable fields -- always <code>null</code>.</li>
      * </ul>
      */
-    private final Map<String, List<? extends Hl7v2Based>> pojoFields;
+    private final Map<String, List<? extends Hl7v2Based<?>>> pojoFields;
 
     public PatientInfo() {
         this.pojoFields = new HashMap<>();
         this.pojoFields.put("PID-3", new ArrayList<Identifiable>());
-        this.pojoFields.put("PID-5", new ArrayList<Name>());
+        this.pojoFields.put("PID-5", new ArrayList<Name<?>>());
         this.pojoFields.put("PID-7", null);
         this.pojoFields.put("PID-8", null);
         this.pojoFields.put("PID-11", new ArrayList<Address>());
@@ -110,9 +110,10 @@ public class PatientInfo implements Serializable {
         }
 
         var xdsFields = pojoFields.get(fieldId);
-        ListIterator xdsIterator = (xdsFields != null) ? xdsFields.listIterator() : null;
+        @SuppressWarnings("unchecked")
+        ListIterator<Hl7v2Based<?>> xdsIterator = (xdsFields != null) ? (ListIterator<Hl7v2Based<?>>) xdsFields.listIterator() : null;
 
-        return new SynchronizingListIterator<String, Hl7v2Based>(stringsIterator, xdsIterator) {
+        return new SynchronizingListIterator<>(stringsIterator, xdsIterator) {
             private void validateParameter(String s) {
                 if ((s != null) && s.contains("~")) {
                     throw new RuntimeException("Repetitions shall be handled by multiple calls to .add()/.set(), and not by the tilde in " + s);
@@ -165,11 +166,12 @@ public class PatientInfo implements Serializable {
         };
     }
 
-    private <T extends Hl7v2Based> ListIterator<T> getXdsFieldIterator(String fieldId) {
+    private <T extends Hl7v2Based<?>> ListIterator<T> getXdsFieldIterator(String fieldId) {
         if (pojoFields.get(fieldId) == null) {
             throw new IllegalArgumentException(fieldId + " is not a known repeatable SourcePatientInfo element");
         }
 
+        @SuppressWarnings("unchecked")
         var xdsIterator = (ListIterator<T>) pojoFields.get(fieldId).listIterator();
         var stringsIterator = getStrings(fieldId).listIterator();
 
@@ -177,8 +179,10 @@ public class PatientInfo implements Serializable {
             private T prepareValue(T xdsObject) {
                 if ("PID-5".equals(fieldId) && (xdsObject != null) && !(xdsObject instanceof XpnName)) {
                     var xpnName = new XpnName();
-                    xpnName.copyFrom((Name)xdsObject);
-                    return (T) xpnName;
+                    xpnName.copyFrom((Name<?>) xdsObject);
+                    @SuppressWarnings("unchecked")
+                    var result = (T) xpnName;
+                    return result;
                 }
                 return xdsObject;
             }
@@ -211,8 +215,8 @@ public class PatientInfo implements Serializable {
      * Returns a snapshot of the list of patient names.  See the note in the class javadoc.
      * @return iterator over the names of the patient (PID-5).
      */
-    public ListIterator<Name> getNames() {
-        return getXdsFieldIterator("PID-5");
+    public ListIterator<Name<?>> getNames() {
+        return this.<Name<?>>getXdsFieldIterator("PID-5");
     }
 
     private String getFirstStringValue(String fieldName) {

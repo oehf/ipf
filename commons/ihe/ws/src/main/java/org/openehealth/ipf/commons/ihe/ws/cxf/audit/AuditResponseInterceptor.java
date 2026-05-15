@@ -38,10 +38,10 @@ import org.w3c.dom.Element;
  * 
  * @author Dmytro Rud
  */
-public class AuditResponseInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
+public class AuditResponseInterceptor<AuditDatasetType extends WsAuditDataset> extends AbstractAuditInterceptor<AuditDatasetType> {
     private static final Logger log = LoggerFactory.getLogger(AuditResponseInterceptor.class);
 
-    private final AsynchronyCorrelator<T> correlator;
+    private final AsynchronyCorrelator correlator;
     private final boolean asyncReceiver;
     private final boolean serverSide;
     
@@ -61,10 +61,10 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
      *      on the asynchronous receiver side. 
      */
     public AuditResponseInterceptor(
-            AuditStrategy<T> auditStrategy,
+            AuditStrategy<AuditDatasetType> auditStrategy,
             AuditContext auditContext,
             boolean serverSide,
-            AsynchronyCorrelator<T> correlator,
+            AsynchronyCorrelator correlator,
             boolean asyncReceiver) 
     {
         super(isClient(asyncReceiver, serverSide) ? Phase.INVOKE : Phase.PREPARE_SEND, auditStrategy, auditContext);
@@ -107,7 +107,7 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
             return;
         }
 
-        T auditDataset = null;
+        AuditDatasetType auditDataset = null;
 
         // try to get the audit dataset from the asynchrony correlator --
         // will work only when we are on asynchronous receiver, and the WSA
@@ -124,7 +124,9 @@ public class AuditResponseInterceptor<T extends WsAuditDataset> extends Abstract
                 }
             }
             if (messageId != null) {
-                auditDataset = correlator.getAuditDataset(messageId);
+                @SuppressWarnings("unchecked")
+                var retrieved = (AuditDatasetType) correlator.getAuditDataset(messageId);
+                auditDataset = retrieved;
                 // message.getExchange().put(CXF_EXCHANGE_KEY, auditDataset);
             } else {
                 log.error("Cannot determine WSA message ID");

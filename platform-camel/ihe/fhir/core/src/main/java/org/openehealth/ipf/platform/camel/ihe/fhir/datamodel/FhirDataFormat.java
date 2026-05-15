@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.openehealth.ipf.platform.camel.ihe.fhir.datamodel;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import lombok.Setter;
 import org.apache.camel.Exchange;
 import org.apache.camel.spi.DataFormat;
 import org.apache.camel.support.ExchangeHelper;
@@ -30,16 +30,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- *
+ * Camel Dataformat for FHIR
  */
 public abstract class FhirDataFormat extends ServiceSupport implements DataFormat  {
 
+    @Setter
     private FhirContext defaultFhirContext = FhirContext.forDstu3();
     private Charset defaultCharset = StandardCharsets.UTF_8;
-
-    public void setDefaultFhirContext(FhirContext context) {
-        defaultFhirContext = context;
-    }
 
     public void setDefaultCharset(String charset) {
         defaultCharset = Charset.forName(charset);

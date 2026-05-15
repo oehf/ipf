@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xacml20.iti79.Iti79AuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.iti79.Iti79AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xacml20.iti79.Iti79PortType;
 
@@ -38,11 +37,11 @@ import java.util.List;
 public class SER implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements WsInteractionId<WsTransactionConfiguration<Iti79AuditDataset>> {
+    public enum Interactions implements WsInteractionId {
         ITI_79(ITI_79_WS_CONFIG);
 
         @Getter
-        private final WsTransactionConfiguration<Iti79AuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class SER implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration<Iti79AuditDataset> ITI_79_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_79_WS_CONFIG = new WsTransactionConfiguration(
         "ser-iti79",
         "Authorization Decisions Query",
         true,

@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 
 /**
  * Interface for Camel components which handle HL7v2 messages,
@@ -26,22 +25,22 @@ import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
  *
  * @author Dmytro Rud
  */
-public interface Hl7v2ConfigurationHolder<T extends MllpAuditDataset> {
+public interface Hl7v2ConfigurationHolder {
 
     /**
      * Returns component configuration.
      */
-    default Hl7v2TransactionConfiguration<T> getHl7v2TransactionConfiguration() {
+    default Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return getInteractionId().getHl7v2TransactionConfiguration();
     }
 
     /**
      * Returns transaction-specific NAK factory.
      */
-    default NakFactory<T> getNakFactory() {
+    default NakFactory getNakFactory() {
         return getInteractionId().getNakFactory();
     }
 
-    Hl7v2InteractionId<T> getInteractionId();
+    Hl7v2InteractionId getInteractionId();
 
 }

@@ -29,9 +29,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * @since 5.0
  */
 @UriEndpoint(scheme = "pdqm-iti119", title = "ITI-119 PDQm", syntax = "pdqm-iti119:host:port", category = Category.HTTP)
-public class Iti119Endpoint extends FhirEndpoint<FhirQueryAuditDataset, Iti119Component> {
+public class Iti119Endpoint extends FhirEndpoint<FhirQueryAuditDataset> {
 
-    public Iti119Endpoint(String uri, Iti119Component fhirComponent, FhirEndpointConfiguration<FhirQueryAuditDataset> config) {
+    public Iti119Endpoint(String uri, Iti119Component fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent, config);
     }
 

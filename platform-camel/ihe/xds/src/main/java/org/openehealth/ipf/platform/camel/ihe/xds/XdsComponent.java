@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.platform.camel.ihe.xds;
 
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.XdsInteractionId;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -28,9 +27,9 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
  * @since 3.1
  */
 public abstract class XdsComponent<AuditDatasetType extends XdsAuditDataset>
-        extends AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, XdsInteractionId<WsTransactionConfiguration<AuditDatasetType>>> {
+        extends AbstractWsComponent<AuditDatasetType> {
 
-    public XdsComponent(XdsInteractionId<WsTransactionConfiguration<AuditDatasetType>> interactionId) {
+    public XdsComponent(XdsInteractionId interactionId) {
         super(interactionId);
     }
 

@@ -24,9 +24,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti65Endpoint extends FhirEndpoint<Iti65AuditDataset, Iti65Component> {
+public class Iti65Endpoint extends FhirEndpoint<Iti65AuditDataset> {
 
-    public Iti65Endpoint(String uri, Iti65Component fhirComponent, FhirEndpointConfiguration<Iti65AuditDataset> config) {
+    public Iti65Endpoint(String uri, Iti65Component fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent, config);
     }
 

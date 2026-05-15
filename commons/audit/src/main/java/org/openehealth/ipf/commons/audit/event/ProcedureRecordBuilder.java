@@ -28,7 +28,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a Procedure Record event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.15
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.15">Part 15, A.5.3.15</a>
  * <p>
  * This message describes the event of a procedure record being created, accessed, modified,
  * accessed, or deleted. This message may only include information about a single patient.

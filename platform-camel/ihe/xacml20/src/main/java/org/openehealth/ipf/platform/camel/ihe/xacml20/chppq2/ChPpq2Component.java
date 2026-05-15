@@ -16,8 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq2;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.CH_PPQ;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -28,7 +26,7 @@ import java.util.Map;
  * @since 3.5.1
  * @author Dmytro Rud
  */
-public class ChPpq2Component extends AbstractWsComponent<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, WsInteractionId<WsTransactionConfiguration<ChPpqAuditDataset>>> {
+public class ChPpq2Component extends AbstractWsComponent<ChPpqAuditDataset> {
 
     public ChPpq2Component() {
         super(CH_PPQ.Interactions.CH_PPQ_2);

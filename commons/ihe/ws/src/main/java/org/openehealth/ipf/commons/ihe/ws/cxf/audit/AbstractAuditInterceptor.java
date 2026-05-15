@@ -43,7 +43,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Dmytro Rud
  */
-abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends AbstractSafeInterceptor {
+abstract public class AbstractAuditInterceptor<AuditDatasetType extends WsAuditDataset> extends AbstractSafeInterceptor {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractAuditInterceptor.class);
 
@@ -56,7 +56,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
     /**
      * Audit strategy associated with this interceptor.
      */
-    private final AuditStrategy<T> auditStrategy;
+    private final AuditStrategy<AuditDatasetType> auditStrategy;
 
     @Getter
     private final AuditContext auditContext;
@@ -68,7 +68,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      * @param auditStrategy an audit strategy instance. <p><code>null</code> values are
      *                      explicitly prohibited.
      */
-    protected AbstractAuditInterceptor(String phase, AuditStrategy<T> auditStrategy, AuditContext auditContext) {
+    protected AbstractAuditInterceptor(String phase, AuditStrategy<AuditDatasetType> auditStrategy, AuditContext auditContext) {
         super(phase);
         this.auditStrategy = requireNonNull(auditStrategy);
         this.auditContext = requireNonNull(auditContext);
@@ -86,8 +86,8 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      * @return an audit dataset instance, or <code>null</code> when this instance
      * could be neither obtained nor created from scratch.
      */
-    protected T getAuditDataset(SoapMessage message) {
-        T auditDataset = InterceptorUtils.findContextualProperty(message, DATASET_CONTEXT_KEY);
+    protected AuditDatasetType getAuditDataset(SoapMessage message) {
+        AuditDatasetType auditDataset = InterceptorUtils.findContextualProperty(message, DATASET_CONTEXT_KEY);
         if (auditDataset == null) {
             auditDataset = getAuditStrategy().createAuditDataset();
             if (auditDataset == null) {
@@ -105,7 +105,7 @@ abstract public class AbstractAuditInterceptor<T extends WsAuditDataset> extends
      *
      * @return an audit strategy instance or <code>null</code> when none configured.
      */
-    protected AuditStrategy<T> getAuditStrategy() {
+    protected AuditStrategy<AuditDatasetType> getAuditStrategy() {
         return auditStrategy;
     }
 

@@ -19,9 +19,9 @@ import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguration;
 
-public class ChPpq4Endpoint extends FhirEndpoint<ChPpqmAuditDataset, ChPpq4Component> {
+public class ChPpq4Endpoint extends FhirEndpoint<ChPpqmAuditDataset> {
 
-    public ChPpq4Endpoint(String uri, ChPpq4Component fhirComponent, FhirEndpointConfiguration<ChPpqmAuditDataset> config) {
+    public ChPpq4Endpoint(String uri, ChPpq4Component fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent, config);
     }
 

@@ -31,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * @since 3.1
  */
 public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> extends FhirComponent<AuditDatasetType>
-        implements FhirInteractionId<AuditDatasetType> {
+        implements FhirInteractionId {
 
     @Getter @Setter
     private String name;
@@ -40,7 +40,7 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
     @Getter @Setter
     private boolean query;
     @Getter @Setter
-    private FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration;
+    private FhirTransactionConfiguration fhirTransactionConfiguration;
 
     public CustomFhirComponent() {
         super(null);
@@ -52,14 +52,14 @@ public class CustomFhirComponent<AuditDatasetType extends FhirAuditDataset> exte
         setFhirInteractionId(this);
     }
 
-    public CustomFhirComponent(FhirTransactionConfiguration<AuditDatasetType> fhirTransactionConfiguration) {
+    public CustomFhirComponent(FhirTransactionConfiguration fhirTransactionConfiguration) {
         this();
         this.fhirTransactionConfiguration = fhirTransactionConfiguration;
     }
 
     @Override
-    protected FhirEndpoint<?, ?> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config) {
-        return new CustomFhirEndpoint(uri, this, config);
+    protected FhirEndpoint<AuditDatasetType> doCreateEndpoint(String uri, FhirEndpointConfiguration config) {
+        return new CustomFhirEndpoint<>(uri, this, config);
     }
 
 }

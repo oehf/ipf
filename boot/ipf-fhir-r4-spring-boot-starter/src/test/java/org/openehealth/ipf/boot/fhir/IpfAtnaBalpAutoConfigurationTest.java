@@ -49,7 +49,7 @@ public class IpfAtnaBalpAutoConfigurationTest {
         assertEquals("mysite", auditContext.getAuditEnterpriseSiteId());
         assertEquals("localhost", auditContext.getAuditRepositoryHostName());
         assertEquals(1342, auditContext.getAuditRepositoryPort());
-        assertEquals("FHIR-REST-TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
+        assertEquals("FHIR-REST-APACHE5-TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
         assertInstanceOf(AsynchronousAuditMessageQueue.class, auditContext.getAuditMessageQueue());
 
         assertEquals("fhir", auditContext.getAuditRepositoryContextPath());

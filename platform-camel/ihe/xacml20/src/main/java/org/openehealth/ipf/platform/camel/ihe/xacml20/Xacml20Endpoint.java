@@ -27,12 +27,12 @@ import java.util.Map;
  * @since 3.5.1
  * @author Dmytro Rud
  */
-abstract public class Xacml20Endpoint<T extends WsAuditDataset> extends AbstractWsEndpoint<T, WsTransactionConfiguration<T>> {
+abstract public class Xacml20Endpoint<T extends WsAuditDataset> extends AbstractWsEndpoint<T> {
 
     public Xacml20Endpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<T, WsTransactionConfiguration<T>, ? extends WsInteractionId<WsTransactionConfiguration<T>>> component,
+            AbstractWsComponent<T> component,
             Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass)
     {

@@ -33,7 +33,7 @@ public class MdmHl7v2TransactionConfigurationFactoryBean implements FactoryBean<
 
     @Override
     public Hl7v2TransactionConfiguration getObject() {
-        return new Hl7v2TransactionConfiguration<>(
+        return new Hl7v2TransactionConfiguration(
                 "mdm",
                 "Medical Document Management",
                 false,

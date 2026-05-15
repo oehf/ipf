@@ -19,8 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.pharm1.Pharm1PortType;
 
@@ -42,7 +40,7 @@ public class CMPD implements XdsIntegrationProfile {
     public enum Interactions implements XdsInteractionId {
         PHARM_1(ITI_PHARM_1_WS_CONFIG);
 
-        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private final WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -60,7 +58,7 @@ public class CMPD implements XdsIntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_PHARM_1_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_PHARM_1_WS_CONFIG = new WsTransactionConfiguration(
             "cmpd-pharm1",
             "Query Pharmacy Documents",
             true,

@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +35,7 @@ public class CONTINUA_HRN implements XdsIntegrationProfile {
     public enum Interactions implements XdsInteractionId {
         ITI_41(XDS.Interactions.ITI_41.getWsTransactionConfiguration());
 
-        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private final WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {

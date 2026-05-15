@@ -33,7 +33,6 @@ import org.apache.camel.support.DefaultEndpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.HL7v2Endpoint;
@@ -51,12 +50,9 @@ import static java.util.Objects.requireNonNull;
  * @author Dmytro Rud
  */
 @ManagedResource(description = "Managed IPF MLLP ITI Endpoint")
-public abstract class MllpEndpoint<
-        ConfigType extends MllpEndpointConfiguration,
-        AuditDatasetType extends MllpAuditDataset,
-        ComponentType extends MllpComponent<ConfigType, AuditDatasetType>>
+public abstract class MllpEndpoint<ConfigType extends MllpEndpointConfiguration, ComponentType extends MllpComponent<ConfigType>>
         extends DefaultEndpoint
-        implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint<AuditDatasetType> {
+        implements InterceptableEndpoint<ConfigType, ComponentType>, HL7v2Endpoint {
 
     @Getter(AccessLevel.PROTECTED)
     private final ConfigType config;
@@ -116,7 +112,7 @@ public abstract class MllpEndpoint<
      * Returns transaction configuration.
      */
     @Override
-    public Hl7v2TransactionConfiguration<AuditDatasetType> getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return mllpComponent.getHl7v2TransactionConfiguration();
     }
 
@@ -124,12 +120,12 @@ public abstract class MllpEndpoint<
      * Returns transaction-specific ACK and NAK factory.
      */
     @Override
-    public NakFactory<AuditDatasetType> getNakFactory() {
+    public NakFactory getNakFactory() {
         return mllpComponent.getNakFactory();
     }
 
     @Override
-    public Hl7v2InteractionId<AuditDatasetType> getInteractionId() {
+    public Hl7v2InteractionId getInteractionId() {
         return mllpComponent.getInteractionId();
     }
 
@@ -230,7 +226,7 @@ public abstract class MllpEndpoint<
 
     @Override
     public boolean equals(Object object) {
-        if (object instanceof MllpEndpoint<?, ?, ?> that) {
+        if (object instanceof MllpEndpoint<?, ?> that) {
             return wrappedEndpoint.equals(that.getWrappedEndpoint());
         }
         return false;

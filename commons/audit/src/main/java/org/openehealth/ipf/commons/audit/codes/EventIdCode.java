@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.audit.types.EventId;
 
 /**
  * Audit Event ID Code as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_400
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_400">Part 16, CID 400</a>
  * 1.2.840.10008.6.1.903
  *
  * @author Christian Ohr

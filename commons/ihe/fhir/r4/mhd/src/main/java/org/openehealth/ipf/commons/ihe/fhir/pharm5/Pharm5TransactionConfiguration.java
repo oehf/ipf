@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.pharm5;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * Static configuration for CMPD PHARM-5 transaction components
@@ -26,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
  * @author Quentin Ligier
  * @since 4.3
  **/
-public class Pharm5TransactionConfiguration extends FhirTransactionConfiguration<FhirQueryAuditDataset> {
+public class Pharm5TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Pharm5TransactionConfiguration() {
         super("cmpd-pharm5",

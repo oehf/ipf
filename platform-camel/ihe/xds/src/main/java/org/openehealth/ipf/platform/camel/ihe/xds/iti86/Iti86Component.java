@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti86;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -46,9 +45,9 @@ public class Iti86Component extends XdsComponent<XdsNonconstructiveDocumentSetRe
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<>(uri, remaining, this, parameters, Iti86Service.class) {
             @Override
-            public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset>, ?, ?> getProducer(
-                    AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset, WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset>> endpoint,
-                    JaxWsClientFactory<XdsNonconstructiveDocumentSetRequestAuditDataset> clientFactory) {
+            public AbstractWsProducer<XdsNonconstructiveDocumentSetRequestAuditDataset, ?, ?> getProducer(
+                AbstractWsEndpoint<XdsNonconstructiveDocumentSetRequestAuditDataset> endpoint,
+                JaxWsClientFactory<XdsNonconstructiveDocumentSetRequestAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, RemoveDocumentsRequestType.class, RegistryResponseType.class);
             }
         };

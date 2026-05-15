@@ -65,7 +65,7 @@ public class Person extends Hl7v2Based<XCN> {
      * @param name
      *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
-    public Person(Identifiable id, Name name) {
+    public Person(Identifiable id, Name<?> name) {
         this();
         setId(id);
         setName(name);
@@ -107,7 +107,7 @@ public class Person extends Hl7v2Based<XCN> {
     /**
      * @return the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
-    public Name getName() {
+    public Name<?> getName() {
         var name = new XcnName(getHapiObject());
         return name.isEmpty() ? null : name;
     }
@@ -116,7 +116,7 @@ public class Person extends Hl7v2Based<XCN> {
      * @param name
      *          the name of the person (XCN.2.1, XCN.3, XCN.4, XCN.5, XCN.6, XCN.7).
      */
-    public void setName(Name name) {
+    public void setName(Name<?> name) {
         if (name != null) {
             var thisName = new XcnName(getHapiObject());
             thisName.copyFrom(name);

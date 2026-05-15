@@ -1,6 +1,6 @@
 ipf:
   atna:
-    audit-repository-transport: FHIR-REST-TLS
+    audit-repository-transport: FHIR-REST-APACHE5-TLS
     balp:
       audit-repository-context-path: fhir
       oauth:

@@ -26,7 +26,7 @@ import static java.util.Objects.requireNonNull;
  * JCache-based implementation of asynchronous message correlator.
  * @author Dmytro Rud
  */
-public class JCacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset> implements AsynchronyCorrelator<AuditDatasetType> {
+public class JCacheAsynchronyCorrelator implements AsynchronyCorrelator {
 
     private static final String SERVICE_ENDPOINT_URI_SUFFIX = ".serviceEndpoint";
     private static final String CORRELATION_KEY_SUFFIX      = ".correlationKey";
@@ -75,7 +75,7 @@ public class JCacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset>
     }
 
     @Override
-    public AuditDatasetType getAuditDataset(String messageId) {
+    public WsAuditDataset getAuditDataset(String messageId) {
         return get(messageId, AUDIT_DATASET_SUFFIX);
     }
 

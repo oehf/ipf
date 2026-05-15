@@ -32,7 +32,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.qedm.QEDM.Interactions.PCC_44
  * @author Christian Ohr
  * @since 3.6
  */
-public class Pcc44Component extends FhirComponentWithOptions<FhirQueryAuditDataset, Pcc44Options, Pcc44OptionsProvider> {
+public class Pcc44Component extends FhirComponentWithOptions<FhirQueryAuditDataset, Pcc44Options> {
 
     public Pcc44Component() {
         super(PCC_44, Pcc44OptionsProvider::new);
@@ -43,7 +43,7 @@ public class Pcc44Component extends FhirComponentWithOptions<FhirQueryAuditDatas
     }
 
     @Override
-    protected Pcc44Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<FhirQueryAuditDataset> config) {
+    protected Pcc44Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration config) {
         return new Pcc44Endpoint(uri, this, config);
     }
 

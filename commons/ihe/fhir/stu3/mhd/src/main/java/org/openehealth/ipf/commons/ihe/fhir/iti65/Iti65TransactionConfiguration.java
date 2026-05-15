@@ -27,7 +27,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
  * @author Christian Ohr
  * @since 3.4
  */
-public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<Iti65AuditDataset> {
+public class Iti65TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti65TransactionConfiguration() {
         super("mhd-iti65",

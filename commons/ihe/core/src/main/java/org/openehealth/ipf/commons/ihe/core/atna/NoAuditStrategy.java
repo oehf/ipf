@@ -20,24 +20,24 @@ package org.openehealth.ipf.commons.ihe.core.atna;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
-public class NoAuditStrategy<T extends AuditDataset> extends AuditStrategySupport<T> {
+public class NoAuditStrategy<AuditDatasetType extends AuditDataset> extends AuditStrategySupport<AuditDatasetType> {
 
     public NoAuditStrategy(boolean serverSide) {
         super(serverSide);
     }
 
     @Override
-    public T createAuditDataset() {
+    public AuditDatasetType createAuditDataset() {
         return null;
     }
 
     @Override
-    public void doAudit(AuditContext auditContext, T auditDataset) {
+    public void doAudit(AuditContext auditContext, AuditDatasetType auditDataset) {
         // no audit
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, AuditDatasetType auditDataset) {
         return new AuditMessage[0];
     }
 }

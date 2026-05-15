@@ -27,7 +27,7 @@ import java.util.List;
 
 /**
  * Builds an Audit Event representing a Patient Record event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.4
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.4">Part 15, A.5.3.4</a>
  * <p>
  * This message describes the event of a patient record being created, modified, accessed, or deleted.
  * </p>

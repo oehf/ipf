@@ -19,13 +19,14 @@ package org.openehealth.ipf.commons.audit.event;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.codes.*;
 import org.openehealth.ipf.commons.audit.types.EventType;
+import org.openehealth.ipf.commons.audit.types.MediaType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
 import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a DICOM Instances Transferred event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.7
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.7">Part 15, A.5.3.7</a>
  * <p>
  * This message describes the event of the completion of transferring DICOM SOP Instances
  * between two Application Entities. This message may only include information about a
@@ -50,44 +51,38 @@ public class DicomInstancesTransferredBuilder extends BaseAuditMessageBuilder<Di
                                             PurposeOfUse... purposesOfUse) {
         super();
         setEventIdentification(outcome,
-                eventOutcomeDescription,
-                eventActionCode,
-                EventIdCode.DICOMInstancesTransferred,
-                eventType,
-                purposesOfUse
+            eventOutcomeDescription,
+            eventActionCode,
+            EventIdCode.DICOMInstancesTransferred,
+            eventType,
+            purposesOfUse
         );
     }
 
     /**
-     * @param userId          The identity of the process sending the data
-     * @param altUserId       Alternate UserID
-     * @param userName        UserName
-     * @param networkId       Network Access Point ID
-     * @param userIsRequestor Whether the destination participant represents the requestor (i.e. pull request)
+     * @param userId                  The identity of the process sending or receiving the data
+     * @param altUserId               Alternate UserID
+     * @param userName                UserName
+     * @param activeParticipantRoleId Role ID
+     * @param networkId               Network Access Point ID
+     * @param networkAccessPointType  Network Access Point Type
+     * @param mediaIdentifier         media identifier
+     * @param mediaType               media type
+     * @param userIsRequestor         Whether the destination participant represents the requestor (i.e. pull request)
      * @return this
      */
-    public DicomInstancesTransferredBuilder setSendingProcessParticipant(String userId,
-                                                                         String altUserId,
-                                                                         String userName,
-                                                                         String networkId,
-                                                                         boolean userIsRequestor) {
-        return addSourceActiveParticipant(userId, altUserId, userName, networkId, userIsRequestor);
-    }
-
-    /**
-     * @param userId          The identity of the process receiving the data
-     * @param altUserId       Alternate UserID
-     * @param userName        UserName
-     * @param networkId       Network Access Point ID
-     * @param userIsRequestor Whether the destination participant represents the requestor (i.e. pull request)
-     * @return this
-     */
-    public DicomInstancesTransferredBuilder setReceivingProcessParticipant(String userId,
-                                                                           String altUserId,
-                                                                           String userName,
-                                                                           String networkId,
-                                                                           boolean userIsRequestor) {
-        return addDestinationActiveParticipant(userId, altUserId, userName, networkId, userIsRequestor);
+    public DicomInstancesTransferredBuilder setProcessParticipant(String userId,
+                                                                  String altUserId,
+                                                                  String userName,
+                                                                  ActiveParticipantRoleIdCode activeParticipantRoleId,
+                                                                  String networkId,
+                                                                  NetworkAccessPointTypeCode networkAccessPointType,
+                                                                  String mediaIdentifier,
+                                                                  MediaType mediaType,
+                                                                  boolean userIsRequestor) {
+        return addActiveParticipant(
+            userId, altUserId, userName, userIsRequestor, Collections.singletonList(activeParticipantRoleId),
+            networkId, networkAccessPointType, mediaIdentifier, mediaType);
     }
 
     /**
@@ -105,12 +100,6 @@ public class DicomInstancesTransferredBuilder extends BaseAuditMessageBuilder<Di
     @Override
     public void validate() {
         super.validate();
-        if (getMessage().findActiveParticipants(ap -> ap.getRoleIDCodes().contains(ActiveParticipantRoleIdCode.Source)).size() != 1) {
-            throw new AuditException("Must have one ActiveParticipant with RoleIDCode Source");
-        }
-        if (getMessage().findActiveParticipants(ap -> ap.getRoleIDCodes().contains(ActiveParticipantRoleIdCode.Destination)).size() != 1) {
-            throw new AuditException("Must have one ActiveParticipant with RoleIDCode Destination");
-        }
         if (getMessage().findParticipantObjectIdentifications(poi -> poi.getParticipantObjectIDTypeCode() == ParticipantObjectIdTypeCode.PatientNumber).size() != 1) {
             throw new AuditException("Must one ParticipantObjectIdentification with ParticipantObjectIDTypeCode PatientNumber");
         }

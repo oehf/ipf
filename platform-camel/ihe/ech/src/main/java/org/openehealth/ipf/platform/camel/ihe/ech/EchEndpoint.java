@@ -23,12 +23,12 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
 import java.util.Map;
 
-abstract public class EchEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> {
+abstract public class EchEndpoint extends AbstractWsEndpoint<WsAuditDataset> {
 
     protected EchEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> component,
+            AbstractWsComponent<WsAuditDataset> component,
             Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass) 
     {

@@ -41,7 +41,7 @@ public class PatientInfoXml {
     private List<Identifiable> ids;
 
     @XmlElement(name = "name")
-    private List<Name> names;
+    private List<Name<?>> names;
 
     @XmlElement(name = "birthTime")
     private Timestamp dateOfBirth;
@@ -67,14 +67,14 @@ public class PatientInfoXml {
         this.ids = ids;
     }
 
-    public List<Name> getNames() {
+    public List<Name<?>> getNames() {
         if (names == null) {
             names = new ArrayList<>();
         }
         return names;
     }
 
-    public void setNames(List<Name> names) {
+    public void setNames(List<Name<?>> names) {
         this.names = names;
     }
 

@@ -16,14 +16,15 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti68bin;
 
-import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
+import ca.uhn.fhir.context.FhirVersionEnum;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 
 /**
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti68BinaryTransactionConfiguration extends TransactionConfiguration<FhirAuditDataset> {
+public class Iti68BinaryTransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti68BinaryTransactionConfiguration() {
 
@@ -31,6 +32,10 @@ public class Iti68BinaryTransactionConfiguration extends TransactionConfiguratio
                 "Retrieve Document",
                 false,
                 null,
-                new Iti68BinaryServerAuditStrategy());
+                new Iti68BinaryServerAuditStrategy(),
+                FhirVersionEnum.R4,
+            new Iti68BinaryResourceProvider(),
+            new Iti68BinaryRequestFactory(),
+            MhdValidator::new);
     }
 }

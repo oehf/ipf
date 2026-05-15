@@ -19,7 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.*;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18AuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti18.Iti18PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti41.Iti41ClientAuditStrategy;
@@ -70,7 +69,7 @@ public class XDS implements XdsIntegrationProfile {
         ITI_62(ITI_62_WS_CONFIG),
         ITI_86(ITI_86_WS_CONFIG);
 
-        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private final WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -88,7 +87,7 @@ public class XDS implements XdsIntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_18_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_18_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti18",
             "Registry Stored Query",
             true,
@@ -104,7 +103,7 @@ public class XDS implements XdsIntegrationProfile {
             true,
             false);
 
-    private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_41_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_41_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti41",
             "Provide and Register Document Set-b",
             false,
@@ -120,7 +119,7 @@ public class XDS implements XdsIntegrationProfile {
             false,
             true);
 
-    private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_41_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_41_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti41-async-response",
             "Provide and Register Document Set-b",
             false,
@@ -136,7 +135,7 @@ public class XDS implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_42_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_42_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti42",
             "Register Document Set-b",
             false,
@@ -152,7 +151,7 @@ public class XDS implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> ITI_43_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_43_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti43",
             "Retrieve Document Set",
             false,
@@ -168,7 +167,7 @@ public class XDS implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<XdsQueryAuditDataset> ITI_51_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_51_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti51",
             "Multi-Patient Stored Query",
             true,
@@ -184,7 +183,7 @@ public class XDS implements XdsIntegrationProfile {
             true,
             false);
 
-    private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_57_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_57_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti57",
             "XDS Metadata Update",
             false,
@@ -201,7 +200,7 @@ public class XDS implements XdsIntegrationProfile {
             false);
 
 
-    private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_61_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_61_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti61",
             "Register On-Demand Document Entry",
             false,
@@ -217,7 +216,7 @@ public class XDS implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<XdsRemoveMetadataAuditDataset> ITI_62_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_62_WS_CONFIG = new WsTransactionConfiguration(
             "xds-iti62",
             "Delete Document Set",
             false,
@@ -233,7 +232,7 @@ public class XDS implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> ITI_86_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ITI_86_WS_CONFIG = new WsTransactionConfiguration(
             "rmd-iti86",
             "Remove Documents",
             false,

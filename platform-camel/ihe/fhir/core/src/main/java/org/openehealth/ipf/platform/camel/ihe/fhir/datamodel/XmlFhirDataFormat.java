@@ -20,7 +20,7 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 
 /**
- *
+ * Camel Dataformat for XML FHIR
  */
 public class XmlFhirDataFormat extends FhirDataFormat {
 

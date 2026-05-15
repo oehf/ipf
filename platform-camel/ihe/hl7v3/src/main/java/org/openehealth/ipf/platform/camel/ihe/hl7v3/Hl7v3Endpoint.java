@@ -21,9 +21,7 @@ import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ServiceFactory;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
-import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 
 import java.util.Map;
@@ -33,43 +31,42 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-public abstract class Hl7v3Endpoint<ConfigType extends Hl7v3WsTransactionConfiguration>
-        extends AbstractWsEndpoint<Hl7v3AuditDataset, ConfigType> {
+public abstract class Hl7v3Endpoint extends AbstractWsEndpoint<Hl7v3AuditDataset> {
 
     protected Hl7v3Endpoint(
-            String endpointUri,
-            String address,
-            AbstractWsComponent<Hl7v3AuditDataset, ConfigType, ? extends WsInteractionId<ConfigType>> component,
-            Map<String, Object> parameters,
-            Class<? extends AbstractWebService> serviceClass) {
+        String endpointUri,
+        String address,
+        Hl7v3Component component,
+        Map<String, Object> parameters,
+        Class<? extends AbstractWebService> serviceClass) {
         super(endpointUri, address, component, parameters, serviceClass);
     }
 
     @Override
     public JaxWsClientFactory<Hl7v3AuditDataset> getJaxWsClientFactory() {
         return new Hl7v3ClientFactory(
-                getComponent().getWsTransactionConfiguration(),
-                getServiceUrl(),
-                isAudit() ? getComponent().getClientAuditStrategy() : null,
-                getAuditContext(),
-                getCustomCxfInterceptors(),
-                getFeatures(),
-                getProperties(),
-                getCorrelator(),
-                getSecurityInformation(),
-                getHttpClientPolicy());
+            (Hl7v3WsTransactionConfiguration) getComponent().getWsTransactionConfiguration(),
+            getServiceUrl(),
+            isAudit() ? getComponent().getClientAuditStrategy() : null,
+            getAuditContext(),
+            getCustomCxfInterceptors(),
+            getFeatures(),
+            getProperties(),
+            getCorrelator(),
+            getSecurityInformation(),
+            getHttpClientPolicy());
     }
 
 
     @Override
     public JaxWsServiceFactory<Hl7v3AuditDataset> getJaxWsServiceFactory() {
         return new Hl7v3ServiceFactory(
-                getComponent().getWsTransactionConfiguration(),
-                getServiceAddress(),
-                isAudit() ? getComponent().getServerAuditStrategy() : null,
-                getAuditContext(),
-                getCustomCxfInterceptors(),
-                getRejectionHandlingStrategy());
+            (Hl7v3WsTransactionConfiguration) getComponent().getWsTransactionConfiguration(),
+            getServiceAddress(),
+            isAudit() ? getComponent().getServerAuditStrategy() : null,
+            getAuditContext(),
+            getCustomCxfInterceptors(),
+            getRejectionHandlingStrategy());
     }
 
 }

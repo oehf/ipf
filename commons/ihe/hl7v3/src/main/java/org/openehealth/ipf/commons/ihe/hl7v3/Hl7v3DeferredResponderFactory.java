@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.WsSecurityInformation;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 
@@ -38,7 +39,7 @@ import java.util.Map;
 public class Hl7v3DeferredResponderFactory extends JaxWsClientFactory<Hl7v3AuditDataset> {
 
     public Hl7v3DeferredResponderFactory(
-            Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
             AuditStrategy<Hl7v3AuditDataset> auditStrategy,
             AuditContext auditContext,

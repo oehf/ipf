@@ -63,13 +63,15 @@ public class Iti68BinaryComponent extends ServletComponent implements Intercepta
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<FhirAuditDataset> getClientAuditStrategy() {
-        return MHD.RetrieveBinaryInteractions.ITI_68_BIN.getTransactionConfiguration().getClientAuditStrategy();
+        return (AuditStrategy<FhirAuditDataset>)MHD.RetrieveBinaryInteractions.ITI_68_BIN.getTransactionConfiguration().getClientAuditStrategy();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<FhirAuditDataset> getServerAuditStrategy() {
-        return MHD.RetrieveBinaryInteractions.ITI_68_BIN.getTransactionConfiguration().getServerAuditStrategy();
+        return (AuditStrategy<FhirAuditDataset>)MHD.RetrieveBinaryInteractions.ITI_68_BIN.getTransactionConfiguration().getServerAuditStrategy();
     }
 }

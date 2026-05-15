@@ -25,11 +25,11 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * @author Quentin Ligier
  * @since 4.3
  **/
-public class Pharm5Endpoint extends FhirEndpoint<FhirQueryAuditDataset, Pharm5Component> {
+public class Pharm5Endpoint extends FhirEndpoint<FhirQueryAuditDataset> {
 
     public Pharm5Endpoint(final String uri,
                           final Pharm5Component fhirComponent,
-                          final FhirEndpointConfiguration<FhirQueryAuditDataset> config) {
+                          final FhirEndpointConfiguration config) {
         super(uri, fhirComponent, config);
     }
 

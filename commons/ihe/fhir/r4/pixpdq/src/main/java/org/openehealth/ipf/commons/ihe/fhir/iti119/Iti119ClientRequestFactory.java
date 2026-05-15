@@ -37,7 +37,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputPa
  * @author Christian Ohr
  * @since 5.0
  */
-public class Iti119ClientRequestFactory implements ClientRequestFactory<IOperationUntypedWithInput<Bundle>> {
+public class Iti119ClientRequestFactory implements ClientRequestFactory {
 
     @Override
     public IClientExecutable<IOperationUntypedWithInput<Bundle>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {

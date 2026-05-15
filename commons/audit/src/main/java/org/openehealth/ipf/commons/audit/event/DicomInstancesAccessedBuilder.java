@@ -25,7 +25,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a DICOM Instances Accessed event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.6
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.6">Part 15, A.5.3.6</a>
  * <p>
  * This message describes the event of DICOM SOP Instances being viewed, utilized, updated,
  * or deleted. This message shall only include information about a single patient and can be used

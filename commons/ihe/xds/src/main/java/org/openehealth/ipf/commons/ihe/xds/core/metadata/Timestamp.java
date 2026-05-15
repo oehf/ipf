@@ -16,6 +16,12 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.DataTypeException;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlEnum;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -23,9 +29,6 @@ import org.openehealth.ipf.commons.ihe.core.HL7DTM;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.DateTimeAdapter;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
-
-import jakarta.xml.bind.annotation.*;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -176,7 +179,7 @@ public class Timestamp implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         var timestamp = (Timestamp) o;
-        return StringUtils.equals(toHL7(this), toHL7(timestamp));
+        return Objects.equals(toHL7(this), toHL7(timestamp));
     }
 
     @Override

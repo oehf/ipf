@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsAsyncResponseServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.databinding.plainxml.PlainXmlDataBinding;
 import org.openehealth.ipf.commons.ihe.ws.cxf.payload.InNamespaceMergeInterceptor;
@@ -49,11 +50,11 @@ public class Hl7v3AsyncResponseServiceFactory extends JaxWsAsyncResponseServiceF
      *          user-defined custom CXF interceptors.
      */
     public Hl7v3AsyncResponseServiceFactory(
-            Hl7v3WsTransactionConfiguration wsTransactionConfiguration,
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<Hl7v3AuditDataset> auditStrategy,
             AuditContext auditContext,
-            AsynchronyCorrelator<Hl7v3AuditDataset> correlator,
+            AsynchronyCorrelator correlator,
             InterceptorProvider customInterceptors)
     {
         super(wsTransactionConfiguration, serviceAddress, auditStrategy, auditContext, customInterceptors, correlator);

@@ -19,8 +19,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.PaginationStorage;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -53,7 +51,7 @@ abstract public class HpdQueryEndpoint<AuditDatasetType extends WsAuditDataset> 
     public HpdQueryEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ? extends WsInteractionId<WsTransactionConfiguration<AuditDatasetType>>> component,
+            AbstractWsComponent<AuditDatasetType> component,
             Map<String, Object> parameters,
             Class<? extends HpdQueryService> serviceClass)
     {
@@ -61,7 +59,7 @@ abstract public class HpdQueryEndpoint<AuditDatasetType extends WsAuditDataset> 
     }
 
     @Override
-    public AbstractWsProducer<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory) {
+    public AbstractWsProducer<AuditDatasetType, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory) {
         return new HpdQueryProducer<>((HpdQueryEndpoint<AuditDatasetType>) endpoint, clientFactory);
     }
 

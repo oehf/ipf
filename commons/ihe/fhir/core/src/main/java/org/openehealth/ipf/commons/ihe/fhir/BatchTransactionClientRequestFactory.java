@@ -28,7 +28,7 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 4.1
  */
-public class BatchTransactionClientRequestFactory implements ClientRequestFactory<ITransactionTyped<IBaseBundle>> {
+public class BatchTransactionClientRequestFactory implements ClientRequestFactory {
 
     private static final BatchTransactionClientRequestFactory INSTANCE = new BatchTransactionClientRequestFactory();
 

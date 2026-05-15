@@ -24,7 +24,6 @@ import org.apache.camel.component.netty.NettyEndpoint;
 import org.apache.camel.component.netty.NettyEndpointConfigurer;
 import org.apache.camel.spi.PropertyConfigurer;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.ssl.CamelTlsParameters;
 import org.openehealth.ipf.platform.camel.ihe.core.ssl.StaticSSLContextParameters;
@@ -44,8 +43,8 @@ import java.util.Map;
  *
  * @author Dmytro Rud
  */
-public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration, AuditDatasetType extends MllpAuditDataset>
-        extends NettyComponent implements InterceptableComponent, Hl7v2ConfigurationHolder<AuditDatasetType> {
+public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration>
+        extends NettyComponent implements InterceptableComponent, Hl7v2ConfigurationHolder {
 
     private static final Logger log = LoggerFactory.getLogger(MllpComponent.class);
 
@@ -87,7 +86,7 @@ public abstract class MllpComponent<ConfigType extends MllpEndpointConfiguration
      * @param config          endpoint configuration.
      * @return configured MLLP endpoint instance which wraps the Netty one.
      */
-    protected abstract MllpEndpoint<?, ?, ?> createEndpoint(NettyEndpoint wrappedEndpoint, ConfigType config);
+    protected abstract MllpEndpoint<ConfigType, ?> createEndpoint(NettyEndpoint wrappedEndpoint, ConfigType config);
 
 
     /**

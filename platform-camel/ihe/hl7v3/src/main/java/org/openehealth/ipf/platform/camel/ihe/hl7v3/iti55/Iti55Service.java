@@ -26,7 +26,6 @@ import org.apache.cxf.ws.addressing.AddressingProperties;
 import org.apache.cxf.ws.addressing.AttributedURIType;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Exception;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55PortType;
 import org.openehealth.ipf.commons.ihe.hl7v3.iti55.Iti55Utils;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AbstractAuditInterceptor;
@@ -59,7 +58,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
 
     private final ProducerTemplate producerTemplate;
     private final ExecutorService executorService;
-    private final Hl7v3Endpoint<Hl7v3WsTransactionConfiguration> endpoint;
+    private final Hl7v3Endpoint endpoint;
     private final CamelContext camelContext;
 
 
@@ -68,7 +67,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
      * @param endpoint
      *      Camel endpoint instance this Web Service corresponds to.
      */
-    Iti55Service(Hl7v3Endpoint<Hl7v3WsTransactionConfiguration> endpoint) {
+    Iti55Service(Hl7v3Endpoint endpoint) {
         super(ITI_55);
         this.endpoint = endpoint;
         this.camelContext = endpoint.getCamelContext();
@@ -159,7 +158,7 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
                     exchange.getIn().setHeader("iti55.deferred.requestMessageId", requestMessageId);
                     exchange.getIn().setHeader("iti55.deferred.auditDataset", auditDataset);
 
-                    var responseEndpoint = (AbstractWsEndpoint<?, ?>) camelContext.getEndpoint(deferredResponseUri);
+                    var responseEndpoint = (AbstractWsEndpoint<?>) camelContext.getEndpoint(deferredResponseUri);
                     responseEndpoint.setAuditContext(endpoint.getAuditContext());
 
                     exchange = producerTemplate.send(responseEndpoint, exchange);
@@ -231,7 +230,6 @@ public class Iti55Service extends AbstractHl7v3WebService implements Iti55PortTy
         var outMessage = messageContext.getWrappedMessage().getExchange().getOutMessage();
 
         // when WS-Addressing headers were missing from the beginning
-        // TODO: is this check still necessary under CXF 2.5?
         if (outMessage == null) {
             return;
         }

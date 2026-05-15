@@ -16,8 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chadr;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.CH_ADR;
 import org.openehealth.ipf.commons.ihe.xacml20.chadr.ChAdrAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -28,7 +26,7 @@ import java.util.Map;
  * @author Dmytro Rud
  * @since 4.8.0
  */
-public class ChAdrComponent extends AbstractWsComponent<ChAdrAuditDataset, WsTransactionConfiguration<ChAdrAuditDataset>, WsInteractionId<WsTransactionConfiguration<ChAdrAuditDataset>>> {
+public class ChAdrComponent extends AbstractWsComponent<ChAdrAuditDataset> {
 
     public ChAdrComponent() {
         super(CH_ADR.Interactions.CH_ADR);

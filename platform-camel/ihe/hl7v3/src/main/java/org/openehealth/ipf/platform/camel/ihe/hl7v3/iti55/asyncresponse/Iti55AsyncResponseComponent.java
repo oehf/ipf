@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.asyncresponse;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 
@@ -28,7 +27,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55_ASY
  * Camel component for the ITI-55 XCPD Initiating Gateway actor
  * (receivers of asynchronous responses).
  */
-public class Iti55AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
+public class Iti55AsyncResponseComponent extends Hl7v3Component {
 
     public Iti55AsyncResponseComponent() {
         super(ITI_55_ASYNC_RESPONSE);
@@ -36,7 +35,7 @@ public class Iti55AsyncResponseComponent extends Hl7v3Component<Hl7v3WsTransacti
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this, parameters, Iti55AsyncResponseService.class);
+        return new Hl7v3AsyncResponseEndpoint(uri, remaining, this, parameters, Iti55AsyncResponseService.class);
     }
 
 

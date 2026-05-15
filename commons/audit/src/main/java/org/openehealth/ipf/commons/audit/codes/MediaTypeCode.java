@@ -23,9 +23,11 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 import org.openehealth.ipf.commons.audit.types.MediaType;
 
 /**
- * Media Type Code as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_405
+ * Media Type Code / Application Type Code as specified in
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_405">Part 16, CID 405</a>
  * 1.2.840.10008.6.1.908
+ * and
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_406">Part 16, CID 406</a>
  *
  * @author Christian Ohr
  * @since 3.5
@@ -33,7 +35,9 @@ import org.openehealth.ipf.commons.audit.types.MediaType;
 public enum MediaTypeCode implements MediaType, EnumeratedCodedValue<MediaType> {
 
     Usb("110030", "USB Disk Emulation"),
+    @Deprecated
     Email("110031", "Email"),
+    EmailMessage("110157", "Email Message"),
     CD("110032", "CD"),
     DVD("110033", "DVD"),
     CompactFlash("110034", "Compact Flash"),
@@ -41,7 +45,10 @@ public enum MediaTypeCode implements MediaType, EnumeratedCodedValue<MediaType> 
     SD("110036", "Secure Digital Card"),
     URI("110037", "URI"),
     Film("110010", "Film"),
-    PaperDocument("110038", "Paper Document");
+    PaperDocument("110038", "Paper Document"),
+
+    ClipboardManager("110158", "Clipboard Manager"),
+    MessagingSystem("110159", "Messaging System");
 
     @Getter
     private final MediaType value;

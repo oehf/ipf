@@ -37,14 +37,14 @@ import java.util.function.Supplier;
  * @author Christian Ohr
  * @since 3.2
  */
-public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends TransactionConfiguration<T> {
+public class FhirTransactionConfiguration extends TransactionConfiguration {
 
     @Getter
     private final FhirVersionEnum fhirVersion;
     private final FhirContextProvider fhirContextProvider;
     private final List<? extends FhirProvider> staticResourceProviders;
     @Getter
-    private final ClientRequestFactory<?> staticClientRequestFactory;
+    private final ClientRequestFactory staticClientRequestFactory;
     private final Supplier<FhirTransactionValidator> fhirValidatorSupplier;
 
     private transient FhirTransactionValidator fhirValidator;
@@ -62,11 +62,11 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<T> clientAuditStrategy,
-            AuditStrategy<T> serverAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
             FhirContext defaultFhirContext,
             FhirProvider resourceProvider,
-            ClientRequestFactory<?> clientRequestFactory,
+            ClientRequestFactory clientRequestFactory,
             Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, defaultFhirContext,
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
@@ -76,11 +76,11 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<T> clientAuditStrategy,
-            AuditStrategy<T> serverAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
             FhirContext fhirContext,
             List<? extends FhirProvider> resourceProviders,
-            ClientRequestFactory<?> clientRequestFactory,
+            ClientRequestFactory clientRequestFactory,
             Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirContext.getVersion().getVersion();
@@ -94,11 +94,11 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<T> clientAuditStrategy,
-            AuditStrategy<T> serverAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
             FhirVersionEnum fhirVersion,
             FhirProvider resourceProvider,
-            ClientRequestFactory<?> clientRequestFactory,
+            ClientRequestFactory clientRequestFactory,
             Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         this(name, description, isQuery, clientAuditStrategy, serverAuditStrategy, fhirVersion,
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
@@ -108,11 +108,11 @@ public class FhirTransactionConfiguration<T extends FhirAuditDataset> extends Tr
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<T> clientAuditStrategy,
-            AuditStrategy<T> serverAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
             FhirVersionEnum fhirVersion,
             List<? extends FhirProvider> resourceProviders,
-            ClientRequestFactory<?> clientRequestFactory,
+            ClientRequestFactory clientRequestFactory,
             Function<FhirContext, FhirTransactionValidator> fhirValidator) {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirVersion;

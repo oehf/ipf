@@ -24,7 +24,7 @@ import java.util.Collections;
 
 /**
  * Builds an User Authentication representing a Network Entry event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.12
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.12">Part 15 A.5.3.12</a>2
  * <p>
  * This message describes the event that a user has attempted to log on or log off.
  * This report can be made regardless of whether the attempt was successful or not.

@@ -52,11 +52,11 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 @Slf4j
-public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrategySupport<T> {
+public class DispatchAuditStrategy<AuditDatasetType extends XdsAuditDataset> extends AuditStrategySupport<AuditDatasetType> {
 
     private final Map<String, XdsAuditStrategy<? extends XdsAuditDataset>> MAP;
 
-    public DispatchAuditStrategy(Map<String, XdsAuditStrategy<T>> additionalMappings) {
+    public DispatchAuditStrategy(Map<String, XdsAuditStrategy<AuditDatasetType>> additionalMappings) {
         super(true);
 
         MAP = new HashMap<>();
@@ -84,13 +84,13 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     }
 
     @Override
-    public T createAuditDataset() {
+    public AuditDatasetType createAuditDataset() {
         var strategy = getAuditStrategy();
         return (strategy != null) ? strategy.createAuditDataset() : null;
     }
 
     @Override
-    public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters ) {
+    public AuditDatasetType enrichAuditDatasetFromRequest(AuditDatasetType auditDataset, Object request, Map<String, Object> parameters ) {
         var strategy = getAuditStrategy();
         if (strategy != null) {
             return strategy.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
@@ -99,7 +99,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
+    public boolean enrichAuditDatasetFromResponse(AuditDatasetType auditDataset, Object response, AuditContext auditContext) {
         var strategy = getAuditStrategy();
         if (strategy != null) {
             return strategy.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
@@ -108,7 +108,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     }
 
     @Override
-    public void doAudit(AuditContext auditContext, T auditDataset) {
+    public void doAudit(AuditContext auditContext, AuditDatasetType auditDataset) {
         var strategy = getAuditStrategy();
         if (strategy != null) {
             strategy.doAudit(auditContext, auditDataset);
@@ -116,18 +116,18 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
     }
 
     @Override
-    public AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset) {
+    public AuditMessage[] makeAuditMessage(AuditContext auditContext, AuditDatasetType auditDataset) {
         var strategy = getAuditStrategy();
         return (strategy != null) ? strategy.makeAuditMessage(auditContext, auditDataset) : null;
     }
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object response) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(AuditDatasetType auditDataset, Object response) {
         var strategy = getAuditStrategy();
         return (strategy != null) ? strategy.getEventOutcomeIndicator(auditDataset, response) : null;
     }
 
-    private XdsAuditStrategy<T> getAuditStrategy() {
+    private XdsAuditStrategy<AuditDatasetType> getAuditStrategy() {
         var messageContext = new WebServiceContextImpl().getMessageContext();
         if ("GET".equals(messageContext.get(MessageContext.HTTP_REQUEST_METHOD))) {
             log.debug("Cannot serve HTTP method GET");
@@ -139,7 +139,7 @@ public class DispatchAuditStrategy<T extends XdsAuditDataset> extends AuditStrat
             return null;
         }
 
-        var auditStrategy = (XdsAuditStrategy<T>) MAP.get(action);
+        var auditStrategy = (XdsAuditStrategy<AuditDatasetType>) MAP.get(action);
         if (auditStrategy == null) {
             log.debug("No strategy could be found for action {}", action);
         } else {

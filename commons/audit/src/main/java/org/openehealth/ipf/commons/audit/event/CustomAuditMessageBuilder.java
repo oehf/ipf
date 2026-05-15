@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.audit.types.EventType;
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 
 /**
- *
  * Audit Message builder used to build custom audit messages
  *
  * @author Christian Ohr

@@ -29,7 +29,7 @@ import java.util.Map;
  * @author Boris Stanojevic
  * @since 4.8
  */
-public class Iti105RequestFactory implements ClientRequestFactory<IClientExecutable<?, ?>> {
+public class Iti105RequestFactory implements ClientRequestFactory {
 
     @Override
     public IClientExecutable getClientExecutable(

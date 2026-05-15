@@ -30,7 +30,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.SIMPLIFIED_PUB
  * @author Boris Stanojevic
  * @since 4.8
  */
-public class Iti105TransactionConfiguration extends FhirTransactionConfiguration<Iti105AuditDataset> {
+public class Iti105TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti105TransactionConfiguration() {
         super("mhd-iti105",

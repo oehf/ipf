@@ -28,7 +28,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a Order Record event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.13
+ * <a href="http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.13">Part 15, A.5.3.13</a>
  * <p>
  * This message describes the event of an order being created, modified, accessed, or deleted.
  * This message may only include information about a single patient.

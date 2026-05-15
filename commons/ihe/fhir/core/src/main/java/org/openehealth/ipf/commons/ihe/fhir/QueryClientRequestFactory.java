@@ -29,7 +29,7 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.2
  */
-public class QueryClientRequestFactory<T extends IBaseBundle> implements ClientRequestFactory<IQuery<T>> {
+public class QueryClientRequestFactory<T extends IBaseBundle> implements ClientRequestFactory {
 
     private final Class<? extends IBaseResource> type;
     private final Class<T> bundleType;

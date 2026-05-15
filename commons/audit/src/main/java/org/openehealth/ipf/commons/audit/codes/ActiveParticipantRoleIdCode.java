@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 
 /**
  * Audit Active Participant Role ID Code as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_402
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_402">Part 16, CID 402</a>
  * 1.2.840.10008.6.1.905
  * <p>
  * ActiveParticipantRoleIdCode identifies which object took which role in the event.
@@ -40,18 +40,20 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
  */
 public enum ActiveParticipantRoleIdCode implements ActiveParticipantRoleId, EnumeratedCodedValue<ActiveParticipantRoleId> {
 
-    Application("110150", "Application"),
-    ApplicationLauncher("110151", "Application Launcher"),
-    Destination("110152", "Destination Role ID"),
-    Source("110153", "Source Role ID"),
-    DestinationMedia("110154", "Destination Media"),
-    SourceMedia("110155", "Source Media");
+    Application("110150", CODE_SYSTEM_NAME_DCM, "Application"),
+    ApplicationLauncher("110151", CODE_SYSTEM_NAME_DCM, "Application Launcher"),
+    Destination("110152", CODE_SYSTEM_NAME_DCM, "Destination Role ID"),
+    Source("110153", CODE_SYSTEM_NAME_DCM, "Source Role ID"),
+    DestinationMedia("110154", CODE_SYSTEM_NAME_DCM, "Destination Media"),
+    SourceMedia("110155", CODE_SYSTEM_NAME_DCM, "Source Media"),
+    Initiator("110156", CODE_SYSTEM_NAME_DCM, "Initiator Role ID"),
+    Person("125676002", CODE_SYSTEM_NAME_SCT, "Person");
 
     @Getter
     private final ActiveParticipantRoleId value;
 
-    ActiveParticipantRoleIdCode(String code, String displayName) {
-        this.value = ActiveParticipantRoleId.of(code, CODE_SYSTEM_NAME_DCM, displayName);
+    ActiveParticipantRoleIdCode(String code, String codeSystem, String displayName) {
+        this.value = ActiveParticipantRoleId.of(code, codeSystem, displayName);
     }
 
     public static ActiveParticipantRoleIdCode enumForCode(String code) {

@@ -52,7 +52,7 @@ import java.util.List;
  * @author Dmytro Rud
  */
 public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
-        extends MllpEndpoint<MllpTransactionEndpointConfiguration, AuditDatasetType, MllpTransactionComponent<AuditDatasetType>>
+        extends MllpEndpoint<MllpTransactionEndpointConfiguration, MllpTransactionComponent<AuditDatasetType>>
         implements AuditableEndpoint<AuditDatasetType> {
 
     /**

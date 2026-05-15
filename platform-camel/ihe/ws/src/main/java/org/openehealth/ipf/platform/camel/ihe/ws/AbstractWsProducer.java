@@ -15,14 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
-import static java.util.Objects.requireNonNull;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
-import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
-
 import com.ctc.wstx.exc.WstxEOFException;
-import java.util.UUID;
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.soap.SOAPFaultException;
+import lombok.Getter;
 import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.camel.Message;
@@ -42,6 +38,12 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.UUID;
+
+import static java.util.Objects.requireNonNull;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processIncomingHeaders;
+import static org.openehealth.ipf.platform.camel.ihe.ws.HeaderUtils.processUserDefinedOutgoingHeaders;
+
 /**
  * Camel producer used to make calls to a Web Service.
  *
@@ -51,12 +53,13 @@ import org.slf4j.LoggerFactory;
  * @author Dmytro Rud
  */
 public abstract class AbstractWsProducer<
-        AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration<AuditDatasetType>, InType, OutType> extends DefaultProducer {
+        AuditDatasetType extends WsAuditDataset, InType, OutType> extends DefaultProducer {
     private static final Logger log = LoggerFactory.getLogger(AbstractWsProducer.class);
 
     private final JaxWsClientFactory<AuditDatasetType> clientFactory;
+    @Getter
     private final Class<InType> requestClass;
+    @Getter
     private final Class<OutType> responseClass;
 
 
@@ -68,7 +71,7 @@ public abstract class AbstractWsProducer<
      * @param requestClass  type of request messages.
      */
     public AbstractWsProducer(
-            AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint,
+            AbstractWsEndpoint<AuditDatasetType> endpoint,
             JaxWsClientFactory<AuditDatasetType> clientFactory,
             Class<InType> requestClass,
             Class<OutType> responseClass) {
@@ -203,12 +206,11 @@ public abstract class AbstractWsProducer<
         // does nothing per default
     }
 
-
+    @SuppressWarnings("unchecked")
     @Override
-    public AbstractWsEndpoint<AuditDatasetType, ConfigType> getEndpoint() {
-        return (AbstractWsEndpoint<AuditDatasetType, ConfigType>) super.getEndpoint();
+    public AbstractWsEndpoint<AuditDatasetType> getEndpoint() {
+        return (AbstractWsEndpoint<AuditDatasetType>) super.getEndpoint();
     }
-
 
     /**
      * Sets thread safety and timeout options of the given CXF client.
@@ -264,13 +266,5 @@ public abstract class AbstractWsProducer<
         return clientFactory.getWsTransactionConfiguration();
     }
 
-
-    public Class<InType> getRequestClass() {
-        return requestClass;
-    }
-
-    public Class<OutType> getResponseClass() {
-        return responseClass;
-    }
 
 }

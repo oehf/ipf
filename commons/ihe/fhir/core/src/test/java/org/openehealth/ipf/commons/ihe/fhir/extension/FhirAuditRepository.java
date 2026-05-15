@@ -109,7 +109,7 @@ public class FhirAuditRepository implements BeforeAllCallback, BeforeEachCallbac
     }
 
     private void registerShutdownHook() {
-        ExtensionContext.Store.CloseableResource closeableResource = () -> {
+        AutoCloseable closeableResource = () -> {
             LOGGER.info("stopping undertow server...");
             if (server != null) server.stop();
             LOGGER.info("successfully stopped undertow server");

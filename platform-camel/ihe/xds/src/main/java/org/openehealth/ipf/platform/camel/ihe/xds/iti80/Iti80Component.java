@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti80;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
@@ -41,8 +40,8 @@ public class Iti80Component extends XdsComponent<XdsSubmitAuditDataset> {
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<>(uri, remaining, this, parameters, Iti80Service.class) {
             @Override
-            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, ?, ?> getProducer(
-                    AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
+            public AbstractWsProducer<XdsSubmitAuditDataset, ?, ?> getProducer(
+                    AbstractWsEndpoint<XdsSubmitAuditDataset> endpoint,
                     JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
                 return new Iti80Producer(endpoint, clientFactory);
             }

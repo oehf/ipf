@@ -32,7 +32,7 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti83ClientRequestFactory implements ClientRequestFactory<IOperationUntypedWithInput<Parameters>> {
+public class Iti83ClientRequestFactory implements ClientRequestFactory {
 
     @Override
     public IClientExecutable<IOperationUntypedWithInput<Parameters>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {

@@ -32,7 +32,7 @@ import java.util.Map;
  * @author Quentin Ligier
  * @since 4.3
  **/
-public class Pharm5ClientRequestFactory implements ClientRequestFactory<IOperationUntypedWithInput<Bundle>> {
+public class Pharm5ClientRequestFactory implements ClientRequestFactory {
 
     @Override
     public IClientExecutable<IOperationUntypedWithInput<Bundle>, ?> getClientExecutable(final IGenericClient client,

@@ -19,8 +19,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsNonconstructiveDocumentSetRequestAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69PortType;
 import org.openehealth.ipf.commons.ihe.xds.rad69.Rad69ServerAuditStrategy;
@@ -47,7 +45,7 @@ public class RAD implements XdsIntegrationProfile {
         RAD_75(RAD_75_WS_CONFIG),
         RAD_75_ASYNC_RESPONSE(RAD_75_ASYNC_RESPONSE_WS_CONFIG);
 
-        @Getter private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+        @Getter private final WsTransactionConfiguration wsTransactionConfiguration;
 
         @Override
         public XdsIntegrationProfile getInteractionProfile() {
@@ -65,7 +63,7 @@ public class RAD implements XdsIntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> RAD_69_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration RAD_69_WS_CONFIG = new WsTransactionConfiguration(
             "xdsi-rad69",
             "Retrieve Imaging Document Set",
             false,
@@ -81,7 +79,7 @@ public class RAD implements XdsIntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> RAD_75_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration RAD_75_WS_CONFIG = new WsTransactionConfiguration(
             "xcai-rad75",
             "Cross Gateway Retrieve Imaging Document Set",
             false,
@@ -97,7 +95,7 @@ public class RAD implements XdsIntegrationProfile {
             false,
             true);
 
-    private final static WsTransactionConfiguration<XdsNonconstructiveDocumentSetRequestAuditDataset> RAD_75_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration RAD_75_ASYNC_RESPONSE_WS_CONFIG = new WsTransactionConfiguration(
             "xcai-rad75-async-response",
             "Cross Gateway Retrieve Imaging Document Set",
             false,

@@ -17,8 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hpd.iti58;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hpd.HPD;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdQueryEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
@@ -30,7 +28,7 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> {
+public class Iti58Component extends AbstractWsComponent<WsAuditDataset> {
 
     public Iti58Component() {
         super(HPD.ReadInteractions.ITI_58);
@@ -40,7 +38,7 @@ public class Iti58Component extends AbstractWsComponent<WsAuditDataset, WsTransa
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new HpdQueryEndpoint<>(uri, remaining, this, parameters, Iti58Service.class) {
             @Override
-            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint) {
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<WsAuditDataset> endpoint) {
                 return new Iti58Service(this);
             }
         };

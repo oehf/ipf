@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti81TransactionConfiguration extends FhirTransactionConfiguration<FhirAuditEventQueryAuditDataset> {
+public class Iti81TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti81TransactionConfiguration() {
         super("atna-iti81",

@@ -35,14 +35,14 @@ import java.util.Map;
 public class JaxWsRequestClientFactory<AuditDatasetType extends WsAuditDataset> extends JaxWsClientFactory<AuditDatasetType> {
 
     public JaxWsRequestClientFactory(
-            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceUrl,
             AuditStrategy<AuditDatasetType> auditStrategy,
             AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties,
-            AsynchronyCorrelator<AuditDatasetType> correlator,
+            AsynchronyCorrelator correlator,
             WsSecurityInformation securityInformation,
             HTTPClientPolicy httpClientPolicy) {
         super(wsTransactionConfiguration, serviceUrl, auditStrategy, auditContext,

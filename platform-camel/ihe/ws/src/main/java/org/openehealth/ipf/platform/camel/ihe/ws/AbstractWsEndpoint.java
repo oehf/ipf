@@ -32,9 +32,7 @@ import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsSecurityInformation;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
@@ -43,7 +41,6 @@ import org.openehealth.ipf.platform.camel.ihe.core.AmbiguousBeanException;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.xml.namespace.QName;
-
 import java.util.List;
 import java.util.Map;
 
@@ -54,9 +51,7 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 @ManagedResource(description = "Managed IPF eHealth Web Service Endpoint")
-public abstract class AbstractWsEndpoint<
-        AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration<AuditDatasetType>>
+public abstract class AbstractWsEndpoint<AuditDatasetType extends WsAuditDataset>
         extends DefaultEndpoint implements AuditableEndpoint<AuditDatasetType> {
 
     private static final String ENDPOINT_PROTOCOL = "http://";
@@ -111,7 +106,7 @@ public abstract class AbstractWsEndpoint<
     private String serviceUrl;
 
     private AuditContext auditContext;
-    private AsynchronyCorrelator<AuditDatasetType> correlator = null;
+    private AsynchronyCorrelator correlator = null;
     private final InterceptorProvider customInterceptors;
     private String homeCommunityId = null;
     private WsRejectionHandlingStrategy rejectionHandlingStrategy = null;
@@ -131,7 +126,7 @@ public abstract class AbstractWsEndpoint<
     protected AbstractWsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId<ConfigType>> component,
+            AbstractWsComponent<AuditDatasetType> component,
             Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass) {
         this(endpointUri, address, component,
@@ -157,7 +152,7 @@ public abstract class AbstractWsEndpoint<
     protected AbstractWsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId<ConfigType>> component,
+            AbstractWsComponent<AuditDatasetType> component,
             AuditContext auditContext,
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
@@ -212,7 +207,7 @@ public abstract class AbstractWsEndpoint<
      * @param endpoint this endpoint as parameter
      * @return service class instance
      */
-    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint) {
+    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<AuditDatasetType> endpoint) {
         return null;
     }
 
@@ -330,14 +325,14 @@ public abstract class AbstractWsEndpoint<
     /**
      * Configures the asynchrony correlator for this endpoint.
      */
-    public void setCorrelator(AsynchronyCorrelator<AuditDatasetType> correlator) {
+    public void setCorrelator(AsynchronyCorrelator correlator) {
         this.correlator = correlator;
     }
 
     /**
      * Returns the correlator.
      */
-    public AsynchronyCorrelator<AuditDatasetType> getCorrelator() {
+    public AsynchronyCorrelator getCorrelator() {
         return correlator;
     }
 
@@ -419,8 +414,8 @@ public abstract class AbstractWsEndpoint<
 
     @SuppressWarnings("unchecked")
     @Override
-    public AbstractWsComponent<AuditDatasetType, ConfigType, ? extends WsInteractionId> getComponent() {
-        return (AbstractWsComponent<AuditDatasetType, ConfigType, WsInteractionId<ConfigType>>) super.getComponent();
+    public AbstractWsComponent<AuditDatasetType> getComponent() {
+        return (AbstractWsComponent<AuditDatasetType>) super.getComponent();
     }
 
     /**
@@ -473,7 +468,7 @@ public abstract class AbstractWsEndpoint<
      * @return Camel producer instance.
      * @since 3.1
      */
-    public abstract AbstractWsProducer<AuditDatasetType, ConfigType, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory);
+    public abstract AbstractWsProducer<AuditDatasetType, ?, ?> getProducer(AbstractWsEndpoint<AuditDatasetType> endpoint, JaxWsClientFactory<AuditDatasetType> clientFactory);
 
 
     //special managed attributes

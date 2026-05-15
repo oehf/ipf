@@ -52,7 +52,7 @@ public class Iti31Component extends MllpTransactionComponent<FeedAuditDataset> {
     @Override
     protected MllpTransactionEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) throws Exception {
         var config = super.createConfig(uri, parameters);
-        Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider =
+        Hl7v2TransactionOptionsProvider<? extends Hl7v2TransactionOptions> optionsProvider =
                 getAndRemoveOrResolveReferenceParameter(parameters, "iheOptionsProvider", Hl7v2TransactionOptionsProvider.class, new Iti31OptionsProvider());
         var options = getAndRemoveParameter(parameters, "iheOptions", String.class, optionsProvider.getDefaultOption().name());
         List<? extends Hl7v2TransactionOptions> iti31Options = TransactionOptionsUtils.split(options, Iti31Options.class);

@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * @since 3.1
  */
-public abstract class AuditStrategySupport<T extends AuditDataset> implements AuditStrategy<T> {
+public abstract class AuditStrategySupport<AuditDatasetType extends AuditDataset> implements AuditStrategy<AuditDatasetType> {
 
     @Getter(AccessLevel.PROTECTED)
     private final boolean serverSide;
@@ -56,7 +56,7 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
      * @param auditDataset audit dataset
      */
     @Override
-    public void doAudit(AuditContext auditContext, T auditDataset) {
+    public void doAudit(AuditContext auditContext, AuditDatasetType auditDataset) {
         try {
             auditContext.audit(makeAuditMessage(auditContext, auditDataset));
         } catch (Exception e) {
@@ -71,16 +71,16 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
      * @param auditDataset audit dataset
      * @return audit message
      */
-    public abstract AuditMessage[] makeAuditMessage(AuditContext auditContext, T auditDataset);
+    public abstract AuditMessage[] makeAuditMessage(AuditContext auditContext, AuditDatasetType auditDataset);
 
 
     @Override
-    public T enrichAuditDatasetFromRequest(T auditDataset, Object request, Map<String, Object> parameters) {
+    public AuditDatasetType enrichAuditDatasetFromRequest(AuditDatasetType auditDataset, Object request, Map<String, Object> parameters) {
         return auditDataset;
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
+    public boolean enrichAuditDatasetFromResponse(AuditDatasetType auditDataset, Object response, AuditContext auditContext) {
         return true;
     }
 

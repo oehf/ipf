@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v2;
 import ca.uhn.hl7v2.AcknowledgmentCode;
 import ca.uhn.hl7v2.HL7Exception;
 import ca.uhn.hl7v2.model.Message;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.modules.hl7.message.MessageUtils;
 
 import java.io.IOException;
@@ -35,9 +34,9 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Dmytro Rud
  */
-public class NakFactory<AuditDatasetType extends MllpAuditDataset> {
+public class NakFactory {
 
-    private final Hl7v2TransactionConfiguration<AuditDatasetType> config;
+    private final Hl7v2TransactionConfiguration config;
     private final boolean useCAckTypeCodes;
     private final String defaultNakMsh9;
 
@@ -51,7 +50,7 @@ public class NakFactory<AuditDatasetType extends MllpAuditDataset> {
      *                         <tt>AA</tt>, <tt>AE</tt>, <tt>AR</tt>.
      * @param defaultNakMsh9   desired contents of MSH-9 in this transaction's default NAKs.
      */
-    public NakFactory(Hl7v2TransactionConfiguration<AuditDatasetType> config, boolean useCAckTypeCodes, String defaultNakMsh9) {
+    public NakFactory(Hl7v2TransactionConfiguration config, boolean useCAckTypeCodes, String defaultNakMsh9) {
         this.config = requireNonNull(config);
         this.useCAckTypeCodes = useCAckTypeCodes;
         this.defaultNakMsh9 = requireNonNull(defaultNakMsh9);
@@ -63,7 +62,7 @@ public class NakFactory<AuditDatasetType extends MllpAuditDataset> {
      *
      * @param config Configuration of the transaction served by this factory.
      */
-    public NakFactory(Hl7v2TransactionConfiguration<AuditDatasetType> config) {
+    public NakFactory(Hl7v2TransactionConfiguration config) {
         this(config, false, "ACK");
     }
 
@@ -176,7 +175,7 @@ public class NakFactory<AuditDatasetType extends MllpAuditDataset> {
     /**
      * Returns configuration of the transaction served by this factory.
      */
-    protected Hl7v2TransactionConfiguration<AuditDatasetType> getConfig() {
+    protected Hl7v2TransactionConfiguration getConfig() {
         return config;
     }
 

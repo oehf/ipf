@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti68TransactionConfiguration extends TransactionConfiguration<Iti68AuditDataset> {
+public class Iti68TransactionConfiguration extends TransactionConfiguration {
 
     public Iti68TransactionConfiguration() {
 

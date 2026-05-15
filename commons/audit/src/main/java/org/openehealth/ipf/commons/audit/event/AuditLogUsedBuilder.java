@@ -25,7 +25,7 @@ import java.util.List;
 
 /**
  * Builds an Audit Event representing a Audit Log Used event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.2
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.2">Part 15, A.5.3.2</a>
  * <p>
  * This message describes the event of a person or process reading a log of audit trail information.
  * </p>

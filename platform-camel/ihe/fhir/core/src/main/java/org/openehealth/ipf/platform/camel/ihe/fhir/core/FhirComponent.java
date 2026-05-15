@@ -42,13 +42,13 @@ import java.util.Map;
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         extends DefaultComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
 
-    private FhirInteractionId<AuditDatasetType> fhirInteractionId;
+    private FhirInteractionId fhirInteractionId;
 
-    public FhirComponent(FhirInteractionId<AuditDatasetType> fhirInteractionId) {
+    public FhirComponent(FhirInteractionId fhirInteractionId) {
         this.fhirInteractionId = fhirInteractionId;
     }
 
-    public FhirComponent(CamelContext context, FhirInteractionId<AuditDatasetType> fhirInteractionId) {
+    public FhirComponent(CamelContext context, FhirInteractionId fhirInteractionId) {
         super(context);
         this.fhirInteractionId = fhirInteractionId;
     }
@@ -88,8 +88,8 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
         return getFhirTransactionConfiguration().getFhirVersion() == fhirContext.getVersion().getVersion();
     }
 
-    protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
-        return new FhirEndpointConfiguration<>(this, remaining, parameters);
+    protected FhirEndpointConfiguration createConfig(String remaining, Map<String, Object> parameters) throws Exception {
+        return new FhirEndpointConfiguration(this, remaining, parameters);
     }
 
     @Override
@@ -113,26 +113,28 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      * @param config FhirEndpointConfiguration
      * @return a new endpoint instance
      */
-    protected abstract FhirEndpoint<?, ?> doCreateEndpoint(String uri, FhirEndpointConfiguration<AuditDatasetType> config);
+    protected abstract FhirEndpoint<AuditDatasetType> doCreateEndpoint(String uri, FhirEndpointConfiguration config);
 
     /**
      * @return component-specific configuration
      */
-    public FhirTransactionConfiguration<AuditDatasetType> getFhirTransactionConfiguration() {
+    public FhirTransactionConfiguration getFhirTransactionConfiguration() {
         return getInteractionId().getFhirTransactionConfiguration();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return getFhirTransactionConfiguration().getServerAuditStrategy();
+        return (AuditStrategy<AuditDatasetType>) getFhirTransactionConfiguration().getServerAuditStrategy();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return getFhirTransactionConfiguration().getClientAuditStrategy();
+        return (AuditStrategy<AuditDatasetType>) getFhirTransactionConfiguration().getClientAuditStrategy();
     }
 
-    public FhirInteractionId<AuditDatasetType> getInteractionId() {
+    public FhirInteractionId getInteractionId() {
         return fhirInteractionId;
     }
 

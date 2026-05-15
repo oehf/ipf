@@ -21,7 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.QueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti21.Iti21AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti22.Iti22AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils;
@@ -38,12 +37,12 @@ import java.util.List;
 public class PDQ implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements Hl7v2InteractionId<QueryAuditDataset> {
+    public enum Interactions implements Hl7v2InteractionId {
         ITI_21(ITI_21_CONFIGURATION, ITI_21_NAK_FACTORY),
         ITI_22(ITI_22_CONFIGURATION, ITI_22_NAK_FACTORY);
 
-        @Getter private final Hl7v2TransactionConfiguration<QueryAuditDataset> hl7v2TransactionConfiguration;
-        @Getter private final NakFactory<QueryAuditDataset> nakFactory;
+        @Getter private final Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
+        @Getter private final NakFactory nakFactory;
     }
 
     @Override
@@ -51,7 +50,7 @@ public class PDQ implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private static final Hl7v2TransactionConfiguration<QueryAuditDataset> ITI_21_CONFIGURATION =
+    private static final Hl7v2TransactionConfiguration ITI_21_CONFIGURATION =
             new PdqTransactionConfiguration(
                     "pdq-iti21",
                     "Patient Demographics Query",
@@ -73,10 +72,10 @@ public class PDQ implements IntegrationProfile {
                             CustomModelClassUtils.createFactory("pdq", "2.5"),
                             PixPdqTransactions.ITI21));
 
-    private static final NakFactory<QueryAuditDataset> ITI_21_NAK_FACTORY =
+    private static final NakFactory ITI_21_NAK_FACTORY =
             new QpdAwareNakFactory(ITI_21_CONFIGURATION, "RSP", "K22");
 
-    private static final Hl7v2TransactionConfiguration<QueryAuditDataset> ITI_22_CONFIGURATION =
+    private static final Hl7v2TransactionConfiguration ITI_22_CONFIGURATION =
             new PdqTransactionConfiguration(
                     "pdq-iti22",
                     "Patient Demographics And Visit Query",
@@ -98,6 +97,6 @@ public class PDQ implements IntegrationProfile {
                             CustomModelClassUtils.createFactory("pdq", "2.5"),
                             PixPdqTransactions.ITI22));
 
-    private static final NakFactory<QueryAuditDataset> ITI_22_NAK_FACTORY =
+    private static final NakFactory ITI_22_NAK_FACTORY =
             new QpdAwareNakFactory(ITI_22_CONFIGURATION, "RSP", "ZV2");
 }

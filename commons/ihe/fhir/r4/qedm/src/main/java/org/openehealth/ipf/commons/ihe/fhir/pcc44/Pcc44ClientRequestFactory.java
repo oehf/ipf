@@ -33,7 +33,7 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.6
  */
-public class Pcc44ClientRequestFactory implements ClientRequestFactory<IQuery<Bundle>> {
+public class Pcc44ClientRequestFactory implements ClientRequestFactory {
 
 
     @Override

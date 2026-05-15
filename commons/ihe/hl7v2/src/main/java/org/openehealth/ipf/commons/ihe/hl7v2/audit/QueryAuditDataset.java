@@ -21,7 +21,6 @@ import lombok.Setter;
 /**
  * @author Dmytro Rud
  */
-@SuppressWarnings("serial")
 public class QueryAuditDataset extends MllpAuditDataset {
 
     public static final String NO_PATIENT_RESULT_IDS = "org.openehealth.ipf.commons.ihe.core.atna.ExcludePatientsFromResponse";

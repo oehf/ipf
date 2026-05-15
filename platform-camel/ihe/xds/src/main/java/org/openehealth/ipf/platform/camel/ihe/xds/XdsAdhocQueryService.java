@@ -52,7 +52,7 @@ public abstract class XdsAdhocQueryService extends AbstractWebService {
         var exception = Exchanges.extractException(exchange);
         if (exception != null) {
             log.debug("{} service failed", getClass().getSimpleName(), exception);
-            String homeCommunityId = HomeCommunityUtils.getHomeCommunityId(exchange, this.homeCommunityId);
+            var homeCommunityId = HomeCommunityUtils.getHomeCommunityId(exchange, this.homeCommunityId);
             var errorResponse = new QueryResponse(
                     exception,
                     ErrorCode.REGISTRY_ERROR,

@@ -42,7 +42,7 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
     /**
      * Transaction configuration.
      */
-    protected final WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration;
+    protected final WsTransactionConfiguration wsTransactionConfiguration;
     /**
      * Service endpoint address.
      */
@@ -77,7 +77,7 @@ public class JaxWsServiceFactory<AuditDatasetType extends WsAuditDataset> {
      *
      */
     public JaxWsServiceFactory(
-            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<AuditDatasetType> auditStrategy,
             AuditContext auditContext,

@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1PortType;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1ServerAuditStrategy;
@@ -41,7 +40,7 @@ import java.util.List;
 public class CH_PPQ implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements WsInteractionId<WsTransactionConfiguration<ChPpqAuditDataset>> {
+    public enum Interactions implements WsInteractionId {
         CH_PPQ_1(CH_PPQ_1_WS_CONFIG),
         CH_PPQ_2(CH_PPQ_2_WS_CONFIG);
 
@@ -53,7 +52,7 @@ public class CH_PPQ implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration<ChPpqAuditDataset> CH_PPQ_1_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration CH_PPQ_1_WS_CONFIG = new WsTransactionConfiguration(
             "ch-ppq1",
             "Privacy Policy Feed",
             false,
@@ -69,7 +68,7 @@ public class CH_PPQ implements IntegrationProfile {
             false,
             false);
 
-    private final static WsTransactionConfiguration<ChPpqAuditDataset> CH_PPQ_2_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration CH_PPQ_2_WS_CONFIG = new WsTransactionConfiguration(
             "ch-ppq2",
             "Privacy Policy Query",
             false,

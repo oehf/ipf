@@ -34,7 +34,7 @@ public class ChPpq3Component extends FhirComponent<ChPpqmAuditDataset> {
     }
 
     @Override
-    protected ChPpq3Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<ChPpqmAuditDataset> config) {
+    protected ChPpq3Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration config) {
         return new ChPpq3Endpoint(uri, this, config);
     }
 

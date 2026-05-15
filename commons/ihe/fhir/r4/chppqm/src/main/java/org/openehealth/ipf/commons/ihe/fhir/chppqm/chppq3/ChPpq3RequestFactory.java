@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils;
 
 import java.util.Map;
 
-public class ChPpq3RequestFactory implements ClientRequestFactory<IClientExecutable<?, ?>> {
+public class ChPpq3RequestFactory implements ClientRequestFactory {
 
     @Override
     public IClientExecutable getClientExecutable(

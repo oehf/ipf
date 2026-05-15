@@ -49,7 +49,7 @@ import static org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationUtil
  * Format of continuation messages is described, for example,
  * in the IHE PIXv3/PDQv3 Supplement August 2010, pp. 85-87 and 117-119.
  */
-class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration, String, String> {
+class Hl7v3ContinuationAwareProducer extends AbstractWsProducer<Hl7v3AuditDataset, String, String> {
     private static final transient Logger log = LoggerFactory.getLogger(Hl7v3ContinuationAwareProducer.class)
 
     private static final CombinedXmlValidator VALIDATOR = new CombinedXmlValidator()

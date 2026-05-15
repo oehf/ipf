@@ -18,11 +18,11 @@ package org.openehealth.ipf.commons.ihe.ws.correlation;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 /**
- * Interface for message correlators in asynchronous 
+ * Interface for message correlators in asynchronous
  * Web Service-based eHealth transactions.
  * @author Dmytro Rud
  */
-public interface AsynchronyCorrelator<AuditDatasetType extends WsAuditDataset> {
+public interface AsynchronyCorrelator {
 
     /**
      * When the Web Service context of an outgoing request message contains
@@ -77,7 +77,7 @@ public interface AsynchronyCorrelator<AuditDatasetType extends WsAuditDataset> {
      * Returns the audit dataset for the request message with the
      * given ID, or <code>null</code> if the message is unknown.
      */
-    AuditDatasetType getAuditDataset(String messageId);
+    WsAuditDataset getAuditDataset(String messageId);
 
     /**
      * Stores a set of alternative keys for the message with the given
