@@ -16,7 +16,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.pharm5;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DocumentReference;
@@ -35,7 +34,7 @@ import java.util.Map;
 public class Pharm5ClientRequestFactory implements ClientRequestFactory {
 
     @Override
-    public IClientExecutable<IOperationUntypedWithInput<Bundle>, ?> getClientExecutable(final IGenericClient client,
+    public IOperationUntypedWithInput<Bundle> getClientExecutable(final IGenericClient client,
                                                                                             final Object requestData,
                                                                                             final Map<String, Object> parameters) {
 

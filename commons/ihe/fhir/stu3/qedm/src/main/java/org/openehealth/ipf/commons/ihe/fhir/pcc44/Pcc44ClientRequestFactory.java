@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.ICriterion;
 import ca.uhn.fhir.rest.gclient.IQuery;
 import org.hl7.fhir.dstu3.model.Bundle;
@@ -36,14 +35,14 @@ import java.util.Map;
 public class Pcc44ClientRequestFactory implements ClientRequestFactory {
 
     @Override
-    public IClientExecutable<IQuery<Bundle>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+    public IQuery<Bundle> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
         IQuery<IBaseBundle> query;
         var queriedResourceType = (String) parameters.get(Constants.FHIR_RESOURCE_TYPE_HEADER);
-        if (requestData instanceof ICriterion criterion) {
+        if (requestData instanceof ICriterion<?> criterion) {
             query = client.search()
                     .forResource(queriedResourceType)
                     .where(criterion);
-        } else if (requestData instanceof ICriterion[] criteria) {
+        } else if (requestData instanceof ICriterion<?>[] criteria) {
             query = client.search()
                     .forResource(queriedResourceType);
             if (criteria.length > 0) {

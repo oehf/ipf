@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti119;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Parameters;
@@ -40,7 +39,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputPa
 public class Iti119ClientRequestFactory implements ClientRequestFactory {
 
     @Override
-    public IClientExecutable<IOperationUntypedWithInput<Bundle>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+    public IOperationUntypedWithInput<Bundle> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
         return getClientExecutable(client, matchParameters(requestData, parameters));
     }
 
@@ -78,7 +77,7 @@ public class Iti119ClientRequestFactory implements ClientRequestFactory {
     }
 
 
-    private IClientExecutable<IOperationUntypedWithInput<Bundle>, ?> getClientExecutable(IGenericClient client, Parameters requestData) {
+    private IOperationUntypedWithInput<Bundle> getClientExecutable(IGenericClient client, Parameters requestData) {
         return client.operation()
             .onType(Patient.class)
             .named(Iti119Constants.PDQM_MATCH_OPERATION_NAME)

@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-package org.openehealth.ipf.commons.ihe.fhir.iti105;
+package org.openehealth.ipf.commons.ihe.fhir.iti68bin;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.ICreateTyped;
-import org.hl7.fhir.r4.model.DocumentReference;
+import ca.uhn.fhir.rest.gclient.IReadExecutable;
+import org.hl7.fhir.r4.model.Binary;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 
 import java.util.Map;
@@ -29,14 +29,14 @@ import java.util.Map;
  * @author Boris Stanojevic
  * @since 4.8
  */
-public class Iti105RequestFactory implements ClientRequestFactory {
+public class Iti68BinaryRequestFactory implements ClientRequestFactory {
 
     @Override
-    public ICreateTyped getClientExecutable(
+    public IReadExecutable<Binary> getClientExecutable(
             IGenericClient client,
             Object requestData,
             Map<String, Object> parameters) {
-        return client.create().resource((DocumentReference) requestData);
+        return client.read().resource(Binary.class).withId(requestData.toString());
     }
 
 }

@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import ca.uhn.fhir.rest.gclient.IOperationUntypedWithInput;
 import org.hl7.fhir.dstu3.model.Parameters;
 import org.hl7.fhir.dstu3.model.Patient;
@@ -35,7 +34,7 @@ import java.util.Map;
 public class Iti83ClientRequestFactory implements ClientRequestFactory {
 
     @Override
-    public IClientExecutable<IOperationUntypedWithInput<Parameters>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+    public IOperationUntypedWithInput<Parameters> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
 
         if (requestData instanceof Parameters p) {
             return getClientExecutable(client, p);
@@ -51,7 +50,7 @@ public class Iti83ClientRequestFactory implements ClientRequestFactory {
 
     }
 
-    private IClientExecutable<IOperationUntypedWithInput<Parameters>, ?> getClientExecutable(IGenericClient client, Parameters requestData) {
+    private IOperationUntypedWithInput<Parameters> getClientExecutable(IGenericClient client, Parameters requestData) {
         return client.operation()
                 .onType(Patient.class)
                 .named(Iti83Constants.PIXM_OPERATION_NAME)
