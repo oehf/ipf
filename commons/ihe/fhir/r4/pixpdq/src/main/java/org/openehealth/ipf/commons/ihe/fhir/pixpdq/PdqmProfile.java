@@ -63,6 +63,11 @@ public enum PdqmProfile implements Pdqm320, IheFhirProfile {
     public static final String PDQM_PATIENT_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Patient";
     public static final String PDQM_MATCH_INPUT_PATIENT_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.MatchInputPatient";
 
+    // AuditEvent Profile URLs
+    public static final String PDQM_SUPPLIER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Query.Audit.Supplier";
+    public static final String PDQM_CONSUMER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Query.Audit.Consumer";
+
+
     // Bundle Profile URLs
 
     public static final String ITI78_QUERY_PATIENT_RESOURCE_RESPONSE_MESSAGE_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.QueryPatientResourceResponseMessage";

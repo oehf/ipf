@@ -23,6 +23,7 @@ import org.openehealth.ipf.commons.audit.types.EventType;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.EHS_SYSTEM_NAME;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.IHE_SYSTEM_NAME;
+import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.RESTFUL_INTERACTION_SYSTEM_NAME;
 
 /**
  * @author Christian Ohr
@@ -30,10 +31,16 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.IHE_SYS
 public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventType> {
 
     ProvideDocumentBundle("ITI-65", IHE_SYSTEM_NAME, "Provide Document Bundle"),
-    MobileDocumentManifestQuery("ITI-66", IHE_SYSTEM_NAME, "Mobile Document Manifest Query"),
-    MobileDocumentReferenceQuery("ITI-67", IHE_SYSTEM_NAME, "Mobile Document Reference Query"),
+    MobileDocumentManifestQuery("ITI-66", IHE_SYSTEM_NAME, "Mobile Document Manifest Query",
+        "org.openehealth.ipf.commons.ihe.fhir.mhd.model.FindDocumentListsResponderAuditEvent",
+        "org.openehealth.ipf.commons.ihe.fhir.mhd.model.FindDocumentListsConsumerAuditEvent"),
+    MobileDocumentReferenceQuery("ITI-67", IHE_SYSTEM_NAME, "Mobile Document Reference Query",
+        "org.openehealth.ipf.commons.ihe.fhir.mhd.model.FindDocumentReferencesResponderAuditEvent",
+        "org.openehealth.ipf.commons.ihe.fhir.mhd.model.FindDocumentReferencesConsumerAuditEvent"),
     MobileDocumentRetrieval("ITI-68", IHE_SYSTEM_NAME, "Mobile Document Retrieval"),
-    MobilePatientDemographicsQuery("ITI-78", IHE_SYSTEM_NAME, "Mobile Patient Demographics Query"),
+    MobilePatientDemographicsQuery("ITI-78", IHE_SYSTEM_NAME, "Mobile Patient Demographics Query",
+        "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmSupplierAuditEvent",
+        "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmConsumerAuditEvent"),
     RetrieveATNAAuditEvent("ITI-81", IHE_SYSTEM_NAME, "Retrieve ATNA AuditEvent"),
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", IHE_SYSTEM_NAME, "Mobile Patient Identifier Cross-reference Query"),
     SimplifiedPublish("ITI-105", IHE_SYSTEM_NAME, "Simplified Publish"),
@@ -47,8 +54,20 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     @Getter
     private final EventType value;
 
+    @Getter
+    private final String serverEventClassName;
+    @Getter
+    private final String clientEventClassName;
+
     FhirEventTypeCode(String code, String codeSystemName, String displayName) {
+        this(code, codeSystemName, displayName, null, null);
+    }
+
+    FhirEventTypeCode(String code, String codeSystemName, String displayName,
+                      String serverEventClassName, String clientEventClassName) {
         this.value = EventType.of(code, codeSystemName, displayName);
+        this.serverEventClassName = serverEventClassName;
+        this.clientEventClassName = clientEventClassName;
     }
 
     public static EventType fromRestOperationType(RestOperationTypeEnum operation) {
@@ -58,7 +77,7 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     public static EventType fromRestOperationType(RestOperationTypeEnum operation, String originalText) {
         return EventType.of(
                 operation.getCode(),
-                "http://hl7.org/fhir/restful-interaction",
+                RESTFUL_INTERACTION_SYSTEM_NAME,
                 originalText != null ? originalText : operation.getCode());
     }
 

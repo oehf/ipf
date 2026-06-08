@@ -175,6 +175,12 @@ public enum MhdProfile implements Mhd423, IheFhirProfile {
     public static final String MINIMAL_DOCUMENT_REFERENCE_PROFILE =  "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.DocumentReference";
     public static final String SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.SimplifiedPublish.DocumentReference";
 
+    // AuditEvent profiles
+    public static final String FIND_DOCUMENT_REFERENCES_RESPONDER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentReferences.Audit.Responder";
+    public static final String FIND_DOCUMENT_REFERENCES_CONSUMER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentReferences.Audit.Consumer";
+    public static final String FIND_DOCUMENT_LISTS_RESPONDER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentLists.Audit.Responder";
+    public static final String FIND_DOCUMENT_LISTS_CONSUMER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentLists.Audit.Consumer";
+
     // Parameters
 
     public static final String DOCUMENT_REFERENCE_PATCH_PARAMETERS_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Patch.Parameters";

@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.core.atna.event;
 
+import lombok.Getter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
@@ -52,19 +53,20 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
     public static final String SERIES_INSTANCE_UNIQUE_ID = "Series Instance Unique Id";
     public static final String DOCUMENT_UNIQUE_ID = "ihe:DocumentUniqueId";
 
+    @Getter
     private final AuditContext auditContext;
+    @Getter
+    private final boolean serverSide;
 
     public IHEAuditMessageBuilder(AuditContext auditContext, AuditDataset auditDataset, D delegate) {
         super(delegate);
         this.auditContext = requireNonNull(auditContext, "auditContext must be not null");
+        this.serverSide = requireNonNull(auditDataset, "auditDataset must be not null").isServerSide();
         delegate.setAuditSource(auditContext);
         if (auditDataset.getW3cTraceContextId() != null) {
             addSwissW3CTraceContextIdParticipantObject(auditDataset.getW3cTraceContextId());
         }
-    }
-
-    public AuditContext getAuditContext() {
-        return auditContext;
+        delegate.getMessage().setServerSide(serverSide);
     }
 
     /**
@@ -75,7 +77,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
      * @return this
      */
     protected final T setLocalParticipant(AuditDataset auditDataset) {
-        if (auditDataset.isServerSide())
+        if (serverSide)
             delegate.addDestinationActiveParticipant(
                     auditDataset.getDestinationUserId() != null ?
                             auditDataset.getDestinationUserId() :
@@ -104,7 +106,7 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
      * @return this
      */
     protected final T setRemoteParticipant(AuditDataset auditDataset) {
-        if (auditDataset.isServerSide())
+        if (serverSide)
             delegate.addSourceActiveParticipant(
                     auditDataset.getSourceUserId() != null ?
                             auditDataset.getSourceUserId() :

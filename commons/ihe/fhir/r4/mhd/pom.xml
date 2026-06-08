@@ -25,6 +25,10 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-fhir-r4-audit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-ihe-xds</artifactId>
         </dependency>
         <dependency>

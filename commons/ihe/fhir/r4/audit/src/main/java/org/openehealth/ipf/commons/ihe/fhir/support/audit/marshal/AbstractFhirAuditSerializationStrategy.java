@@ -19,6 +19,7 @@ package org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
+import lombok.SneakyThrows;
 import org.hl7.fhir.exceptions.FHIRException;
 import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.Base64BinaryType;
@@ -37,9 +38,12 @@ import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
+import org.openehealth.ipf.commons.audit.model.EventIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.events.SelfInitializing;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -47,9 +51,9 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.openehealth.ipf.commons.audit.types.CodedValueType.CODE_SYSTEM_NAME_DCM;
 import static org.openehealth.ipf.commons.audit.types.CodedValueType.CODE_SYSTEM_NAME_EHS;
 import static org.openehealth.ipf.commons.audit.types.CodedValueType.CODE_SYSTEM_NAME_IHE_TRANSACTIONS;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.*;
@@ -81,12 +85,25 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
 
     public AuditEvent translate(AuditMessage auditMessage) {
         var eit = auditMessage.getEventIdentification();
-        var auditEvent = new AuditEvent()
-            .setType(codedValueTypeToCoding(eit.getEventID(), DCM_SYSTEM_NAME))
+        var auditEvent = makeAuditEventInstance(eit, auditMessage.isServerSide());
+
+        // If the AuditEvent is marked as being profiled in BALP, we let it initialize itself.
+        if (auditEvent instanceof SelfInitializing profiledAuditEvent) {
+            profiledAuditEvent.initialize(auditMessage);
+            return auditEvent;
+        }
+
+        // Otherwise we do some generic transformation
+        auditEvent
             .setAction(getAuditEventAction(eit.getEventActionCode()))
             .setRecorded(Date.from(eit.getEventDateTime()))
             .setOutcome(getAuditEventOutcome(eit.getEventOutcomeIndicator()))
             .setOutcomeDesc(eit.getEventOutcomeDescription());
+        if (CODE_SYSTEM_NAME_DCM.equals(eit.getEventID().getCodeSystemName())) {
+            auditEvent.setType(codedValueTypeToCoding(eit.getEventID(), DCM_SYSTEM_NAME));
+        } else {
+            auditEvent.setType(codedValueTypeToCoding(eit.getEventID()));
+        }
         eit.getEventTypeCode().forEach(etc -> {
             if (CODE_SYSTEM_NAME_IHE_TRANSACTIONS.equals(etc.getCodeSystemName())) {
                 auditEvent.addSubtype(codedValueTypeToCoding(etc, IHE_SYSTEM_NAME));
@@ -107,6 +124,34 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
         auditMessage.getParticipantObjectIdentifications().forEach(poit ->
             auditEvent.addEntity(participantObjectIdentificationToEntity(poit)));
         return auditEvent;
+    }
+
+    private AuditEvent makeAuditEventInstance(EventIdentificationType eventIdentification, boolean serverSide) {
+        return eventIdentification.getEventTypeCode().stream()
+            .filter(eventType -> eventType instanceof FhirEventTypeCode)
+            .findFirst()
+            .map(FhirEventTypeCode.class::cast)
+            .map(fetc -> serverSide ?
+                fetc.getServerEventClassName() :
+                fetc.getClientEventClassName())
+            .map(this::auditEventInstance)
+            .orElseGet(AuditEvent::new);
+    }
+
+    /**
+     * Returns a new instance of {@link AuditEvent}
+     * @return AuditEvent instance matching the FHIR transaction
+     * @throws ClassCastException on misconfiguration
+     */
+    @SneakyThrows
+    public AuditEvent auditEventInstance(String auditEventClassName) {
+        if (auditEventClassName == null) {
+            return new AuditEvent();
+        }
+        var auditEventClass = (Class<? extends AuditEvent>)Class.forName(auditEventClassName);
+        return auditEventClass
+            .getConstructor()
+            .newInstance();
     }
 
     protected AuditEvent.AuditEventEntityComponent participantObjectIdentificationToEntity(ParticipantObjectIdentificationType poit) {
@@ -201,15 +246,18 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
 
     private Optional<String> getOAuthAttrFromKnownRoleIdCode(List<ActiveParticipantRoleId> roleCodes,
                                                              String knownCodeSystem) {
-        return roleCodes.stream().filter(p -> p.getCodeSystemName().equals(knownCodeSystem))
+        return roleCodes.stream()
+            .filter(p -> p.getCodeSystemName().equals(knownCodeSystem))
             .findFirst()
             .map(CodedValueType::getCode);
     }
 
     private List<String> getOAuthListAttrFromKnownRoleIdCode(List<ActiveParticipantRoleId> roleCodes,
                                                              String knownCodeSystem) {
-        return roleCodes.stream().filter(p -> p.getCodeSystemName().equals(knownCodeSystem))
-            .map(CodedValueType::getCode).collect(Collectors.toList());
+        return roleCodes.stream()
+            .filter(p -> p.getCodeSystemName().equals(knownCodeSystem))
+            .map(CodedValueType::getCode)
+            .toList();
     }
 
     protected AuditEvent.AuditEventAgentNetworkType auditEventNetworkType(NetworkAccessPointTypeCode naptc) {

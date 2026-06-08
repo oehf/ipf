@@ -50,6 +50,9 @@ public class AuditMessage implements Serializable, Validateable {
     @Setter
     private AuditSourceIdentificationType auditSourceIdentification;
     private List<ParticipantObjectIdentificationType> participantObjectIdentifications;
+    @Getter
+    @Setter
+    private boolean serverSide;
 
     public List<ActiveParticipantType> getActiveParticipants() {
         if (activeParticipants == null) {

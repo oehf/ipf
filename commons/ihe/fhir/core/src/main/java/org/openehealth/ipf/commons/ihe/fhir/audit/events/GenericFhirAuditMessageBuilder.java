@@ -37,8 +37,8 @@ import java.util.Objects;
  * and operation type for the participants. The audit messages follow the pattern shared
  * with audit messages of IHE transactions. Some exceptions:
  * <ul>
- * <li>the Event ID is always EV("rest", "http://hl7.org/fhir/audit-event-type", "RESTful Operation") (as described
- * in https://www.hl7.org/fhir/valueset-audit-event-type.html)</li>
+ * <li>the Event ID is always EV("rest", "http://terminology.hl7.org/CodeSystem/audit-event-type", "RESTful Operation") (as described
+ * in <a href="https://hl7.org/fhir/R4/codesystem-audit-event-type.html">here</a>)</li>
  * <li>and the Event Action corresponds with the FHIR operation (see https://www.hl7.org/fhir/valueset-audit-event-action.html)</li>
  * <li>the query/resource participant object's ParticipantObjectIdType is the resource type</li>
  * </ul>

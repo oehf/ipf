@@ -27,7 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
+import java.util.Base64;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -69,15 +69,15 @@ public class TestIti67WithBalpAudit extends AbstractTestIti67 {
         assertEquals(1, auditEvents.size());
         var auditEvent = auditEvents.get(0);
 
-        assertEquals("110112", auditEvent.getType().getCode());
+        assertEquals("rest", auditEvent.getType().getCode());
+        assertEquals("RESTful Operation", auditEvent.getType().getDisplay());
         assertEquals("ITI-67", auditEvent.getSubtypeFirstRep().getCode());
         assertEquals("E", auditEvent.getAction().toCode());
-        assertEquals("Query", auditEvent.getType().getDisplay());
         assertEquals("0", auditEvent.getOutcome().toCode());
-        Optional<AuditEvent.AuditEventAgentComponent> sourceRole = findRoleAgentWithCode(auditEvent, "110153");
+        var sourceRole = findRoleAgentWithCode(auditEvent, "110153");
         assertTrue(sourceRole.isPresent());
-        assertTrue(sourceRole.get().getRequestor());
-        Optional<AuditEvent.AuditEventAgentComponent> destinationRole = findRoleAgentWithCode(auditEvent, "110152");
+        assertFalse(sourceRole.get().getRequestor());
+        var destinationRole = findRoleAgentWithCode(auditEvent, "110152");
         assertTrue(destinationRole.isPresent());
         assertFalse(destinationRole.get().getRequestor());
         assertEquals(1, auditEvent.getEntity().stream()
@@ -92,12 +92,14 @@ public class TestIti67WithBalpAudit extends AbstractTestIti67 {
         sendViaProducer(referencePatientIdentifierParameter());
         assertEquals(2, FhirAuditRepository.getAuditEvents().size());
 
-        List<byte[]> queries = FhirAuditRepository.getAuditEvents().stream().flatMap(event -> event.getEntity().stream()
+        var queries = FhirAuditRepository.getAuditEvents().stream()
+            .flatMap(event -> event.getEntity().stream()
             .filter(entity -> entity.getType().getCode().equals("2") && entity.getRole().getCode().equals("24"))
             .map(AuditEvent.AuditEventEntityComponent::getQuery)
-            .filter(Objects::nonNull)).toList();
+            .filter(Objects::nonNull))
+            .toList();
 
-        String query = new String(queries.get(0), StandardCharsets.UTF_8);
+        var query = new String(Base64.getDecoder().decode(queries.get(0)), StandardCharsets.UTF_8);
         assertTrue(query.startsWith("patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1"));
     }
 
