@@ -26,7 +26,7 @@ import org.springframework.test.context.ContextConfiguration
 import static org.junit.jupiter.api.Assertions.*
 
 /**
- * Unit tests for the PIX Feed transaction a.k.a. ITI-8 with OpenTelemtry trace propagation
+ * Unit tests for the PIX Feed transaction a.k.a. ITI-8 with OpenTelemetry trace propagation
  */
 @ContextConfiguration('/iti8/iti-8-otel.xml')
 class TestIti8Otel extends AbstractMllpTest {

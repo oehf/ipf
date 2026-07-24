@@ -19,11 +19,14 @@ package org.openehealth.ipf.commons.ihe.hl7v2.tracing
 
 import ca.uhn.hl7v2.HapiContext
 import ca.uhn.hl7v2.model.Message
+import groovy.transform.CompileStatic
 import io.micrometer.tracing.SpanCustomizer
+import io.micrometer.tracing.Tracer
 import io.micrometer.tracing.otel.bridge.ArrayListSpanProcessor
 import io.micrometer.tracing.otel.bridge.OtelCurrentTraceContext
 import io.micrometer.tracing.otel.bridge.OtelPropagator
 import io.micrometer.tracing.otel.bridge.OtelTracer
+import io.micrometer.tracing.propagation.Propagator
 import io.opentelemetry.api.trace.SpanKind
 import io.opentelemetry.context.propagation.ContextPropagators
 import io.opentelemetry.extension.trace.propagation.B3Propagator
@@ -48,27 +51,7 @@ class MessageOtelTracerTest {
     void traceMessage() {
         ArrayListSpanProcessor reporter = new ArrayListSpanProcessor()
 
-        // Otel setup
-        var sdkTracerProvider = SdkTracerProvider.builder()
-            .addSpanProcessor(reporter)
-            .setResource(Resource.getDefault())
-            .setSampler(Sampler.alwaysOn())
-            .build()
-        var otelPropagator = ContextPropagators.create(B3Propagator.injectingMultiHeaders())
-        var openTelemetrySdkBuilder = OpenTelemetrySdk.builder()
-            .setPropagators(otelPropagator)
-            .setTracerProvider(sdkTracerProvider)
-        var otelTracer = openTelemetrySdkBuilder.build().getTracer("io.micrometer.micrometer-tracing")
-
-        // Micrometer Otel Bridge
-        def propagator = new OtelPropagator(otelPropagator, otelTracer)
-        def tracer = new OtelTracer(otelTracer, new OtelCurrentTraceContext(), new OtelTracer.EventPublisher() {
-            @Override
-            void publishEvent(Object event) {
-            }
-        })
-
-        def messageTracer = new MessageTracer(tracer, propagator)
+        def messageTracer = createMessageTracer(reporter)
         def sending = MessageUtils.makeMessage(CONTEXT, 'ORU', 'R01', '2.5')
 
         messageTracer.sendMessage(sending, "producer", new Handler() {
@@ -95,6 +78,37 @@ class MessageOtelTracerTest {
         assertNotEquals(clientSpan.spanId, serverSpan.spanId)
         assertEquals(clientSpan.traceId, serverSpan.traceId)
         assertEquals(clientSpan.spanId, serverSpan.parentSpanId)
+    }
+
+    /**
+     * OpenTelemetry/Micrometer wiring is compiled statically so that the OpenTelemetry SDK builder calls
+     * bind at compile time. {@code ContextPropagators.create(..)} returns a package-private implementation
+     * which Groovy's dynamic dispatch cannot resolve against {@code setPropagators(ContextPropagators)}.
+     */
+    @CompileStatic
+    private static MessageTracer createMessageTracer(ArrayListSpanProcessor reporter) {
+        // Otel setup
+        SdkTracerProvider sdkTracerProvider = SdkTracerProvider.builder()
+            .addSpanProcessor(reporter)
+            .setResource(Resource.getDefault())
+            .setSampler(Sampler.alwaysOn())
+            .build()
+        ContextPropagators otelPropagator = ContextPropagators.create(B3Propagator.injectingMultiHeaders())
+        var otelTracer = OpenTelemetrySdk.builder()
+            .setPropagators(otelPropagator)
+            .setTracerProvider(sdkTracerProvider)
+            .build()
+            .getTracer("io.micrometer.micrometer-tracing")
+
+        // Micrometer Otel Bridge
+        Propagator propagator = new OtelPropagator(otelPropagator, otelTracer)
+        Tracer tracer = new OtelTracer(otelTracer, new OtelCurrentTraceContext(), new OtelTracer.EventPublisher() {
+            @Override
+            void publishEvent(Object event) {
+            }
+        })
+
+        return new MessageTracer(tracer, propagator)
     }
 
 }

@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.controls.strategies;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JsonNode;
 import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortControl2;
 
 import javax.naming.ldap.BasicControl;
@@ -38,9 +38,7 @@ public class SortControlStrategy implements ControlStrategy {
     public BasicControl deserializeJson(JsonNode node) throws IOException {
         var keys = new ArrayList<SortKey>();
         var keysNode = node.get("keys");
-        var keyNodes = keysNode.elements();
-        while (keyNodes.hasNext()) {
-            var keyNode = keyNodes.next();
+        for (var keyNode : keysNode.values()) {
             keys.add(new SortKey(keyNode.get("attrId").textValue(), keyNode.get("ascending").booleanValue(), keyNode.get("matchingRuleId").textValue()));
         }
         return new SortControl2(node.get("critical").asBoolean(), keys.toArray(new SortKey[0]));
@@ -49,12 +47,12 @@ public class SortControlStrategy implements ControlStrategy {
     @Override
     public void serializeJson(BasicControl control, JsonGenerator gen) throws IOException {
         var sortControl = (SortControl2) control;
-        gen.writeArrayFieldStart("keys");
+        gen.writeArrayPropertyStart("keys");
         for (var sortKey : sortControl.getKeys()) {
             gen.writeStartObject();
-            gen.writeStringField("attrId", sortKey.getAttributeID());
-            gen.writeStringField("matchingRuleId", sortKey.getMatchingRuleID());
-            gen.writeBooleanField("ascending", sortKey.isAscending());
+            gen.writeStringProperty("attrId", sortKey.getAttributeID());
+            gen.writeStringProperty("matchingRuleId", sortKey.getMatchingRuleID());
+            gen.writeBooleanProperty("ascending", sortKey.isAscending());
             gen.writeEndObject();
         }
         gen.writeEndArray();

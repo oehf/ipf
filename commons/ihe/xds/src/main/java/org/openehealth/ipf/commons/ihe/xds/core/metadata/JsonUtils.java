@@ -15,11 +15,13 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
+
 import lombok.experimental.UtilityClass;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.module.jakarta.xmlbind.JakartaXmlBindAnnotationModule;
 
 /**
  * @author Dmytro Rud
@@ -31,11 +33,14 @@ public class JsonUtils {
      * Creates and returns an ObjectMapper instance suitable for the simplified XDS data model.
      */
     public ObjectMapper createObjectMapper() {
-        var objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
-        objectMapper.registerModule(new JakartaXmlBindAnnotationModule());
-        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        return objectMapper;
+        // Java 8 date/time support is auto-registered by jackson-databind 3.x, so no JavaTimeModule is needed.
+        // ALLOW_FINAL_FIELDS_AS_MUTATORS restores the Jackson 2.x default so that pre-initialized final fields
+        // (e.g. the TimeRange fields of the stored queries) are populated on deserialization.
+        return JsonMapper.builder()
+                .addModule(new JakartaXmlBindAnnotationModule())
+                .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .enable(MapperFeature.ALLOW_FINAL_FIELDS_AS_MUTATORS)
+                .build();
     }
 
 }

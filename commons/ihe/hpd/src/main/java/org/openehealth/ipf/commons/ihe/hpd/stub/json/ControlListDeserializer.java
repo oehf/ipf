@@ -15,16 +15,17 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.json;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.JsonNode;
 import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Control;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ValueDeserializer;
 
 import javax.naming.ldap.BasicControl;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,18 +34,21 @@ import java.util.List;
  *
  * @author Dmytro Rud
  */
-public class ControlListDeserializer extends JsonDeserializer<List> {
+public class ControlListDeserializer extends ValueDeserializer<List> {
 
     @Override
-    public List deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
+    public List deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) {
         JsonNode arrayNode = jsonParser.readValueAsTree();
         if (!arrayNode.isArray()) {
             throw new IllegalArgumentException("'controls' shall be a JSON array");
         }
         List<Control> result = new ArrayList<>();
-        var controlNodes = arrayNode.elements();
-        while (controlNodes.hasNext()) {
-            result.add(ControlUtils.toDsmlv2(deserializeControl(controlNodes.next())));
+        try {
+            for (var controlNode : arrayNode.values()) {
+                result.add(ControlUtils.toDsmlv2(deserializeControl(controlNode)));
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
         return result;
     }
