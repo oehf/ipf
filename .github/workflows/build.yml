@@ -39,5 +39,5 @@ jobs:
           ignore-maven-wrapper: true
 
       - name: Deploy to Sonatype
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         run: mvn -B deploy -DskipTests

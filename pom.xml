@@ -27,7 +27,7 @@
         <!-- Project configurations -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <surefire-plugin-version>3.5.5</surefire-plugin-version>
+        <surefire-plugin-version>3.5.6</surefire-plugin-version>
         <jxr-plugin-version>3.6.0</jxr-plugin-version>
         <project-info-reports-plugin-version>3.9.0</project-info-reports-plugin-version>
         <maven-dsldoc-plugin-version>1.6</maven-dsldoc-plugin-version>
@@ -41,9 +41,9 @@
         <build-helper-version>3.6.1</build-helper-version>
         <compiler-plugin-version>3.15.0</compiler-plugin-version>
         <enforcer-plugin-version>3.6.3</enforcer-plugin-version>
-        <gmavenplus-plugin-version>4.3.1</gmavenplus-plugin-version>
+        <gmavenplus-plugin-version>5.1.0</gmavenplus-plugin-version>
 
-        <jar-plugin-version>3.5.0</jar-plugin-version>
+        <jar-plugin-version>3.5.1</jar-plugin-version>
         <javadoc-plugin-version>3.12.0</javadoc-plugin-version>
         <jaxb-plugin-version>4.1.0</jaxb-plugin-version>
         <lombok-plugin-version>1.18.20.0</lombok-plugin-version>
@@ -52,18 +52,20 @@
         <scm-publish-plugin-version>3.3.0</scm-publish-plugin-version>
         <!-- investigate: maven-release-plugin-fails source-artifacts-getting-deployed-twice on version greater than 3.2.1 -->
         <source-plugin-version>3.4.0</source-plugin-version>
-        <site-plugin-version>3.21.0</site-plugin-version>
+        <site-plugin-version>3.22.0</site-plugin-version>
 
         <!-- Dependency version properties -->
         <brave-version>6.3.1</brave-version>
         <easymock-version>5.6.0</easymock-version>
-        <guava-version>33.5.0-jre</guava-version>
+        <guava-version>33.6.0-jre</guava-version>
         <lombok-version>1.18.46</lombok-version>
-        <mockserver-version>5.15.0</mockserver-version>
+        <mockserver-version>7.4.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
+        <!-- keep in sync with Spring Boot's managed tomcat.version -->
         <tomcat-version>11.0.22</tomcat-version>
-        <undertow-version>2.3.24.Final</undertow-version>
-        <xbean-spring-version>4.30</xbean-spring-version>
+        <!-- undertow-servlet is not published beyond 2.3.x; Undertow 2.4.x dropped the servlet module -->
+        <undertow-version>2.3.26.Final</undertow-version>
+        <xbean-spring-version>4.31</xbean-spring-version>
     </properties>
 
     <scm>
@@ -537,6 +539,10 @@
                                         <message>Requires at least Java 17</message>
                                         <version>[17,)</version>
                                     </requireJavaVersion>
+                                    <requireMavenVersion>
+                                        <message>Requires at least Maven 3.9.0</message>
+                                        <version>[3.9.0,)</version>
+                                    </requireMavenVersion>
                                 </rules>
                             </configuration>
                         </execution>
