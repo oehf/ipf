@@ -46,6 +46,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterce
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.openehealth.ipf.commons.core.pool.PoolEvictor;
 import org.vibur.objectpool.ConcurrentPool;
 import org.vibur.objectpool.PoolObjectFactory;
 import org.vibur.objectpool.PoolService;
@@ -114,6 +115,12 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
         int poolSize = Integer.getInteger(POOL_SIZE_PROPERTY, -1);
         clientPool = new ConcurrentPool<>(new ConcurrentLinkedQueueCollection<>(), new PortFactory(),
             0, (poolSize > 0) ? poolSize : DEFAULT_POOL_SIZE, false);
+
+        // Each pooled stub retains a CXF service model, interceptor chains and an HTTP conduit, so a
+        // pool left at its high-water mark after a traffic burst holds on to a lot of memory.
+        // PoolEvictor shrinks it again; it keeps only a weak reference, so nothing here needs to be
+        // deregistered when the endpoint owning this factory goes away.
+        PoolEvictor.register(clientPool, "JaxWsClientFactory(" + wsTransactionConfiguration.getServiceName() + ")");
     }
 
     /**

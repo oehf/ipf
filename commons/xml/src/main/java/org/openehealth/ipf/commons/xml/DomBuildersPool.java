@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.xml;
 
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
+import org.openehealth.ipf.commons.core.pool.PoolEvictor;
 import org.vibur.objectpool.ConcurrentPool;
 import org.vibur.objectpool.PoolObjectFactory;
 import org.vibur.objectpool.PoolService;
@@ -30,6 +31,11 @@ import java.util.function.Function;
 
 /**
  * Pool for DOM document builders (which are not thread-safe).
+ * <p>
+ * Document builders retain their internal parser buffers across {@link DocumentBuilder#reset()}, so
+ * builders left idle after a traffic burst keep that memory allocated. The pool is therefore
+ * registered with {@link PoolEvictor}, which destroys builders that stay idle; see that class for
+ * the interval and sampling system properties.
  *
  * @author Dmytro Rud
  * @since 3.5.1
@@ -39,6 +45,14 @@ import java.util.function.Function;
 public class DomBuildersPool {
     public static final String POOL_SIZE_PROPERTY = DomBuildersPool.class.getName() + ".POOLSIZE";
     private static final int DEFAULT_POOL_SIZE = 100;
+
+    /**
+     * Creating a factory performs JAXP provider lookup and is far more expensive than creating a
+     * builder from it, so it is done once. A {@code DocumentBuilderFactory} is not thread-safe to
+     * <em>configure</em>, but it is only configured here, in a static initializer; afterwards
+     * {@link DocumentBuilderFactory#newDocumentBuilder()} is the only method called on it.
+     */
+    private static final DocumentBuilderFactory FACTORY = createFactory();
 
     private static final PoolService<DocumentBuilder> POOL;
     static {
@@ -50,6 +64,27 @@ public class DomBuildersPool {
                 (poolSize > 0) ? poolSize : DEFAULT_POOL_SIZE,
                 false);
         log.debug("Initialized DomBuildersPool with size: {}", (poolSize > 0) ? poolSize : DEFAULT_POOL_SIZE);
+        PoolEvictor.register(POOL, "DomBuildersPool");
+    }
+
+    private static DocumentBuilderFactory createFactory() {
+        try {
+            var factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+
+            // Security features to prevent XXE attacks
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+            factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
+            factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+            factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+            factory.setXIncludeAware(false);
+            factory.setExpandEntityReferences(false);
+            return factory;
+        } catch (ParserConfigurationException e) {
+            log.error("Failed to configure DocumentBuilderFactory", e);
+            throw new IllegalStateException("Failed to configure DocumentBuilderFactory", e);
+        }
     }
 
 
@@ -73,13 +108,24 @@ public class DomBuildersPool {
      * @param documentBuilder document builder, <code>null</code> values are safe.
      */
     public static void restore(DocumentBuilder documentBuilder) {
-        if (documentBuilder != null) {
-            try {
-                documentBuilder.reset();
-                POOL.restore(documentBuilder);
-            } catch (Exception e) {
-                log.warn("Failed to return document builder to pool", e);
-            }
+        if (documentBuilder == null) {
+            return;
+        }
+        // Every take() must be matched by exactly one restore(), otherwise the pool permanently
+        // loses capacity and eventually take() blocks forever. If reset() fails we therefore still
+        // hand the builder back, but flagged as invalid so the pool discards it instead of reusing
+        // a builder in an unknown state.
+        var valid = true;
+        try {
+            documentBuilder.reset();
+        } catch (Exception e) {
+            valid = false;
+            log.warn("Failed to reset document builder, discarding it", e);
+        }
+        try {
+            POOL.restore(documentBuilder, valid);
+        } catch (Exception e) {
+            log.warn("Failed to return document builder to pool", e);
         }
     }
 
@@ -108,19 +154,7 @@ public class DomBuildersPool {
         @Override
         public DocumentBuilder create() {
             try {
-                var factory = DocumentBuilderFactory.newInstance();
-                factory.setNamespaceAware(true);
-                
-                // Security features to prevent XXE attacks
-                factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
-                factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-                factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-                factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-                factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-                factory.setXIncludeAware(false);
-                factory.setExpandEntityReferences(false);
-                
-                var documentBuilder = factory.newDocumentBuilder();
+                var documentBuilder = FACTORY.newDocumentBuilder();
                 log.debug("Created a new document builder {}", documentBuilder);
                 return documentBuilder;
             } catch (ParserConfigurationException e) {
