@@ -87,8 +87,34 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
             ClassLoader classLoader,
             Map<String, Object> staticParams)
     {
+        this(outputFormat, classLoader, staticParams, false);
+    }
+
+    /**
+     * Creates a transmogrifier that is permitted to resolve external entities from local resources.
+     * <p>
+     * Only for transforming trusted classpath content — specifically the bundled Schematron rule
+     * sets, which are composed from {@code .ent} entity files and cannot be compiled otherwise. The
+     * returned instance must never be used on inbound messages.
+     */
+    static XsltTransmogrifier<String> forTrustedResources() {
+        return new XsltTransmogrifier<>(String.class, null, null, true);
+    }
+
+    private XsltTransmogrifier(
+            Class<T> outputFormat,
+            ClassLoader classLoader,
+            Map<String, Object> staticParams,
+            boolean trustedResourcesOnly)
+    {
         super(classLoader);
         factory = TransformerFactory.newInstance();
+        // The stylesheets are trusted classpath resources, but the transformed document is not.
+        if (trustedResourcesOnly) {
+            XmlSecurity.hardenForTrustedResources(factory);
+        } else {
+            XmlSecurity.harden(factory);
+        }
         // Wrap the default resolver if available
         if (factory.getURIResolver() != null) {
             resolver = new ClasspathUriResolver(factory.getURIResolver());

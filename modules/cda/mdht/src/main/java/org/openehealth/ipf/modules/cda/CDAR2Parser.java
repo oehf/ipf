@@ -101,7 +101,9 @@ public class CDAR2Parser implements Parser<ClinicalDocument> {
         final var factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
 
+        factory.setFeature(javax.xml.XMLConstants.FEATURE_SECURE_PROCESSING, true);
         factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
         factory.setFeature("http://apache.org/xml/features/xinclude", false);
         factory.setXIncludeAware(false);
         factory.setExpandEntityReferences(false);

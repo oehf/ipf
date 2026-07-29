@@ -80,6 +80,11 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
             log.debug("Validating XML message");
             var schema = resource(schemaResource);
             var validator = schema.newValidator();
+            // The message being validated is untrusted. Hardening the SchemaFactory in
+            // createResource() only governs schema compilation, so the validator that parses the
+            // instance document must be restricted separately, or a DOCTYPE in an inbound message
+            // can read local files and trigger outbound requests.
+            XmlSecurity.harden(validator);
             var errorHandler = new CollectingErrorHandler();
             validator.setErrorHandler(errorHandler);
             validator.validate(message);
@@ -103,6 +108,7 @@ public class XsdValidator extends AbstractCachingXmlProcessor<Schema> implements
 
         // Register resource resolver to resolve external XML schemas
         factory.setResourceResolver(RESOURCE_RESOLVER);
+        XmlSecurity.harden(factory);
         try {
             factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
             return factory.newSchema(resourceContent(params));
