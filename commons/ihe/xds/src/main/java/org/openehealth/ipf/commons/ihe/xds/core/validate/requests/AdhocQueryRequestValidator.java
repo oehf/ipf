@@ -16,17 +16,13 @@
 package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile;
+import org.openehealth.ipf.commons.ihe.xds.XdsIntegrationProfile.HomeCommunityIdOptionality;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
-import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
-import org.openehealth.ipf.commons.ihe.xds.core.validate.query.*;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,13 +34,22 @@ import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XCF.Interactions.ITI_63;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType.LEAF_CLASS;
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM;
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType.OBJECT_REF;
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.requests.QueryRules.rules;
 
 /**
  * Validates an {@link EbXMLAdhocQueryRequest}.
+ * <p>
+ * Everything that is specific to a single {@link QueryType} is declared in one place, namely in the
+ * {@link #rulesFor} switch, expressed in the vocabulary of {@link QueryRules}. The switch is
+ * deliberately exhaustive and has no {@code default} branch, so a newly added {@code QueryType}
+ * fails to compile until its rules are declared.
  *
  * @author Jens Riemschneider
  */
@@ -53,391 +58,304 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
     @Getter
     private static final AdhocQueryRequestValidator instance = new AdhocQueryRequestValidator();
 
-    private static final CXValidator cxValidator = new CXValidator(true);
-    private static final OIDValidator oidValidator = new OIDValidator();
-    private static final NopValidator nopValidator = new NopValidator();
 
-
-    private static void addAllowedMultipleSlots(QueryType queryType, QueryParameter... parameters) {
-        var slotNames = Arrays.stream(parameters)
-                .map(QueryParameter::getSlotName)
-                .collect(Collectors.toSet());
-        ALLOWED_MULTIPLE_SLOTS.put(queryType, slotNames);
-    }
-
-
-    private static final Map<QueryType, Set<String>> ALLOWED_MULTIPLE_SLOTS;
-
-    static {
-        ALLOWED_MULTIPLE_SLOTS = new EnumMap<>(QueryType.class);
-
-        addAllowedMultipleSlots(FIND_DOCUMENTS,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_DOCUMENTS_BY_REFERENCE_ID,
-                DOC_ENTRY_REFERENCE_IDS,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_DOCUMENTS_MPQ,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ,
-                DOC_ENTRY_REFERENCE_IDS,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_FOLDERS,
-                FOLDER_CODES);
-
-        addAllowedMultipleSlots(FIND_FOLDERS_MPQ,
-                FOLDER_CODES);
-
-        addAllowedMultipleSlots(GET_ALL,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(GET_SUBMISSION_SET_AND_CONTENTS,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(GET_FOLDER_AND_CONTENTS,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FETCH,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_MEDICATION_TREATMENT_PLANS,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_PRESCRIPTIONS,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_DISPENSES,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_MEDICATION_ADMINISTRATIONS,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_PRESCRIPTIONS_FOR_VALIDATION,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-
-        addAllowedMultipleSlots(FIND_PRESCRIPTIONS_FOR_DISPENSE,
-                DOC_ENTRY_EVENT_CODE,
-                DOC_ENTRY_CONFIDENTIALITY_CODE);
-    }
-
+    // ------------------------------------------------------------------------
+    // Which query types may be used in which transaction
+    // ------------------------------------------------------------------------
 
     private static final Map<InteractionId, Set<QueryType>> ALLOWED_QUERY_TYPES;
 
     static {
         Set<QueryType> itiStoredQueryTypes = EnumSet.of(
-                FIND_DOCUMENTS,
-                FIND_DOCUMENTS_BY_REFERENCE_ID,
-                FIND_SUBMISSION_SETS,
-                FIND_FOLDERS,
-                GET_ALL,
-                GET_DOCUMENTS,
-                GET_FOLDERS,
-                GET_ASSOCIATIONS,
-                GET_DOCUMENTS_AND_ASSOCIATIONS,
-                GET_SUBMISSION_SETS,
-                GET_SUBMISSION_SET_AND_CONTENTS,
-                GET_FOLDER_AND_CONTENTS,
-                GET_FOLDERS_FOR_DOCUMENT,
-                GET_RELATED_DOCUMENTS);
+            FIND_DOCUMENTS,
+            FIND_DOCUMENTS_BY_REFERENCE_ID,
+            FIND_SUBMISSION_SETS,
+            FIND_FOLDERS,
+            GET_ALL,
+            GET_DOCUMENTS,
+            GET_FOLDERS,
+            GET_ASSOCIATIONS,
+            GET_DOCUMENTS_AND_ASSOCIATIONS,
+            GET_SUBMISSION_SETS,
+            GET_SUBMISSION_SET_AND_CONTENTS,
+            GET_FOLDER_AND_CONTENTS,
+            GET_FOLDERS_FOR_DOCUMENT,
+            GET_RELATED_DOCUMENTS);
 
         Set<QueryType> pharmStoredQueryTypes = EnumSet.of(
-                FIND_MEDICATION_TREATMENT_PLANS,
-                FIND_PRESCRIPTIONS,
-                FIND_DISPENSES,
-                FIND_MEDICATION_ADMINISTRATIONS,
-                FIND_PRESCRIPTIONS_FOR_VALIDATION,
-                FIND_PRESCRIPTIONS_FOR_DISPENSE,
-                FIND_MEDICATION_LIST);
+            FIND_MEDICATION_TREATMENT_PLANS,
+            FIND_PRESCRIPTIONS,
+            FIND_DISPENSES,
+            FIND_MEDICATION_ADMINISTRATIONS,
+            FIND_PRESCRIPTIONS_FOR_VALIDATION,
+            FIND_PRESCRIPTIONS_FOR_DISPENSE,
+            FIND_MEDICATION_LIST);
+
+        // The FindDocumentsExclude Option (CP-ITI-1323) is defined for XDS.b only, hence
+        // FIND_DOCUMENTS_EXCLUDE is accepted for ITI-18 but not for ITI-38.
+        Set<QueryType> iti18StoredQueryTypes = EnumSet.copyOf(itiStoredQueryTypes);
+        iti18StoredQueryTypes.add(FIND_DOCUMENTS_EXCLUDE);
 
         ALLOWED_QUERY_TYPES = new HashMap<>(5);
-        ALLOWED_QUERY_TYPES.put(ITI_18, itiStoredQueryTypes);
+        ALLOWED_QUERY_TYPES.put(ITI_18, iti18StoredQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_38, itiStoredQueryTypes);
         ALLOWED_QUERY_TYPES.put(ITI_51, EnumSet.of(FIND_DOCUMENTS_MPQ, FIND_FOLDERS_MPQ, FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ));
         ALLOWED_QUERY_TYPES.put(ITI_63, EnumSet.of(FETCH));
         ALLOWED_QUERY_TYPES.put(PHARM_1, pharmStoredQueryTypes);
     }
 
-    private final Map<String, QueryParameterValidation[]> validations = new ConcurrentHashMap<>();
+    /**
+     * @return all query types that are allowed in at least one transaction.
+     * Package-private, intended for consistency checks in tests.
+     */
+    static Set<QueryType> queryTypesAllowedInAnyTransaction() {
+        return ALLOWED_QUERY_TYPES.values().stream()
+            .flatMap(Set::stream)
+            .collect(Collectors.toUnmodifiableSet());
+    }
+
+
+    // ------------------------------------------------------------------------
+    // Rules per query type
+    // ------------------------------------------------------------------------
+
+    private final Map<String, QueryRules> rulesCache = new ConcurrentHashMap<>();
 
     private AdhocQueryRequestValidator() {
     }
 
-    private QueryParameterValidation[] getValidators(QueryType queryType, ValidationProfile profile) {
-        var homeCommunityIdOptionality = profile.getInteractionProfile().getHomeCommunityIdOptionality();
-        return validations.computeIfAbsent(queryType.name() + homeCommunityIdOptionality.name(),
-            s -> instantiateValidators(queryType, homeCommunityIdOptionality));
+    private QueryRules getRules(QueryType queryType, ValidationProfile profile) {
+        var optionality = profile.getInteractionProfile().getHomeCommunityIdOptionality();
+        return rulesCache.computeIfAbsent(queryType.name() + optionality.name(),
+            key -> rulesFor(queryType, optionality));
     }
 
-    private QueryParameterValidation[] instantiateValidators(QueryType queryType, XdsIntegrationProfile.HomeCommunityIdOptionality homeCommunityIdOptionality) {
+    private static QueryRules rulesFor(QueryType queryType, HomeCommunityIdOptionality optionality) {
         return switch (queryType) {
-            case FETCH -> new QueryParameterValidation[]{
-                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                new CodeValidation(DOC_ENTRY_CLASS_CODE, false),
-                new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-            };
-            case FIND_DOCUMENTS, FIND_DOCUMENTS_MPQ -> new QueryParameterValidation[]{
-                // PatientId MUST BE supplied in single patient query.
-                // PatientId (list) MAY BE supplied in multi patient query.
-                // The validators for the two cases are otherwise identical.
-                queryType.equals(FIND_DOCUMENTS)
-                    ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false)
-                    : new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator),
-                new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                new StatusValidation(DOC_ENTRY_STATUS),
-                new DocumentEntryTypeValidation(),
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-            };
-            case FIND_DOCUMENTS_BY_TITLE -> new QueryParameterValidation[]{
-                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                new StringListValidation(DOC_ENTRY_TITLE, nopValidator),
-                new StatusValidation(DOC_ENTRY_STATUS),
-                new DocumentEntryTypeValidation(),
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-            };
-            case FIND_DOCUMENTS_BY_REFERENCE_ID, FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ -> new QueryParameterValidation[]{
-                queryType.equals(FIND_DOCUMENTS_BY_REFERENCE_ID)
-                    ? new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false)
-                    : new StringListValidation(DOC_ENTRY_PATIENT_ID, cxValidator),
-                new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                new StatusValidation(DOC_ENTRY_STATUS),
-                new DocumentEntryTypeValidation(),
-                new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-            };
-            case FIND_SUBMISSION_SETS -> new QueryParameterValidation[]{
-                new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
-                // Excluded to avoid validation errors for xdstest requests
-                // new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
-                new TimestampValidation(SUBMISSION_SET_SUBMISSION_TIME_FROM),
-                new TimestampValidation(SUBMISSION_SET_SUBMISSION_TIME_TO),
-                new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
-                new CodeValidation(SUBMISSION_SET_CONTENT_TYPE_CODE),
-                new StatusValidation(SUBMISSION_SET_STATUS),
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-            };
-            case FIND_FOLDERS, FIND_FOLDERS_MPQ -> new QueryParameterValidation[]{
-                // PatientId MUST BE supplied in single patient query.
-                // PatientId (list) MAY BE supplied in multi patient query.
-                // The validators for the two cases are otherwise identical.
-                queryType.equals(FIND_FOLDERS) ? new StringValidation(FOLDER_PATIENT_ID, cxValidator, false) : new StringListValidation(FOLDER_PATIENT_ID, cxValidator),
-                new TimestampValidation(FOLDER_LAST_UPDATE_TIME_FROM),
-                new TimestampValidation(FOLDER_LAST_UPDATE_TIME_TO),
-                new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME),
-                new StatusValidation(FOLDER_STATUS),
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-            };
-            case GET_ALL -> new QueryParameterValidation[]{
-                new StringValidation(PATIENT_ID, cxValidator, false),
-                new StatusValidation(DOC_ENTRY_STATUS),
-                new StatusValidation(SUBMISSION_SET_STATUS),
-                new StatusValidation(FOLDER_STATUS),
-                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
-                new DocumentEntryTypeValidation(),
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-            };
-            case GET_DOCUMENTS -> new QueryParameterValidation[]{
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID),
-                new StringListValidation(DOC_ENTRY_UUID, nopValidator),
-                new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
-            };
-            case GET_DOCUMENTS_AND_ASSOCIATIONS -> new QueryParameterValidation[]{
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
-                new StringListValidation(DOC_ENTRY_UUID, nopValidator),
-                new StringListValidation(DOC_ENTRY_UNIQUE_ID, nopValidator),
-            };
-            case GET_FOLDERS_FOR_DOCUMENT -> new QueryParameterValidation[]{
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
-                new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
-                new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
-            };
-            case GET_FOLDERS -> new QueryParameterValidation[]{
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID),
-                new StringListValidation(FOLDER_UUID, nopValidator),
-                new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
-            };
-            case GET_ASSOCIATIONS, GET_SUBMISSION_SETS -> new QueryParameterValidation[]{
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                new StringListValidation(UUID, nopValidator),
-            };
-            case GET_SUBMISSION_SET_AND_CONTENTS -> new QueryParameterValidation[]{
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                new ChoiceValidation(false, SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID),
-                new StringValidation(SUBMISSION_SET_UUID, nopValidator, true),
-                new StringValidation(SUBMISSION_SET_UNIQUE_ID, nopValidator, true),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
-                new DocumentEntryTypeValidation(),
-            };
-            case GET_FOLDER_AND_CONTENTS -> new QueryParameterValidation[]{
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                new ChoiceValidation(false, FOLDER_UUID, FOLDER_UNIQUE_ID),
-                new StringValidation(FOLDER_UUID, nopValidator, true),
-                new StringValidation(FOLDER_UNIQUE_ID, nopValidator, true),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                new QueryListCodeValidation(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME),
-                new DocumentEntryTypeValidation(),
-            };
-            case GET_RELATED_DOCUMENTS -> new QueryParameterValidation[]{
-                new HomeCommunityIdValidation(homeCommunityIdOptionality),
-                new ChoiceValidation(false, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
-                new StringValidation(DOC_ENTRY_UUID, nopValidator, true),
-                new StringValidation(DOC_ENTRY_UNIQUE_ID, nopValidator, true),
-                new AssociationValidation(ASSOCIATION_TYPE),
-                new DocumentEntryTypeValidation(),
-            };
-            case FIND_MEDICATION_TREATMENT_PLANS, FIND_PRESCRIPTIONS, FIND_DISPENSES, FIND_MEDICATION_ADMINISTRATIONS,
-                 FIND_PRESCRIPTIONS_FOR_VALIDATION, FIND_PRESCRIPTIONS_FOR_DISPENSE -> new QueryParameterValidation[]{
-                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                new ChoiceValidation(true, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID),
-                new StringListValidation(FOLDER_UUID, nopValidator),
-                new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_CREATION_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TIME_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_STOP_TIME_TO),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_EVENT_CODE),
-                new CodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE),
-                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator),
-                new StatusValidation(DOC_ENTRY_STATUS),
-            };
-            case FIND_MEDICATION_LIST -> new QueryParameterValidation[]{
-                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_START_TO),
-                new TimestampValidation(DOC_ENTRY_SERVICE_END_FROM),
-                new TimestampValidation(DOC_ENTRY_SERVICE_END_TO),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                new StatusValidation(DOC_ENTRY_STATUS),
-                new DocumentEntryTypeValidation(),
-            };
-            case SUBSCRIPTION_FOR_DOCUMENT_ENTRY -> new QueryParameterValidation[]{
-                new StringValidation(DOC_ENTRY_PATIENT_ID, cxValidator, false),
-                new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                new StringListValidation(DOC_ENTRY_REFERENCE_IDS, nopValidator),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator)
-            };
-            case SUBSCRIPTION_FOR_FOLDER -> new QueryParameterValidation[]{
-                new StringValidation(FOLDER_PATIENT_ID, cxValidator, false),
-                new StringListValidation(FOLDER_UNIQUE_ID, nopValidator),
-                new QueryListCodeValidation(FOLDER_CODES, FOLDER_CODES_SCHEME)
-            };
-            case SUBSCRIPTION_FOR_SUBMISSION_SET -> new QueryParameterValidation[]{
-                new StringValidation(SUBMISSION_SET_PATIENT_ID, cxValidator, false),
-                new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
-                new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
-                new StringListValidation(SUBMISSION_SET_INTENDED_RECIPIENT, nopValidator)
-            };
-            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY -> new QueryParameterValidation[]{
-                new CodeValidation(DOC_ENTRY_CLASS_CODE),
-                new CodeValidation(DOC_ENTRY_TYPE_CODE),
-                new CodeValidation(DOC_ENTRY_PRACTICE_SETTING_CODE),
-                new CodeValidation(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE),
-                new QueryListCodeValidation(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME),
-                new QueryListCodeValidation(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME),
-                new CodeValidation(DOC_ENTRY_FORMAT_CODE),
-                new StringListValidation(DOC_ENTRY_AUTHOR_PERSON, nopValidator)
-            };
-            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET -> new QueryParameterValidation[]{
-                new StringListValidation(SUBMISSION_SET_SOURCE_ID, oidValidator),
-                new StringValidation(SUBMISSION_SET_AUTHOR_PERSON, nopValidator, true),
-                new StringListValidation(SUBMISSION_SET_INTENDED_RECIPIENT, nopValidator)
-            };
-        };
 
+            case FETCH -> rules()
+                .patientId(DOC_ENTRY_PATIENT_ID)
+                .documentMetadata(true)
+                .homeCommunityId(optionality)
+                .allowingMultipleSlots(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+            case FIND_DOCUMENTS -> findDocumentsRules(true, optionality);
+
+            // PatientId MUST BE supplied in the single patient query and MAY BE supplied in the
+            // multi patient query, which in turn demands at least one of several parameters.
+            case FIND_DOCUMENTS_MPQ -> findDocumentsRules(false, optionality)
+                .requiringAtLeastOneOf(
+                    DOC_ENTRY_PATIENT_ID,
+                    DOC_ENTRY_CLASS_CODE,
+                    DOC_ENTRY_EVENT_CODE,
+                    DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE);
+
+            case FIND_DOCUMENTS_BY_REFERENCE_ID -> findDocumentsByReferenceIdRules(true, optionality);
+            case FIND_DOCUMENTS_BY_REFERENCE_ID_MPQ -> findDocumentsByReferenceIdRules(false, optionality);
+
+            case FIND_DOCUMENTS_BY_TITLE -> rules()
+                .patientId(DOC_ENTRY_PATIENT_ID)
+                .documentMetadata(false)
+                .stringList(DOC_ENTRY_TITLE)
+                .documentStatusAndType()
+                .homeCommunityId(optionality);
+
+            case FIND_DOCUMENTS_EXCLUDE -> rules()
+                .mutuallyExclusiveExcludedParameters()
+                .patientId(DOC_ENTRY_PATIENT_ID)
+                .documentMetadata(false)
+                .documentStatusAndType()
+                .stringList(DOC_ENTRY_REFERENCE_IDS)
+                .excludedParameters()
+                .homeCommunityId(optionality)
+                .allowingMultipleSlots(
+                    DOC_ENTRY_REFERENCE_IDS, DOC_ENTRY_REFERENCE_IDS_EXCLUDE,
+                    DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_EXCLUDE,
+                    DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_EXCLUDE);
+
+            case FIND_SUBMISSION_SETS -> rules()
+                .patientId(SUBMISSION_SET_PATIENT_ID)
+                // Excluded to avoid validation errors for xdstest requests
+                // .oidList(SUBMISSION_SET_SOURCE_ID)
+                .timestamps(SUBMISSION_SET_SUBMISSION_TIME_FROM, SUBMISSION_SET_SUBMISSION_TIME_TO)
+                .optionalString(SUBMISSION_SET_AUTHOR_PERSON)
+                .code(SUBMISSION_SET_CONTENT_TYPE_CODE)
+                .status(SUBMISSION_SET_STATUS)
+                .homeCommunityId(optionality);
+
+            case FIND_FOLDERS -> findFoldersRules(true, optionality);
+            case FIND_FOLDERS_MPQ -> findFoldersRules(false, optionality)
+                .requiringAtLeastOneOf(FOLDER_PATIENT_ID, FOLDER_CODES);
+
+            case GET_ALL -> rules()
+                .patientId(PATIENT_ID)
+                .status(DOC_ENTRY_STATUS, SUBMISSION_SET_STATUS, FOLDER_STATUS)
+                .codeQueryList(DOC_ENTRY_FORMAT_CODE, DOC_ENTRY_FORMAT_CODE_SCHEME)
+                .documentEntryType(DOC_ENTRY_TYPE)
+                .homeCommunityId(optionality)
+                .allowingMultipleSlots(DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+            case GET_DOCUMENTS -> rules()
+                .homeCommunityId(optionality)
+                .identifierList(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID, DOC_ENTRY_LOGICAL_ID);
+
+            case GET_DOCUMENTS_AND_ASSOCIATIONS -> rules()
+                .homeCommunityId(optionality)
+                .identifierList(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
+
+            case GET_FOLDERS -> rules()
+                .homeCommunityId(optionality)
+                .identifierList(FOLDER_UUID, FOLDER_UNIQUE_ID, FOLDER_LOGICAL_ID);
+
+            case GET_FOLDERS_FOR_DOCUMENT -> rules()
+                .homeCommunityId(optionality)
+                .identifierValue(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID);
+
+            case GET_ASSOCIATIONS, GET_SUBMISSION_SETS -> rules()
+                .homeCommunityId(optionality)
+                .stringList(UUID);
+
+            case GET_SUBMISSION_SET_AND_CONTENTS -> rules()
+                .homeCommunityId(optionality)
+                .identifierValue(SUBMISSION_SET_UUID, SUBMISSION_SET_UNIQUE_ID)
+                .contentsFilters()
+                .allowingMultipleSlots(DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+            case GET_FOLDER_AND_CONTENTS -> rules()
+                .homeCommunityId(optionality)
+                .identifierValue(FOLDER_UUID, FOLDER_UNIQUE_ID)
+                .contentsFilters()
+                .allowingMultipleSlots(DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+            case GET_RELATED_DOCUMENTS -> rules()
+                .homeCommunityId(optionality)
+                .identifierValue(DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID)
+                .association(ASSOCIATION_TYPE)
+                .documentEntryType(DOC_ENTRY_TYPE);
+
+            case FIND_MEDICATION_TREATMENT_PLANS, FIND_PRESCRIPTIONS, FIND_DISPENSES,
+                 FIND_MEDICATION_ADMINISTRATIONS, FIND_PRESCRIPTIONS_FOR_VALIDATION,
+                 FIND_PRESCRIPTIONS_FOR_DISPENSE -> rules()
+                .patientId(DOC_ENTRY_PATIENT_ID)
+                .choice(true, DOC_ENTRY_UUID, DOC_ENTRY_UNIQUE_ID)
+                .stringList(FOLDER_UUID, FOLDER_UNIQUE_ID)
+                .code(DOC_ENTRY_PRACTICE_SETTING_CODE)
+                .documentTimeRanges()
+                .code(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
+                    DOC_ENTRY_EVENT_CODE,
+                    DOC_ENTRY_CONFIDENTIALITY_CODE)
+                .stringList(DOC_ENTRY_AUTHOR_PERSON)
+                .status(DOC_ENTRY_STATUS)
+                .allowingMultipleSlots(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE);
+
+            case FIND_MEDICATION_LIST -> rules()
+                .patientId(DOC_ENTRY_PATIENT_ID)
+                .timestamps(
+                    DOC_ENTRY_SERVICE_START_FROM,
+                    DOC_ENTRY_SERVICE_START_TO,
+                    DOC_ENTRY_SERVICE_END_FROM,
+                    DOC_ENTRY_SERVICE_END_TO)
+                .code(DOC_ENTRY_FORMAT_CODE)
+                .status(DOC_ENTRY_STATUS)
+                .documentEntryType(DOC_ENTRY_TYPE);
+
+            case SUBSCRIPTION_FOR_DOCUMENT_ENTRY -> rules()
+                .patientId(DOC_ENTRY_PATIENT_ID)
+                .code(DOC_ENTRY_CLASS_CODE, DOC_ENTRY_TYPE_CODE)
+                .stringList(DOC_ENTRY_REFERENCE_IDS)
+                .code(DOC_ENTRY_PRACTICE_SETTING_CODE,
+                    DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE,
+                    DOC_ENTRY_FORMAT_CODE)
+                .codeQueryList(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME)
+                .codeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME)
+                .stringList(DOC_ENTRY_AUTHOR_PERSON);
+
+            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY -> rules()
+                .code(DOC_ENTRY_CLASS_CODE,
+                    DOC_ENTRY_TYPE_CODE,
+                    DOC_ENTRY_PRACTICE_SETTING_CODE,
+                    DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE)
+                .codeQueryList(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_SCHEME)
+                .codeQueryList(DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_SCHEME)
+                .code(DOC_ENTRY_FORMAT_CODE)
+                .stringList(DOC_ENTRY_AUTHOR_PERSON)
+                .requiringAtLeastOneOf(
+                    DOC_ENTRY_CLASS_CODE,
+                    DOC_ENTRY_TYPE_CODE,
+                    DOC_ENTRY_PRACTICE_SETTING_CODE,
+                    DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE);
+
+            case SUBSCRIPTION_FOR_FOLDER -> rules()
+                .patientId(FOLDER_PATIENT_ID)
+                .stringList(FOLDER_UNIQUE_ID)
+                .codeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME);
+
+            case SUBSCRIPTION_FOR_SUBMISSION_SET -> rules()
+                .patientId(SUBMISSION_SET_PATIENT_ID)
+                .oidList(SUBMISSION_SET_SOURCE_ID)
+                .optionalString(SUBMISSION_SET_AUTHOR_PERSON)
+                .stringList(SUBMISSION_SET_INTENDED_RECIPIENT);
+
+            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET -> rules()
+                .oidList(SUBMISSION_SET_SOURCE_ID)
+                .optionalString(SUBMISSION_SET_AUTHOR_PERSON)
+                .stringList(SUBMISSION_SET_INTENDED_RECIPIENT)
+                .requiringAtLeastOneOf(
+                    SUBMISSION_SET_SOURCE_ID,
+                    SUBMISSION_SET_AUTHOR_PERSON,
+                    SUBMISSION_SET_INTENDED_RECIPIENT);
+        };
     }
+
+
+    // ------------------------------------------------------------------------
+    // Rules of query type families
+    // ------------------------------------------------------------------------
+
+    private static QueryRules findDocumentsRules(boolean singlePatient, HomeCommunityIdOptionality optionality) {
+        return rules()
+            .patientId(DOC_ENTRY_PATIENT_ID, singlePatient)
+            .documentMetadata(false)
+            .documentStatusAndType()
+            .homeCommunityId(optionality)
+            .allowingMultipleSlots(DOC_ENTRY_EVENT_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE);
+    }
+
+    private static QueryRules findDocumentsByReferenceIdRules(boolean singlePatient, HomeCommunityIdOptionality optionality) {
+        return rules()
+            .patientId(DOC_ENTRY_PATIENT_ID, singlePatient)
+            .documentMetadata(false)
+            .documentStatusAndType()
+            .stringList(DOC_ENTRY_REFERENCE_IDS)
+            .homeCommunityId(optionality)
+            .allowingMultipleSlots(DOC_ENTRY_REFERENCE_IDS, DOC_ENTRY_EVENT_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE);
+    }
+
+    private static QueryRules findFoldersRules(boolean singlePatient, HomeCommunityIdOptionality optionality) {
+        return rules()
+            .patientId(FOLDER_PATIENT_ID, singlePatient)
+            .timestamps(FOLDER_LAST_UPDATE_TIME_FROM, FOLDER_LAST_UPDATE_TIME_TO)
+            .codeQueryList(FOLDER_CODES, FOLDER_CODES_SCHEME)
+            .status(FOLDER_STATUS)
+            .homeCommunityId(optionality)
+            .allowingMultipleSlots(FOLDER_CODES);
+    }
+
+    // ------------------------------------------------------------------------
+    // Validation
+    // ------------------------------------------------------------------------
 
     @Override
     public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request, ValidationProfile profile) {
         requireNonNull(request, "request cannot be null");
 
         if (profile == ITI_63) {
-            metaDataAssert(QueryReturnType.LEAF_CLASS_WITH_REPOSITORY_ITEM.getCode().equals(request.getReturnType()),
-                    UNKNOWN_RETURN_TYPE, request.getReturnType());
+            metaDataAssert(LEAF_CLASS_WITH_REPOSITORY_ITEM.getCode().equals(request.getReturnType()),
+                UNKNOWN_RETURN_TYPE, request.getReturnType());
         } else {
-            metaDataAssert(QueryReturnType.LEAF_CLASS.getCode().equals(request.getReturnType())
-                            || QueryReturnType.OBJECT_REF.getCode().equals(request.getReturnType()),
-                    UNKNOWN_RETURN_TYPE, request.getReturnType());
+            metaDataAssert(LEAF_CLASS.getCode().equals(request.getReturnType())
+                    || OBJECT_REF.getCode().equals(request.getReturnType()),
+                UNKNOWN_RETURN_TYPE, request.getReturnType());
         }
 
         var queryType = QueryType.valueOfId(request.getId());
@@ -446,39 +364,6 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         var allowedQueryTypes = ALLOWED_QUERY_TYPES.getOrDefault(profile.getInteractionId(), Collections.emptySet());
         metaDataAssert(allowedQueryTypes.contains(queryType), UNSUPPORTED_QUERY_TYPE, queryType);
 
-        SlotLengthAndNameUniquenessValidator.validateQuerySlots(
-                request.getSlots(),
-                ALLOWED_MULTIPLE_SLOTS.getOrDefault(queryType, Collections.emptySet()));
-        var validations = getValidators(queryType, profile);
-        if (validations != null) {
-            Arrays.stream(validations).forEach(validation -> validation.validate(request));
-        }
-
-        switch (queryType) {
-            case FIND_DOCUMENTS_MPQ:
-                checkAtLeastOnePresent(request, DOC_ENTRY_PATIENT_ID, DOC_ENTRY_CLASS_CODE, DOC_ENTRY_EVENT_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE);
-                break;
-            case FIND_FOLDERS_MPQ:
-                checkAtLeastOnePresent(request, FOLDER_PATIENT_ID, FOLDER_CODES);
-                break;
-            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY:
-                checkAtLeastOnePresent(request, DOC_ENTRY_CLASS_CODE, DOC_ENTRY_TYPE_CODE, DOC_ENTRY_PRACTICE_SETTING_CODE, DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE);
-                break;
-            case SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET:
-                checkAtLeastOnePresent(request, SUBMISSION_SET_SOURCE_ID, SUBMISSION_SET_AUTHOR_PERSON, SUBMISSION_SET_INTENDED_RECIPIENT);
-                break;
-        }
-    }
-
-    /**
-     * Checks that at least one of the given query parameters is provided in the message.
-     */
-    private void checkAtLeastOnePresent(EbXMLAdhocQueryRequest<AdhocQueryRequest> request, QueryParameter... params) {
-        var slotNames = Arrays.stream(params).map(QueryParameter::getSlotName).toList();
-        slotNames.stream()
-                .map(request::getSlotValues)
-                .filter(slotList -> !slotList.isEmpty())
-                .findAny()
-                .orElseThrow(() -> new XDSMetaDataException(ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER, "one of " + StringUtils.join(slotNames, ", ")));
+        getRules(queryType, profile).validate(request);
     }
 }

@@ -22,6 +22,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssigningAuthority;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.*;
@@ -34,9 +36,12 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_18;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_51;
@@ -362,6 +367,105 @@ public class AdhocQueryRequestValidatorTest {
         query.setTargetCommunityIds(List.of("urn:oid:2.3.4", "urn:oid:3.4.5"));
         var ebXML = transformer.toEbXML(new QueryRegistry(query));
         validator.validate(ebXML, ITI_18);
+    }
+
+    /**
+     * Query types that are deliberately not bound to one of the standard transactions handled by
+     * {@link AdhocQueryRequestValidator}, either because they are a national extension or because
+     * they belong to DSUB rather than to a Registry Stored Query transaction.
+     * <p>
+     * A newly added query type shows up in {@link #testEveryQueryTypeIsBoundToATransaction()} until
+     * it is either allowed for a transaction or listed here.
+     */
+    private static final Set<QueryType> NOT_BOUND_TO_A_TRANSACTION = EnumSet.of(
+            FIND_DOCUMENTS_BY_TITLE,                                // DE:GEMATIK extension
+            SUBSCRIPTION_FOR_DOCUMENT_ENTRY,                        // DSUB
+            SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY,    // DSUB
+            SUBSCRIPTION_FOR_SUBMISSION_SET,                        // DSUB
+            SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET,    // DSUB
+            SUBSCRIPTION_FOR_FOLDER);                               // DSUB
+
+    @Test
+    public void testEveryQueryTypeIsBoundToATransaction() {
+        var unbound = EnumSet.allOf(QueryType.class);
+        unbound.removeAll(AdhocQueryRequestValidator.queryTypesAllowedInAnyTransaction());
+        unbound.removeAll(NOT_BOUND_TO_A_TRANSACTION);
+        assertTrue(unbound.isEmpty(),
+                "query types allowed for no transaction at all: " + unbound
+                        + " -- add them to ALLOWED_QUERY_TYPES or to NOT_BOUND_TO_A_TRANSACTION");
+    }
+
+    @Test
+    public void testFindDocumentsExcludeQuery() {
+        request = SampleData.createFindDocumentsExcludeQuery();
+        validator.validate(transformer.toEbXML(request), ITI_18);
+    }
+
+    /**
+     * The FindDocumentsExclude Option is defined for XDS.b only (ITI TF-1: 10.2.12).
+     */
+    @Test
+    public void testFindDocumentsExcludeQueryIsNotAllowedForIti38() {
+        request = SampleData.createFindDocumentsExcludeQuery();
+        expectFailure(UNSUPPORTED_QUERY_TYPE, transformer.toEbXML(request), ITI_38);
+    }
+
+    /**
+     * ITI TF-2: 3.18.4.1.2.3.7.15 -- an excluding parameter and its non-excluding
+     * counterpart cannot be used in the same query.
+     */
+    @Test
+    public void testFindDocumentsExcludeQueryWithConflictingClassCodes() {
+        var query = (FindDocumentsExcludeQuery) SampleData.createFindDocumentsExcludeQuery().getQuery();
+        query.setClassCodes(List.of(new Code("code1", null, "scheme1")));
+        expectMutuallyExclusive(query, "[$XDSDocumentEntryClassCode, $XDSDocumentEntryClassCodeExclude]");
+    }
+
+    @Test
+    public void testFindDocumentsExcludeQueryWithConflictingDocumentEntryTypes() {
+        var query = (FindDocumentsExcludeQuery) SampleData.createFindDocumentsExcludeQuery().getQuery();
+        query.setDocumentEntryTypes(List.of(DocumentEntryType.STABLE));
+        expectMutuallyExclusive(query, "[$XDSDocumentEntryType, $XDSDocumentEntryTypeExclude]");
+    }
+
+    @Test
+    public void testFindDocumentsExcludeQueryWithConflictingEventCodes() {
+        var query = (FindDocumentsExcludeQuery) SampleData.createFindDocumentsExcludeQuery().getQuery();
+        var eventCodes = new QueryList<Code>();
+        eventCodes.getOuterList().add(List.of(new Code("code7", null, "scheme7")));
+        query.setEventCodes(eventCodes);
+        expectMutuallyExclusive(query, "[$XDSDocumentEntryEventCodeList, $XDSDocumentEntryEventCodeListExclude]");
+    }
+
+    @Test
+    public void testFindDocumentsExcludeQueryWithConflictingReferenceIds() {
+        var query = (FindDocumentsExcludeQuery) SampleData.createFindDocumentsExcludeQuery().getQuery();
+        var referenceIds = new QueryList<String>();
+        referenceIds.getOuterList().add(List.of("ref-id-31"));
+        query.setReferenceIds(referenceIds);
+        expectMutuallyExclusive(query, "[$XDSDocumentEntryReferenceIdList, $XDSDocumentEntryReferenceIdListExclude]");
+    }
+
+    private void expectMutuallyExclusive(FindDocumentsExcludeQuery query, String expectedSlotNames) {
+        var ebXML = transformer.toEbXML(new QueryRegistry(query));
+        var exceptionOccurred = false;
+        try {
+            validator.validate(ebXML, ITI_18);
+        } catch (XdsRuntimeException e) {
+            exceptionOccurred = true;
+            assertEquals(ErrorCode.STORED_QUERY_PARAM_NUMBER, e.getErrorCode());
+            assertTrue(e.getMessage().contains(expectedSlotNames), e.getMessage());
+        }
+        assertTrue(exceptionOccurred);
+    }
+
+    @Test
+    public void testFindDocumentsExcludeQueryWithInvalidExcludedCode() {
+        var query = (FindDocumentsExcludeQuery) SampleData.createFindDocumentsExcludeQuery().getQuery();
+        var ebXML = transformer.toEbXML(new QueryRegistry(query));
+        ebXML.getSlots(QueryParameter.DOC_ENTRY_CLASS_CODE_EXCLUDE.getSlotName()).get(0)
+                .getValueList().set(0, "('code-without-scheme')");
+        expectFailure(INVALID_QUERY_PARAMETER_VALUE, ebXML, ITI_18);
     }
 
 }

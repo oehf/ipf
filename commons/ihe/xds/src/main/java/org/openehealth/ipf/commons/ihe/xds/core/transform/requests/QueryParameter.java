@@ -26,6 +26,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.metadata.XDSMetaClass;
  * @author Jens Riemschneider
  */
 public enum QueryParameter {
+
     /** Used to filter {@link DocumentEntry#getPatientId()}. */
     DOC_ENTRY_PATIENT_ID("$XDSDocumentEntryPatientId"),
     /** Used to filter {@link DocumentEntry#getClassCode()}. */
@@ -152,7 +153,35 @@ public enum QueryParameter {
     /** Used to specify whether old versions of metadata objects shall be returned or not. */
     METADATA_LEVEL("$MetadataLevel"),
     /** Used to specify which communities to forward the query to. */
-    TARGET_COMMUNITY_IDS("$targetCommunityIdList");
+    TARGET_COMMUNITY_IDS("$targetCommunityIdList"),
+
+    // specific for FindDocumentsExclude (CP-ITI-1323): the parameters below carry the values
+    // that shall NOT be present in the returned metadata. Each of them is mutually exclusive
+    // with its counterpart above.
+    /** Used to exclude {@link DocumentEntry#getClassCode()}. */
+    DOC_ENTRY_CLASS_CODE_EXCLUDE(DOC_ENTRY_CLASS_CODE.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getTypeCode()}. */
+    DOC_ENTRY_TYPE_CODE_EXCLUDE(DOC_ENTRY_TYPE_CODE.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getPracticeSettingCode()}. */
+    DOC_ENTRY_PRACTICE_SETTING_CODE_EXCLUDE(DOC_ENTRY_PRACTICE_SETTING_CODE.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getHealthcareFacilityTypeCode()}. */
+    DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_EXCLUDE(DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getEventCodeList()}. */
+    DOC_ENTRY_EVENT_CODE_EXCLUDE(DOC_ENTRY_EVENT_CODE.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getEventCodeList()}. */
+    DOC_ENTRY_EVENT_CODE_EXCLUDE_SCHEME(DOC_ENTRY_EVENT_CODE.slotName + Constants.EXCLUDE + Constants.SCHEME),
+    /** Used to exclude {@link DocumentEntry#getConfidentialityCodes()}. */
+    DOC_ENTRY_CONFIDENTIALITY_CODE_EXCLUDE(DOC_ENTRY_CONFIDENTIALITY_CODE.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getConfidentialityCodes()}. */
+    DOC_ENTRY_CONFIDENTIALITY_CODE_EXCLUDE_SCHEME(DOC_ENTRY_CONFIDENTIALITY_CODE.slotName + Constants.EXCLUDE + Constants.SCHEME),
+    /** Used to exclude {@link DocumentEntry#getAuthors()}. */
+    DOC_ENTRY_AUTHOR_PERSON_EXCLUDE(DOC_ENTRY_AUTHOR_PERSON.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getFormatCode()}. */
+    DOC_ENTRY_FORMAT_CODE_EXCLUDE(DOC_ENTRY_FORMAT_CODE.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getType()}. */
+    DOC_ENTRY_TYPE_EXCLUDE(DOC_ENTRY_TYPE.slotName + Constants.EXCLUDE),
+    /** Used to exclude {@link DocumentEntry#getReferenceIdList()}. */
+    DOC_ENTRY_REFERENCE_IDS_EXCLUDE(DOC_ENTRY_REFERENCE_IDS.slotName + Constants.EXCLUDE);
 
     private final String slotName;
 
@@ -189,4 +218,12 @@ public enum QueryParameter {
         return null;
     }
 
+    /**
+     * Slot name fragments. Kept in a nested class because an enum constant cannot reference
+     * a static field of the enum itself in its constructor arguments.
+     */
+    private static class Constants {
+        public static final String EXCLUDE = "Exclude";
+        public static final String SCHEME = "Scheme";
+    }
 }
