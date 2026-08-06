@@ -334,7 +334,11 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${surefire-plugin-version}</version>
                     <configuration>
-                        <argLine>-Xms64m -Xmx1024m</argLine>
+                        <!-- user.language has to be set on the command line: setting it as a system
+                             property variable would come too late, as the default Locale is already
+                             initialized by then. Tests that assert on messages of the JDK or of
+                             third-party libraries would otherwise depend on the build machine. -->
+                        <argLine>-Xms64m -Xmx1024m -Duser.language=en</argLine>
                         <systemPropertyVariables>
                             <jdk.security.allowNonCaAnchor>true</jdk.security.allowNonCaAnchor>
                             <jdk.xml.totalEntitySizeLimit>0</jdk.xml.totalEntitySizeLimit>

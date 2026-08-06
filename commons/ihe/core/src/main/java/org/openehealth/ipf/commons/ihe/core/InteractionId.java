@@ -22,4 +22,15 @@ package org.openehealth.ipf.commons.ihe.core;
  * @author Dmytro Rud
  */
 public interface InteractionId {
+
+    /**
+     * Returns the configuration of the transaction this interaction ID stands for, irrespective of
+     * the kind of transaction. Sub-interfaces provide a type-safe accessor of their own and override
+     * this method to delegate to it; this method exists for generic code that must not know which
+     * kind of transaction it is dealing with.
+     *
+     * @return the transaction configuration
+     * @since 6.0
+     */
+    TransactionConfiguration getTransactionConfiguration();
 }

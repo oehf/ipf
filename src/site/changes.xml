@@ -23,6 +23,26 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="6.0.0" description="IPF 6.0.0" date="">
+            <action issue="476" dev="ohr" type="add">
+                Support Apache Camel telemetry for the IHE components
+            </action>
+            <action issue="476" dev="ohr" type="remove">
+                Removed MessageTracer in favour of Apache Camel telemetry
+            </action>
+            <action dev="ohr" type="fix">
+                Spring Boot applications using the ATNA starter (and thus any transaction family starter) no longer
+                fail to start when spring-boot-actuator is absent from the classpath
+            </action>
+            <action dev="ohr" type="fix">
+                ipf.xds.caching now also picks up the CacheManager contributed by Spring Boot's cache
+                auto-configuration, not only a user-declared one
+            </action>
+            <action dev="ohr" type="fix">
+                The mhd-iti68-bin endpoint scheme is resolvable again: its Camel component descriptor named
+                the Iti68BinaryComponent in the wrong package, so routes using the scheme failed to start
+            </action>
+        </release>
         <release version="5.3.0" description="IPF 5.3.0" date="">
             <action issue="509" dev="ohr" type="add">
                 Consequently implement FHIR-based ATNA auditing as an alternative to DICOM-based auditing: PIXm [ITI-83],

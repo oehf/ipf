@@ -13,6 +13,15 @@
     <description>Spring Boot support for SVS based components</description>
 
     <dependencies>
+        <!--
+          CXF's micrometer observation integration, needed only when ipf.svs.observing is switched on. Optional so
+          that neither micrometer nor a tracing library is pulled in otherwise.
+        -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-integration-tracing-micrometer</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!-- Camel Spring Boot Support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -53,6 +62,30 @@
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-svs</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.boot</groupId>
+            <artifactId>ipf-ws-spring-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- dependencies for test -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 

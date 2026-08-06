@@ -19,6 +19,7 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.component.netty.NettyEndpoint;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
+import org.openehealth.ipf.platform.camel.ihe.core.InteractionAwareComponent;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
 
@@ -30,7 +31,8 @@ import java.util.Map;
  * @author Dmytro Rud
  */
 public abstract class MllpTransactionComponent<AuditDatasetType extends MllpAuditDataset>
-        extends MllpComponent<MllpTransactionEndpointConfiguration> implements AuditableComponent<AuditDatasetType> {
+        extends MllpComponent<MllpTransactionEndpointConfiguration>
+        implements AuditableComponent<AuditDatasetType>, InteractionAwareComponent {
 
     private final Hl7v2InteractionId interactionId;
 

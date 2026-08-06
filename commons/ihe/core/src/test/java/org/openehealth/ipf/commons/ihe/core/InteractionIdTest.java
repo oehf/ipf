@@ -79,6 +79,10 @@ public class InteractionIdTest {
             @Getter
             private final String description;
 
+            @Override
+            public TransactionConfiguration getTransactionConfiguration() {
+                return null;
+            }
         }
 
         @Override
@@ -103,6 +107,10 @@ public class InteractionIdTest {
             @Getter
             private final String description;
 
+            @Override
+            public TransactionConfiguration getTransactionConfiguration() {
+                return null;
+            }
         }
 
         @Override

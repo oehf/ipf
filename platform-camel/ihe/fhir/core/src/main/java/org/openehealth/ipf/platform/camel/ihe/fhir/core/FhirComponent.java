@@ -28,6 +28,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
+import org.openehealth.ipf.platform.camel.ihe.core.InteractionAwareComponent;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableComponent;
 
 import java.util.Map;
@@ -40,7 +41,8 @@ import java.util.Map;
  */
 @Setter
 public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
-        extends DefaultComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent {
+        extends DefaultComponent implements AuditableComponent<AuditDatasetType>, InterceptableComponent,
+        InteractionAwareComponent {
 
     private FhirInteractionId fhirInteractionId;
 

@@ -13,6 +13,11 @@
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-telemetry</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!-- Dependencies for main -->
         <dependency>
             <groupId>org.openehealth.ipf.modules</groupId>

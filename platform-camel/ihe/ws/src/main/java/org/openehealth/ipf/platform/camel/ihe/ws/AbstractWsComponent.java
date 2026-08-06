@@ -26,6 +26,7 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
+import org.openehealth.ipf.platform.camel.ihe.core.InteractionAwareComponent;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
@@ -42,7 +43,7 @@ import java.util.Map;
  */
 @Getter
 abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset>
-        extends DefaultComponent implements AuditableComponent<AuditDatasetType> {
+        extends DefaultComponent implements AuditableComponent<AuditDatasetType>, InteractionAwareComponent {
 
     private final WsInteractionId interactionId;
 

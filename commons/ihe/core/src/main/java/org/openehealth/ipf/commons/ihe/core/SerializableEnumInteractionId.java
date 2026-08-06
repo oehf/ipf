@@ -66,4 +66,8 @@ public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> im
         return interactionId;
     }
 
+    @Override
+    public TransactionConfiguration getTransactionConfiguration() {
+        return getInteractionId().getTransactionConfiguration();
+    }
 }

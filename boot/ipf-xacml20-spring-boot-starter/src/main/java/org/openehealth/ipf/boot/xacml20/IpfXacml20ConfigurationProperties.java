@@ -15,6 +15,8 @@
  */
 package org.openehealth.ipf.boot.xacml20;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -23,4 +25,21 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "ipf.xacml20")
 public class IpfXacml20ConfigurationProperties {
 
+
+    /**
+     * Whether CXF's observation features shall be provided as beans, so that the SOAP calls of this
+     * transaction family can be observed -- yielding metrics, and spans if a tracing bridge is present.
+     * Attach them to the endpoints with the {@code features} endpoint option:
+     * <pre>
+     * from("ser-iti79:my-service?features=#observationFeature")
+     *     .to("ser-iti79://peer:8080/service?features=#observationClientFeature");
+     * </pre>
+     * Requires {@code cxf-integration-tracing-micrometer} on the classpath and an
+     * {@code ObservationRegistry} bean, which Spring Boot provides.
+     *
+     * @see org.openehealth.ipf.boot.ws.CxfObservationConfigurationSupport
+     */
+    @Getter
+    @Setter
+    private boolean observing;
 }

@@ -351,7 +351,7 @@
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-integration-tracing-micrometer</artifactId>
-                <version>${cxf.version}</version>
+                <version>${cxf-version}</version>
             </dependency>
             <dependency>
                 <groupId>net.sf.saxon</groupId>
@@ -755,6 +755,11 @@
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>ipf-atna-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.openehealth.ipf.boot</groupId>
+                <artifactId>ipf-ws-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

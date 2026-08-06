@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 
 import java.util.List;
 
@@ -27,6 +28,11 @@ import java.util.List;
 public interface FhirInteractionId extends InteractionId {
 
     FhirTransactionConfiguration getFhirTransactionConfiguration();
+
+    @Override
+    default TransactionConfiguration getTransactionConfiguration() {
+        return getFhirTransactionConfiguration();
+    }
 
     /**
      * Optional initialization with dynamic TransactionOptions

@@ -33,9 +33,9 @@ import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.audit.AuditEventRepository;
-import org.springframework.boot.actuate.security.AbstractAuthenticationAuditListener;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -171,23 +171,52 @@ public class IpfAtnaAutoConfiguration {
     // can all be overwritten
 
     /**
-     * Returns an AuditMessageQueue bean. If "ipf.atna-spring-audit-event-enabled" is true and an
-     * {@link AuditEventRepository} is configured, it returns a {@link CompositeAuditMessageQueue} instead
-     * that also publishes audit events to this AuditEventRepository, using {@link AuditApplicationEventMessageQueue}.
+     * Provides the {@link AuditMessageQueue} bean when spring-boot-actuator is absent. The actuator is an
+     * optional dependency of this starter, and its types must therefore not appear in the signature of a
+     * bean method of an unconditional configuration class: Spring introspects such a class reflectively,
+     * which fails with a {@link NoClassDefFoundError} for types that are not on the classpath. This is why
+     * the two variants of the bean live in nested configuration classes, whose conditions are evaluated
+     * without loading them.
+     *
+     * @see SpringAuditEventConfiguration
      */
-    @Bean
-    @ConditionalOnMissingBean
-    public AuditMessageQueue auditMessageQueue(
-        IpfAtnaConfigurationProperties config,
-        ObjectProvider<AuditEventRepository> auditEventRepository) throws Exception {
-        var primaryAuditMessageQueue = config.getAuditQueueClass().getConstructor().newInstance();
-        if (config.isSpringAuditEventEnabled() && auditEventRepository.getIfAvailable() != null) {
-            return new CompositeAuditMessageQueue(List.of(
-                new AuditApplicationEventMessageQueue(),
-                primaryAuditMessageQueue
-            ));
+    @Configuration
+    @ConditionalOnMissingClass("org.springframework.boot.actuate.audit.AuditEventRepository")
+    public static class PlainAuditMessageQueueConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AuditMessageQueue auditMessageQueue(IpfAtnaConfigurationProperties config) throws Exception {
+            return config.getAuditQueueClass().getConstructor().newInstance();
         }
-        return primaryAuditMessageQueue;
+    }
+
+    /**
+     * Provides the {@link AuditMessageQueue} bean when spring-boot-actuator is present. If
+     * "ipf.atna.spring-audit-event-enabled" is true and an {@link AuditEventRepository} is configured, the
+     * bean is a {@link CompositeAuditMessageQueue} that also publishes audit events to that
+     * AuditEventRepository, using {@link AuditApplicationEventMessageQueue}.
+     *
+     * @see PlainAuditMessageQueueConfiguration
+     */
+    @Configuration
+    @ConditionalOnClass(AuditEventRepository.class)
+    public static class SpringAuditEventConfiguration {
+
+        @Bean
+        @ConditionalOnMissingBean
+        public AuditMessageQueue auditMessageQueue(
+            IpfAtnaConfigurationProperties config,
+            ObjectProvider<AuditEventRepository> auditEventRepository) throws Exception {
+            var primaryAuditMessageQueue = config.getAuditQueueClass().getConstructor().newInstance();
+            if (config.isSpringAuditEventEnabled() && auditEventRepository.getIfAvailable() != null) {
+                return new CompositeAuditMessageQueue(List.of(
+                    new AuditApplicationEventMessageQueue(),
+                    primaryAuditMessageQueue
+                ));
+            }
+            return primaryAuditMessageQueue;
+        }
     }
 
     @Bean
@@ -269,14 +298,6 @@ public class IpfAtnaAutoConfiguration {
     @ConditionalOnMissingBean
     ApplicationStopEventListener applicationStopEventListener(AuditContext auditContext) {
         return new ApplicationStopEventListener(auditContext);
-    }
-
-    @Bean
-    @ConditionalOnProperty(value = "ipf.atna.audit-enabled")
-    @ConditionalOnClass(name = "org.springframework.security.authentication.event.AbstractAuthenticationEvent")
-    @ConditionalOnMissingBean(AbstractAuthenticationAuditListener.class)
-    AuthenticationListener loginListener(AuditContext auditContext) {
-        return new AuthenticationListener(auditContext);
     }
 
 }

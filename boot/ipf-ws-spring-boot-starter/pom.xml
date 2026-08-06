@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.openehealth.ipf.boot</groupId>
+        <artifactId>ipf-spring-boot</artifactId>
+        <version>6.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>ipf-ws-spring-boot-starter</artifactId>
+    <name>ipf-ws-spring-boot-starter</name>
+    <description>Spring Boot support common to the Web Service based IHE transactions</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <exclusions>
+                <!-- spring-core depends on it directly since Spring Framework 7; jcl-over-slf4j takes its place -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!--
+          CXF's micrometer observation integration. Optional, so that adding this module does not pull
+          in micrometer or a tracing library: it is needed only once a transaction family starter has
+          observing switched on, and the configuration below is not even loaded without it.
+        -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-integration-tracing-micrometer</artifactId>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
+</project>

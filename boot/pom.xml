@@ -22,6 +22,7 @@
         <module>ipf-fhir-r4-spring-boot-starter</module>
 		<module>ipf-fhir-stu3-spring-boot-starter</module>
         <module>ipf-atna-spring-boot-starter</module>
+        <module>ipf-ws-spring-boot-starter</module>
         <module>ipf-hpd-spring-boot-starter</module>
         <module>ipf-xacml20-spring-boot-starter</module>
         <module>ipf-svs-spring-boot-starter</module>

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 
 import java.util.List;
 
@@ -28,6 +29,11 @@ import java.util.List;
 public interface Hl7v2InteractionId extends InteractionId {
 
     Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration();
+
+    @Override
+    default TransactionConfiguration getTransactionConfiguration() {
+        return getHl7v2TransactionConfiguration();
+    }
 
     NakFactory getNakFactory();
 

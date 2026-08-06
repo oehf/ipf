@@ -3,7 +3,6 @@ package net.ihe.gazelle.gen.common;
 import org.w3c.dom.Document;
 
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;

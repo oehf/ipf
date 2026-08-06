@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.ws;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 
 /**
  * @author Christian Ohr
@@ -24,4 +25,9 @@ import org.openehealth.ipf.commons.ihe.core.InteractionId;
 public interface WsInteractionId extends InteractionId {
 
     WsTransactionConfiguration getWsTransactionConfiguration();
+
+    @Override
+    default TransactionConfiguration getTransactionConfiguration() {
+        return getWsTransactionConfiguration();
+    }
 }
