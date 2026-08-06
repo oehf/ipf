@@ -9,4 +9,4 @@
 
 # Camel registration for the mhd-iti68-bin component
  
-class=org.openehealth.ipf.platform.camel.ihe.fhir.iti68.Iti68BinaryComponent
+class=org.openehealth.ipf.platform.camel.ihe.fhir.iti68bin.Iti68BinaryComponent
