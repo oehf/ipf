@@ -63,7 +63,7 @@ val Type.nullValue: Boolean get() = stringValue(this) == "\"\""
 /**
  * getValue or a default if null
  */
-fun Type.getValueOr(v: String?): String? = if (value != null) value else v
+fun Type.getValueOr(v: String?): String? = value ?: v
 
 fun Type.valueOr(v: String?): String? = getValueOr(v)
 
@@ -418,8 +418,12 @@ fun Message.validate(context: HapiContext?) {
     }
 }
 
-val Message.eventType: String get() = get("MSH")[9][1].value!!
-val Message.triggerEvent: String get() = get("MSH")[9][2].value!!
+val Message.eventType: String
+    get() = get("MSH")[9][1].value
+            ?: throw Hl7DslException("MSH-9-1 (message code) is missing")
+val Message.triggerEvent: String
+    get() = get("MSH")[9][2].value
+            ?: throw Hl7DslException("MSH-9-2 (trigger event) is missing")
 val Message.messageStructure: String
     get() = messageStructure(
             eventType, triggerEvent, version, parser.hapiContext.modelClassFactory)

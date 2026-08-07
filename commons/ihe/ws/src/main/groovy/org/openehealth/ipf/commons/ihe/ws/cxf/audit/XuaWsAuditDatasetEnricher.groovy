@@ -74,8 +74,8 @@ class XuaWsAuditDatasetEnricher implements WsAuditDatasetEnricher {
 
         // check whether someone has already parsed the SAML2 assertion
         def o = message.getContextualProperty(XUA_SAML_ASSERTION)
-        if (o instanceof Element) {
-            assertion = (Element) o
+        if (o instanceof Element element) {
+            assertion = element
         }
 
         // extract SAML assertion the from WS-Security SOAP header

@@ -33,9 +33,11 @@ internal class RepeatableField (
 
     override fun iterator(): Iterator<Type> = elements.iterator()
 
-    override fun accept(visitor: MessageVisitor?, currentLocation: Location?): Boolean {
-        TODO("not implemented")
-    }
+    // Not TODO(): that throws NotImplementedError, an Error rather than an Exception, which escapes
+    // the catch(Exception) handlers of callers such as the HL7 validators.
+    override fun accept(visitor: MessageVisitor?, currentLocation: Location?): Boolean =
+            throw UnsupportedOperationException(
+                    "A repeatable field cannot be visited as a whole; visit its repetitions individually")
 
     override fun getMessage(): Message = segment.message
 
@@ -44,13 +46,13 @@ internal class RepeatableField (
     override fun provideLocation(parentLocation: Location?, index: Int, repetition: Int): Location =
             elementAt(0).provideLocation(parentLocation, index, repetition)
 
-    override fun isEmpty(): Boolean = !elements.any { !it.isEmpty }
+    override fun isEmpty(): Boolean = elements.all { it.isEmpty }
 
     override fun getName(): String = elementAt(0).name
 
-    override fun parse(string: String?) {
-        TODO("not implemented")
-    }
+    override fun parse(string: String?): Unit =
+            throw UnsupportedOperationException(
+                    "A repeatable field cannot be parsed as a whole; parse into a single repetition")
 
     override fun encode(): String =
         elements.joinToString(getSeparator().toString()) { it.encode() }
