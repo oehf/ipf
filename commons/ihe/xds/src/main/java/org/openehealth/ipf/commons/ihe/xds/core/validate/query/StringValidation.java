@@ -50,7 +50,6 @@ public class StringValidation implements QueryParameterValidation {
     public StringValidation(QueryParameter param, ValueValidator validator, boolean optional) {
         this.param = requireNonNull(param, "param cannot be null");
         this.validator = requireNonNull(validator, "validator cannot be null");
-
         this.optional = optional;
     }
 

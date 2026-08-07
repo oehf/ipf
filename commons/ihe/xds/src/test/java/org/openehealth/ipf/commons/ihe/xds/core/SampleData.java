@@ -469,6 +469,54 @@ public abstract class SampleData {
         return new QueryRegistry(query);
     }
 
+    /**
+     * @return a sample stored query for find documents with excluded metadata values.
+     */
+    public static QueryRegistry createFindDocumentsExcludeQuery() {
+        var query = new FindDocumentsExcludeQuery();
+
+        query.setHomeCommunityId("urn:oid:1.21.41");
+        query.setPatientId(new Identifiable("id3", new AssigningAuthority("1.3")));
+        query.setStatus(Arrays.asList(AvailabilityStatus.APPROVED, AvailabilityStatus.DEPRECATED));
+        query.getCreationTime().setFrom("1980");
+        query.getCreationTime().setTo("1981");
+        query.getServiceStartTime().setFrom("1982");
+        query.getServiceStartTime().setTo("1983");
+        query.getServiceStopTime().setFrom("1984");
+        query.getServiceStopTime().setTo("1985");
+
+        // ITI TF-2: 3.18.4.1.2.3.7.15 -- each excluding parameter is mutually exclusive with its
+        // non-excluding counterpart, hence none of the latter is populated here.
+        query.setExcludedClassCodes(Arrays.asList(new Code("code1", null, "scheme1"), new Code("code2", null, "scheme2")));
+        query.setExcludedTypeCodes(Arrays.asList(new Code("codet1", null, "schemet1"), new Code("codet2", null, "schemet2")));
+        query.setExcludedPracticeSettingCodes(Arrays.asList(new Code("code3", null, "scheme3"), new Code("code4", null, "scheme4")));
+        query.setExcludedHealthcareFacilityTypeCodes(Arrays.asList(new Code("code5", null, "scheme5"), new Code("code6", null, "scheme6")));
+        query.setExcludedFormatCodes(Arrays.asList(new Code("code13", null, "scheme13"), new Code("code14", null, "scheme14")));
+        query.setExcludedAuthorPersons(Arrays.asList("per'son1", "person2"));
+        query.setExcludedDocumentEntryTypes(Collections.singletonList(DocumentEntryType.STABLE));
+
+        var excludedEventCodes = new QueryList<Code>();
+        excludedEventCodes.getOuterList().add(
+                Arrays.asList(new Code("code7", null, "scheme7"), new Code("code8", null, "scheme8")));
+        excludedEventCodes.getOuterList().add(
+                Collections.singletonList(new Code("code9", null, "scheme9")));
+        query.setExcludedEventCodes(excludedEventCodes);
+
+        var excludedConfidentialityCodes = new QueryList<Code>();
+        excludedConfidentialityCodes.getOuterList().add(
+                Arrays.asList(new Code("code10", null, "scheme10"), new Code("code11", null, "scheme11")));
+        excludedConfidentialityCodes.getOuterList().add(
+                Collections.singletonList(new Code("code12", null, "scheme12")));
+        query.setExcludedConfidentialityCodes(excludedConfidentialityCodes);
+
+        var excludedReferenceIds = new QueryList<String>();
+        excludedReferenceIds.getOuterList().add(Arrays.asList("ref-id-11", "ref-id-12"));
+        excludedReferenceIds.getOuterList().add(Collections.singletonList("ref-id-21"));
+        query.setExcludedReferenceIds(excludedReferenceIds);
+
+        return new QueryRegistry(query);
+    }
+
     public static QueryRegistry createFindDocumentsByTitleQuery() {
         var query = new FindDocumentsByTitleQuery();
         populateDocumentsQuery(query);

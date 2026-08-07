@@ -35,7 +35,9 @@ import java.io.Serial;
 @XmlRootElement(name = "findDocumentsByReferenceIdQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class FindDocumentsByReferenceIdQuery extends FindDocumentsQuery {
+public class FindDocumentsByReferenceIdQuery extends FindDocumentsQuery
+    implements DocumentReferenceIdAwareStoredQuery {
+
     @Serial
     private static final long serialVersionUID = 8898792914033157098L;
 

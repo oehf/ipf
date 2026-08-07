@@ -38,7 +38,8 @@ import java.util.List;
 @XmlRootElement(name = "findDocumentsByReferenceIdForMultiplePatientsQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
-public class FindDocumentsByReferenceIdForMultiplePatientsQuery extends DocumentsQuery implements DocumentEntryTypeAwareStoredQuery {
+public class FindDocumentsByReferenceIdForMultiplePatientsQuery extends DocumentsQuery
+    implements DocumentEntryTypeAwareStoredQuery, DocumentReferenceIdAwareStoredQuery {
     @Serial
     private static final long serialVersionUID = -8981126710746958226L;
 

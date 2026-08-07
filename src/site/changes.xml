@@ -23,6 +23,11 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="5.3.0" description="IPF 5.3.0" date="">
+            <action issue="515" dev="ohr" type="add">
+                Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323)
+            </action>
+        </release>
         <release version="5.2.0" description="IPF 5.2.0" date="">
             <action issue="512" dev="ohr" type="update">
                 Selecting uniqueIds from a NamingSystem resource by type will now respect the "preferred" flag

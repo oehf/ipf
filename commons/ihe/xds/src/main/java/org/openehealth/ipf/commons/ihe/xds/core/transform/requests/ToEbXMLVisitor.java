@@ -193,4 +193,9 @@ final class ToEbXMLVisitor implements Visitor {
     public void visit(SubscriptionForFolderQuery query) {
         SubscriptionForFolderQueryTransformer.getInstance().toEbXML(query, ebXML);
     }
+
+    @Override
+    public void visit(FindDocumentsExcludeQuery query) {
+        FindDocumentsExcludeQueryTransformer.getInstance().toEbXML(query, ebXML);
+    }
 }

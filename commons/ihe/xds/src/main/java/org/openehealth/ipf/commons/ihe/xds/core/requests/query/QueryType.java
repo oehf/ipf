@@ -87,7 +87,9 @@ public enum QueryType {
     @XmlEnumValue("SubscriptionForPatientIndepedentDocumentEntry") SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_DOCUMENT_ENTRY("urn:uuid:742790e0-aba6-43d6-9f1f-e43ed9790b79", SubscriptionForPatientIndependentDocumentEntryQuery.class),
     @XmlEnumValue("SubscriptionForSubmissionSet") SUBSCRIPTION_FOR_SUBMISSION_SET("urn:uuid:fbede94e-dbdc-4f6b-bc1f-d730e677cece", SubscriptionForSubmissionSetQuery.class),
     @XmlEnumValue("SubscriptionForPatientIndependentSubmissionSet") SUBSCRIPTION_FOR_PATIENT_INDEPENDENT_SUBMISSION_SET("urn:uuid:868cad3d-ec09-4565-b66c-1be10d034399", SubscriptionForPatientIndependentSubmissionSetQuery.class),
-    @XmlEnumValue("SubscriptionForFolder") SUBSCRIPTION_FOR_FOLDER("urn:uuid:9376254e-da05-41f5-9af3-ac56d63d8ebd", SubscriptionForFolderQuery.class);
+    @XmlEnumValue("SubscriptionForFolder") SUBSCRIPTION_FOR_FOLDER("urn:uuid:9376254e-da05-41f5-9af3-ac56d63d8ebd", SubscriptionForFolderQuery.class),
+    /** Returns documents whose metadata do <em>not</em> contain the values given in the "Exclude" parameters. */
+    @XmlEnumValue("FindDocumentsExclude") FIND_DOCUMENTS_EXCLUDE("urn:uuid:4308b1df-36de-4bef-8e2e-ba91f593c435", FindDocumentsExcludeQuery.class);
 
     private final String id;
     private final Class<? extends Query> type;

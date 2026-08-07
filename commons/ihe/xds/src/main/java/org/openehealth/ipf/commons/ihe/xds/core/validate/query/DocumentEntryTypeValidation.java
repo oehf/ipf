@@ -26,11 +26,20 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessag
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAssertions.metaDataAssert;
 
 /**
- * Query parameter validation for $XDSDocumentEntryType.
+ * Query parameter validation for $XDSDocumentEntryType and its "Exclude" variant.
  * @author Dmytro Rud
  */
 public class DocumentEntryTypeValidation implements QueryParameterValidation {
-    private final QueryParameter param = QueryParameter.DOC_ENTRY_TYPE;
+    private final QueryParameter param;
+
+    /**
+     * @param param
+     *          the document entry type parameter to validate, i.e. either
+     *          {@link QueryParameter#DOC_ENTRY_TYPE} or {@link QueryParameter#DOC_ENTRY_TYPE_EXCLUDE}.
+     */
+    public DocumentEntryTypeValidation(QueryParameter param) {
+        this.param = param;
+    }
 
     @Override
     public void validate(EbXMLAdhocQueryRequest<AdhocQueryRequest> request) throws XDSMetaDataException {

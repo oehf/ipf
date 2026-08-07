@@ -114,9 +114,7 @@ public class QuerySlotHelper {
         if (queryList == null) {
             return;
         }
-        for (var codes : queryList.getOuterList()) {
-            fromCode(param, codes);
-        }
+        queryList.getOuterList().forEach(codes -> fromCode(param, codes));
     }
 
     private QueryList<Code> toCodeQueryList(QueryParameter param) {

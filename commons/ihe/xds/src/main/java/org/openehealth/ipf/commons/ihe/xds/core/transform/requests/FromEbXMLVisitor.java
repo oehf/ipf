@@ -194,4 +194,9 @@ final class FromEbXMLVisitor implements Visitor {
     public void visit(SubscriptionForPatientIndependentSubmissionSetQuery query) {
         SubscriptionForPatientIndependentSubmissionSetQueryTransformer.getInstance().fromEbXML(query, ebXML);
     }
+
+    @Override
+    public void visit(FindDocumentsExcludeQuery query) {
+        FindDocumentsExcludeQueryTransformer.getInstance().fromEbXML(query, ebXML);
+    }
 }

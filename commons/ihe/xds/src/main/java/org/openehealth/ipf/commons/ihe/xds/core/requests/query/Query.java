@@ -91,6 +91,7 @@ public abstract class Query implements Serializable {
         void visit(SubscriptionForPatientIndependentDocumentEntryQuery query);
         void visit(SubscriptionForSubmissionSetQuery query);
         void visit(SubscriptionForPatientIndependentSubmissionSetQuery query);
+        void visit(FindDocumentsExcludeQuery query);
     }
 
     /**
