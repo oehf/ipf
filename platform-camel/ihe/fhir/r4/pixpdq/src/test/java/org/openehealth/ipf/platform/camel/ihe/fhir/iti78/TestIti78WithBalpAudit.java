@@ -19,6 +19,7 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import ca.uhn.fhir.rest.api.SearchStyleEnum;
 import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.CanonicalType;
@@ -29,6 +30,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmValidator;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmPatient;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmValidator;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
@@ -119,6 +121,27 @@ public class TestIti78WithBalpAudit extends AbstractTestIti78 {
         assertEquals(1, queries.size(), "expected exactly one query entity");
         assertEquals("family=Test&_format=xml",
             new String(queries.get(0).getQuery(), StandardCharsets.UTF_8));
+    }
+
+    /**
+     * ITI-78 §3.78.4.1.2 lets the consumer send the search as {@code POST Patient/_search} with the
+     * criteria in a form-encoded body. The URL then has no query string, and the query entity the profile
+     * requires used to come out empty -- which the PDQm profile does not allow, {@code entity:query.query}
+     * being mandatory. The criteria are recovered from the request parameters instead.
+     */
+    @Test
+    public void testAPostSearchRecordsItsCriteria() {
+        var result = client.search()
+            .forResource(PdqmPatient.class)
+            .where(familyParameters())
+            .usingStyle(SearchStyleEnum.POST)
+            .returnBundle(Bundle.class)
+            .execute();
+        assertEquals(Bundle.BundleType.SEARCHSET, result.getType());
+
+        var queries = queryEntities(FhirAuditRepository.getAuditEvents().get(0));
+        assertEquals(1, queries.size(), "expected exactly one query entity");
+        assertEquals("family=Test", new String(queries.get(0).getQuery(), StandardCharsets.UTF_8));
     }
 
     /**

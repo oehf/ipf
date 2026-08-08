@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.audit;
 
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import ca.uhn.fhir.rest.param.BaseParam;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
@@ -26,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -59,6 +61,8 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
         var query = (String) parameters.get(HTTP_QUERY);
         if (query != null) {
             dataset.setQueryString(URLDecoder.decode(query, StandardCharsets.UTF_8));
+        } else {
+            formEncodedQuery(parameters).ifPresent(dataset::setQueryString);
         }
 
         var searchParameter = (FhirSearchParameters) parameters.get(Constants.FHIR_REQUEST_PARAMETERS);
@@ -73,6 +77,34 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
         }
 
         return dataset;
+    }
+
+    /**
+     * Reconstructs the query of a search whose parameters were not in the URL.
+     * <p>
+     * A FHIR search may be issued as {@code POST [type]/_search} with the parameters in an
+     * {@code application/x-www-form-urlencoded} body -- for PDQm that is ITI-78 §3.78.4.1.2, but every
+     * search transaction accepts it, because HAPI routes {@code _search} to the same {@code @Search}
+     * method as the GET. The URL then has no query string, and the query entity the BALP query pattern
+     * requires would be written empty, which does not satisfy the profile.
+     * <p>
+     * The servlet container merges form-encoded body parameters into the request parameters, and HAPI
+     * hands those on, so the criteria can be recovered from there. They come back already decoded, which
+     * is what the URL branch produces too after {@link URLDecoder}.
+     *
+     * @param parameters request parameters
+     * @return the reconstructed query, or empty if the request carried no parameters either
+     */
+    private Optional<String> formEncodedQuery(Map<String, Object> parameters) {
+        return Optional.ofNullable((RequestDetails) parameters.get(Constants.FHIR_REQUEST_DETAILS))
+            .map(RequestDetails::getParameters)
+            .map(Map::entrySet)
+            .stream()
+            .flatMap(Set::stream)
+            .filter(parameter -> parameter.getValue() != null)
+            .flatMap(parameter -> Arrays.stream(parameter.getValue())
+                .map(value -> parameter.getKey() + "=" + (value != null ? value : "")))
+            .reduce((left, right) -> left + "&" + right);
     }
 
     /**

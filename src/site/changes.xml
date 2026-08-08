@@ -29,6 +29,11 @@
                 PDQm [ITI-78] and [ITI-119], and MHD [ITI-65], [ITI-66], [ITI-67], [ITI-68] and [ITI-105]
                 following the profiles based on IHE BALP. Some classes were renamed or deprecated.
             </action>
+            <action issue="514" dev="ohr" type="fix">
+                Record the search criteria of a FHIR query sent as POST [type]/_search, e.g. [ITI-78], in the audit
+                message. They travel in the request body rather than in the URL, so the query string used to stay empty.
+                Thanks to rbastiaansen732 for reporting and proposing a fix.
+            </action>
             <action issue="515" dev="ohr" type="add">
                 Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323)
             </action>
