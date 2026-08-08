@@ -20,7 +20,7 @@ import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Consent;
 import org.openehealth.ipf.commons.ihe.fhir.QueryClientRequestFactory;
 
-public class ChPpq5ClientRequestFactory extends QueryClientRequestFactory<org.hl7.fhir.r4.model.Bundle> {
+public class ChPpq5ClientRequestFactory extends QueryClientRequestFactory<Bundle> {
 
     public ChPpq5ClientRequestFactory() {
         super(Consent.class, Bundle.class);

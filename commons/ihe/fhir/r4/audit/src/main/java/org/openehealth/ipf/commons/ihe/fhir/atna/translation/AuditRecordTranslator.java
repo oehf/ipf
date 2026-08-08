@@ -38,6 +38,7 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator;
 import org.openehealth.ipf.commons.map.MappingService;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -364,7 +365,7 @@ public class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
      * @param dicomDescriptions the DICOM object descriptions
      * @return the formatted description string
      */
-    private String buildDicomDescription(java.util.List<DicomObjectDescriptionType> dicomDescriptions) {
+    private String buildDicomDescription(List<DicomObjectDescriptionType> dicomDescriptions) {
         var descriptionBuilder = new StringBuilder();
         
         for (DicomObjectDescriptionType dicomDesc : dicomDescriptions) {
@@ -399,7 +400,7 @@ public class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
      * @param prefix the prefix to add before the values
      * @param values the list of values to append
      */
-    private void appendIfNotEmpty(StringBuilder builder, String prefix, java.util.List<String> values) {
+    private void appendIfNotEmpty(StringBuilder builder, String prefix, List<String> values) {
         if (!values.isEmpty()) {
             if (!builder.isEmpty()) {
                 builder.append(", ");

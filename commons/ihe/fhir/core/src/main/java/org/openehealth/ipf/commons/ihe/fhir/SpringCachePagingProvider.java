@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
  * Note that {@link IBundleProvider} is not serializable, so if {@link #isDistributed()} returns true,
  * only the bundles are stored. When the result list is {@link #retrieveResultList(RequestDetails, String) retrieved}
  * a new instance of {@link SimpleBundleProvider} is created and returned instead. This does
- * not work with {@link org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider}
+ * not work with {@link LazyBundleProvider}
  * as this class relies on a completely initialized result list.
  * </p>
  * <p>

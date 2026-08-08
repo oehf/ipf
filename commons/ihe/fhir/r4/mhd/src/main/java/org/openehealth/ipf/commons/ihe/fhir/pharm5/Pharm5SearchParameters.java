@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.fhir.pharm5;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.model.api.Include;
+import ca.uhn.fhir.rest.api.Constants;
 import ca.uhn.fhir.rest.api.SortOrderEnum;
 import ca.uhn.fhir.rest.api.SortSpec;
 import ca.uhn.fhir.rest.param.*;
@@ -186,7 +187,7 @@ public class Pharm5SearchParameters extends FhirSearchAndSortParameters<Document
                 sort = sort.getChain();
                 first = false;
             }
-            parameters.addParameter(ca.uhn.fhir.rest.api.Constants.PARAM_SORT, new StringType(b.toString()));
+            parameters.addParameter(Constants.PARAM_SORT, new StringType(b.toString()));
         }
         if (this.getIncludeSpec() != null) {
             for (final var nextInclude : this.getIncludeSpec()) {
@@ -200,8 +201,8 @@ public class Pharm5SearchParameters extends FhirSearchAndSortParameters<Document
                 }
 
                 final var paramName = (nextInclude.isRecurse())
-                        ? ca.uhn.fhir.rest.api.Constants.PARAM_INCLUDE_ITERATE
-                        : ca.uhn.fhir.rest.api.Constants.PARAM_INCLUDE;
+                        ? Constants.PARAM_INCLUDE_ITERATE
+                        : Constants.PARAM_INCLUDE;
                 parameters.addParameter(paramName, new StringType(b.toString()));
             }
         }

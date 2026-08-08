@@ -15,20 +15,10 @@
  */
 package org.openehealth.ipf.commons.audit;
 
-import lombok.Getter;
-import lombok.Setter;
-
 /**
- * Default implementation of a {@link BalpAuditContext}.
+ * @deprecated {@link DefaultAuditContext} now carries everything this added. Use it instead.
  */
+@Deprecated(since = "5.3", forRemoval = true)
 public class DefaultBalpAuditContext extends DefaultAuditContext implements BalpAuditContext {
-
-    @Getter
-    @Setter
-    private String auditRepositoryContextPath;
-
-    @Getter
-    @Setter
-    private BalpJwtExtractorProperties balpJwtExtractorProperties = new BalpJwtExtractorProperties();
 }
 

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.audit.model;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.openehealth.ipf.commons.audit.JwtDataSet;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.event.BaseAuditMessageBuilder;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
@@ -54,6 +55,23 @@ public class AuditMessage implements Serializable, Validateable {
     @Setter
     private boolean serverSide;
 
+    /**
+     * Claims of the access token the audited request carried, if any. Kept alongside the participants
+     * they were encoded into, so that a serialization strategy can map from the claims directly.
+     */
+    @Getter
+    @Setter
+    private JwtDataSet jwtDataSet;
+
+    /**
+     * Id correlating the audit records that the two ends of a transaction write about it. Kept alongside
+     * the participant object it was encoded into, because which participant object that is depends on
+     * the profile that asked for the correlation, while the value does not.
+     */
+    @Getter
+    @Setter
+    private String requestId;
+
     public List<ActiveParticipantType> getActiveParticipants() {
         if (activeParticipants == null) {
             activeParticipants = new ArrayList<>();
@@ -84,7 +102,7 @@ public class AuditMessage implements Serializable, Validateable {
      * Validates the constructed audit message against the specification, because API does not completely
      * prevent constructing incomplete or inconsistent messages.
      *
-     * @throws org.openehealth.ipf.commons.audit.AuditException AuditException in case validation fails
+     * @throws AuditException AuditException in case validation fails
      */
     @Override
     public void validate() {

@@ -19,8 +19,10 @@ import groovy.xml.slurpersupport.GPathResult
 import org.apache.cxf.binding.soap.SoapMessage
 import org.apache.cxf.headers.Header
 import org.apache.cxf.message.Message
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId
 import org.openehealth.ipf.commons.audit.types.PurposeOfUse
+import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser
 
 /**
@@ -81,12 +83,12 @@ class SwissEprWsAuditDatasetEnricher extends XuaWsAuditDatasetEnricher {
     }
 
     private static void extractW3cTraceContextId(SoapMessage message, WsAuditDataset auditDataset) {
-        if (auditDataset.w3cTraceContextId == null) {
+        if (ParticipantObjectIdTypeCode.SwissW3cTraceContext != auditDataset.requestIdType) {
             def httpHeaders = message.get(Message.PROTOCOL_HEADERS) as Map<String, List<String>>
             if (httpHeaders != null) {
                 for (String headerName : httpHeaders.keySet()) {
                     if ('traceparent'.equalsIgnoreCase(headerName)) {
-                        auditDataset.w3cTraceContextId = httpHeaders[headerName][0]
+                        auditDataset.setRequestId(httpHeaders[headerName][0], ParticipantObjectIdTypeCode.SwissW3cTraceContext)
                         break
                     }
                 }

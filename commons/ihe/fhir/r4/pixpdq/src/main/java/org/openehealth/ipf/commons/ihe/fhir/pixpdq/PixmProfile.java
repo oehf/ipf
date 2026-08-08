@@ -51,8 +51,16 @@ public enum PixmProfile implements Pixm310, IheFhirProfile {
 
     // Parameters Profile URLs
 
-    public static final String PIXM_QUERY_PARAMETERS_IN_PROFILE = "https://profiles.ihe.net/ITI/PIXm/StructureDefinition/IHE.PIXm.Query.Parameters.In";
-    public static final String PIXM_QUERY_PARAMETERS_OUT_PROFILE = "https://profiles.ihe.net/ITI/PIXm/StructureDefinition/IHE.PIXm.Query.Parameters.Out";
+    /** Canonical URL prefix of the PIXm profiles. */
+    private static final String PROFILE_PREFIX = IheFhirProfile.IHE_ITI_PREFIX + "PIXm/StructureDefinition/";
+
+    public static final String PIXM_QUERY_PARAMETERS_IN_PROFILE = PROFILE_PREFIX + "IHE.PIXm.Query.Parameters.In";
+    public static final String PIXM_QUERY_PARAMETERS_OUT_PROFILE = PROFILE_PREFIX + "IHE.PIXm.Query.Parameters.Out";
+
+    // AuditEvent Profile URLs
+
+    public static final String PIXM_CONSUMER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.PIXm.Query.Audit.Consumer";
+    public static final String PIXM_MANAGER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.PIXm.Query.Audit.Manager";
 
     @Getter
     private final String url;

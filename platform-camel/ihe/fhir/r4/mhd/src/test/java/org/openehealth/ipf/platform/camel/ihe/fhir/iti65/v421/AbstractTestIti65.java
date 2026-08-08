@@ -25,7 +25,7 @@ import org.openehealth.ipf.commons.core.URN;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
-import org.openehealth.ipf.commons.ihe.fhir.audit.auth.BalpJwtGenerator;
+import org.openehealth.ipf.commons.ihe.fhir.audit.auth.JwtGenerator;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveDocumentReference;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveProvideDocumentBundle;
@@ -150,7 +150,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     }
 
     protected Bundle sendManuallyWithJwt(Bundle bundle) {
-        var headerValue = "Bearer " + new BalpJwtGenerator().next();
+        var headerValue = "Bearer " + new JwtGenerator().next();
         return client.transaction().withBundle(bundle)
             .withAdditionalHeader("Authorization", headerValue)
             .encodedXml().execute();
@@ -161,7 +161,7 @@ abstract class AbstractTestIti65 extends FhirTestContainer {
     }
 
     protected Bundle sendViaProducerWithJwtAuthorization(Bundle bundle) {
-        var headerValue = "Bearer " + new BalpJwtGenerator().next();
+        var headerValue = "Bearer " + new JwtGenerator().next();
         return producerTemplate.requestBodyAndHeader("direct:input", bundle, "Authorization",
             headerValue, Bundle.class);
     }

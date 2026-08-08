@@ -23,6 +23,8 @@ import jakarta.xml.bind.annotation.XmlType;
 import lombok.Data;
 import lombok.NonNull;
 
+import javax.xml.XMLConstants;
+
 /**
  * Model of an SVS ValueSetRequest
  *
@@ -37,7 +39,7 @@ public class ValueSetRequest {
     @NonNull
     private String id;
 
-    @XmlAttribute(name = "lang", namespace = javax.xml.XMLConstants.XML_NS_URI)
+    @XmlAttribute(name = "lang", namespace = XMLConstants.XML_NS_URI)
     private String lang;
 
     @XmlAttribute(name = "version")

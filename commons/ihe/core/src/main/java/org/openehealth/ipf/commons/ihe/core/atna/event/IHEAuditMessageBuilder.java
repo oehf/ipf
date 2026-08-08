@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.core.atna.event;
 
 import lombok.Getter;
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.event.BaseAuditMessageBuilder;
@@ -63,8 +64,9 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
         this.auditContext = requireNonNull(auditContext, "auditContext must be not null");
         this.serverSide = requireNonNull(auditDataset, "auditDataset must be not null").isServerSide();
         delegate.setAuditSource(auditContext);
-        if (auditDataset.getW3cTraceContextId() != null) {
-            addSwissW3CTraceContextIdParticipantObject(auditDataset.getW3cTraceContextId());
+        if (auditDataset.getRequestId() != null) {
+            addRequestIdParticipantObject(auditDataset.getRequestId(), auditDataset.getRequestIdType());
+            delegate.getMessage().setRequestId(auditDataset.getRequestId());
         }
         delegate.getMessage().setServerSide(serverSide);
     }
@@ -221,14 +223,34 @@ public abstract class IHEAuditMessageBuilder<T extends IHEAuditMessageBuilder<T,
 
     /**
      * Adds a Participant Object representing a W3C Trace Context ID (specific for the Swiss EPR).
+     *
+     * @param traceContextId contents of a {@code traceparent} header
+     * @return this
+     * @deprecated use {@link #addRequestIdParticipantObject(String, ParticipantObjectIdType)} with
+     *      {@link ParticipantObjectIdTypeCode#SwissW3cTraceContext}.
      */
+    @Deprecated(since = "5.3", forRemoval = true)
     public T addSwissW3CTraceContextIdParticipantObject(String traceContextId) {
+        return addRequestIdParticipantObject(traceContextId, ParticipantObjectIdTypeCode.SwissW3cTraceContext);
+    }
+
+    /**
+     * Adds a Participant Object for the id correlating the audit records that the two ends of a
+     * transaction write about it, e.g. the contents of an {@code X-Request-Id} header.
+     *
+     * @param requestId     the correlation id, must not be null
+     * @param requestIdType participant object ID type to record it under, i.e. which profile asked for
+     *                      the correlation. Which HTTP header the value came from is deliberately not
+     *                      recorded, because the correlation does not depend on it.
+     * @return this
+     */
+    public T addRequestIdParticipantObject(String requestId, ParticipantObjectIdType requestIdType) {
         delegate.addParticipantObjectIdentification(
-            ParticipantObjectIdType.of("traceparent", "e-health-suisse", "traceparent"),
+            requireNonNull(requestIdType, "request ID type must not be null"),
             null,
             null,
             null,
-            requireNonNull(traceContextId, "trace context ID must not be null"),
+            requireNonNull(requestId, "request ID must not be null"),
             ParticipantObjectTypeCode.Other,
             ParticipantObjectTypeCodeRole.ProcessingElement,
             null,

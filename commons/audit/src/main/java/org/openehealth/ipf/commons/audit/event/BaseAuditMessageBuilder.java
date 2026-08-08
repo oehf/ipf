@@ -82,7 +82,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     }
 
     /**
-     * Sets a {@link org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType} for a given Audit Source ID
+     * Sets a {@link AuditSourceIdentificationType} for a given Audit Source ID
      *
      * @param sourceId The Audit Source ID to use
      * @return this
@@ -92,7 +92,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     }
 
     /**
-     * Sets a {@link org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType} for a given Audit Source ID
+     * Sets a {@link AuditSourceIdentificationType} for a given Audit Source ID
      * and Audit Source Enterprise Site ID
      *
      * @param sourceId         The Audit Source ID to use
@@ -104,7 +104,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
     }
 
     /**
-     * Sets a {@link org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType} for a given Audit Source ID,
+     * Sets a {@link AuditSourceIdentificationType} for a given Audit Source ID,
      * Audit Source Enterprise Site ID, and a list of audit source type codes
      *
      * @param sourceId         The Audit Source ID to use

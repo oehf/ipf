@@ -20,6 +20,7 @@ import org.apache.camel.Exchange;
 import org.apache.camel.ExchangePattern;
 import org.apache.cxf.binding.soap.SoapFault;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
+import org.apache.cxf.message.Message;
 import org.openehealth.ipf.platform.camel.core.util.Exchanges;
 
 import java.util.Map;
@@ -66,7 +67,7 @@ abstract public class AbstractWebService {
 
         // set Camel exchange property based on request encoding
         exchange.setProperty(Exchange.CHARSET_NAME,
-                messageContext.get(org.apache.cxf.message.Message.ENCODING));
+                messageContext.get(Message.ENCODING));
 
         // process
         consumer.process(exchange);
@@ -83,7 +84,7 @@ abstract public class AbstractWebService {
         // set response encoding based on Camel exchange property
         var responseEncoding = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
         if (responseEncoding != null) {
-            messageContext.put(org.apache.cxf.message.Message.ENCODING, responseEncoding);
+            messageContext.put(Message.ENCODING, responseEncoding);
         }
         return exchange;
     }

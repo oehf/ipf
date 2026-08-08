@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Configurer used to autowire all classes implementing the
- * {@link org.openehealth.ipf.commons.core.extend.config.DynamicExtension}
+ * {@link DynamicExtension}
  * interface using Groovy 2.x Extension Modules
  *
  * @author Christian Ohr

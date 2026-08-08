@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public class BalpJwtGenerator implements Generator<String> {
+public class JwtGenerator implements Generator<String> {
 
     private static final Generator<String> strings = PrimitiveGenerators.letterStrings(10, 10);
 
@@ -28,12 +28,12 @@ public class BalpJwtGenerator implements Generator<String> {
     @Override
     public String next() {
         try {
-            RSAKey jwk = new RSAKeyGenerator(2048)
+            var jwk = new RSAKeyGenerator(2048)
                 .keyUse(KeyUse.SIGNATURE)
                 .keyID(UUID.randomUUID().toString())
                 .generate();
 
-            SignedJWT signedJWT = new SignedJWT(jwsHeader(jwk), jwsClaimsSet());
+            var signedJWT = new SignedJWT(jwsHeader(jwk), jwsClaimsSet());
             signedJWT.sign(new RSASSASigner(jwk.toPrivateKey()));
             return signedJWT.serialize();
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class BalpJwtGenerator implements Generator<String> {
 
     public static String anyValidJwtWithRSAKey(RSAKey rsaKey){
         try {
-            SignedJWT signedJWT = new SignedJWT(jwsHeader(rsaKey), jwsClaimsSet());
+            var signedJWT = new SignedJWT(jwsHeader(rsaKey), jwsClaimsSet());
             signedJWT.sign(new RSASSASigner(rsaKey.toPrivateKey()));
             return signedJWT.serialize();
         } catch (Exception e) {

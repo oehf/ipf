@@ -19,6 +19,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
+import org.w3c.dom.Document;
 
 import javax.xml.transform.dom.DOMResult;
 
@@ -45,7 +46,7 @@ public class FindDocumentsExcludeQueryTest {
 
         var domResult = new DOMResult();
         marshaller.marshal(query, domResult);
-        var marshalledNode = ((org.w3c.dom.Document) domResult.getNode()).getDocumentElement();
+        var marshalledNode = ((Document) domResult.getNode()).getDocumentElement();
         assertNotNull(marshalledNode);
 
         var unmarshaller = jaxbContext.createUnmarshaller();

@@ -31,10 +31,12 @@ import org.openehealth.ipf.commons.audit.protocol.UDPSyslogSenderImpl;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 
 /**
  * Default implementation of an AuditContext. By default, audit is written to localhost:514 via UDP.
@@ -49,6 +51,22 @@ import java.net.UnknownHostException;
 public class DefaultAuditContext implements AuditContext {
 
     static final AuditContext NO_AUDIT = new DefaultAuditContext();
+    @Getter
+    @Setter
+    private String auditRepositoryContextPath = "";
+
+    @Getter
+    @Setter
+    private JwtExtractorProperties jwtExtractorProperties = new JwtExtractorProperties();
+
+    @Getter
+    @Setter
+    private List<String> requestIdHeaderNames = List.of(RequestIdHeaders.X_REQUEST_ID);
+
+    @Getter
+    @Setter
+    private ParticipantObjectIdType requestIdType;
+
 
     @Getter
     @Setter

@@ -19,9 +19,11 @@ package org.openehealth.ipf.boot.atna;
 import lombok.Getter;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
+import org.openehealth.ipf.commons.audit.RequestIdHeaders;
 import org.openehealth.ipf.commons.audit.FhirAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.WsAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.codes.AuditSourceType;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.handler.LoggingAuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
@@ -29,6 +31,8 @@ import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.queue.SynchronousAuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+
+import java.util.List;
 
 @ConfigurationProperties(prefix = "ipf.atna")
 public class IpfAtnaConfigurationProperties {
@@ -44,6 +48,28 @@ public class IpfAtnaConfigurationProperties {
 
     @Getter @Setter
     private String auditSendingApplication;
+
+    /**
+     * Names of the HTTP headers that may carry the id correlating the audit records the two ends of a
+     * transaction write about it, most preferred first. The first header a request actually carries
+     * wins; empty disables the lookup.
+     * <p>
+     * IHE BALP asks for X-Request-Id and reports it as the transaction entity of an AuditEvent. A
+     * deployment that already propagates a trace can name its headers instead: "traceparent" for W3C
+     * Trace Context, or "b3" and "X-B3-TraceId" for the single-header and multi-header flavours of B3
+     * (naming both accepts whichever a caller uses; they yield the same id).
+     */
+    @Getter @Setter
+    private List<String> requestIdHeaderNames = List.of(RequestIdHeaders.X_REQUEST_ID);
+
+    /**
+     * Participant object ID type to record the correlation id under, whichever header it was found in.
+     * Leave unset and the type follows the header, so that the DICOM audit record says which propagation
+     * format the id came from: XRequestId, W3cTraceContext, B3SingleHeader or B3MultiHeader. Set it only
+     * to flatten that distinction, e.g. for a repository that understands XRequestId alone.
+     */
+    @Getter @Setter
+    private ParticipantObjectIdTypeCode requestIdType;
 
     /**
      * Sets the Audit transport (UDP, TLS)

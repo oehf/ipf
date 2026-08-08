@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.audit.types.PurposeOfUse;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PHIExportBuilder;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 
-import static org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpJwtUtils.addJwtParticipant;
+import static org.openehealth.ipf.commons.ihe.fhir.audit.events.JwtUtils.addJwtParticipant;
 
 public class BalpPHIExportBuilder extends PHIExportBuilder<BalpPHIExportBuilder> {
 

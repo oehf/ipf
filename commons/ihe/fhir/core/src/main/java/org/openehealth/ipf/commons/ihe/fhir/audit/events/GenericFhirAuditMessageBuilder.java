@@ -133,7 +133,7 @@ public class GenericFhirAuditMessageBuilder extends
     }
 
     public GenericFhirAuditMessageBuilder addJwtParticipants(GenericFhirAuditDataset auditDataset) {
-        BalpJwtUtils.addJwtParticipant(delegate, auditDataset, getAuditContext());
+        JwtUtils.addJwtParticipant(delegate, auditDataset, getAuditContext());
         return self();
     }
 

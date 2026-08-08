@@ -25,6 +25,7 @@ import jakarta.jws.WebService;
 import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.ws.Action;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory;
 
 /**
  * SEI for the CH:CIQ transaction (Swiss EPR extension: Community Information Query)
@@ -32,7 +33,7 @@ import jakarta.xml.ws.Action;
  * @author Dmytro Rud
  */
 @WebService(targetNamespace = "urn:ch:admin:bag:epr:cpi:2017", name = "ICommunityPortalIndex", portName = "WSHttpBinding_ICommunityPortalIndex")
-@XmlSeeAlso(org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory.class)
+@XmlSeeAlso(ObjectFactory.class)
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
 public interface ChCiqPortType {
 

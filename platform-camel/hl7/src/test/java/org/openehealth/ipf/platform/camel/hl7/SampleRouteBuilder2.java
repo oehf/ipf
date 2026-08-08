@@ -23,7 +23,7 @@ import static org.openehealth.ipf.platform.camel.hl7.HL7v2.set;
 
 /**
  * This route is the Java version of {@link org.openehealth.ipf.platform.camel.hl7.extend.SampleRouteBuilder}
- * using expressions and predicates defined by {@link org.openehealth.ipf.platform.camel.hl7.HL7v2}.
+ * using expressions and predicates defined by {@link HL7v2}.
  */
 public class SampleRouteBuilder2 extends RouteBuilder {
 

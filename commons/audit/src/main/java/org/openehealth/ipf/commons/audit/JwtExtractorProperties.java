@@ -18,7 +18,11 @@ package org.openehealth.ipf.commons.audit;
 import lombok.Getter;
 import lombok.Setter;
 
-public class BalpJwtExtractorProperties {
+/**
+ * Where to find the claims in an access token. The mechanism is not tied to any audit format: the
+ * defaults simply point at the standard JWT claims and at the IHE IUA and BPPC extensions.
+ */
+public class JwtExtractorProperties {
 
     @Getter
     @Setter

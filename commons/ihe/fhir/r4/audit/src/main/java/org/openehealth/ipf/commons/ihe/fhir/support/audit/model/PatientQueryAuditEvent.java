@@ -29,6 +29,7 @@ public class PatientQueryAuditEvent extends QueryAuditEvent {
      * @return this instance
      */
     public PatientQueryAuditEvent setPatient(Reference patientReference) {
-        return BalpAuditEventHelper.addPatient(this, patientReference);
+        addPatientEntity(patientReference);
+        return this;
     }
 }

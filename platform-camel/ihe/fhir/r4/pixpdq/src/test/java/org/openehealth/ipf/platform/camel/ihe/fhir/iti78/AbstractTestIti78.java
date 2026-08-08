@@ -47,6 +47,14 @@ abstract class AbstractTestIti78 extends FhirTestContainer {
         return PdqmPatient.FAMILY.matches().value("Test");
     }
 
+    /**
+     * A query that names the patient it is about, rather than searching by demographics.
+     */
+    protected ICriterion<?> identifierParameters() {
+        return PdqmPatient.IDENTIFIER.exactly()
+            .systemAndIdentifier("urn:oid:1.2.3.4", "0815");
+    }
+
     protected Bundle sendManually(ICriterion<?> requestData) {
         return client.search()
                 .forResource(PdqmPatient.class)

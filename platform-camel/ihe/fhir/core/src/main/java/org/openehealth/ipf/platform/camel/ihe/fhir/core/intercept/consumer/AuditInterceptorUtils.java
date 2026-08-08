@@ -18,6 +18,8 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.consumer;
 
 import org.apache.camel.Exchange;
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.RequestIdHeaders;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDatasetEnricher;
@@ -78,7 +80,60 @@ public abstract class AuditInterceptorUtils {
         return Optional.empty();
     }
 
+    /**
+     * The id correlating the audit records of the two ends of a transaction, together with the
+     * participant object ID type it is to be recorded under.
+     *
+     * @param value the correlation id
+     * @param type  how to record it, which says where the id came from
+     */
+    public record RequestId(String value, ParticipantObjectIdType type) {
+    }
+
+    /**
+     * Extracts the id correlating the audit records of the two ends of a transaction from the first of
+     * the configured headers the message carries. Incoming headers are searched before outgoing ones, so
+     * that a server adopts the id its client sent rather than one the route happens to set as well.
+     * <p>
+     * The type follows the header the id was found in, unless the audit context forces one; see
+     * {@link AuditContext#getRequestIdType()}.
+     *
+     * @param exchange     exchange being audited
+     * @param auditContext audit context naming the headers to look for
+     * @return the correlation id, if the message carries one
+     */
+    public static Optional<RequestId> extractRequestId(Exchange exchange, AuditContext auditContext) {
+        for (var headerName : auditContext.getRequestIdHeaderNames()) {
+            var value = httpHeaderValue(exchange, Constants.HTTP_INCOMING_HEADERS, headerName)
+                .or(() -> httpHeaderValue(exchange, Constants.HTTP_OUTGOING_HEADERS, headerName));
+            if (value.isPresent()) {
+                var type = auditContext.getRequestIdType() != null ?
+                    auditContext.getRequestIdType() :
+                    RequestIdHeaders.participantObjectIdType(headerName);
+                return value.map(id -> new RequestId(id, type));
+            }
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<String> httpHeaderValue(Exchange exchange, String headerMapName, String headerName) {
+        Map<String, List<String>> httpHeaders = exchange.getIn().getHeader(headerMapName, Map.class);
+        if (httpHeaders == null) {
+            return Optional.empty();
+        }
+        return httpHeaders.entrySet().stream()
+            .filter(entry -> headerName.equalsIgnoreCase(entry.getKey()))
+            .map(Map.Entry::getValue)
+            .filter(values -> values != null && !values.isEmpty())
+            .map(values -> values.get(0))
+            .flatMap(value -> RequestIdHeaders.extractRequestId(headerName, value).stream())
+            .findFirst();
+    }
+
     public static void enrichAuditDatasetFromRequest(AuditDataset auditDataset, AuditContext auditContext, Exchange exchange) {
+        // an enricher configured afterwards may still override both the id and its type
+        extractRequestId(exchange, auditContext).ifPresent(requestId ->
+            auditDataset.setRequestId(requestId.value(), requestId.type()));
         if (auditContext.getFhirAuditDatasetEnricher() != null) {
             FhirAuditDatasetEnricher enricher = auditContext.getFhirAuditDatasetEnricher();
             enricher.enrichAuditDatasetFromRequest(auditDataset, exchange.getIn().getBody(), exchange.getIn().getHeaders());

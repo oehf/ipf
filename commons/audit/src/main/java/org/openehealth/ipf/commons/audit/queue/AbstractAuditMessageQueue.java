@@ -20,7 +20,6 @@ import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
-import java.util.stream.Stream;
 
 /**
  * <p>
@@ -44,10 +43,21 @@ public abstract class AbstractAuditMessageQueue implements AuditMessageQueue {
 
     @Override
     public void audit(AuditContext auditContext, AuditMessage... auditMessages) {
-        if (auditMessages != null) {
-            Stream.of(auditMessages)
-                .map(msg -> auditContext.getSerializationStrategy().marshal(msg, pretty))
-                .forEach(msg -> handle(auditContext, msg));
+        if (auditMessages == null) {
+            return;
+        }
+        for (var auditMessage : auditMessages) {
+            String auditRecord;
+            try {
+                auditRecord = auditContext.getSerializationStrategy().marshal(auditMessage, pretty);
+            } catch (Exception e) {
+                // Serializing an audit message must not break the transaction being audited, so the
+                // failure goes to the configured handler -- the same place a failed delivery ends up.
+                // Deployments that want auditing to be fatal can plug a rethrowing handler.
+                auditContext.getAuditExceptionHandler().handleException(auditContext, e, null);
+                continue;
+            }
+            handle(auditContext, auditRecord);
         }
     }
 

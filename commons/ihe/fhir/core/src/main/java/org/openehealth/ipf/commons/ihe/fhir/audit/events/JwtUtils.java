@@ -16,14 +16,12 @@
 package org.openehealth.ipf.commons.ihe.fhir.audit.events;
 
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.BalpAuditContext;
-import org.openehealth.ipf.commons.audit.BalpJwtExtractorProperties;
 import org.openehealth.ipf.commons.audit.event.BaseAuditMessageBuilder;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.audit.auth.BalpJwtParser;
+import org.openehealth.ipf.commons.ihe.fhir.audit.auth.JwtParser;
 
 import java.util.Collections;
 
@@ -31,21 +29,22 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.DCM_SYSTEM_NAME;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.OUSER_AGENT_PURPOSE_OF_USE_SYSTEM_NAME;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.OUSER_AGENT_ROLE_SYSTEM_NAME;
-import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME;
+import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.USER_AGENT_TYPES_SYSTEM_NAME;
+import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.USER_OAUTH_AGENT_CODE;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.OUSER_AGENT_TYPE_SYSTEM_NAME;
 
-public class BalpJwtUtils {
-
-    private static final BalpJwtExtractorProperties DEFAULT_BALP_JWT_EXTRACTOR_PROPERTIES = new BalpJwtExtractorProperties();
+public class JwtUtils {
 
     public static <D extends BaseAuditMessageBuilder<D>> void addJwtParticipant(D delegate,
                                                                                 FhirAuditDataset auditDataset,
                                                                                 AuditContext auditContext) {
-        var balpJwtExtractorProperties = (auditContext instanceof BalpAuditContext)?
-            ((BalpAuditContext)auditContext).getBalpJwtExtractorProperties() : DEFAULT_BALP_JWT_EXTRACTOR_PROPERTIES;
-        var balpDataSet = BalpJwtParser.parseAuthorizationToBalpDataSet(
-            auditDataset.getAuthorization(), balpJwtExtractorProperties);
-        balpDataSet.ifPresent(dataSet -> {
+        var jwtDataSet = JwtParser.parseAuthorizationToJwtDataSet(
+            auditDataset.getAuthorization(), auditContext.getJwtExtractorProperties());
+        jwtDataSet.ifPresent(dataSet -> {
+            // the claims travel with the message, so that a FHIR serialization strategy can map from
+            // them directly instead of decoding the participants built below
+            delegate.getMessage().setJwtDataSet(dataSet);
+
             if (isNotBlank(dataSet.getIheBppcPatientId())) {
                 delegate.addPatientParticipantObject(
                     dataSet.getIheBppcPatientId(),
@@ -89,11 +88,14 @@ public class BalpJwtUtils {
                             DCM_SYSTEM_NAME, "oAuth Token Client ID")));
                     delegate.addActiveParticipant(clientAp);
                 }
-            } else if (isNotBlank(dataSet.getOpaqueJwt())) {
-                var ap = new ActiveParticipantType(dataSet.getSubject(), true);
+            } else if (dataSet.isOpaque()) {
+                // all that can be said is that a token was presented. Its value is a credential and does
+                // not belong in an audit record, and there is no subject to name either.
+                var ap = new ActiveParticipantType(auditContext.getAuditValueIfMissing(), true);
                 ap.getRoleIDCodes().add(
-                    ActiveParticipantRoleId.of(CodedValueType.of(dataSet.getOpaqueJwt(),
-                        OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME, "oAuth Opaque Token")));
+                    ActiveParticipantRoleId.of(CodedValueType.of(USER_OAUTH_AGENT_CODE,
+                        USER_AGENT_TYPES_SYSTEM_NAME, "oAuth Opaque Token")));
+                delegate.addActiveParticipant(ap);
             }
         });
     }

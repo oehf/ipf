@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.auth;
 import com.nimbusds.jwt.JWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import lombok.Getter;
-import org.openehealth.ipf.commons.audit.BalpJwtExtractorProperties;
+import org.openehealth.ipf.commons.audit.JwtExtractorProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,68 +32,68 @@ import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-public class BalpJwtClaimsExtractor {
+public class JwtClaimsExtractor {
 
-    private static final Logger log = LoggerFactory.getLogger(BalpJwtClaimsExtractor.class);
+    private static final Logger log = LoggerFactory.getLogger(JwtClaimsExtractor.class);
 
-    public Optional<String> extractId(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getIdPath()));
+    public Optional<String> extractId(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getIdPath()));
     }
 
-    public Optional<String> extractClientId(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getClientIdPath()));
+    public Optional<String> extractClientId(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getClientIdPath()));
     }
 
-    public Optional<String> extractSubject(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getSubjectPath()));
+    public Optional<String> extractSubject(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getSubjectPath()));
     }
 
-    public Optional<String> extractIssuer(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getIssuerPath()));
+    public Optional<String> extractIssuer(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getIssuerPath()));
     }
 
-    public Optional<String> extractSubjectName(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getSubjectNamePath()));
+    public Optional<String> extractSubjectName(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getSubjectNamePath()));
     }
 
-    public Optional<String> extractSubjectOrganization(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getSubjectOrganizationPath()));
+    public Optional<String> extractSubjectOrganization(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getSubjectOrganizationPath()));
     }
 
-    public Optional<String> extractSubjectOrganizationId(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getSubjectOrganizationIdPath()));
+    public Optional<String> extractSubjectOrganizationId(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getSubjectOrganizationIdPath()));
     }
 
-    public Optional<Set<String>> extractSubjectRole(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractListClaimFromJWT(jwt, balpJwtExtractorProperties.getSubjectRolePath()));
+    public Optional<Set<String>> extractSubjectRole(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractListClaimFromJWT(jwt, jwtExtractorProperties.getSubjectRolePath()));
     }
 
-    public Optional<Set<String>> extractPurposeOfUse(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractListClaimFromJWT(jwt, balpJwtExtractorProperties.getPurposeOfUsePath()));
+    public Optional<Set<String>> extractPurposeOfUse(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractListClaimFromJWT(jwt, jwtExtractorProperties.getPurposeOfUsePath()));
     }
 
-    public Optional<String> extractHomeCommunityId(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getHomeCommunityIdPath()));
+    public Optional<String> extractHomeCommunityId(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getHomeCommunityIdPath()));
     }
 
-    public Optional<String> extractNationalProviderIdentifier(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getNationalProviderIdPath()));
+    public Optional<String> extractNationalProviderIdentifier(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getNationalProviderIdPath()));
     }
 
-    public Optional<String> extractPersonId(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getPersonIdPath()));
+    public Optional<String> extractPersonId(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getPersonIdPath()));
     }
 
-    public Optional<String> extractBppcPatientId(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getPatientIdPath()));
+    public Optional<String> extractBppcPatientId(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getPatientIdPath()));
     }
 
-    public Optional<String> extractBppcDocId(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getDocIdPath()));
+    public Optional<String> extractBppcDocId(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getDocIdPath()));
     }
 
-    public Optional<String> extractBppcAcp(JWT jwt, BalpJwtExtractorProperties balpJwtExtractorProperties) {
-        return Optional.ofNullable(extractStringClaimFromJWT(jwt, balpJwtExtractorProperties.getAcpPath()));
+    public Optional<String> extractBppcAcp(JWT jwt, JwtExtractorProperties jwtExtractorProperties) {
+        return Optional.ofNullable(extractStringClaimFromJWT(jwt, jwtExtractorProperties.getAcpPath()));
     }
 
     private String extractStringClaimFromJWT(JWT jwt, String[] expressions){

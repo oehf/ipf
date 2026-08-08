@@ -227,7 +227,7 @@ public abstract class EbXMLRegistryObject30<E extends RegistryObjectType> implem
     }
 
     /**
-     * Implements the {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlotList} interface
+     * Implements the {@link EbXMLSlotList} interface
      * by delegating the calls to a "proper" slot list.
      */
     @Delegate

@@ -87,11 +87,27 @@ public class TestIti105WithBalpAudit extends FhirTestContainer {
         assertEquals(1, auditEvents.size());
         var auditEvent = auditEvents.get(0);
 
-        assertEquals("110107", auditEvent.getType().getCode());
-        assertEquals("ITI-105", auditEvent.getSubtypeFirstRep().getCode());
+        // ITI-105 is audited with its BALP profiled AuditEvent, built on the PatientCreate pattern
+        assertEquals("rest", auditEvent.getType().getCode());
+        assertEquals("RESTful Operation", auditEvent.getType().getDisplay());
         assertEquals("C", auditEvent.getAction().toCode());
-        assertEquals("Import", auditEvent.getType().getDisplay());
         assertEquals("0", auditEvent.getOutcome().toCode());
+
+        assertTrue(auditEvent.getSubtype().stream().anyMatch(subtype ->
+            "urn:ihe:event-type-code".equals(subtype.getSystem())
+                && "ITI-105".equals(subtype.getCode())
+                && "Simplified Publish".equals(subtype.getDisplay())),
+            "the ITI-105 subtype with its fixed display is missing");
+        assertTrue(auditEvent.getSubtype().stream().anyMatch(subtype ->
+            "create".equals(subtype.getCode())), "the create subtype the pattern requires is missing");
+
+        assertTrue(auditEvent.getAgent().stream().anyMatch(agent ->
+            "110153".equals(agent.getType().getCodingFirstRep().getCode())), "no client agent");
+        assertTrue(auditEvent.getAgent().stream().anyMatch(agent ->
+            "110152".equals(agent.getType().getCodingFirstRep().getCode())), "no server agent");
+
+        assertEquals("https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.SimplifiedPublish.Audit.Recipient",
+            auditEvent.getMeta().getProfile().get(0).getValue());
     }
 
     @Test

@@ -9,7 +9,6 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset.HumanUser;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.atna.XdsAuditorTestBase;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Identifiable;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsByReferenceIdQuery;

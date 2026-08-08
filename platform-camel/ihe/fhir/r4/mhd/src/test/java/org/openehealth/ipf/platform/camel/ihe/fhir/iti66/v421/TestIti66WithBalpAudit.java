@@ -64,9 +64,12 @@ public class TestIti66WithBalpAudit extends AbstractTestIti66 {
 
         assertEquals(1, FhirAuditRepository.getAuditEvents().size());
         AuditEvent auditEvent = FhirAuditRepository.getAuditEvents().get(0);
-        assertEquals("110112", auditEvent.getType().getCode());
-        assertEquals("Query", auditEvent.getType().getDisplay());
+        // ITI-66 is audited with its BALP profiled AuditEvent, whose type the pattern fixes to "rest"
+        assertEquals("rest", auditEvent.getType().getCode());
+        assertEquals("RESTful Operation", auditEvent.getType().getDisplay());
         assertEquals("ITI-66", auditEvent.getSubtypeFirstRep().getCode());
+        // MHD fixes the subtype as a pattern of system, code and display
+        assertEquals("Find Document Lists", auditEvent.getSubtypeFirstRep().getDisplay());
         assertEquals("E", auditEvent.getAction().toCode());
         assertEquals("0", auditEvent.getOutcome().toCode());
         Optional<AuditEvent.AuditEventAgentComponent> sourceRole = findRoleAgentWithCode(auditEvent, "110153");

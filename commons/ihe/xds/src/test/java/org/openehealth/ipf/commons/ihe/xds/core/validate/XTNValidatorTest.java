@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Tests for {@link org.openehealth.ipf.commons.ihe.xds.core.validate.XTNValidator}.
+ * Tests for {@link XTNValidator}.
  * @author Dmytro Rud
  */
 public class XTNValidatorTest {

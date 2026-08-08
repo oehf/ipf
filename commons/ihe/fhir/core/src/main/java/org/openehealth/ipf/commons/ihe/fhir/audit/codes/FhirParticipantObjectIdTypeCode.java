@@ -31,8 +31,8 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.IHE_SYS
 public enum FhirParticipantObjectIdTypeCode implements ParticipantObjectIdType, EnumeratedCodedValue<ParticipantObjectIdType> {
 
     ProvideDocumentBundle("ITI-65", IHE_SYSTEM_NAME, "Provide Document Bundle"),
-    MobileDocumentManifestQuery("ITI-66", IHE_SYSTEM_NAME, "Mobile Document Manifest Query"),
-    MobileDocumentReferenceQuery("ITI-67", IHE_SYSTEM_NAME, "Mobile Document Reference Query"),
+    MobileDocumentManifestQuery("ITI-66", IHE_SYSTEM_NAME, "Find Document Lists"),
+    MobileDocumentReferenceQuery("ITI-67", IHE_SYSTEM_NAME, "Find Document References"),
     MobileDocumentRetrieval("ITI-68", IHE_SYSTEM_NAME, "Mobile Document Retrieval"),
     MobilePatientDemographicsQuery("ITI-78", IHE_SYSTEM_NAME, "Mobile Patient Demographics Query"),
     RetrieveATNAAuditEvent("ITI-81", IHE_SYSTEM_NAME, "Retrieve ATNA AuditEvent"),

@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.audit;
 
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 
 import java.util.List;
@@ -26,10 +27,18 @@ import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_OUTGOING_HEADE
 /**
  * Audit dataset enricher for FHIR based transactions which implements requirements
  * of the Swiss Electronic Patient Record.
+ * <p>
+ * The correlation id it extracts is the same {@code traceparent} that
+ * {@link org.openehealth.ipf.commons.audit.AuditContext#getRequestIdHeaderNames()} picks up when
+ * configured for it, and the recorded value is identical. All this enricher adds is the code system name
+ * the Swiss EPR claimed for it -- {@link ParticipantObjectIdTypeCode#SwissW3cTraceContext} rather than
+ * the {@link ParticipantObjectIdTypeCode#W3cTraceContext} that trace context is standardised under.
  *
  * @author Dmytro Rud
  */
 public class SwissEprFhirAuditDatasetEnricher implements FhirAuditDatasetEnricher {
+
+    private static final String TRACEPARENT_HEADER = "traceparent";
 
     @Override
     public void enrichAuditDatasetFromRequest(AuditDataset auditDataset, Object request, Map<String, Object> parameters) {
@@ -47,13 +56,15 @@ public class SwissEprFhirAuditDatasetEnricher implements FhirAuditDatasetEnriche
     }
 
     private static void extractW3cTraceContextId(Map<String, Object> parameters, String key, AuditDataset auditDataset) {
-        if (auditDataset.getW3cTraceContextId() == null) {
+        // a trace context id found here overrides whatever the generic extraction picked up, but only
+        // until one has been found: this runs for the request and for the response
+        if (!ParticipantObjectIdTypeCode.SwissW3cTraceContext.equals(auditDataset.getRequestIdType())) {
             var value = parameters.get(key);
             if (value != null) {
                 var headers = (Map<String, List<String>>) value;
                 for (var name : headers.keySet()) {
-                    if ("traceparent".equalsIgnoreCase(name)) {
-                        auditDataset.setW3cTraceContextId(headers.get(name).get(0));
+                    if (TRACEPARENT_HEADER.equalsIgnoreCase(name)) {
+                        auditDataset.setRequestId(headers.get(name).get(0), ParticipantObjectIdTypeCode.SwissW3cTraceContext);
                         return;
                     }
                 }

@@ -19,13 +19,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * A generic data structure used to store information pieces needed for auditing.
@@ -78,19 +82,68 @@ public abstract class AuditDataset implements Serializable {
     private String eventOutcomeDescription;
 
     /**
-     * Source User Name, e.g. extracted from a client certificate
+     * Source UserName, e.g. extracted from a client certificate
      */
     @Getter
     @Setter
     private String sourceUserName;
 
     /**
-     * Contents of the HTTP header "traceparent:" as defined in the
-     * <a href="https://www.w3.org/TR/trace-context/">W3C Trace Context</a> specification.
+     * Id correlating the audit records that the two ends of a transaction write about it, taken from
+     * whichever HTTP header {@link org.openehealth.ipf.commons.audit.AuditContext#getRequestIdHeaderNames()}
+     * names.
      */
     @Getter
-    @Setter
-    private String w3cTraceContextId;
+    private String requestId;
+
+    /**
+     * Participant object ID type the correlation id is recorded under. The value is the same whichever
+     * it is; what differs is which profile asked for the correlation, and the profiles disagree on the
+     * code -- see {@link ParticipantObjectIdTypeCode#XRequestId} and
+     * {@link ParticipantObjectIdTypeCode#W3cTraceContext}.
+     */
+    @Getter
+    private ParticipantObjectIdType requestIdType = ParticipantObjectIdTypeCode.XRequestId;
+
+    /**
+     * Sets the correlation id along with the participant object ID type it is to be recorded under.
+     *
+     * @param requestId     the correlation id
+     * @param requestIdType how to record it, e.g. {@link ParticipantObjectIdTypeCode#W3cTraceContext}
+     */
+    public void setRequestId(String requestId, ParticipantObjectIdType requestIdType) {
+        this.requestId = requestId;
+        this.requestIdType = requireNonNull(requestIdType, "request ID type must not be null");
+    }
+
+    /**
+     * @return the correlation id if it is a W3C Trace Context one, null otherwise
+     * @deprecated the trace context id was never anything but a correlation id read from an HTTP header,
+     *      which is what {@link #getRequestId()} is. Only the participant object it ends up in differs,
+     *      and that is {@link #getRequestIdType()} now.
+     */
+    @Deprecated(since = "5.3", forRemoval = true)
+    public String getW3cTraceContextId() {
+        return isW3cTraceContext(requestIdType) ? requestId : null;
+    }
+
+    /**
+     * @param w3cTraceContextId contents of a {@code traceparent} header
+     * @deprecated use {@link #setRequestId(String, ParticipantObjectIdType)}, with
+     *      {@link ParticipantObjectIdTypeCode#W3cTraceContext} or, for the Swiss EPR,
+     *      {@link ParticipantObjectIdTypeCode#SwissW3cTraceContext}. This one keeps setting the Swiss
+     *      code, which is what it always did.
+     */
+    @Deprecated(since = "5.3", forRemoval = true)
+    public void setW3cTraceContextId(String w3cTraceContextId) {
+        setRequestId(w3cTraceContextId, ParticipantObjectIdTypeCode.SwissW3cTraceContext);
+    }
+
+    private static boolean isW3cTraceContext(ParticipantObjectIdType requestIdType) {
+        // matched on the code alone: the same traceparent is recorded under more than one code system
+        // name, and a caller may have built an equivalent type of its own instead of using a constant
+        return ParticipantObjectIdTypeCode.W3cTraceContext.getCode().equals(requestIdType.getCode());
+    }
 
     /**
      * @param serverSide   specifies whether this audit dataset will be used on the

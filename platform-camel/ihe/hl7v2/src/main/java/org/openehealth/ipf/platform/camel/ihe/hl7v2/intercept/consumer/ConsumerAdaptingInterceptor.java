@@ -71,7 +71,7 @@ public class ConsumerAdaptingInterceptor extends InterceptorSupport {
     
     /**
      * Converts response to a {@link Message}, throws
-     * a {@link org.openehealth.ipf.platform.camel.ihe.hl7v2.Hl7v2AdaptingException} on failure.
+     * a {@link Hl7v2AdaptingException} on failure.
      */
     @Override
     public void process(Exchange exchange) throws Exception {

@@ -46,7 +46,7 @@ abstract public class AbstractSafeInterceptor extends AbstractSoapInterceptor {
     abstract protected void process(SoapMessage message);
     
     /**
-     * Calls {@link #process(org.apache.cxf.binding.soap.SoapMessage)}
+     * Calls {@link #process(SoapMessage)}
      * and "forwards" all exceptions to the error log.
      * 
      * @param message CXF message to process.

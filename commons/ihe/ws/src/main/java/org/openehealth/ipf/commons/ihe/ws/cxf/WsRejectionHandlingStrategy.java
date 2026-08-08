@@ -39,7 +39,7 @@ public interface WsRejectionHandlingStrategy {
      * This method should return <code>true</code> when the given CXF
      * exchange can be considered rejected (failed).
      * <p>
-     * @see org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils#extractOutgoingException(org.apache.cxf.message.Exchange)
+     * @see org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils#extractOutgoingException(Exchange)
      *
      * @param cxfExchange
      *      CXF exchange under consideration.

@@ -51,7 +51,48 @@ public enum ParticipantObjectIdTypeCode implements ParticipantObjectIdType, Enum
     NodeID("110182", "Node ID", CODE_SYSTEM_NAME_DCM),
 
     // IHE
-    XdsMetadata("urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd", "submission set classificationNode", "IHE XDS Metadata");
+    XdsMetadata("urn:uuid:a54d6aa5-d40d-43f9-88c5-b4633d873bdd", "submission set classificationNode", "IHE XDS Metadata"),
+
+    /**
+     * Id correlating the audit records that the two ends of a transaction write about it, as
+     * <a href="https://profiles.ihe.net/ITI/BALP/index.html">IHE BALP</a> defines it: the contents of an
+     * {@code X-Request-Id} header. The fallback for a correlation id from any header without a code of
+     * its own.
+     */
+    XRequestId("XrequestId", "X-Request-Id", "IHE BALP"),
+
+    // w3c, https://www.w3.org/TR/trace-context/
+
+    /**
+     * A correlation id propagated as <a href="https://www.w3.org/TR/trace-context/">W3C Trace
+     * Context</a>, i.e. the contents of a {@code traceparent} header.
+     */
+    W3cTraceContext("traceparent", "traceparent", "w3c"),
+
+    // e-health-suisse
+
+    /**
+     * The same {@code traceparent} as {@link #W3cTraceContext}, under the code system name the Swiss EPR
+     * claimed for it. Trace context itself is a W3C standard and nothing Swiss, so this is only for
+     * deployments bound to that convention -- everything else records a {@code traceparent} as
+     * {@link #W3cTraceContext}.
+     */
+    SwissW3cTraceContext("traceparent", "traceparent", "e-health-suisse"),
+
+    // openzipkin B3, https://github.com/openzipkin/b3-propagation
+
+    /**
+     * A correlation id propagated in the B3 single header, which packs the trace id, the span id and the
+     * sampling state into one value. Only the trace id is recorded, since the span id differs between
+     * the two ends of a transaction.
+     */
+    B3SingleHeader("b3", "b3", "openzipkin"),
+
+    /**
+     * A correlation id propagated in the B3 multi-header flavour, whose {@code X-B3-TraceId} carries the
+     * trace id on its own. The recorded value is the same as for {@link #B3SingleHeader}.
+     */
+    B3MultiHeader("X-B3-TraceId", "X-B3-TraceId", "openzipkin");
 
     @Getter
     private final ParticipantObjectIdType value;

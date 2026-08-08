@@ -29,7 +29,8 @@ public class PatientDeleteAuditEvent extends DeleteAuditEvent {
      * @return this instance
      */
     public PatientDeleteAuditEvent setPatient(Reference patientReference) {
-        return BalpAuditEventHelper.addPatient(this, patientReference);
+        addPatientEntity(patientReference);
+        return this;
     }
 
 }

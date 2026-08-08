@@ -35,6 +35,12 @@ import java.util.Optional;
 public interface IheFhirProfile {
 
     /**
+     * Common prefix of the canonical URLs of the IHE ITI profiles. A constant expression, so that the
+     * constants built from it remain usable in annotations and in enum constant arguments.
+     */
+    String IHE_ITI_PREFIX = "https://profiles.ihe.net/ITI/";
+
+    /**
      * Gets the canonical URL of the profile
      *
      * @return the profile URL

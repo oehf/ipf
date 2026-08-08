@@ -29,7 +29,7 @@ import org.hl7.fhir.instance.model.api.IBaseConformance;
 import org.openehealth.ipf.boot.atna.AuditContextCustomizer;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.boot.atna.IpfAtnaConfigurationProperties;
-import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
+import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
@@ -78,9 +78,9 @@ public class IpfFhirAutoConfiguration {
     @Bean
     public AuditContextCustomizer fhirAuditSerializationCustomizer(IpfAtnaConfigurationProperties auditConfig) {
         return auditContext -> {
-            if (auditContext instanceof DefaultBalpAuditContext balpAuditContext && auditConfig.getBalp() != null) {
+            if (auditContext instanceof DefaultAuditContext defaultAuditContext && auditConfig.getBalp() != null) {
                 if (isNotBlank(auditConfig.getBalp().getAuditEventSerializationType())) {
-                    balpAuditContext.setSerializationStrategy(
+                    defaultAuditContext.setSerializationStrategy(
                         auditConfig.getBalp().getAuditEventSerializationType().equalsIgnoreCase("json") ?
                             new BalpJsonSerializationStrategy() : new BalpXmlSerializationStrategy());
                 }

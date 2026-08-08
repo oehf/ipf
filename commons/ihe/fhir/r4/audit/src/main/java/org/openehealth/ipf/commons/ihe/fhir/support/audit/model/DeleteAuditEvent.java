@@ -16,14 +16,12 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import org.hl7.fhir.r4.model.AuditEvent;
-import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.codesystems.AuditEntityType;
 import org.hl7.fhir.r4.model.codesystems.ObjectRole;
 import org.hl7.fhir.r4.model.codesystems.RestfulInteraction;
 import org.hl7.fhir.r4.model.codesystems.V3ParticipationType;
+import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 
 import java.util.Date;
 
@@ -32,8 +30,14 @@ import static org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCod
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.PROVENANCE_PARTICIPANT_SYSTEM_NAME;
 import static org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpConstants.BALP_DELETE_AUDIT_PROFILE;
 
+/**
+ * A basic AuditEvent profile for when a RESTful Delete action happens successfully.
+ * The request does not have a Patient subject indicated.
+ *
+ * @author Christian Ohr
+ */
 @ResourceDef(name = "AuditEvent", id = "DeleteAuditEvent", profile = BALP_DELETE_AUDIT_PROFILE)
-public class DeleteAuditEvent extends AuditEvent {
+public class DeleteAuditEvent extends BalpAuditEvent {
 
     public DeleteAuditEvent() {
         super();
@@ -50,6 +54,26 @@ public class DeleteAuditEvent extends AuditEvent {
     }
 
     /**
+     * @return DICOM 110150, which the delete pattern fixes for the client agent
+     */
+    @Override
+    protected Coding clientAgentType() {
+        return dicomAgentType(Application);
+    }
+
+    /**
+     * @return the custodian participation type. Unlike the other patterns, the delete pattern does not
+     *      name the server with a DICOM role but with the provenance participant type it plays for the
+     *      data being deleted.
+     */
+    @Override
+    protected Coding serverAgentType() {
+        return new Coding()
+            .setCode("custodian")
+            .setSystem(PROVENANCE_PARTICIPANT_SYSTEM_NAME);
+    }
+
+    /**
      * Sets the client agent (mandatory)
      *
      * @param clientReference client reference (can be display only)
@@ -60,9 +84,19 @@ public class DeleteAuditEvent extends AuditEvent {
     public DeleteAuditEvent setClient(Reference clientReference,
                                       String networkAddress,
                                       AuditEventAgentNetworkType networkType) {
-        return BalpAuditEventHelper.addAgent(this,
-            Application, clientReference,
-            networkAddress, networkType);
+        addAgent(clientAgentType(), clientReference, networkAddress, networkType);
+        return this;
+    }
+
+    /**
+     * Sets the client agent (mandatory) from the active participant an ATNA audit record holds it in.
+     *
+     * @param client active participant standing for the client of the transaction
+     * @return this instance
+     */
+    public DeleteAuditEvent setClient(ActiveParticipantType client) {
+        addAgent(clientAgentType(), client);
+        return this;
     }
 
     /**
@@ -76,32 +110,52 @@ public class DeleteAuditEvent extends AuditEvent {
     public DeleteAuditEvent setServer(Reference serverReference,
                                       String networkAddress,
                                       AuditEventAgentNetworkType networkType) {
-        addAgent()
-            .setType(new CodeableConcept()
-                .addCoding(new Coding()
-                    .setCode("custodian")
-                    .setSystem(PROVENANCE_PARTICIPANT_SYSTEM_NAME)
-                ))
-            .setWho(serverReference)
-            .setRequestor(false)
-            .setNetwork(new AuditEventAgentNetworkComponent()
-                .setType(networkType)
-                .setAddress(networkAddress));
+        addAgent(serverAgentType(), serverReference, networkAddress, networkType);
         return this;
+    }
+
+    /**
+     * Sets the server agent (mandatory) from the active participant an ATNA audit record holds it in.
+     *
+     * @param server active participant standing for the server of the transaction
+     * @return this instance
+     */
+    public DeleteAuditEvent setServer(ActiveParticipantType server) {
+        addAgent(serverAgentType(), server);
+        return this;
+    }
+
+    /**
+     * Sets the user agent (optional), as the information recipient
+     *
+     * @param userReference user reference (can be display only)
+     * @return this instance
+     */
+    public DeleteAuditEvent setUser(Reference userReference) {
+        return setUser(V3ParticipationType.IRCP, userReference);
     }
 
     /**
      * Sets the user agent (optional)
      *
+     * @param typeCode      participation type of the user
      * @param userReference user reference (can be display only)
      * @return this instance
      */
     public DeleteAuditEvent setUser(V3ParticipationType typeCode, Reference userReference) {
-        return BalpAuditEventHelper.addUserAgent(this, typeCode, userReference);
+        addUserAgent(typeCode, userReference);
+        return this;
     }
 
+    /**
+     * Sets the entity carrying the X-Request-Id of the transaction (optional)
+     *
+     * @param xRequestId value of the X-Request-Id header
+     * @return this instance
+     */
     public DeleteAuditEvent setTransaction(String xRequestId) {
-        return BalpAuditEventHelper.addTransactionEntity(this, xRequestId);
+        addTransactionEntity(xRequestId);
+        return this;
     }
 
     /**
@@ -112,21 +166,7 @@ public class DeleteAuditEvent extends AuditEvent {
      * @return this instance
      */
     public DeleteAuditEvent setData(Reference entity, ObjectRole entityRole) {
-        if (entityRole != ObjectRole._3 &&
-            entityRole != ObjectRole._4 &&
-            entityRole != ObjectRole._20) {
-            throw new IllegalArgumentException("Must be object role report, domain resource or job");
-        }
-        addEntity()
-            .setWhat(entity)
-            .setType(new Coding()
-                .setCode(AuditEntityType._2.toCode())
-                .setSystem(AuditEntityType._2.getSystem())
-                .setDisplay(AuditEntityType._2.getDisplay()))
-            .setRole(new Coding()
-                .setCode(entityRole.toCode())
-                .setSystem(entityRole.getSystem())
-                .setDisplay(entityRole.getDisplay()));
+        addDataEntity(entity, entityRole);
         return this;
     }
 }

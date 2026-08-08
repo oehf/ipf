@@ -15,22 +15,54 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.audit.events;
 
+import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 /**
- * Common interface for AuditEvents that initialize themselves given
- * a populated AuditMessage.
+ * Common interface for AuditEvents that initialize themselves given a populated AuditMessage, i.e. that
+ * convert the ATNA audit record of a transaction into their own profiled shape instead of leaving it to
+ * the generic translation.
+ * <p>
+ * How much of that is generic is a matter of the FHIR version and of the profile, so it is not decided
+ * here: the FHIR-version-agnostic part of IPF cannot reference AuditEvent at all. Implementors of the
+ * R4 query patterns share their implementation through
+ * {@code org.openehealth.ipf.commons.ihe.fhir.support.audit.model.SelfInitializingQueryAuditEvent}.
+ * <p>
+ * An implementation is instantiated per audit message by the FHIR serialization strategy, through a
+ * public no-arg constructor, and is not reused. What the constructor may set is what the profile fixes
+ * for every record of the transaction; everything derived from the concrete transaction belongs in
+ * {@link #initialize(AuditMessage)}.
+ *
+ * @author Christian Ohr
+ * @since 5.3
  */
 public interface SelfInitializing {
 
-    default void initialize(AuditMessage auditMessage) {
-        setLocalAgent(auditMessage);
-        setRemoteAgent(auditMessage);
-        setUserAgent(auditMessage);
-    }
+    /**
+     * Populates this AuditEvent from the given audit message. Called instead of the generic
+     * AuditMessage-to-AuditEvent translation, so everything the resulting resource is to carry has to be
+     * set here -- what the constructor fixes is only what the profile fixes.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     */
+    void initialize(AuditMessage auditMessage);
 
-    void setLocalAgent(AuditMessage auditMessage);
-    void setRemoteAgent(AuditMessage auditMessage);
-    void setUserAgent(AuditMessage auditMessage);
+    /**
+     * Whether this AuditEvent can represent the given audit message conformantly. What it cannot
+     * represent must not be rendered as this profile at all: a record claiming a profile it does not
+     * satisfy is worse than one claiming a weaker profile it does.
+     * <p>
+     * By default only the outcome is examined. Most IHE transaction profiles build on a BALP pattern
+     * that fixes the outcome to success, so a failed transaction is not one of them; profiles that
+     * constrain the outcome without fixing it -- MHD's Provide Document Bundle, for instance -- override
+     * this. Implementations whose profile requires something the audit message may not carry, such as a
+     * patient, refuse those messages here too.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @return whether this AuditEvent may be used for it
+     */
+    default boolean supports(AuditMessage auditMessage) {
+        return EventOutcomeIndicator.Success == auditMessage.getEventIdentification().getEventOutcomeIndicator();
+    }
 
 }

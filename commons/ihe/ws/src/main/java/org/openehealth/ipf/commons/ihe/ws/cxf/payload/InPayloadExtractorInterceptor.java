@@ -117,7 +117,7 @@ public class InPayloadExtractorInterceptor extends AbstractPhaseInterceptor<Mess
      * Interceptor which deletes saved "whole-HTTP" payload and the byte
      * array-based input stream, which are not necessary any more after
      * the SOAP Body has been successfully processed by the
-     * {@link org.apache.cxf.wsdl.interceptors.DocLiteralInInterceptor}.
+     * {@link DocLiteralInInterceptor}.
      */
     private static class DropHttpPayloadInterceptor extends AbstractPhaseInterceptor<Message> {
 

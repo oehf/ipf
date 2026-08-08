@@ -20,6 +20,7 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.extern.slf4j.Slf4j;
+import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.SearchResultEntry;
 import org.openehealth.ipf.commons.xml.XmlUtils;
 import org.springframework.cache.Cache;
@@ -47,7 +48,7 @@ public class SpringCachePaginationStorage implements PaginationStorage {
     static {
         try {
             JAXB_CONTEXT = JAXBContext.newInstance(
-                    org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.ObjectFactory.class,
+                    ObjectFactory.class,
                     Container.class);
         } catch (JAXBException e) {
             throw new ExceptionInInitializerError(e);

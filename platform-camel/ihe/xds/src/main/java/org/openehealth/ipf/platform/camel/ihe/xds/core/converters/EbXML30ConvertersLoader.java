@@ -5,6 +5,25 @@ import org.apache.camel.TypeConverterLoaderException;
 import org.apache.camel.spi.TypeConverterLoader;
 import org.apache.camel.spi.TypeConverterRegistry;
 import org.apache.camel.support.SimpleTypeConverter;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.Response;
+import org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
+import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.xdsi.RetrieveImagingDocumentSetRequestType;
 
 /**
@@ -21,46 +40,46 @@ public final class EbXML30ConvertersLoader implements TypeConverterLoader {
     }
 
     private void registerConverters(TypeConverterRegistry registry) {
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.class, org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType.class, org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.class, org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.class, org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet) value));
-        addTypeConverter(registry, RetrieveImagingDocumentSetRequestType.class, org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.requests.ProvideAndRegisterDocumentSet.class, org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.ProvideAndRegisterDocumentSetRequestType) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry.class, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet.class, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveDocuments.class, org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RemoveDocumentsRequestType) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata.class, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet.class, org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetRequestType) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveImagingDocumentSet.class, RetrieveImagingDocumentSetRequestType.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((RetrieveImagingDocumentSetRequestType) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse.class, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convertToQueryResponse((org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.responses.Response.class, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.responses.RetrievedDocumentSet.class, org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.RetrieveDocumentSetResponseType) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest.class, org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.requests.RemoveMetadata) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest.class, org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest.class, org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse.class, org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse) value));
-        addTypeConverter(registry, org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType.class, org.openehealth.ipf.commons.ihe.xds.core.responses.Response.class, false,
-            (type, exchange, value) -> org.openehealth.ipf.platform.camel.ihe.xds.core.converters.EbXML30Converters.convert((org.openehealth.ipf.commons.ihe.xds.core.responses.Response) value));
+        addTypeConverter(registry, ProvideAndRegisterDocumentSetRequestType.class, ProvideAndRegisterDocumentSet.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((ProvideAndRegisterDocumentSet) value));
+        addTypeConverter(registry, RemoveDocumentsRequestType.class, RemoveDocuments.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RemoveDocuments) value));
+        addTypeConverter(registry, RetrieveDocumentSetRequestType.class, RetrieveDocumentSet.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RetrieveDocumentSet) value));
+        addTypeConverter(registry, RetrieveDocumentSetResponseType.class, RetrievedDocumentSet.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RetrievedDocumentSet) value));
+        addTypeConverter(registry, RetrieveImagingDocumentSetRequestType.class, RetrieveImagingDocumentSet.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RetrieveImagingDocumentSet) value));
+        addTypeConverter(registry, ProvideAndRegisterDocumentSet.class, ProvideAndRegisterDocumentSetRequestType.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((ProvideAndRegisterDocumentSetRequestType) value));
+        addTypeConverter(registry, QueryRegistry.class, AdhocQueryRequest.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((AdhocQueryRequest) value));
+        addTypeConverter(registry, RegisterDocumentSet.class, SubmitObjectsRequest.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((SubmitObjectsRequest) value));
+        addTypeConverter(registry, RemoveDocuments.class, RemoveDocumentsRequestType.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RemoveDocumentsRequestType) value));
+        addTypeConverter(registry, RemoveMetadata.class, RemoveObjectsRequest.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RemoveObjectsRequest) value));
+        addTypeConverter(registry, RetrieveDocumentSet.class, RetrieveDocumentSetRequestType.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RetrieveDocumentSetRequestType) value));
+        addTypeConverter(registry, RetrieveImagingDocumentSet.class, RetrieveImagingDocumentSetRequestType.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RetrieveImagingDocumentSetRequestType) value));
+        addTypeConverter(registry, QueryResponse.class, AdhocQueryResponse.class, false,
+            (type, exchange, value) -> EbXML30Converters.convertToQueryResponse((AdhocQueryResponse) value));
+        addTypeConverter(registry, Response.class, RegistryResponseType.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RegistryResponseType) value));
+        addTypeConverter(registry, RetrievedDocumentSet.class, RetrieveDocumentSetResponseType.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RetrieveDocumentSetResponseType) value));
+        addTypeConverter(registry, RemoveObjectsRequest.class, RemoveMetadata.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RemoveMetadata) value));
+        addTypeConverter(registry, SubmitObjectsRequest.class, RegisterDocumentSet.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((RegisterDocumentSet) value));
+        addTypeConverter(registry, AdhocQueryRequest.class, QueryRegistry.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((QueryRegistry) value));
+        addTypeConverter(registry, AdhocQueryResponse.class, QueryResponse.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((QueryResponse) value));
+        addTypeConverter(registry, RegistryResponseType.class, Response.class, false,
+            (type, exchange, value) -> EbXML30Converters.convert((Response) value));
     }
 
     private static void addTypeConverter(TypeConverterRegistry registry, Class<?> toType, Class<?> fromType, boolean allowNull, SimpleTypeConverter.ConversionMethod method) { 

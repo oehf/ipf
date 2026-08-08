@@ -68,7 +68,7 @@ public class ExtensionModuleFactory extends PropertiesModuleFactory {
 
     /**
      * Delegate that actually creates the ExtensionModule. Defaults to calling
-     * {@link MetaInfExtensionModule#newModule(java.util.Properties, ClassLoader)}.
+     * {@link MetaInfExtensionModule#newModule(Properties, ClassLoader)}.
      *
      * @param properties extension module properties
      * @param classLoader classloader

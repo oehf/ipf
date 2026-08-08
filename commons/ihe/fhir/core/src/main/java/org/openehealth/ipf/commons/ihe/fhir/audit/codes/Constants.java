@@ -34,8 +34,8 @@ public class Constants {
     public static final String OUSER_AGENT_TYPE_CODE = "IRCP";
     public static final String OUSER_AGENT_PURPOSE_OF_USE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/v3-ActReason";
     public static final String OUSER_AGENT_ROLE_SYSTEM_NAME = "http://terminology.hl7.org/CodeSystem/v3-RoleClass";
-    public static final String OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME = "https://profiles.ihe.net/ITI/BALP/CodeSystem/UserAgentTypes";
-    public static final String OUSER_AGENT_TYPE_OPAQUE_CODE = "UserOauthAgent";
+    public static final String USER_AGENT_TYPES_SYSTEM_NAME = "https://profiles.ihe.net/ITI/BALP/CodeSystem/UserAgentTypes";
+    public static final String USER_OAUTH_AGENT_CODE = "UserOauthAgent";
 
     public static final String AUDIT_ENTITY_TYPE_SYSTEM_NAME = "https://profiles.ihe.net/ITI/BALP/CodeSystem/BasicAuditEntityType";
 }

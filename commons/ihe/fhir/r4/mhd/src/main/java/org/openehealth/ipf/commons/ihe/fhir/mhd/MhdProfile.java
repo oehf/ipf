@@ -148,54 +148,63 @@ public enum MhdProfile implements Mhd423, IheFhirProfile {
 
     // Bundle Profiles V4
 
-    public static final String ITI65_MINIMAL_BUNDLE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.ProvideBundle";
-    public static final String ITI65_COMPREHENSIVE_BUNDLE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Comprehensive.ProvideBundle";
-    public static final String ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.UnContained.Comprehensive.ProvideBundle";
-    public static final String ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.ProvideDocumentBundleResponse";
-    public static final String ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentListsResponseMessage";
-    public static final String ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentReferencesResponseMessage";
-    public static final String ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentReferencesComprehensiveResponseMessage";
+    /** Canonical URL prefix of the MHD profiles. */
+    private static final String PROFILE_PREFIX = IheFhirProfile.IHE_ITI_PREFIX + "MHD/StructureDefinition/";
+
+    public static final String ITI65_MINIMAL_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.MHD.Minimal.ProvideBundle";
+    public static final String ITI65_COMPREHENSIVE_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.MHD.Comprehensive.ProvideBundle";
+    public static final String ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.MHD.UnContained.Comprehensive.ProvideBundle";
+    public static final String ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE = PROFILE_PREFIX + "IHE.MHD.ProvideDocumentBundleResponse";
+    public static final String ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.MHD.FindDocumentListsResponseMessage";
+    public static final String ITI67_FIND_DOCUMENT_REFERENCES_RESPONSE_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.MHD.FindDocumentReferencesResponseMessage";
+    public static final String ITI67_FIND_DOCUMENT_REFERENCES_COMPREHENSIVE_RESPONSE_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.MHD.FindDocumentReferencesComprehensiveResponseMessage";
 
     // DocumentManifest/List profiles
 
-    public static final String MHD_LIST_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.List";
-    public static final String COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Comprehensive.SubmissionSet";
-    public static final String UNCONTAINED_COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.UnContained.Comprehensive.SubmissionSet";
-    public static final String MINIMAL_SUBMISSIONSET_TYPE_LIST_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.SubmissionSet";
+    public static final String MHD_LIST_PROFILE = PROFILE_PREFIX + "IHE.MHD.List";
+    public static final String COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST_PROFILE = PROFILE_PREFIX + "IHE.MHD.Comprehensive.SubmissionSet";
+    public static final String UNCONTAINED_COMPREHENSIVE_SUBMISSIONSET_TYPE_LIST_PROFILE = PROFILE_PREFIX + "IHE.MHD.UnContained.Comprehensive.SubmissionSet";
+    public static final String MINIMAL_SUBMISSIONSET_TYPE_LIST_PROFILE = PROFILE_PREFIX + "IHE.MHD.Minimal.SubmissionSet";
 
     // List Profile
 
-    public static final String MINIMAL_FOLDER_TYPE_LIST_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.Folder";
-    public static final String COMPREHENSIVE_FOLDER_TYPE_LIST_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Comprehensive.Folder";
+    public static final String MINIMAL_FOLDER_TYPE_LIST_PROFILE = PROFILE_PREFIX + "IHE.MHD.Minimal.Folder";
+    public static final String COMPREHENSIVE_FOLDER_TYPE_LIST_PROFILE = PROFILE_PREFIX + "IHE.MHD.Comprehensive.Folder";
 
     // DocumentReference profiles
 
-    public static final String COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Comprehensive.DocumentReference";
-    public static final String UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.UnContained.Comprehensive.DocumentReference";
-    public static final String MINIMAL_DOCUMENT_REFERENCE_PROFILE =  "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Minimal.DocumentReference";
-    public static final String SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.SimplifiedPublish.DocumentReference";
+    public static final String COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE = PROFILE_PREFIX + "IHE.MHD.Comprehensive.DocumentReference";
+    public static final String UNCONTAINED_COMPREHENSIVE_DOCUMENT_REFERENCE_PROFILE = PROFILE_PREFIX + "IHE.MHD.UnContained.Comprehensive.DocumentReference";
+    public static final String MINIMAL_DOCUMENT_REFERENCE_PROFILE =  PROFILE_PREFIX + "IHE.MHD.Minimal.DocumentReference";
+    public static final String SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE_PROFILE = PROFILE_PREFIX + "IHE.MHD.SimplifiedPublish.DocumentReference";
 
     // AuditEvent profiles
-    public static final String FIND_DOCUMENT_REFERENCES_RESPONDER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentReferences.Audit.Responder";
-    public static final String FIND_DOCUMENT_REFERENCES_CONSUMER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentReferences.Audit.Consumer";
-    public static final String FIND_DOCUMENT_LISTS_RESPONDER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentLists.Audit.Responder";
-    public static final String FIND_DOCUMENT_LISTS_CONSUMER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.FindDocumentLists.Audit.Consumer";
+    public static final String FIND_DOCUMENT_REFERENCES_RESPONDER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.FindDocumentReferences.Audit.Responder";
+    public static final String FIND_DOCUMENT_REFERENCES_CONSUMER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.FindDocumentReferences.Audit.Consumer";
+    public static final String FIND_DOCUMENT_LISTS_RESPONDER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.FindDocumentLists.Audit.Responder";
+    public static final String FIND_DOCUMENT_LISTS_CONSUMER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.FindDocumentLists.Audit.Consumer";
+    public static final String SIMPLIFIED_PUBLISH_SOURCE_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.SimplifiedPublish.Audit.Source";
+    public static final String SIMPLIFIED_PUBLISH_RECIPIENT_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.SimplifiedPublish.Audit.Recipient";
+    public static final String RETRIEVE_DOCUMENT_CONSUMER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.RetrieveDocument.Audit.Consumer";
+    public static final String RETRIEVE_DOCUMENT_RESPONDER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.RetrieveDocument.Audit.Responder";
+    public static final String PROVIDE_BUNDLE_SOURCE_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.ProvideBundle.Audit.Source";
+    public static final String PROVIDE_BUNDLE_RECIPIENT_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.MHD.ProvideBundle.Audit.Recipient";
 
     // Parameters
 
-    public static final String DOCUMENT_REFERENCE_PATCH_PARAMETERS_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.Patch.Parameters";
-    public static final String GENERATE_METADATA_PARAMETERS_IN_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.GenerateMetadata.Parameters.In";
-    public static final String GENERATE_METADATA_PARAMETERS_OUT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.GenerateMetadata.Parameters.Out";
+    public static final String DOCUMENT_REFERENCE_PATCH_PARAMETERS_PROFILE = PROFILE_PREFIX + "IHE.MHD.Patch.Parameters";
+    public static final String GENERATE_METADATA_PARAMETERS_IN_PROFILE = PROFILE_PREFIX + "IHE.MHD.GenerateMetadata.Parameters.In";
+    public static final String GENERATE_METADATA_PARAMETERS_OUT_PROFILE = PROFILE_PREFIX + "IHE.MHD.GenerateMetadata.Parameters.Out";
 
     // Datatypes
 
-    public static final String DESIGNATION_TYPE_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-designationType";
-    public static final String AUTHOR_ORG_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-authorOrg";
-    public static final String INTENDED_RECIPIENT_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-intendedRecipient";
-    public static final String SOURCE_ID_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/ihe-sourceId";
-    public static final String SUBMISSIONSET_UNIQUE_IDENTIFIER_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.SubmissionSetUniqueIdIdentifier";
-    public static final String UNIQUE_ID_IDENTIFIER_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.UniqueIdIdentifier";
-    public static final String ENTRY_UUID_IDENTIFIER_PROFILE = "https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.EntryUUID.Identifier";
+    public static final String DESIGNATION_TYPE_PROFILE = PROFILE_PREFIX + "ihe-designationType";
+    public static final String AUTHOR_ORG_PROFILE = PROFILE_PREFIX + "ihe-authorOrg";
+    public static final String INTENDED_RECIPIENT_PROFILE = PROFILE_PREFIX + "ihe-intendedRecipient";
+    public static final String SOURCE_ID_PROFILE = PROFILE_PREFIX + "ihe-sourceId";
+    public static final String SUBMISSIONSET_UNIQUE_IDENTIFIER_PROFILE = PROFILE_PREFIX + "IHE.MHD.SubmissionSetUniqueIdIdentifier";
+    public static final String UNIQUE_ID_IDENTIFIER_PROFILE = PROFILE_PREFIX + "IHE.MHD.UniqueIdIdentifier";
+    public static final String ENTRY_UUID_IDENTIFIER_PROFILE = PROFILE_PREFIX + "IHE.MHD.EntryUUID.Identifier";
 
 
     @Getter

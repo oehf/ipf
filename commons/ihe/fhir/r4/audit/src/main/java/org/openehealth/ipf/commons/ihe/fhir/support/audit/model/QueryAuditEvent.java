@@ -16,15 +16,15 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.codesystems.AuditEntityType;
-import org.hl7.fhir.r4.model.codesystems.ObjectRole;
 import org.hl7.fhir.r4.model.codesystems.RestfulInteraction;
 import org.hl7.fhir.r4.model.codesystems.V3ParticipationType;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
+import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
-import java.util.Base64;
 import java.util.Date;
 
 import static org.hl7.fhir.r4.model.codesystems.AuditEventType.REST;
@@ -35,9 +35,11 @@ import static org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpConst
 /**
  * A basic AuditEvent profile for when a RESTful Query / Search action happens successfully.
  * The request does not have a Patient subject indicated.
+ *
+ * @author Christian Ohr
  */
 @ResourceDef(name = "AuditEvent", id = "QueryAuditEvent", profile = BALP_QUERY_AUDIT_PROFILE)
-public class QueryAuditEvent extends AuditEvent {
+public class QueryAuditEvent extends BalpAuditEvent {
 
     public QueryAuditEvent() {
         super();
@@ -48,6 +50,22 @@ public class QueryAuditEvent extends AuditEvent {
             .setCode(REST.toCode())
             .setSystem(REST.getSystem())
             .setDisplay(REST.getDisplay()));
+    }
+
+    /**
+     * @return DICOM 110153, which the query pattern fixes for the client agent
+     */
+    @Override
+    protected Coding clientAgentType() {
+        return dicomAgentType(Source);
+    }
+
+    /**
+     * @return DICOM 110152, which the query pattern fixes for the server agent
+     */
+    @Override
+    protected Coding serverAgentType() {
+        return dicomAgentType(Destination);
     }
 
     /**
@@ -79,9 +97,19 @@ public class QueryAuditEvent extends AuditEvent {
     public QueryAuditEvent setClient(Reference clientReference,
                                      String networkAddress,
                                      AuditEventAgentNetworkType networkType) {
-        return BalpAuditEventHelper.addAgent(this,
-            Source, clientReference,
-            networkAddress, networkType);
+        addAgent(clientAgentType(), clientReference, networkAddress, networkType);
+        return this;
+    }
+
+    /**
+     * Sets the client agent (mandatory) from the active participant an ATNA audit record holds it in.
+     *
+     * @param client active participant standing for the client of the transaction
+     * @return this instance
+     */
+    public QueryAuditEvent setClient(ActiveParticipantType client) {
+        addAgent(clientAgentType(), client);
+        return this;
     }
 
     /**
@@ -95,44 +123,93 @@ public class QueryAuditEvent extends AuditEvent {
     public QueryAuditEvent setServer(Reference serverReference,
                                      String networkAddress,
                                      AuditEventAgentNetworkType networkType) {
-        return BalpAuditEventHelper.addAgent(this,
-            Destination, serverReference,
-            networkAddress, networkType);
+        addAgent(serverAgentType(), serverReference, networkAddress, networkType);
+        return this;
     }
 
     /**
-     * Sets the user agent (optional)
+     * Sets the server agent (mandatory) from the active participant an ATNA audit record holds it in.
+     *
+     * @param server active participant standing for the server of the transaction
+     * @return this instance
+     */
+    public QueryAuditEvent setServer(ActiveParticipantType server) {
+        addAgent(serverAgentType(), server);
+        return this;
+    }
+
+    /**
+     * Sets the user agent (optional), as the information recipient
      *
      * @param userReference user reference (can be display only)
      * @return this instance
      */
     public QueryAuditEvent setUser(Reference userReference) {
-        return BalpAuditEventHelper.addUserAgent(this, V3ParticipationType.IRCP, userReference);
+        return setUser(V3ParticipationType.IRCP, userReference);
     }
 
+    /**
+     * Sets the user agent (optional)
+     *
+     * @param typeCode      participation type of the user
+     * @param userReference user reference (can be display only)
+     * @return this instance
+     */
+    public QueryAuditEvent setUser(V3ParticipationType typeCode, Reference userReference) {
+        addUserAgent(typeCode, userReference);
+        return this;
+    }
+
+    /**
+     * Sets the entity carrying the X-Request-Id of the transaction (optional)
+     *
+     * @param xRequestId value of the X-Request-Id header
+     * @return this instance
+     */
     public QueryAuditEvent setTransaction(String xRequestId) {
-        return BalpAuditEventHelper.addTransactionEntity(this, xRequestId);
+        addTransactionEntity(xRequestId);
+        return this;
     }
 
     /**
      * Sets the query entity (mandatory)
      *
-     * @param query        mandatory original query, will be base64-encoded
-     * @param cleanedQuery optional cleaned query, will not be base64-encoded
+     * @param query        mandatory raw query, as the profile requires it. {@code entity.query} is a
+     *                     base64Binary element, so FHIR encodes it on serialization -- encoding it here
+     *                     as well would leave the recipient with base64 text instead of the query.
+     * @param cleanedQuery optional cleaned query, kept as readable text in {@code entity.description}
      * @return this instance
      */
     public QueryAuditEvent setQuery(byte[] query, String cleanedQuery) {
-        addEntity()
-            .setType(new Coding()
-                .setCode(AuditEntityType._2.toCode())
-                .setSystem(AuditEntityType._2.getSystem())
-                .setDisplay(AuditEntityType._2.getDisplay()))
-            .setRole(new Coding()
-                .setCode(ObjectRole._24.toCode())
-                .setSystem(ObjectRole._24.getSystem())
-                .setDisplay(ObjectRole._24.getDisplay()))
-            .setQuery(Base64.getEncoder().encode(query))
-            .setDescription(cleanedQuery);
+        addQueryEntity(query, cleanedQuery);
         return this;
+    }
+
+    /**
+     * Fills in everything the query pattern requires and an ATNA audit record provides, except the
+     * patient: the time the event was recorded, the search subtype, the agents, the audit source, and
+     * the query and transaction entities. Shared with {@link PatientQueryAuditEvent}, which is this plus
+     * the patient.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @param localRole    which end of the transaction wrote the record
+     */
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        // the time the event happened, as opposed to the time this resource was built
+        setRecorded(Date.from(auditMessage.getEventIdentification().getEventDateTime()));
+
+        // the pattern requires a search subtype next to the transaction subtype
+        setSearchType(RestfulInteraction.SEARCH);
+
+        setClientAndServer(auditMessage);
+        addUserAgents(auditMessage);
+        setAuditSource(auditMessage, localRole);
+
+        BalpAuditEventHelper.requestId(auditMessage).ifPresent(this::addTransactionEntity);
+        auditMessage.findParticipantObjectIdentifications(
+                poi -> ParticipantObjectTypeCodeRole.Query == poi.getParticipantObjectTypeCodeRole())
+            .stream()
+            .findFirst()
+            .ifPresent(poi -> setQuery(poi.getParticipantObjectQuery(), null));
     }
 }

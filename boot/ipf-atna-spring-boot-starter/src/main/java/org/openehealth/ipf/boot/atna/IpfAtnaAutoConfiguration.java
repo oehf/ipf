@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.audit.AuditMessagePostProcessor;
 import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.DefaultAuditMetadataProvider;
-import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
 import org.openehealth.ipf.commons.audit.FhirAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.WsAuditDatasetEnricher;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
@@ -61,12 +60,9 @@ public class IpfAtnaAutoConfiguration {
                                      WsAuditDatasetEnricher wsAuditDatasetEnricher,
                                      FhirAuditDatasetEnricher fhirAuditDatasetEnricher,
                                      @Value("${spring.application.name}") String appName) {
-        DefaultAuditContext auditContext;
+        var auditContext = new DefaultAuditContext();
         if (config.getBalp() != null) {
-            auditContext = new DefaultBalpAuditContext();
-            configureBalpAuditContext((DefaultBalpAuditContext) auditContext, config);
-        } else {
-            auditContext = new DefaultAuditContext();
+            configureBalpAuditContext(auditContext, config);
         }
         configureDefaultAuditContext(auditContext, config, auditTransmissionProtocol,
             auditMessageQueue, tlsParameters, auditMetadataProvider, auditExceptionHandler,
@@ -98,6 +94,8 @@ public class IpfAtnaAutoConfiguration {
         auditContext.setAuditSource(config.getAuditSourceType());
         auditContext.setIncludeParticipantsFromResponse(config.isIncludeParticipantsFromResponse());
         auditContext.setAuditValueIfMissing(config.getAuditValueIfMissing());
+        auditContext.setRequestIdHeaderNames(config.getRequestIdHeaderNames());
+        auditContext.setRequestIdType(config.getRequestIdType());
 
         // Strategies and complex parameters; overrideable
         auditContext.setTlsParameters(tlsParameters);
@@ -115,13 +113,13 @@ public class IpfAtnaAutoConfiguration {
         }
     }
 
-    private void configureBalpAuditContext(DefaultBalpAuditContext auditContext, IpfAtnaConfigurationProperties config) {
+    private void configureBalpAuditContext(DefaultAuditContext auditContext, IpfAtnaConfigurationProperties config) {
         auditContext.setAuditRepositoryContextPath(config.getBalp().getAuditRepositoryContextPath());
 
         // FHIR Serialization Strategy is applied via AuditContextCustomizer
         // in IpfFhirAutoConfiguration
         var oAuth = config.getBalp().getOauth();
-        var props = auditContext.getBalpJwtExtractorProperties();
+        var props = auditContext.getJwtExtractorProperties();
 
         if (oAuth != null) {
             if (oAuth.getIdPath() != null) {

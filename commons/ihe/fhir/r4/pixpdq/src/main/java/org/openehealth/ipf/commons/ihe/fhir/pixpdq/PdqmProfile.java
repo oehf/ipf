@@ -60,22 +60,27 @@ public enum PdqmProfile implements Pdqm320, IheFhirProfile {
 
     // Resource Profile URLs
 
-    public static final String PDQM_PATIENT_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Patient";
-    public static final String PDQM_MATCH_INPUT_PATIENT_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.MatchInputPatient";
+    /** Canonical URL prefix of the PDQm profiles. */
+    private static final String PROFILE_PREFIX = IheFhirProfile.IHE_ITI_PREFIX + "PDQm/StructureDefinition/";
+
+    public static final String PDQM_PATIENT_PROFILE = PROFILE_PREFIX + "IHE.PDQm.Patient";
+    public static final String PDQM_MATCH_INPUT_PATIENT_PROFILE = PROFILE_PREFIX + "IHE.PDQm.MatchInputPatient";
 
     // AuditEvent Profile URLs
-    public static final String PDQM_SUPPLIER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Query.Audit.Supplier";
-    public static final String PDQM_CONSUMER_AUDIT_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Query.Audit.Consumer";
+    public static final String PDQM_SUPPLIER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.PDQm.Query.Audit.Supplier";
+    public static final String PDQM_CONSUMER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.PDQm.Query.Audit.Consumer";
+    public static final String PDQM_MATCH_SUPPLIER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.PDQm.Match.Audit.Supplier";
+    public static final String PDQM_MATCH_CONSUMER_AUDIT_PROFILE = PROFILE_PREFIX + "IHE.PDQm.Match.Audit.Consumer";
 
 
     // Bundle Profile URLs
 
-    public static final String ITI78_QUERY_PATIENT_RESOURCE_RESPONSE_MESSAGE_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.QueryPatientResourceResponseMessage";
-    public static final String ITI119_MATCH_OUTPUT_BUNDLE_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.MatchOutputBundle";
+    public static final String ITI78_QUERY_PATIENT_RESOURCE_RESPONSE_MESSAGE_PROFILE = PROFILE_PREFIX + "IHE.PDQm.QueryPatientResourceResponseMessage";
+    public static final String ITI119_MATCH_OUTPUT_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.PDQm.MatchOutputBundle";
 
     // Parameters Profile URLs
 
-    public static final String ITI119_MATCH_INPUT_PARAMETERS_PROFILE = "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.MatchInputParameters";
+    public static final String ITI119_MATCH_INPUT_PARAMETERS_PROFILE = PROFILE_PREFIX + "IHE.PDQm.MatchInputParameters";
 
     // Extension URLs (Datatypes)
 

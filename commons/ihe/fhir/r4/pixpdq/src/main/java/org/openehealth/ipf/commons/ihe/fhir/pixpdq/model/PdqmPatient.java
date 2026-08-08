@@ -27,6 +27,7 @@ import ca.uhn.fhir.util.ElementUtil;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.hl7.fhir.r4.model.Address;
 import org.hl7.fhir.r4.model.BackboneElement;
+import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Configuration;
@@ -52,7 +53,7 @@ import java.util.List;
  * FHIR resource patterns for element access and manipulation.
  * </p>
  *
- * @see org.hl7.fhir.r4.model.Patient
+ * @see Patient
  * @see PdqmProfile
  */
 @ResourceDef(name = "Patient", id = "PDQmPatient", profile = PdqmProfile.PDQM_PATIENT_PROFILE)
@@ -150,7 +151,7 @@ public class PdqmPatient extends Patient implements Pdqm320 {
         }
     }
 
-    private <T extends org.hl7.fhir.r4.model.Base> List<T> copyList(List<T> source) {
+    private <T extends Base> List<T> copyList(List<T> source) {
         if (source == null) {
             return null;
         }
@@ -453,7 +454,7 @@ public class PdqmPatient extends Patient implements Pdqm320 {
     }
 
     // Helper method to check if a list has non-empty items
-    private <T extends org.hl7.fhir.r4.model.Base> boolean hasNonEmptyItems(List<T> list) {
+    private <T extends Base> boolean hasNonEmptyItems(List<T> list) {
         if (list == null) {
             return false;
         }

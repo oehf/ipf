@@ -20,19 +20,36 @@ import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.parser.IParser;
 
 /**
+ * Serializes ATNA audit messages as XML-encoded FHIR R4 {@code AuditEvent} resources. Configure it as
+ * the {@code serializationStrategy} of the audit context to have audit records written in the shape
+ * that <a href="https://profiles.ihe.net/ITI/BALP/index.html">IHE BALP</a> and the AuditEvent profiles
+ * of the IHE transactions define.
+ *
  * @author Christian Ohr
  * @since 4.1
+ * @see BalpJsonSerializationStrategy
  */
 public class BalpXmlSerializationStrategy extends AbstractFhirAuditSerializationStrategy {
 
+    /**
+     * Uses a newly created R4 {@link FhirContext}. Prefer {@link #BalpXmlSerializationStrategy(FhirContext)}
+     * whenever the application has one already: a FhirContext is expensive to create and meant to be shared.
+     */
     public BalpXmlSerializationStrategy() {
         super();
     }
 
+    /**
+     * @param fhirContext the FhirContext whose XML parser serializes the AuditEvents. Must be an R4 context.
+     */
     public BalpXmlSerializationStrategy(FhirContext fhirContext) {
         super(fhirContext);
     }
 
+    /**
+     * @param fhirContext the FhirContext to obtain the parser from
+     * @return an XML parser
+     */
     @Override
     protected IParser getParser(FhirContext fhirContext) {
         return fhirContext.newXmlParser();

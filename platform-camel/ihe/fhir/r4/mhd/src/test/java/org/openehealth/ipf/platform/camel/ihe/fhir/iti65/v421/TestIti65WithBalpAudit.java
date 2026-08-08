@@ -86,6 +86,7 @@ public class TestIti65WithBalpAudit extends AbstractTestIti65 {
         assertEquals(2, auditEvents.size());
     }
 
+
     private Optional<AuditEvent.AuditEventAgentComponent> findRoleAgentWithCode(AuditEvent auditEvent, String code) {
         return auditEvent.getAgent().stream()
             .filter(p -> p.getType().getCodingFirstRep().getCode().equals(code))

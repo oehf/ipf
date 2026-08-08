@@ -17,16 +17,13 @@
 package org.openehealth.ipf.commons.audit.queue;
 
 import io.micrometer.context.ThreadLocalAccessor;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.protocol.RecordingAuditMessageTransmission;
 
 import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

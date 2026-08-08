@@ -106,7 +106,7 @@ public class XsltTransmogrifier<T> extends AbstractCachingXmlProcessor<Templates
      * The XSL stylesheet resource location is mandatory in the first extra parameter.
      * XSL Parameters may be passed as a Map in the second parameter.
      * 
-     * @see Transmogrifier#zap(java.lang.Object, java.lang.Object[])
+     * @see Transmogrifier#zap(Object, Object[])
      */
     @Override
     public T zap(Source source, Object... params) {

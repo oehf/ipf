@@ -5,7 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openehealth.ipf.commons.audit.DefaultBalpAuditContext;
+import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.event.ApplicationActivityBuilder;
 import org.openehealth.ipf.commons.audit.utils.AuditUtils;
@@ -23,13 +23,13 @@ import java.util.stream.IntStream;
 @ExtendWith(FhirAuditRepository.class)
 public abstract class AbstractFhirRestTLSSenderIntegrationTest {
 
-    protected DefaultBalpAuditContext auditContext;
+    protected DefaultAuditContext auditContext;
 
     private static final Logger log = LoggerFactory.getLogger(AbstractFhirRestTLSSenderIntegrationTest.class);
 
     @BeforeEach
     public void setup() {
-        this.auditContext = new DefaultBalpAuditContext();
+        this.auditContext = new DefaultAuditContext();
         auditContext.setAuditRepositoryPort(FhirAuditRepository.getServerHttpsPort());
         auditContext.setAuditRepositoryContextPath(FhirAuditRepository.getServerContextPath());
         auditContext.setAuditRepositoryHost("localhost");

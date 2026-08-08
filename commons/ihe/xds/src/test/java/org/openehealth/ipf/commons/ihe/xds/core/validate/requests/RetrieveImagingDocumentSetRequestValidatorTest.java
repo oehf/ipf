@@ -38,7 +38,7 @@ import static org.openehealth.ipf.commons.ihe.xds.RAD.Interactions.RAD_69;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.*;
 
 /**
- * Validates {@link org.openehealth.ipf.commons.ihe.xds.core.validate.requests.RetrieveImagingDocumentSetRequestValidator}.
+ * Validates {@link RetrieveImagingDocumentSetRequestValidator}.
  * @author Clay Sebourn
  */
 public class RetrieveImagingDocumentSetRequestValidatorTest

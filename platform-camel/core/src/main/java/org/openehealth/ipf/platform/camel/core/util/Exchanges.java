@@ -160,7 +160,7 @@ public class Exchanges {
      * Extracts the exception handled while processing the given
      * exchange (if any), and marks the exchange as non-failed.
      * <p>
-     * This method corresponds to {@link #extractException(org.apache.camel.Exchange, boolean)}
+     * This method corresponds to {@link #extractException(Exchange, boolean)}
      * with the second parameter set to <code>true</code>.
      * </p>
      *

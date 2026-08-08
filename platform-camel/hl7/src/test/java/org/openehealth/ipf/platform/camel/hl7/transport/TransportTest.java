@@ -28,7 +28,6 @@ import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
-import java.net.ServerSocket;
 import java.nio.charset.Charset;
 import java.util.Scanner;
 

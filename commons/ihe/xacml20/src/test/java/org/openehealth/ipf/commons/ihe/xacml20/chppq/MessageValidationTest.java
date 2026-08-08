@@ -19,7 +19,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xacml20.Xacml20Utils;
 
-import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBIntrospector;
 
 import static org.openehealth.ipf.commons.ihe.xacml20.Xacml20MessageValidator.*;

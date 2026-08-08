@@ -40,16 +40,16 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.model.AuditSourceIdentificationType;
 import org.openehealth.ipf.commons.audit.model.EventIdentificationType;
 import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationType;
-import org.openehealth.ipf.commons.audit.types.ActiveParticipantRoleId;
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.SelfInitializing;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpAuditEventHelper;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpQueryAuditEvent;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.PatientQueryAuditEvent;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.sql.Date;
-import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -59,21 +59,54 @@ import static org.openehealth.ipf.commons.audit.types.CodedValueType.CODE_SYSTEM
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.*;
 
 /**
+ * {@link SerializationStrategy} that renders an ATNA {@link AuditMessage} as a FHIR R4
+ * {@link AuditEvent} resource rather than as a DICOM audit record. This is what an audit record
+ * repository speaking FHIR expects, and the prerequisite for the audit records of a transaction to
+ * conform to <a href="https://profiles.ihe.net/ITI/BALP/index.html">IHE BALP</a> and to the AuditEvent
+ * profiles the IHE transactions build on it. Configure an instance of a subclass as the
+ * {@code serializationStrategy} of the audit context; the transactions themselves are unaffected, as
+ * they keep building the same audit messages either way.
+ * <p>
+ * Two kinds of AuditEvent come out of here: a transaction whose IHE profile defines an AuditEvent of
+ * its own has it converted by that AuditEvent (see {@link SelfInitializing}), everything else by the
+ * generic element-by-element translation of {@link #translate(AuditMessage)}. Note that neither is
+ * validated against the profile it claims -- what the translation produces is only as conformant as
+ * the audit message it was given.
+ * <p>
+ * A subclass decides nothing but the encoding, by choosing the {@link IParser}.
+ *
  * @author Christian Ohr
  * @since 3.6
+ * @see BalpXmlSerializationStrategy
+ * @see BalpJsonSerializationStrategy
  */
 abstract class AbstractFhirAuditSerializationStrategy implements SerializationStrategy {
 
     private final FhirContext fhirContext;
 
+    /**
+     * Uses a newly created R4 {@link FhirContext}. Prefer {@link #AbstractFhirAuditSerializationStrategy(FhirContext)}
+     * whenever the application has one already: a FhirContext is expensive to create and meant to be shared.
+     */
     public AbstractFhirAuditSerializationStrategy() {
         this(FhirContext.forR4());
     }
 
+    /**
+     * @param fhirContext the FhirContext whose parser serializes the AuditEvents. Must be an R4 context.
+     */
     public AbstractFhirAuditSerializationStrategy(FhirContext fhirContext) {
         this.fhirContext = fhirContext;
     }
 
+    /**
+     * Translates the audit message into an {@link AuditEvent} and writes it out in this strategy's encoding.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @param writer       where to write the serialized AuditEvent to
+     * @param pretty       whether to pretty-print the output
+     * @throws IOException if writing fails
+     */
     @Override
     public void marshal(AuditMessage auditMessage, Writer writer, boolean pretty) throws IOException {
         getParser(fhirContext)
@@ -81,18 +114,34 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             .encodeResourceToWriter(translate(auditMessage), writer);
     }
 
+    /**
+     * @param fhirContext the FhirContext to obtain the parser from
+     * @return the parser determining the encoding of the serialized AuditEvent
+     */
     protected abstract IParser getParser(FhirContext fhirContext);
 
+    /**
+     * Converts an ATNA audit message into the AuditEvent resource representing it, either through the
+     * AuditEvent the audited transaction's profile defines or, failing that, generically.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @return the AuditEvent representing it
+     */
     public AuditEvent translate(AuditMessage auditMessage) {
         var eit = auditMessage.getEventIdentification();
-        var auditEvent = makeAuditEventInstance(eit, auditMessage.isServerSide());
 
-        // If the AuditEvent is marked as being profiled in BALP, we let it initialize itself.
-        if (auditEvent instanceof SelfInitializing profiledAuditEvent) {
-            profiledAuditEvent.initialize(auditMessage);
-            return auditEvent;
+        // A transaction that is profiled in FHIR gets its own AuditEvent, which fills itself in from the
+        // audit message -- but only if that AuditEvent can represent the message conformantly. What it
+        // cannot represent is stepped down rather than mislabelled: to the BALP pattern the transaction
+        // profile derives from where there is one, and to the generic translation below otherwise.
+        var profiledAuditEvent = makeAuditEventInstance(eit, auditMessage.isServerSide());
+        var selfInitializing = selfInitializingFor(profiledAuditEvent, auditMessage);
+        if (selfInitializing != null) {
+            selfInitializing.initialize(auditMessage);
+            return (AuditEvent) selfInitializing;
         }
 
+        var auditEvent = new AuditEvent();
         // Otherwise we do some generic transformation
         auditEvent
             .setAction(getAuditEventAction(eit.getEventActionCode()))
@@ -126,6 +175,45 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
         return auditEvent;
     }
 
+    /**
+     * Picks the AuditEvent that is to convert the audit message itself: the one the transaction's profile
+     * defines, or, when that one cannot represent this particular message, the BALP pattern it derives
+     * from without the constraint it fails.
+     * <p>
+     * Today the only such step-down is the patient: the query patterns the IHE transactions build on
+     * require a patient entity, and a query that identifies none is audited as the plain BALP query
+     * pattern instead. A message that not even that can represent -- a failed transaction, say -- returns
+     * null and stays on the generic translation.
+     *
+     * @param profiledAuditEvent the AuditEvent the transaction's profile defines
+     * @param auditMessage       the audit message of the transaction being audited
+     * @return the AuditEvent to convert the message, or null to translate it generically
+     */
+    private SelfInitializing selfInitializingFor(AuditEvent profiledAuditEvent, AuditMessage auditMessage) {
+        if (profiledAuditEvent instanceof SelfInitializing selfInitializing) {
+            if (selfInitializing.supports(auditMessage)) {
+                return selfInitializing;
+            }
+            if (profiledAuditEvent instanceof PatientQueryAuditEvent) {
+                var withoutPatient = new BalpQueryAuditEvent();
+                if (withoutPatient.supports(auditMessage)) {
+                    return withoutPatient;
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Instantiates the AuditEvent that the audited transaction's profile defines for the end of the
+     * transaction the audit source is on. Which transaction that is is taken from the first
+     * {@link FhirEventTypeCode} among the event type codes; a transaction without one, or one whose
+     * profile does not define an AuditEvent, falls back to a plain {@link AuditEvent}.
+     *
+     * @param eventIdentification event identification of the audit message
+     * @param serverSide          whether the audit message was recorded by the server of the transaction
+     * @return a new AuditEvent instance, never null
+     */
     private AuditEvent makeAuditEventInstance(EventIdentificationType eventIdentification, boolean serverSide) {
         return eventIdentification.getEventTypeCode().stream()
             .filter(eventType -> eventType instanceof FhirEventTypeCode)
@@ -139,8 +227,14 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
     }
 
     /**
-     * Returns a new instance of {@link AuditEvent}
-     * @return AuditEvent instance matching the FHIR transaction
+     * Returns a new instance of {@link AuditEvent}. The class is named rather than referenced because
+     * the transaction-specific AuditEvents live in the modules of their transactions, which this module
+     * is a dependency of and not the other way round.
+     *
+     * @param auditEventClassName fully qualified name of an {@link AuditEvent} subclass with a public
+     *                            no-arg constructor, or null
+     * @return AuditEvent instance matching the FHIR transaction, or a plain {@link AuditEvent} if no
+     *      class name was given
      * @throws ClassCastException on misconfiguration
      */
     @SneakyThrows
@@ -154,6 +248,14 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             .newInstance();
     }
 
+    /**
+     * Converts a participant object of the audit message into an entity of the AuditEvent. The
+     * participant object ID becomes {@code entity.what}, as a literal reference if it reads like one
+     * and as an identifier otherwise.
+     *
+     * @param poit participant object identification
+     * @return the corresponding entity
+     */
     protected AuditEvent.AuditEventEntityComponent participantObjectIdentificationToEntity(ParticipantObjectIdentificationType poit) {
         var entity = new AuditEvent.AuditEventEntityComponent()
             // poit.getParticipantObjectIDTypeCode())) not used here
@@ -182,6 +284,12 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
         return entity;
     }
 
+    /**
+     * Converts the audit source identification of the audit message into {@code AuditEvent.source}.
+     *
+     * @param asit audit source identification
+     * @return the corresponding source component
+     */
     protected AuditEvent.AuditEventSourceComponent auditSourceIdentificationToEventSource(AuditSourceIdentificationType asit) {
         var source = new AuditEvent.AuditEventSourceComponent()
             .setSite(asit.getAuditEnterpriseSiteID())
@@ -191,8 +299,16 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
         return source;
     }
 
+    /**
+     * Converts an active participant of the audit message into an agent of the AuditEvent. An active
+     * participant whose role ID codes encode the claims of an access token becomes the OAuth agent BALP
+     * defines for it; everything else is mapped element by element.
+     *
+     * @param ap active participant
+     * @return the corresponding agent
+     */
     protected AuditEvent.AuditEventAgentComponent activeParticipantToAgent(ActiveParticipantType ap) {
-        var oAuthEventAgent = oAuthActiveParticipantToAgent(ap);
+        var oAuthEventAgent = BalpAuditEventHelper.oAuthActiveParticipantToAgent(ap);
         return oAuthEventAgent.orElseGet(() -> new AuditEvent.AuditEventAgentComponent()
             .setType(ap.getRoleIDCodes().isEmpty() ? null : codedValueTypeToCodeableConcept(ap.getRoleIDCodes().get(0), DCM_SYSTEM_NAME))
             .setWho(new Reference().setDisplay(ap.getUserID()))
@@ -205,61 +321,10 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
                 .setType(auditEventNetworkType(ap.getNetworkAccessPointTypeCode()))));
     }
 
-    private Optional<AuditEvent.AuditEventAgentComponent> oAuthActiveParticipantToAgent(ActiveParticipantType ap) {
-        var oUser = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_TYPE_SYSTEM_NAME);
-        if (oUser.isPresent()) {
-            var agent = new AuditEvent.AuditEventAgentComponent()
-                .setType(systemAndCodeToCodeableConcept(OUSER_AGENT_TYPE_SYSTEM_NAME, OUSER_AGENT_TYPE_CODE, "information recipient"))
-                .addPolicy(oUser.get())
-                .setName(ap.getUserName())
-                .setWho(
-                    new Reference(ap.getUserID())
-                        .setIdentifier(new Identifier().setSystem(ap.getAlternativeUserID()).setValue(ap.getUserID()))
-                        .setDisplay(ap.getUserName()))
-                .setRequestor(ap.isUserIsRequestor());
-            getOAuthListAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_PURPOSE_OF_USE_SYSTEM_NAME)
-                .forEach(purpose -> agent.getPurposeOfUse().add(
-                    systemAndCodeToCodeableConcept(OUSER_AGENT_PURPOSE_OF_USE_SYSTEM_NAME, purpose, "")));
-            getOAuthListAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), OUSER_AGENT_ROLE_SYSTEM_NAME)
-                .forEach(purpose -> agent.getRole().add(
-                    systemAndCodeToCodeableConcept(OUSER_AGENT_ROLE_SYSTEM_NAME, purpose, "")));
-            return Optional.of(agent);
-        }
-        var oClient = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(), DCM_SYSTEM_NAME);
-        if (oClient.isPresent()) {
-            return Optional.of(new AuditEvent.AuditEventAgentComponent()
-                .setType(systemAndCodeToCodeableConcept(DCM_SYSTEM_NAME, DCM_OCLIENT_CODE, "Application"))
-                .setRequestor(ap.isUserIsRequestor())
-                .setWho(new Reference().setIdentifier(
-                    new Identifier().setValue(oClient.get())).setDisplay(ap.getUserName())));
-        }
-        var opaqueToken = getOAuthAttrFromKnownRoleIdCode(ap.getRoleIDCodes(),
-            OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME);
-        if (opaqueToken.isPresent()) {
-            return Optional.of(new AuditEvent.AuditEventAgentComponent()
-                .setType(new CodeableConcept(
-                    new Coding(OUSER_AGENT_TYPE_OPAQUE_SYSTEM_NAME, OUSER_AGENT_TYPE_OPAQUE_CODE, "")))
-                .setRequestor(true));
-        }
-        return Optional.empty();
-    }
-
-    private Optional<String> getOAuthAttrFromKnownRoleIdCode(List<ActiveParticipantRoleId> roleCodes,
-                                                             String knownCodeSystem) {
-        return roleCodes.stream()
-            .filter(p -> p.getCodeSystemName().equals(knownCodeSystem))
-            .findFirst()
-            .map(CodedValueType::getCode);
-    }
-
-    private List<String> getOAuthListAttrFromKnownRoleIdCode(List<ActiveParticipantRoleId> roleCodes,
-                                                             String knownCodeSystem) {
-        return roleCodes.stream()
-            .filter(p -> p.getCodeSystemName().equals(knownCodeSystem))
-            .map(CodedValueType::getCode)
-            .toList();
-    }
-
+    /**
+     * @param naptc network access point type code, may be null
+     * @return the corresponding {@code AuditEvent.agent.network.type}, or null
+     */
     protected AuditEvent.AuditEventAgentNetworkType auditEventNetworkType(NetworkAccessPointTypeCode naptc) {
         try {
             return naptc != null?
@@ -270,6 +335,10 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
         }
     }
 
+    /**
+     * @param eventOutcomeIndicator outcome of the audited event
+     * @return the corresponding {@code AuditEvent.outcome}
+     */
     protected AuditEvent.AuditEventOutcome getAuditEventOutcome(EventOutcomeIndicator eventOutcomeIndicator) {
         try {
             return AuditEvent.AuditEventOutcome.fromCode(String.valueOf(eventOutcomeIndicator.getValue()));
@@ -279,6 +348,10 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
         }
     }
 
+    /**
+     * @param eventActionCode action code of the audited event
+     * @return the corresponding {@code AuditEvent.action}
+     */
     protected AuditEvent.AuditEventAction getAuditEventAction(EventActionCode eventActionCode) {
         try {
             return AuditEvent.AuditEventAction.fromCode(eventActionCode.getValue());
@@ -288,6 +361,16 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
         }
     }
 
+    /**
+     * Builds a Coding from an arbitrary code object by extracting its value.
+     *
+     * @param codeSystem    system of the resulting Coding
+     * @param code          the code object, may be null
+     * @param valueSupplier extracts the code value from it
+     * @param <T>           type of the code object
+     * @param <V>           type of the extracted value
+     * @return the resulting Coding, or null if no code was given
+     */
     protected <T, V> Coding codeToCoding(String codeSystem, T code, Function<T, V> valueSupplier) {
         return (code != null) ?
             new Coding()
@@ -296,12 +379,24 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             null;
     }
 
+    /**
+     * @param cvt coded value, may be null
+     * @return the corresponding Coding using the coded value's own code system name, or null
+     */
     protected Coding codedValueTypeToCoding(CodedValueType cvt) {
         return cvt != null ?
             codedValueTypeToCoding(cvt, cvt.getCodeSystemName()) :
             null;
     }
 
+    /**
+     * The display of the resulting Coding is the coded value's original text, which is where IPF keeps
+     * the human readable name of a code.
+     *
+     * @param cvt        coded value, may be null
+     * @param codeSystem system of the resulting Coding, typically the URI the code system name maps to
+     * @return the corresponding Coding, or null
+     */
     protected Coding codedValueTypeToCoding(CodedValueType cvt, String codeSystem) {
         return cvt != null ?
             new Coding(codeSystem,
@@ -310,19 +405,25 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             null;
     }
 
+    /**
+     * @param cvt coded value, may be null
+     * @return a CodeableConcept with the coded value as its only Coding, or null
+     */
     protected CodeableConcept codedValueTypeToCodeableConcept(CodedValueType cvt) {
         return cvt != null ?
             codedValueTypeToCodeableConcept(cvt, cvt.getCodeSystemName()) :
             null;
     }
 
+    /**
+     * @param cvt        coded value, may be null
+     * @param codeSystem system of the resulting Coding
+     * @return a CodeableConcept with the coded value as its only Coding, or null
+     */
     protected CodeableConcept codedValueTypeToCodeableConcept(CodedValueType cvt, String codeSystem) {
         return cvt != null ?
             new CodeableConcept().addCoding(codedValueTypeToCoding(cvt, codeSystem)) :
             null;
     }
 
-    protected CodeableConcept systemAndCodeToCodeableConcept(String codeSystem, String code, String displayName) {
-        return new CodeableConcept().addCoding(new Coding(codeSystem, code, displayName));
-    }
 }

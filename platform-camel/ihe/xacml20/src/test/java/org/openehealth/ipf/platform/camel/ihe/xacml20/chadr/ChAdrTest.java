@@ -35,6 +35,7 @@ import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
 import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -130,7 +131,7 @@ public class ChAdrTest extends StandardTestContainer {
                 assertTrue(requesterParticipant.getParticipantObjectDetails().isEmpty());
             }
 
-            Map<String, String> expectedDecisionsByResourceIds = new java.util.HashMap<>(Map.of(
+            Map<String, String> expectedDecisionsByResourceIds = new HashMap<>(Map.of(
                 "urn:uuid:5a478b92-0b20-40a9-9bee-30ce7d831ca2", "Permit",
                 "urn:uuid:a43e8041-5afd-40bf-9c7c-9d9fc6f8c1a8", "Permit",
                 "urn:uuid:1d78d91d-73c9-49b7-94f5-76b2a44e1c9c", "NotApplicable"));

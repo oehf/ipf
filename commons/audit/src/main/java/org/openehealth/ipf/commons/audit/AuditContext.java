@@ -17,6 +17,7 @@
 package org.openehealth.ipf.commons.audit;
 
 import io.micrometer.context.ContextRegistry;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler;
 import org.openehealth.ipf.commons.audit.marshal.SerializationStrategy;
 import org.openehealth.ipf.commons.audit.marshal.dicom.Current;
@@ -24,9 +25,11 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.protocol.AuditTransmissionProtocol;
 import org.openehealth.ipf.commons.audit.queue.AuditMessageQueue;
 import org.openehealth.ipf.commons.audit.types.AuditSource;
+import org.openehealth.ipf.commons.audit.types.ParticipantObjectIdType;
 import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 
 import java.net.InetAddress;
+import java.util.List;
 import java.util.stream.Stream;
 
 /**
@@ -64,6 +67,59 @@ public interface AuditContext {
      * @return port of the audit repository
      */
     int getAuditRepositoryPort();
+
+    /**
+     * @return context path of the audit repository, for transports that address it over HTTP. Empty
+     *      unless the audit repository is reached through one.
+     */
+    default String getAuditRepositoryContextPath() {
+        return "";
+    }
+
+    /**
+     * @return where to find the claims in an access token the audited request carried. Not tied to any
+     *      audit format; the defaults point at the standard JWT claims and the IHE IUA/BPPC extensions.
+     */
+    default JwtExtractorProperties getJwtExtractorProperties() {
+        return new JwtExtractorProperties();
+    }
+
+    /**
+     * Names of the HTTP headers that may carry the id correlating the audit records the two ends of a
+     * transaction write about it, most preferred first. The first header the request actually carries
+     * wins; a request carrying none is audited without such an id.
+     * <p>
+     * <a href="https://profiles.ihe.net/ITI/BALP/index.html">IHE BALP</a> asks for
+     * {@link RequestIdHeaders#X_REQUEST_ID} and reports it as the transaction entity of an AuditEvent,
+     * which is why that is the default. A deployment that already propagates a trace can name its
+     * headers here instead -- {@link RequestIdHeaders#TRACEPARENT} for W3C Trace Context,
+     * {@link RequestIdHeaders#B3} and {@link RequestIdHeaders#X_B3_TRACE_ID} for the single-header and
+     * multi-header flavours of B3 -- and the id is reported in the same place. Naming both B3 headers is
+     * the way to accept whichever flavour a caller happens to use; they yield the same id.
+     * <p>
+     * Any other name works too and is then taken at face value; see {@link RequestIdHeaders} for the
+     * headers whose value needs more than that.
+     *
+     * @return the header names to look for, most preferred first. Empty disables the lookup.
+     */
+    default List<String> getRequestIdHeaderNames() {
+        return List.of(RequestIdHeaders.X_REQUEST_ID);
+    }
+
+    /**
+     * Participant object ID type to record the correlation id under, whichever of
+     * {@link #getRequestIdHeaderNames()} it was found in. Set this only to flatten the distinction: by
+     * default the type follows the header, so that the audit record says which propagation format the
+     * id came from -- see {@link RequestIdHeaders#participantObjectIdType(String)}.
+     * <p>
+     * A deployment whose audit repository only understands
+     * {@link ParticipantObjectIdTypeCode#XRequestId} would name that one here.
+     *
+     * @return the participant object ID type to force, or null to let it follow the header
+     */
+    default ParticipantObjectIdType getRequestIdType() {
+        return null;
+    }
 
     /**
      * @return sending application

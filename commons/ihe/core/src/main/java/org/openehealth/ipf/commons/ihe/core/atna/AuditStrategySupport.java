@@ -41,9 +41,27 @@ public abstract class AuditStrategySupport<T extends AuditDataset> implements Au
     }
 
 
+    /**
+     * Builds the audit message and hands it to the audit context.
+     * <p>
+     * Nothing that goes wrong on the way out of here reaches the caller. Auditing runs in the
+     * {@code finally} of the interceptors, where a thrown exception would replace the outcome of the
+     * transaction being audited -- so a malformed access token, a participant the builder cannot make
+     * sense of, or any other defect in assembling the record would turn a served request into a server
+     * error. Failures go to the configured {@link org.openehealth.ipf.commons.audit.handler.AuditExceptionHandler}
+     * instead, the same place a failed serialization or delivery ends up; deployments that want
+     * auditing to be fatal can plug a rethrowing handler.
+     *
+     * @param auditContext audit context
+     * @param auditDataset audit dataset
+     */
     @Override
     public void doAudit(AuditContext auditContext, T auditDataset) {
-        auditContext.audit(makeAuditMessage(auditContext, auditDataset));
+        try {
+            auditContext.audit(makeAuditMessage(auditContext, auditDataset));
+        } catch (Exception e) {
+            auditContext.getAuditExceptionHandler().handleException(auditContext, e, null);
+        }
     }
 
     /**

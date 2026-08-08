@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.requests.query;
 
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
+import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 import jakarta.xml.bind.JAXBContext;
@@ -72,7 +73,7 @@ public class QueryListTest {
 
         var domResult = new DOMResult();
         marshaller.marshal(jaxbElement, domResult);
-        Node marshalledNode = ((org.w3c.dom.Document) domResult.getNode()).getDocumentElement();
+        Node marshalledNode = ((Document) domResult.getNode()).getDocumentElement();
 
         var unmarshaller = jaxbContext.createUnmarshaller();
         jaxbElement = (JAXBElement<T>) unmarshaller.unmarshal(marshalledNode, QueryList.class);

@@ -74,7 +74,7 @@ public class SpringRegistry implements Registry, BeanFactoryAware {
     /**
      * Stores the beanFactory and initialized the {@link ContextFacade}.
      * 
-     * @see org.springframework.beans.factory.BeanFactoryAware#setBeanFactory(org.springframework.beans.factory.BeanFactory)
+     * @see BeanFactoryAware#setBeanFactory(BeanFactory)
      */
     @Override
     public void setBeanFactory(@NonNull BeanFactory beanFactory) throws BeansException {

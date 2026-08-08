@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
+import ca.uhn.hl7v2.model.Message;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.openehealth.ipf.commons.ihe.hl7v3.translation.Hl7TranslatorV2toV3;
@@ -39,7 +40,7 @@ abstract public class PixPdqV3CamelTranslators {
      */
     public static Processor translatorHL7v3toHL7v2(final Hl7TranslatorV3toV2 translator) {
         return exchange -> {
-            var initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, ca.uhn.hl7v2.model.Message.class);
+            var initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, Message.class);
             var xmlText = exchange.getIn().getMandatoryBody(String.class);
             exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, xmlText);
             var resultMessage = exchange.getMessage();
@@ -56,7 +57,7 @@ abstract public class PixPdqV3CamelTranslators {
     public static Processor translatorHL7v2toHL7v3(final Hl7TranslatorV2toV3 translator) {
         return exchange -> {
             var initial = exchange.getProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, String.class);
-            var msg = exchange.getIn().getMandatoryBody(ca.uhn.hl7v2.model.Message.class);
+            var msg = exchange.getIn().getMandatoryBody(Message.class);
             exchange.setProperty(HL7V3_ORIGINAL_REQUEST_PROPERTY, msg);
             var resultMessage = exchange.getMessage();
             var charset = exchange.getProperty(Exchange.CHARSET_NAME, "UTF-8", String.class);

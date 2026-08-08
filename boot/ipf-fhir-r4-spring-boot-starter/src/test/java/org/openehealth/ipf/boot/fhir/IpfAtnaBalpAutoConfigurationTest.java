@@ -19,7 +19,6 @@ package org.openehealth.ipf.boot.fhir;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.audit.AuditContext;
-import org.openehealth.ipf.commons.audit.BalpAuditContext;
 import org.openehealth.ipf.commons.audit.queue.AsynchronousAuditMessageQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,8 +43,8 @@ public class IpfAtnaBalpAutoConfigurationTest {
 
     @Test
     public void testAtnaWithBalpSettings() {
-        assertInstanceOf(BalpAuditContext.class, auditContext);
-
+        // the BALP settings land on the ordinary audit context: neither an audit repository context
+        // path nor the token claim paths are specific to BALP, so there is no separate context type
         assertEquals("atna-test", auditContext.getAuditSourceId());
         assertEquals("mysite", auditContext.getAuditEnterpriseSiteId());
         assertEquals("localhost", auditContext.getAuditRepositoryHostName());
@@ -53,11 +52,11 @@ public class IpfAtnaBalpAutoConfigurationTest {
         assertEquals("FHIR-REST-TLS", auditContext.getAuditTransmissionProtocol().getTransportName());
         assertInstanceOf(AsynchronousAuditMessageQueue.class, auditContext.getAuditMessageQueue());
 
-        assertEquals("fhir", ((BalpAuditContext)auditContext).getAuditRepositoryContextPath());
+        assertEquals("fhir", auditContext.getAuditRepositoryContextPath());
         assertArrayEquals(new String[]{"cid","client-id","my-client-id-path"},
-            ((BalpAuditContext) auditContext).getBalpJwtExtractorProperties().getClientIdPath());
+            auditContext.getJwtExtractorProperties().getClientIdPath());
         assertArrayEquals(new String[]{},
-            ((BalpAuditContext) auditContext).getBalpJwtExtractorProperties().getIdPath());
+            auditContext.getJwtExtractorProperties().getIdPath());
     }
 
 }

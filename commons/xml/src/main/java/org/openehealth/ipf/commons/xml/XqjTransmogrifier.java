@@ -125,7 +125,7 @@ public class XqjTransmogrifier<T> extends AbstractCachingXmlProcessor<XQPrepared
      * The XQ resource location is mandatory in the first extra parameter. Other
      * parameters may be passed as a Map in the second parameter.
      * 
-     * @see Transmogrifier#zap(java.lang.Object, java.lang.Object[])
+     * @see Transmogrifier#zap(Object, Object[])
      */
     @Override
     public T zap(Source source, Object... params) {

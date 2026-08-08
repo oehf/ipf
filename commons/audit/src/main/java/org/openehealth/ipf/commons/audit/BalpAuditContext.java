@@ -16,14 +16,14 @@
 package org.openehealth.ipf.commons.audit;
 
 /**
- * Extended AuditContext interface with properties required for <a href="https://profiles.ihe.net/ITI/BALP/index.html">IHE BALP</a>.
+ * @deprecated neither of the two properties this used to add is specific to
+ * <a href="https://profiles.ihe.net/ITI/BALP/index.html">IHE BALP</a>: an audit repository context path
+ * belongs to the transport addressing it, and the token claim paths to the token. Both now sit on
+ * {@link AuditContext} itself, so this interface adds nothing. Use {@link AuditContext}.
  *
  * @author Boris Stanojevic
  * @since 4.8
  */
+@Deprecated(since = "5.3", forRemoval = true)
 public interface BalpAuditContext extends AuditContext {
-
-    String getAuditRepositoryContextPath();
-
-    BalpJwtExtractorProperties getBalpJwtExtractorProperties();
 }

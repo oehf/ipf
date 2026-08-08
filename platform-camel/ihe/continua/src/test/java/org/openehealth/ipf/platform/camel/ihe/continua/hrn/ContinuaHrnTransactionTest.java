@@ -31,6 +31,8 @@ import jakarta.activation.DataHandler;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.JAXBException;
+import org.w3c.dom.Document;
+
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -64,7 +66,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
     @Test
     public void happyCase() {
         var uri = "xds-iti41://localhost:" + getPort() + "/continuaHRNService";
-        var response = (Response) send(uri, hrnRequest, Response.class);
+        var response = send(uri, hrnRequest, Response.class);
         assertEquals(Status.SUCCESS, response.getStatus());
     }
 
@@ -89,7 +91,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
         factory.setNamespaceAware(true);
         var builder = factory.newDocumentBuilder();
         var domDocument = builder.parse(stream);
-        xdsDocument.setContent(org.w3c.dom.Document.class, domDocument);
+        xdsDocument.setContent(Document.class, domDocument);
 
         // create data handler from DOM tree
         xdsDocument.getContent(byte[].class);
@@ -97,7 +99,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
         assertEquals(3, xdsDocument.getContentsCount());
 
         // send the resulting request
-        var response = (Response) send(uri, hrnRequest, Response.class);
+        var response = send(uri, hrnRequest, Response.class);
         assertEquals(Status.SUCCESS, response.getStatus());
     }
 
@@ -127,7 +129,7 @@ public class ContinuaHrnTransactionTest extends StandardTestContainer {
         assertEquals(3, xdsDocument.getContentsCount());
 
         // send the resulting request
-        var response = (Response) send(uri, hrnRequest, Response.class);
+        var response = send(uri, hrnRequest, Response.class);
         assertEquals(Status.SUCCESS, response.getStatus());
     }
     

@@ -35,7 +35,7 @@ import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_57;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.LOGICAL_ID_SAME;
 
 /**
- * Test for {@link org.openehealth.ipf.commons.ihe.xds.core.validate.requests.SubmitObjectsRequestValidator}.
+ * Test for {@link SubmitObjectsRequestValidator}.
  * @author Boris Stanojevic
  */
 public class SubmitObjectsRequestForUpdateValidatorTest {

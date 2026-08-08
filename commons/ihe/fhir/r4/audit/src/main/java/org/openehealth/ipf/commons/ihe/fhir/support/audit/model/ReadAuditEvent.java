@@ -16,13 +16,12 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
-import org.hl7.fhir.r4.model.codesystems.AuditEntityType;
 import org.hl7.fhir.r4.model.codesystems.ObjectRole;
 import org.hl7.fhir.r4.model.codesystems.RestfulInteraction;
 import org.hl7.fhir.r4.model.codesystems.V3ParticipationType;
+import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 
 import java.util.Date;
 
@@ -31,8 +30,14 @@ import static org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCod
 import static org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode.Source;
 import static org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpConstants.BALP_READ_AUDIT_PROFILE;
 
+/**
+ * A basic AuditEvent profile for when a RESTful Read action happens successfully.
+ * The request does not have a Patient subject indicated.
+ *
+ * @author Christian Ohr
+ */
 @ResourceDef(name = "AuditEvent", id = "ReadAuditEvent", profile = BALP_READ_AUDIT_PROFILE)
-public class ReadAuditEvent extends AuditEvent {
+public class ReadAuditEvent extends BalpAuditEvent {
 
     public ReadAuditEvent() {
         super();
@@ -43,6 +48,23 @@ public class ReadAuditEvent extends AuditEvent {
             .setCode(REST.toCode())
             .setSystem(REST.getSystem())
             .setDisplay(REST.getDisplay()));
+    }
+
+    /**
+     * @return DICOM 110152, which the read pattern fixes for the client agent -- the other way round
+     *      than the query, create and update patterns do it
+     */
+    @Override
+    protected Coding clientAgentType() {
+        return dicomAgentType(Destination);
+    }
+
+    /**
+     * @return DICOM 110153, which the read pattern fixes for the server agent
+     */
+    @Override
+    protected Coding serverAgentType() {
+        return dicomAgentType(Source);
     }
 
     /**
@@ -74,9 +96,19 @@ public class ReadAuditEvent extends AuditEvent {
     public ReadAuditEvent setClient(Reference clientReference,
                                     String networkAddress,
                                     AuditEventAgentNetworkType networkType) {
-        return BalpAuditEventHelper.addAgent(this,
-            Destination, clientReference,
-            networkAddress, networkType);
+        addAgent(clientAgentType(), clientReference, networkAddress, networkType);
+        return this;
+    }
+
+    /**
+     * Sets the client agent (mandatory) from the active participant an ATNA audit record holds it in.
+     *
+     * @param client active participant standing for the client of the transaction
+     * @return this instance
+     */
+    public ReadAuditEvent setClient(ActiveParticipantType client) {
+        addAgent(clientAgentType(), client);
+        return this;
     }
 
     /**
@@ -90,23 +122,52 @@ public class ReadAuditEvent extends AuditEvent {
     public ReadAuditEvent setServer(Reference serverReference,
                                     String networkAddress,
                                     AuditEventAgentNetworkType networkType) {
-        return BalpAuditEventHelper.addAgent(this,
-            Source, serverReference,
-            networkAddress, networkType);
+        addAgent(serverAgentType(), serverReference, networkAddress, networkType);
+        return this;
     }
 
     /**
-     * Sets the user agent (optional)
+     * Sets the server agent (mandatory) from the active participant an ATNA audit record holds it in.
+     *
+     * @param server active participant standing for the server of the transaction
+     * @return this instance
+     */
+    public ReadAuditEvent setServer(ActiveParticipantType server) {
+        addAgent(serverAgentType(), server);
+        return this;
+    }
+
+    /**
+     * Sets the user agent (optional), as the information recipient
      *
      * @param userReference user reference (can be display only)
      * @return this instance
      */
     public ReadAuditEvent setUser(Reference userReference) {
-        return BalpAuditEventHelper.addUserAgent(this, V3ParticipationType.IRCP, userReference);
+        return setUser(V3ParticipationType.IRCP, userReference);
     }
 
+    /**
+     * Sets the user agent (optional)
+     *
+     * @param typeCode      participation type of the user
+     * @param userReference user reference (can be display only)
+     * @return this instance
+     */
+    public ReadAuditEvent setUser(V3ParticipationType typeCode, Reference userReference) {
+        addUserAgent(typeCode, userReference);
+        return this;
+    }
+
+    /**
+     * Sets the entity carrying the X-Request-Id of the transaction (optional)
+     *
+     * @param xRequestId value of the X-Request-Id header
+     * @return this instance
+     */
     public ReadAuditEvent setTransaction(String xRequestId) {
-        return BalpAuditEventHelper.addTransactionEntity(this, xRequestId);
+        addTransactionEntity(xRequestId);
+        return this;
     }
 
     /**
@@ -117,21 +178,7 @@ public class ReadAuditEvent extends AuditEvent {
      * @return this instance
      */
     public ReadAuditEvent setData(Reference entity, ObjectRole entityRole) {
-        if (entityRole != ObjectRole._3 &&
-            entityRole != ObjectRole._4 &&
-            entityRole != ObjectRole._20) {
-            throw new IllegalArgumentException("Must be object role report, domain resource or job");
-        }
-        addEntity()
-            .setWhat(entity)
-            .setType(new Coding()
-                .setCode(AuditEntityType._2.toCode())
-                .setSystem(AuditEntityType._2.getSystem())
-                .setDisplay(AuditEntityType._2.getDisplay()))
-            .setRole(new Coding()
-                .setCode(entityRole.toCode())
-                .setSystem(entityRole.getSystem())
-                .setDisplay(entityRole.getDisplay()));
+        addDataEntity(entity, entityRole);
         return this;
     }
 }

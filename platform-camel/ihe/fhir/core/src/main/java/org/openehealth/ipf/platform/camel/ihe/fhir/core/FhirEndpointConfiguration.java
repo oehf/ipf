@@ -85,7 +85,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
     private final List<HapiServerInterceptorFactory> hapiServerInterceptorFactories;
 
     /**
-     * If this is true, all paging requests are routed into the route (see {@link org.openehealth.ipf.commons.ihe.fhir.LazyBundleProvider}
+     * If this is true, all paging requests are routed into the route (see {@link LazyBundleProvider}
      * fo details. Otherwise, all results are fetched once and cached in order to serve subsequent paging requests.
      */
     @Getter
@@ -94,7 +94,7 @@ public class FhirEndpointConfiguration<AuditDatasetType extends FhirAuditDataset
 
     /**
      * If this is true, sorting is executed in the BundleProvider if _sort parameters are provided. The sorting logic is expected to
-     * be implemented in {@link org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters} implementations. If this is false,
+     * be implemented in {@link FhirSearchParameters} implementations. If this is false,
      * the Camel route is expected to return sorted results if the query has requested this.
      */
     @Getter
