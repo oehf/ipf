@@ -20,7 +20,12 @@ import org.openehealth.ipf.commons.ihe.fhir.support.BaseValidator;
 
 public class PdqmValidator extends BaseValidator {
 
-    private static final String PDQM_PACKAGE_PATH = "classpath:META-INF/profiles/pdqm/v320/ihe.iti.pdqm.tgz";
+    /**
+     * Classpath location of the implementation guide package this transaction validates against.
+     * Public so that the audit records of the transaction can be validated against the very same
+     * profiles, rather than against a second copy of the path.
+     */
+    public static final String PDQM_PACKAGE_PATH = "classpath:META-INF/profiles/pdqm/v320/ihe.iti.pdqm.tgz";
     private static final String FHIR_EXTENSION_PACKAGE_PATH = "classpath:META-INF/profiles/extensions/v520/hl7.fhir.uv.extensions.r4.tgz";
 
     public PdqmValidator(FhirContext fhirContext) {

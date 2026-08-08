@@ -16,13 +16,20 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.SelfInitializingReadAuditEvent;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.PatientReadAuditEvent;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode.MobileDocumentRetrieval;
 
 /**
  * The AuditEvent of the Retrieve Document [ITI-68] transaction, which MHD profiles on the BALP
- * PatientRead pattern.
+ * PatientRead pattern, making the patient entity mandatory.
+ * <p>
+ * The transaction itself names no patient: it downloads a binary from the URL that a preceding
+ * DocumentReference query handed out, and its audit dataset knows only the document, repository and
+ * home community. So unless the deployment enriches the audit dataset with a patient of its own -- it
+ * is the responder, after all, that resolves the URL to a document -- the record cannot satisfy the
+ * mandatory slice, and the serialization strategy steps it down to the plain BALP read pattern. That
+ * is the intended outcome, not a defect: a conformant weaker record beats a non-conformant stronger one.
  * <p>
  * Everything derivable from the audit message is done by the base class; all this adds is the IHE
  * transaction subtype its profile fixes. Which of the two profiles the record claims is decided by the
@@ -33,7 +40,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode
  * @see RetrieveDocumentConsumerAuditEvent
  * @see RetrieveDocumentResponderAuditEvent
  */
-abstract class RetrieveDocumentAuditEvent extends SelfInitializingReadAuditEvent {
+abstract class RetrieveDocumentAuditEvent extends PatientReadAuditEvent {
 
     protected RetrieveDocumentAuditEvent() {
         super();

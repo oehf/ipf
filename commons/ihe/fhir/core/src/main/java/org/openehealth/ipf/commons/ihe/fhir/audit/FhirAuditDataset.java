@@ -50,7 +50,7 @@ public class FhirAuditDataset extends AuditDataset {
     /**
      * Remote address
      */
-    @Setter @Getter
+    @Setter
     private String remoteAddress;
 
     /**
@@ -98,6 +98,23 @@ public class FhirAuditDataset extends AuditDataset {
     @Override
     public String getLocalAddress() {
         return localAddress != null ? localAddress : AuditUtils.getLocalIPAddress();
+    }
+
+    /**
+     * @return the machine name or IP address of the other end of the transaction.
+     * <p>
+     * Only the server learns this from the request -- the servlet API hands it the client IP. The client
+     * is told nothing about its peer, but it does know the URL it sent the request to, and that URL
+     * identifies the server; the audit message builder reduces it to a host anyway. Without this the
+     * network of the server agent would be missing from every client side record, which the audit
+     * profiles of some transactions require -- PIXm, for one.
+     */
+    @Override
+    public String getRemoteAddress() {
+        if (remoteAddress != null) {
+            return remoteAddress;
+        }
+        return isServerSide() ? null : destinationUserId;
     }
 
 }

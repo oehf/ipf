@@ -15,6 +15,9 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq;
 
+import ca.uhn.fhir.context.FhirContext;
+import org.hl7.fhir.r4.model.AuditEvent;
+import org.hl7.fhir.r4.model.Patient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.AuditContext;
@@ -30,10 +33,11 @@ import org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpConstants;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -42,17 +46,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Validates the AuditEvent each PIXm and PDQm transaction puts on the wire against the StructureDefinition
  * it claims, using the implementation guide packages IPF already ships.
  * <p>
- * All three transactions are profiled on the BALP PatientQuery pattern, whose patient entity is mandatory.
- * A query that identifies a patient claims the transaction profile; one that does not -- a demographics
- * search by name, a $match by candidate attributes -- steps down to the plain BALP query pattern, and both
- * outcomes are checked here.
+ * PIXm [ITI-83] is profiled on the BALP PatientQuery pattern, whose patient entity is mandatory. The two
+ * PDQm transactions are profiled on the plain BALP Query pattern instead, where the patient entity is
+ * optional and used "when one patient is explicitly identified in the query parameters" -- so a
+ * demographics search by name, or a $match by candidate attributes, keeps the PDQm profile and simply
+ * records no patient. Both outcomes are checked here.
  *
  * @author Christian Ohr
  */
 public class PixPdqAuditEventValidationTest {
-
-    private static final String PIXM_PACKAGE_PATH = "classpath:META-INF/profiles/pixm/v310/ihe.iti.pixm.tgz";
-    private static final String PDQM_PACKAGE_PATH = "classpath:META-INF/profiles/pdqm/v320/ihe.iti.pdqm.tgz";
 
     private static final String CLIENT_URI = "http://localhost:8080/client";
     private static final String SERVER_URI = "http://localhost:8888/fhir";
@@ -63,11 +65,14 @@ public class PixPdqAuditEventValidationTest {
      */
     private static final String PATIENT_ID = "urn:oid:1.2.3.4|0815";
 
+    private static final FhirContext FHIR_CONTEXT = FhirContext.forR4Cached();
+
     private static BalpAuditEventValidator validator;
 
     @BeforeAll
     public static void setUpClass() {
-        validator = new BalpAuditEventValidator(PIXM_PACKAGE_PATH, PDQM_PACKAGE_PATH);
+        validator = BalpAuditEventValidator.sharedInstance(
+            PixmValidator.PIXM_PACKAGE_PATH, PdqmValidator.PDQM_PACKAGE_PATH);
     }
 
     // -------------------------------------------------------------------------------- PIXm [ITI-83]
@@ -95,12 +100,17 @@ public class PixPdqAuditEventValidationTest {
     }
 
     /**
-     * A demographics query names no patient, so it cannot claim the PDQm profile and is recorded as the
-     * BALP query pattern -- still conformant, and still naming the transaction.
+     * A demographics query names no patient. The PDQm profile allows that -- its patient entity is
+     * optional -- so the record keeps the profile and just leaves the entity out.
      */
     @Test
     public void testIti78SupplierWithoutPatient() {
-        assertStepsDownToTheQueryPattern(iti78(true, null), "ITI-78");
+        assertConformantWithoutPatient(iti78(true, null), PdqmProfile.PDQM_SUPPLIER_AUDIT_PROFILE);
+    }
+
+    @Test
+    public void testIti78ConsumerWithoutPatient() {
+        assertConformantWithoutPatient(iti78(false, null), PdqmProfile.PDQM_CONSUMER_AUDIT_PROFILE);
     }
 
     // ------------------------------------------------------------------------------- PDQm [ITI-119]
@@ -115,21 +125,54 @@ public class PixPdqAuditEventValidationTest {
         validator.assertConformant(iti119(false, PATIENT_ID));
     }
 
+    /**
+     * A $match by candidate demographics resolves to no single patient, which the PDQm profile permits --
+     * the IHE consumer example of ITI-119 is exactly such a record.
+     */
     @Test
     public void testIti119SupplierWithoutPatient() {
-        assertStepsDownToTheQueryPattern(iti119(true, null), "ITI-119");
+        assertConformantWithoutPatient(iti119(true, null), PdqmProfile.PDQM_MATCH_SUPPLIER_AUDIT_PROFILE);
+    }
+
+    @Test
+    public void testIti119ConsumerWithoutPatient() {
+        assertConformantWithoutPatient(iti119(false, null), PdqmProfile.PDQM_MATCH_CONSUMER_AUDIT_PROFILE);
+    }
+
+    /**
+     * The ITI-119 query entity carries the $match request body, since the transaction has no query
+     * string of its own.
+     */
+    @Test
+    public void testIti119RecordsTheMatchBodyAsQuery() {
+        var auditDataset = queryAuditDataset(true, null);
+        auditDataset.setFhirContext(FHIR_CONTEXT);
+        var patient = new Patient();
+        patient.addName().setFamily("Test").addGiven("John");
+        new Iti119ServerAuditStrategy().enrichAuditDatasetFromRequest(auditDataset, patient, Map.of());
+
+        var auditEvent = validator.toAuditEvent(
+            new Iti119ServerAuditStrategy().makeAuditMessage(auditContext(), auditDataset)[0]);
+
+        var query = auditEvent.getEntity().stream()
+            .filter(AuditEvent.AuditEventEntityComponent::hasQuery)
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("the mandatory query entity is missing"));
+        var body = new String(query.getQuery(), StandardCharsets.UTF_8);
+        assertTrue(body.contains("\"resourceType\":\"Parameters\""), "not the $match body: " + body);
+        assertTrue(body.contains("Test"), "the matched demographics are missing: " + body);
     }
 
     // ------------------------------------------------------------------------------------ assertions
 
-    private void assertStepsDownToTheQueryPattern(AuditMessage auditMessage, String transaction) {
+    private void assertConformantWithoutPatient(AuditMessage auditMessage, String profile) {
         var auditEvent = validator.toAuditEvent(auditMessage);
 
-        assertEquals(List.of(BalpConstants.BALP_QUERY_AUDIT_PROFILE),
-            BalpAuditEventValidator.claimedProfiles(auditEvent));
-        assertTrue(auditEvent.getSubtype().stream()
-                .anyMatch(subtype -> transaction.equals(subtype.getCode())),
-            "the " + transaction + " subtype is missing");
+        assertEquals(List.of(profile), BalpAuditEventValidator.claimedProfiles(auditEvent),
+            "a PDQm record without a patient must keep its transaction profile");
+        assertTrue(auditEvent.getEntity().stream()
+                .noneMatch(entity -> entity.hasRole() && "1".equals(entity.getRole().getCode())),
+            "there is no patient, so no patient entity may be recorded");
         validator.assertConformant(auditMessage);
     }
 

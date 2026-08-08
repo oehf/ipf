@@ -24,9 +24,9 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
  * the generic translation.
  * <p>
  * How much of that is generic is a matter of the FHIR version and of the profile, so it is not decided
- * here: the FHIR-version-agnostic part of IPF cannot reference AuditEvent at all. Implementors of the
- * R4 query patterns share their implementation through
- * {@code org.openehealth.ipf.commons.ihe.fhir.support.audit.model.SelfInitializingQueryAuditEvent}.
+ * here: the FHIR-version-agnostic part of IPF cannot reference AuditEvent at all. The R4 implementations
+ * inherit theirs from the BALP pattern their profile derives from, in
+ * {@code org.openehealth.ipf.commons.ihe.fhir.support.audit.model}.
  * <p>
  * An implementation is instantiated per audit message by the FHIR serialization strategy, through a
  * public no-arg constructor, and is not reused. What the constructor may set is what the profile fixes
@@ -49,14 +49,16 @@ public interface SelfInitializing {
 
     /**
      * Whether this AuditEvent can represent the given audit message conformantly. What it cannot
-     * represent must not be rendered as this profile at all: a record claiming a profile it does not
-     * satisfy is worse than one claiming a weaker profile it does.
+     * represent must not be rendered as this profile at all -- a record claiming a profile it does not
+     * satisfy is worse than one translated generically -- so returning false here drops the message to
+     * the generic AuditMessage-to-AuditEvent translation.
      * <p>
-     * By default only the outcome is examined. Most IHE transaction profiles build on a BALP pattern
+     * By default, only the outcome is examined. Most IHE transaction profiles build on a BALP pattern
      * that fixes the outcome to success, so a failed transaction is not one of them; profiles that
      * constrain the outcome without fixing it -- MHD's Provide Document Bundle, for instance -- override
-     * this. Implementations whose profile requires something the audit message may not carry, such as a
-     * patient, refuse those messages here too.
+     * this. A required element the audit message does not carry is not a reason to refuse it: a
+     * mandatory patient that the transaction cannot determine, say, is recorded as explicitly absent
+     * instead, which keeps the record on the profile its transaction prescribes.
      *
      * @param auditMessage the audit message of the transaction being audited
      * @return whether this AuditEvent may be used for it

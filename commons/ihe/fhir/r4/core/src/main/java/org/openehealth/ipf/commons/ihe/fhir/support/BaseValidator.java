@@ -130,12 +130,17 @@ public abstract class BaseValidator extends FhirTransactionValidator.Support {
     }
 
     /**
-     * Creates and configures the FHIR validator with all necessary validation support.
+     * Creates and configures a FHIR validator backed by the given implementation guides.
+     * <p>
+     * Public and static because validating against an implementation guide is not only something a
+     * transaction validator does: the audit records IPF writes are validated against the IHE guides the
+     * same way, and the two have to agree on the validation support chain to be comparable at all.
      *
-     * @param fhirContext the FHIR context
+     * @param fhirContext  the FHIR context
+     * @param packagePaths classpath locations of the NPM packages holding the profiles
      * @return configured FHIR validator
      */
-    private FhirValidator createValidator(FhirContext fhirContext, String... packagePaths) {
+    public static FhirValidator createValidator(FhirContext fhirContext, String... packagePaths) {
         var supportChain = createValidationSupportChain(fhirContext, packagePaths);
         var instanceValidator = createInstanceValidator(supportChain);
 
@@ -154,7 +159,7 @@ public abstract class BaseValidator extends FhirTransactionValidator.Support {
      * @param packagePaths the paths to the NPM packages
      * @return configured validation support chain
      */
-    private ValidationSupportChain createValidationSupportChain(FhirContext fhirContext, String... packagePaths) {
+    private static ValidationSupportChain createValidationSupportChain(FhirContext fhirContext, String... packagePaths) {
         var supportChain = new ValidationSupportChain();
         
         // 1. NPM package support should come first to allow custom profiles to override defaults
@@ -184,17 +189,17 @@ public abstract class BaseValidator extends FhirTransactionValidator.Support {
      * @param packagePaths  the classpath locations of the NPM packages
      * @throws IllegalStateException if the package cannot be loaded
      */
-    private void addNpmPackageSupport(FhirContext fhirContext, ValidationSupportChain supportChain, String... packagePaths) {
+    private static void addNpmPackageSupport(FhirContext fhirContext, ValidationSupportChain supportChain, String... packagePaths) {
         var npmPackageValidationSupport = new NpmPackageValidationSupport(fhirContext);
         Arrays.stream(packagePaths).forEach(path -> {
             try {
                 npmPackageValidationSupport.loadPackageFromClasspath(path);
-                supportChain.addValidationSupport(npmPackageValidationSupport);
                 log.debug("Successfully loaded NPM package from: {}", path);
             } catch (IOException e) {
                 throw new IllegalStateException("Failed to load validation package from: " + path, e);
             }
         });
+        supportChain.addValidationSupport(npmPackageValidationSupport);
     }
 
     /**
@@ -203,7 +208,7 @@ public abstract class BaseValidator extends FhirTransactionValidator.Support {
      * @param supportChain the validation support chain
      * @return configured FHIR instance validator
      */
-    private FhirInstanceValidator createInstanceValidator(ValidationSupportChain supportChain) {
+    private static FhirInstanceValidator createInstanceValidator(ValidationSupportChain supportChain) {
         var instanceValidator = new FhirInstanceValidator(supportChain);
         instanceValidator.setNoTerminologyChecks(false);
         instanceValidator.setErrorForUnknownProfiles(true);

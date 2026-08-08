@@ -21,7 +21,10 @@ import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.codesystems.ObjectRole;
 import org.hl7.fhir.r4.model.codesystems.RestfulInteraction;
 import org.hl7.fhir.r4.model.codesystems.V3ParticipationType;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import java.util.Date;
 
@@ -49,6 +52,7 @@ public class ReadAuditEvent extends BalpAuditEvent {
             .setSystem(REST.getSystem())
             .setDisplay(REST.getDisplay()));
     }
+
 
     /**
      * @return DICOM 110152, which the read pattern fixes for the client agent -- the other way round
@@ -180,5 +184,30 @@ public class ReadAuditEvent extends BalpAuditEvent {
     public ReadAuditEvent setData(Reference entity, ObjectRole entityRole) {
         addDataEntity(entity, entityRole);
         return this;
+    }
+
+    /**
+     * Fills in everything the read pattern requires and an ATNA audit record provides, except the
+     * patient: the time the event was recorded, the read subtype, the agents, the audit source, and the
+     * transaction and data entities. Shared with {@link PatientReadAuditEvent}, which is this plus the
+     * patient.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @param localRole    which end of the transaction wrote the record
+     */
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        super.initializeFrom(auditMessage, localRole);
+
+        // the pattern requires a read subtype next to the transaction subtype
+        addSubtype()
+            .setCode(RestfulInteraction.READ.toCode())
+            .setSystem(RestfulInteraction.READ.getSystem());
+
+        // the resource that was read
+        auditMessage.findParticipantObjectIdentifications(
+                poi -> ParticipantObjectTypeCodeRole.Report == poi.getParticipantObjectTypeCodeRole())
+            .stream()
+            .findFirst()
+            .ifPresent(poi -> setData(BalpAuditEventHelper.reference(poi.getParticipantObjectID()), ObjectRole._3));
     }
 }

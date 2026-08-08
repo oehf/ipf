@@ -17,11 +17,14 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti68;
 
 import ca.uhn.fhir.rest.gclient.ICriterion;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -75,10 +78,33 @@ public class TestIti68WithBalpAudit extends AbstractTestIti68 {
         assertTrue(auditEvent.getAgent().stream().anyMatch(agent ->
             "110153".equals(agent.getType().getCodingFirstRep().getCode())), "no server agent");
 
-        // only the responder audits this exchange, so the record claims the responder's profile
+        // Only the responder audits this exchange, and it claims the MHD profile of the transaction. That
+        // profile derives from the BALP PatientRead pattern and requires a patient entity, which ITI-68
+        // cannot supply -- the request names a document, and nothing resolves it back to its subject. The
+        // entity is therefore written with the patient marked absent, which keeps the record on the
+        // profile its transaction prescribes. Enriching Iti68AuditDataset with a patient fills it in.
         assertEquals("https://profiles.ihe.net/ITI/MHD/StructureDefinition/IHE.MHD.RetrieveDocument.Audit.Responder",
             auditEvent.getMeta().getProfile().get(0).getValue());
+
+        var patient = auditEvent.getEntity().stream()
+            .filter(entity -> "1".equals(entity.getType().getCode()) && "1".equals(entity.getRole().getCode()))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("the mandatory patient entity is missing"));
+        assertEquals("unknown", patient.getWhat()
+            .getExtensionByUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason")
+            .getValue().primitiveValue());
     }
 
+
+
+    /**
+     * Whatever a test in this class did, the AuditEvents it caused have to conform to the profiles they
+     * claim -- checked here rather than per test, so that a new test is covered without having to say so.
+     */
+    @AfterEach
+    public void validateRecordedAuditEvents() {
+        BalpAuditEventValidator.sharedInstance(MhdValidator.MHD_PACKAGE_PATH)
+            .assertAllConformant(FhirAuditRepository.getAuditEvents());
+    }
 
 }

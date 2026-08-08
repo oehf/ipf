@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
 
 /**
@@ -33,11 +32,4 @@ import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
     profile = PixmProfile.PIXM_MANAGER_AUDIT_PROFILE)
 public class PixmManagerAuditEvent extends PixmAuditEvent {
 
-    /**
-     * @return {@link ActiveParticipantRoleIdCode#Destination}, the audit source being the server here
-     */
-    @Override
-    protected ActiveParticipantRoleIdCode localRole() {
-        return ActiveParticipantRoleIdCode.Destination;
-    }
 }

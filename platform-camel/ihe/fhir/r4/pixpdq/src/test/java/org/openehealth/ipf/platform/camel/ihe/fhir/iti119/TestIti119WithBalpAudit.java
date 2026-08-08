@@ -16,19 +16,22 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti119;
 
+import java.util.List;
+import java.util.Optional;
 import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.CanonicalType;
 import org.hl7.fhir.r4.model.HumanName;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmValidator;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmValidator;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputParameters;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PdqmMatchInputPatient;
-
-import java.util.List;
-import java.util.Optional;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -132,22 +135,21 @@ public class TestIti119WithBalpAudit extends AbstractTestIti119 {
             assertTrue(agentWithTypeCode(auditEvent, "110152").isPresent(), "no server agent");
         }
 
-        // The supplier records the query; the consumer does not, because ITI-119 is a POST $match whose
-        // parameters live in the body rather than in a query string, and the client side audit dataset
-        // captures only the latter. The profile requires entity.query on both ends, so this is a gap in
-        // the ITI-119 audit dataset -- it affects the DICOM audit record just as much.
+        // ITI-119 is a POST $match whose parameters live in the body rather than in a query string, so
+        // both ends record that body as the query entity the profile requires.
         var withQuery = auditEvents.stream().filter(auditEvent -> !queryEntities(auditEvent).isEmpty()).toList();
-        assertEquals(1, withQuery.size(), "expected exactly the supplier to record the query");
+        assertEquals(2, withQuery.size(), "both ends must record the query");
 
-        // A $match identifies no patient either -- the candidates come back in the response -- and the
-        // PDQm profiles require a patient entity, so both records step down to the BALP query pattern.
+        // A $match by candidate demographics identifies no patient -- the candidates come back in the
+        // response. The PDQm profiles allow that, so both records keep the transaction profile.
         var profiles = auditEvents.stream()
             .flatMap(auditEvent -> auditEvent.getMeta().getProfile().stream())
             .map(CanonicalType::getValue)
+            .sorted()
             .toList();
         assertEquals(List.of(
-            "https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.Query",
-            "https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.Query"),
+            "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Match.Audit.Consumer",
+            "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Match.Audit.Supplier"),
             profiles);
     }
 
@@ -183,4 +185,15 @@ public class TestIti119WithBalpAudit extends AbstractTestIti119 {
             .map(subtype -> subtype.getSystem() + "|" + subtype.getCode())
             .toList();
     }
+
+    /**
+     * Whatever a test in this class did, the AuditEvents it caused have to conform to the profiles they
+     * claim -- checked here rather than per test, so that a new test is covered without having to say so.
+     */
+    @AfterEach
+    public void validateRecordedAuditEvents() {
+        BalpAuditEventValidator.sharedInstance(PixmValidator.PIXM_PACKAGE_PATH, PdqmValidator.PDQM_PACKAGE_PATH)
+            .assertAllConformant(FhirAuditRepository.getAuditEvents());
+    }
+
 }

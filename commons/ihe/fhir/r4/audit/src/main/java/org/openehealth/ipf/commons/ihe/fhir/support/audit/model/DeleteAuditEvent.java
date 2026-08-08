@@ -16,14 +16,16 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
+import java.util.Date;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.codesystems.ObjectRole;
 import org.hl7.fhir.r4.model.codesystems.RestfulInteraction;
 import org.hl7.fhir.r4.model.codesystems.V3ParticipationType;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
-
-import java.util.Date;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import static org.hl7.fhir.r4.model.codesystems.AuditEventType.REST;
 import static org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode.Application;
@@ -51,6 +53,19 @@ public class DeleteAuditEvent extends BalpAuditEvent {
         addSubtype()
             .setCode(RestfulInteraction.DELETE.toCode())
             .setSystem(RestfulInteraction.DELETE.getSystem());
+    }
+
+
+    @Override
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        super.initializeFrom(auditMessage, localRole);
+
+        // the resource that was deleted, which the ATNA record carries the same way a read does
+        auditMessage.findParticipantObjectIdentifications(
+                poi -> ParticipantObjectTypeCodeRole.Report == poi.getParticipantObjectTypeCodeRole())
+            .stream()
+            .findFirst()
+            .ifPresent(poi -> setData(BalpAuditEventHelper.reference(poi.getParticipantObjectID()), ObjectRole._3));
     }
 
     /**

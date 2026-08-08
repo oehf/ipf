@@ -16,14 +16,16 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
+import java.util.Date;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.codesystems.ObjectRole;
 import org.hl7.fhir.r4.model.codesystems.RestfulInteraction;
 import org.hl7.fhir.r4.model.codesystems.V3ParticipationType;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
-
-import java.util.Date;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import static org.hl7.fhir.r4.model.codesystems.AuditEventType.REST;
 import static org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode.Destination;
@@ -47,6 +49,24 @@ public class UpdateAuditEvent extends BalpAuditEvent {
             .setCode(REST.toCode())
             .setSystem(REST.getSystem())
             .setDisplay(REST.getDisplay()));
+    }
+
+
+    @Override
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        super.initializeFrom(auditMessage, localRole);
+
+        // The pattern requires an update subtype next to the transaction subtype. An ATNA record does not
+        // distinguish an update from a patch -- both are EventActionCode.Update -- so the plain update is
+        // recorded; a transaction that patches says so by calling setUpdateType itself.
+        setUpdateType(RestfulInteraction.UPDATE);
+
+        // the resource that was updated, which the ATNA record carries the same way a read does
+        auditMessage.findParticipantObjectIdentifications(
+                poi -> ParticipantObjectTypeCodeRole.Report == poi.getParticipantObjectTypeCodeRole())
+            .stream()
+            .findFirst()
+            .ifPresent(poi -> setData(BalpAuditEventHelper.reference(poi.getParticipantObjectID()), ObjectRole._3));
     }
 
     /**

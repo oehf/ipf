@@ -38,4 +38,15 @@ public class Constants {
     public static final String USER_OAUTH_AGENT_CODE = "UserOauthAgent";
 
     public static final String AUDIT_ENTITY_TYPE_SYSTEM_NAME = "https://profiles.ihe.net/ITI/BALP/CodeSystem/BasicAuditEntityType";
+
+    /**
+     * The FHIR core extension that states why a required value is missing, used to record a patient that
+     * a transaction is expected to have but could not determine.
+     */
+    public static final String DATA_ABSENT_REASON_EXTENSION = "http://hl7.org/fhir/StructureDefinition/data-absent-reason";
+
+    /**
+     * {@code data-absent-reason} code for a value that is expected to exist but is not known.
+     */
+    public static final String DATA_ABSENT_REASON_UNKNOWN = "unknown";
 }

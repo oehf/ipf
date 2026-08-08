@@ -16,21 +16,25 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti78;
 
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Optional;
 import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.CanonicalType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Optional;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmValidator;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmValidator;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -143,8 +147,11 @@ public class TestIti78WithBalpAudit extends AbstractTestIti78 {
             var agents = auditEvent.getAgent().stream()
                 .map(agent -> agent.getWho().getDisplay())
                 .toList();
-            assertTrue(agents.contains(auditEvent.getSource().getObserver().getDisplay()),
-                "the observer is not one of the agents: " + agents);
+            var observer = auditEvent.getSource().getObserver().getDisplay();
+            assertTrue(agents.contains(observer), "the observer is not one of the agents: " + agents);
+            // the consumer used to name itself "UNKNOWN", which the invariant then propagated to the
+            // observer of every client side record
+            assertNotEquals("UNKNOWN", observer, "the client does not know its own identity");
         }
     }
 
@@ -182,42 +189,51 @@ public class TestIti78WithBalpAudit extends AbstractTestIti78 {
     }
 
     /**
-     * The consumer does not manage it even for a query by identifier: the patient is taken from the
-     * parsed search parameters, which only the server side has -- FhirProvider puts them into the
-     * exchange, the producer has nothing equivalent. So the consumer record steps down while the
-     * supplier record does not. This is a gap in the client side audit dataset; it affects the DICOM
-     * audit record just as much, which carries no patient participant object either.
+     * Both ends record the patient of a query by identifier, so both claim their PDQm profile. The
+     * consumer has to work harder for it: the patient comes from the parsed search parameters, which
+     * only the server side has, so the client side reads it back out of the query string it sent.
      */
     @Test
-    public void testOnlyTheSupplierRecordsThePatientOfAQueryByIdentifier() {
+    public void testBothEndsRecordThePatientOfAQueryByIdentifier() {
         sendViaProducer(identifierParameters());
 
+        var auditEvents = FhirAuditRepository.getAuditEvents();
+        auditEvents.forEach(auditEvent ->
+            assertEquals(1, entitiesWithTypeAndRole(auditEvent, "1", "1").size(),
+                "patient entity missing from " + auditEvent.getMeta().getProfile()));
+
+        var profiles = auditEvents.stream()
+            .flatMap(auditEvent -> auditEvent.getMeta().getProfile().stream())
+            .map(CanonicalType::getValue)
+            .sorted()
+            .toList();
+        assertEquals(List.of(
+            "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Query.Audit.Consumer",
+            "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Query.Audit.Supplier"),
+            profiles);
+    }
+
+    @Test
+    public void testADemographicsQueryKeepsTheProfileWithoutAPatient() {
+        sendViaProducer(familyParameters());
+
+        // A query by family name identifies no patient -- the matches only come back in the response.
+        // The PDQm profiles derive from the plain BALP Query pattern, whose patient entity is optional
+        // and used only "when one patient is explicitly identified in the query parameters", so both
+        // ends stay PDQm conformant and simply leave the entity out.
         var profiles = FhirAuditRepository.getAuditEvents().stream()
             .flatMap(auditEvent -> auditEvent.getMeta().getProfile().stream())
             .map(CanonicalType::getValue)
             .sorted()
             .toList();
         assertEquals(List.of(
-            "https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.Query",
+            "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Query.Audit.Consumer",
             "https://profiles.ihe.net/ITI/PDQm/StructureDefinition/IHE.PDQm.Query.Audit.Supplier"),
             profiles);
-    }
 
-    @Test
-    public void testADemographicsQueryStepsDownToTheBalpPattern() {
-        sendViaProducer(familyParameters());
-
-        // A query by family name identifies no patient -- the matches only come back in the response --
-        // and the PDQm profiles derive from the BALP PatientQuery pattern, whose patient entity is
-        // mandatory. Neither end can claim PDQm conformance, so both record the plain query pattern.
-        var profiles = FhirAuditRepository.getAuditEvents().stream()
-            .flatMap(auditEvent -> auditEvent.getMeta().getProfile().stream())
-            .map(CanonicalType::getValue)
-            .toList();
-        assertEquals(List.of(
-            "https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.Query",
-            "https://profiles.ihe.net/ITI/BALP/StructureDefinition/IHE.BasicAudit.Query"),
-            profiles);
+        FhirAuditRepository.getAuditEvents().forEach(auditEvent ->
+            assertTrue(entitiesWithTypeAndRole(auditEvent, "1", "1").isEmpty(),
+                "there is no patient, so no patient entity may be recorded"));
 
         // the transaction is still named, so the records remain recognisable as ITI-78
         FhirAuditRepository.getAuditEvents().forEach(auditEvent ->
@@ -273,4 +289,15 @@ public class TestIti78WithBalpAudit extends AbstractTestIti78 {
             .map(subtype -> subtype.getSystem() + "|" + subtype.getCode())
             .toList();
     }
+
+    /**
+     * Whatever a test in this class did, the AuditEvents it caused have to conform to the profiles they
+     * claim -- checked here rather than per test, so that a new test is covered without having to say so.
+     */
+    @AfterEach
+    public void validateRecordedAuditEvents() {
+        BalpAuditEventValidator.sharedInstance(PixmValidator.PIXM_PACKAGE_PATH, PdqmValidator.PDQM_PACKAGE_PATH)
+            .assertAllConformant(FhirAuditRepository.getAuditEvents());
+    }
+
 }

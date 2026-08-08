@@ -41,9 +41,25 @@ public class Iti119ClientRequestFactory implements ClientRequestFactory<IOperati
 
     @Override
     public IClientExecutable<IOperationUntypedWithInput<Bundle>, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {
+        return getClientExecutable(client, matchParameters(requestData, parameters));
+    }
 
+    /**
+     * Assembles the {@code Parameters} body of the {@code $match} operation from the request, which a
+     * route may express as the {@code Parameters} resource itself, as the {@code Patient} to match, or
+     * as endpoint parameters.
+     * <p>
+     * The audit strategy shares this method so that the body it records as the query entity is exactly
+     * the body that goes on the wire -- BALP wants the raw request preserved, which only holds if the
+     * two cannot drift apart.
+     *
+     * @param requestData the request, as the route expressed it
+     * @param parameters  the request parameters
+     * @return the {@code $match} input parameters
+     */
+    static Parameters matchParameters(Object requestData, Map<String, Object> parameters) {
         if (requestData instanceof Parameters p) {
-            return getClientExecutable(client, p);
+            return p;
         }
 
         var p = new Parameters();
@@ -58,7 +74,7 @@ public class Iti119ClientRequestFactory implements ClientRequestFactory<IOperati
                 .setName(entry.getKey())
                 .setValue(new StringType(entry.getValue().toString())));
 
-        return getClientExecutable(client, p);
+        return p;
     }
 
 

@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq.model;
 
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.SelfInitializingQueryAuditEvent;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.PatientQueryAuditEvent;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode.MobilePatientIdentifierCrossReferenceQuery;
 
@@ -34,7 +34,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode
  * @see PixmConsumerAuditEvent
  * @see PixmManagerAuditEvent
  */
-abstract class PixmAuditEvent extends SelfInitializingQueryAuditEvent {
+abstract class PixmAuditEvent extends PatientQueryAuditEvent {
 
     protected PixmAuditEvent() {
         super();

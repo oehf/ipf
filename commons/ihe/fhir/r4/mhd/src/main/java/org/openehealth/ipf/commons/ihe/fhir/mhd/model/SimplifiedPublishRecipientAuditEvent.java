@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 
 /**
@@ -33,11 +32,4 @@ import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
     profile = MhdProfile.SIMPLIFIED_PUBLISH_RECIPIENT_AUDIT_PROFILE)
 public class SimplifiedPublishRecipientAuditEvent extends SimplifiedPublishAuditEvent {
 
-    /**
-     * @return {@link ActiveParticipantRoleIdCode#Destination}, the audit source being the server here
-     */
-    @Override
-    protected ActiveParticipantRoleIdCode localRole() {
-        return ActiveParticipantRoleIdCode.Destination;
-    }
 }

@@ -29,6 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static java.util.Objects.requireNonNull;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 
 /**
@@ -108,7 +109,17 @@ public class ProducerAuditInterceptor<AuditDatasetType extends FhirAuditDataset>
     private AuditDatasetType createAndEnrichAuditDatasetFromRequest(AuditStrategy<AuditDatasetType> strategy, Exchange exchange, Object msg) {
         try {
             var auditDataset = strategy.createAuditDataset();
-            auditDataset.setSourceUserId(auditContext.getAuditValueIfMissing());
+            // The client of the transaction is this application, and the audit source id is what the
+            // audit context calls it. Naming it here matters twice over: it is what the client agent of
+            // the record says, and the transaction profiles require the audit source observer to be that
+            // same agent -- so leaving it unset used to publish records observed by "UNKNOWN".
+            auditDataset.setSourceUserId(isNotBlank(auditContext.getAuditSourceId()) ?
+                auditContext.getAuditSourceId() :
+                auditContext.getAuditValueIfMissing());
+            // The FhirContext header is set by the consumer when it hands a request to the route, so on
+            // this side it is absent. Take it from the endpoint instead: audit strategies that have to
+            // serialize part of the request -- the ITI-119 $match body, for one -- need it on both sides.
+            auditDataset.setFhirContext(getEndpoint(FhirEndpoint.class).getContext());
             AuditInterceptorUtils.enrichAuditDatasetFromRequest(auditDataset, auditContext, exchange);
             return strategy.enrichAuditDatasetFromRequest(auditDataset, msg, exchange.getIn().getHeaders());
         } catch (Exception e) {

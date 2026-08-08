@@ -20,7 +20,12 @@ import org.openehealth.ipf.commons.ihe.fhir.support.BaseValidator;
 
 public class PixmValidator extends BaseValidator {
 
-    private static final String PIXM_PACKAGE_PATH = "classpath:META-INF/profiles/pixm/v310/ihe.iti.pixm.tgz";
+    /**
+     * Classpath location of the implementation guide package this transaction validates against.
+     * Public so that the audit records of the transaction can be validated against the very same
+     * profiles, rather than against a second copy of the path.
+     */
+    public static final String PIXM_PACKAGE_PATH = "classpath:META-INF/profiles/pixm/v310/ihe.iti.pixm.tgz";
 
     public PixmValidator(FhirContext fhirContext) {
         super(fhirContext, PIXM_PACKAGE_PATH);

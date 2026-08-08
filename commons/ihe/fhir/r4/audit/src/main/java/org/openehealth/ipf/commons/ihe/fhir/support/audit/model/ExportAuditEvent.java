@@ -16,13 +16,15 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
+import java.util.Date;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.codesystems.ObjectRole;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
-
-import java.util.Date;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import static org.hl7.fhir.r4.model.codesystems.Iso21089Lifecycle.DISCLOSE;
 import static org.hl7.fhir.r4.model.codesystems.RestfulInteraction.READ;
@@ -67,6 +69,33 @@ public class ExportAuditEvent extends BalpAuditEvent {
             .setCode(READ.toCode())
             .setSystem(READ.getSystem())
             .setDisplay(READ.getDisplay());
+    }
+
+    /**
+     * @param auditMessage the audit message of the transaction being audited
+     * @return the disclosing side, which occupies the source slot of the disclosure. Unlike the RESTful patterns, which end recorded
+     *      the event does not follow from who was the client: this AuditEvent is by definition the
+     *      record of that side, so that is the agent the audit source has to mirror.
+     */
+    @Override
+    protected ActiveParticipantRoleIdCode localRole(AuditMessage auditMessage) {
+        return ActiveParticipantRoleIdCode.Source;
+    }
+
+    @Override
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        super.initializeFrom(auditMessage, localRole);
+
+        addRequiredPatientEntity(auditMessage);
+
+        auditMessage.findParticipantObjectIdentifications(
+                poi -> ParticipantObjectTypeCodeRole.Report == poi.getParticipantObjectTypeCodeRole())
+            .forEach(poi -> addData(
+                BalpAuditEventHelper.reference(poi.getParticipantObjectID()),
+                new Coding()
+                    .setCode(ObjectRole._3.toCode())
+                    .setSystem(ObjectRole._3.getSystem())
+                    .setDisplay(ObjectRole._3.getDisplay())));
     }
 
     /**

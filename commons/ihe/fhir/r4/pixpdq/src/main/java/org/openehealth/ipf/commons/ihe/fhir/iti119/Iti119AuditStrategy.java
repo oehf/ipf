@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.iti119;
 
-import org.hl7.fhir.r4.model.Parameters;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
@@ -50,11 +49,29 @@ class Iti119AuditStrategy extends FhirQueryAuditStrategy {
                 .getMessages();
     }
 
+    /**
+     * Records the {@code $match} request body as the query of the transaction.
+     * <p>
+     * ITI-119 has no query string: the search criteria travel as a {@code Parameters} resource in the
+     * body of a POST. The PDQm audit profiles nevertheless inherit the mandatory query entity of the
+     * BALP query pattern, and the AuditEvent examples of the PDQm implementation guide put the encoded
+     * request body there -- so that is what is recorded here.
+     * <p>
+     * The body is assembled the same way the client request factory assembles it, because a route may
+     * pass the {@code Parameters} resource, the {@code Patient} to match, or endpoint parameters, and
+     * all three have to end up audited as the request they turn into.
+     *
+     * @param auditDataset audit dataset
+     * @param request      request object
+     * @param parameters   request parameters
+     * @return enriched audit dataset
+     */
     @Override
     public FhirQueryAuditDataset enrichAuditDatasetFromRequest(FhirQueryAuditDataset auditDataset, Object request, Map<String, Object> parameters) {
         var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
-        if (request instanceof Parameters p && auditDataset.getFhirContext() != null) {
-            dataset.setQueryString(auditDataset.getFhirContext().newJsonParser().encodeToString(p));
+        if (dataset.getFhirContext() != null) {
+            dataset.setQueryString(dataset.getFhirContext().newJsonParser()
+                .encodeResourceToString(Iti119ClientRequestFactory.matchParameters(request, parameters)));
         }
         return dataset;
     }

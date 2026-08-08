@@ -31,6 +31,15 @@
             <artifactId>ipf-commons-ihe-fhir-r4-audit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- BalpAuditEventValidator and the BALP implementation guide package, to validate the
+             AuditEvents these tests record against the profiles they claim -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-fhir-r4-audit</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.platform-camel</groupId>
             <artifactId>ipf-platform-camel-ihe-ws</artifactId>

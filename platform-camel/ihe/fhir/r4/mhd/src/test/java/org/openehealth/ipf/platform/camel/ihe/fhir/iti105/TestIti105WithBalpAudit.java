@@ -19,7 +19,12 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.iti105;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Collections;
+import java.util.Date;
 import org.hl7.fhir.r4.model.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,13 +32,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SslAwareMethanolRestfulClientFactory;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.SimplifiedPublishDocumentReference;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
-
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.util.Collections;
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -153,6 +155,17 @@ public class TestIti105WithBalpAudit extends FhirTestContainer {
         reference.getContentFirstRep()
             .setFormat(new Coding("urn:oid:1.3.6.1.4.1.19376.1.2.3", "urn:ihe:pcc:handp:2008", null));
         return reference;
+    }
+
+
+    /**
+     * Whatever a test in this class did, the AuditEvents it caused have to conform to the profiles they
+     * claim -- checked here rather than per test, so that a new test is covered without having to say so.
+     */
+    @AfterEach
+    public void validateRecordedAuditEvents() {
+        BalpAuditEventValidator.sharedInstance(MhdValidator.MHD_PACKAGE_PATH)
+            .assertAllConformant(FhirAuditRepository.getAuditEvents());
     }
 
 }

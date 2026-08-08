@@ -27,7 +27,7 @@
             <action issue="509" dev="ohr" type="add">
                 Consequently implement FHIR-based ATNA auditing as an alternative to DICOM-based auditing: PIXm [ITI-83],
                 PDQm [ITI-78] and [ITI-119], and MHD [ITI-65], [ITI-66], [ITI-67], [ITI-68] and [ITI-105]
-                following the profiles based on IHE BALP. Some classes were renamed or deprecated. Enhanced tracing context support.
+                following the profiles based on IHE BALP. Some classes were renamed or deprecated.
             </action>
             <action issue="515" dev="ohr" type="add">
                 Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323)

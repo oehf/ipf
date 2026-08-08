@@ -22,11 +22,8 @@ import org.hl7.fhir.r4.model.codesystems.ObjectRole;
 import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
-import org.openehealth.ipf.commons.ihe.fhir.audit.events.SelfInitializing;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpAuditEvent;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpAuditEventHelper;
-
-import java.util.Date;
 
 import static org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode.Destination;
 import static org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode.Source;
@@ -50,7 +47,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode
  * @see ProvideBundleSourceAuditEvent
  * @see ProvideBundleRecipientAuditEvent
  */
-abstract class ProvideBundleAuditEvent extends BalpAuditEvent implements SelfInitializing {
+abstract class ProvideBundleAuditEvent extends BalpAuditEvent {
 
     protected ProvideBundleAuditEvent() {
         super();
@@ -73,11 +70,6 @@ abstract class ProvideBundleAuditEvent extends BalpAuditEvent implements SelfIni
         return dicomAgentType(Destination);
     }
 
-    /**
-     * @return the role the audit source plays in the transaction, used to name an observer when the
-     *      audit context does not.
-     */
-    protected abstract ActiveParticipantRoleIdCode localRole();
 
     /**
      * The profile constrains the outcome but does not fix it, and its patient entity is optional, so
@@ -92,15 +84,17 @@ abstract class ProvideBundleAuditEvent extends BalpAuditEvent implements SelfIni
     }
 
     /**
-     * Fills in everything the profile requires and the audit message provides: the time the event was
-     * recorded, the outcome, the agents, the audit source, the patient and the SubmissionSet.
+     * Fills in what this profile takes from the audit record beyond the common part: the outcome and the
+     * event itself, the patient, and the SubmissionSet.
      *
      * @param auditMessage the audit message of the transaction being audited
+     * @param localRole    which end of the transaction recorded it
      */
     @Override
-    public void initialize(AuditMessage auditMessage) {
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        super.initializeFrom(auditMessage, localRole);
+
         var eventIdentification = auditMessage.getEventIdentification();
-        setRecorded(Date.from(eventIdentification.getEventDateTime()));
         setOutcome(AuditEventOutcome.fromCode(String.valueOf(eventIdentification.getEventOutcomeIndicator().getValue())));
         setOutcomeDesc(eventIdentification.getEventOutcomeDescription());
 
@@ -114,11 +108,8 @@ abstract class ProvideBundleAuditEvent extends BalpAuditEvent implements SelfIni
             .setDisplay(eventId.getOriginalText()));
         setAction(AuditEventAction.fromCode(eventIdentification.getEventActionCode().getValue()));
 
-        setClientAndServer(auditMessage);
-        addUserAgents(auditMessage);
-        setAuditSource(auditMessage, localRole());
-        BalpAuditEventHelper.patientReference(auditMessage).ifPresent(this::addPatientEntity);
-        BalpAuditEventHelper.requestId(auditMessage).ifPresent(this::addTransactionEntity);
+        // the patient entity is optional in this profile
+        addPatientEntityIfPresent(auditMessage);
 
         // the submission set, which the ATNA record carries as the job the documents belong to
         auditMessage.findParticipantObjectIdentifications(

@@ -18,11 +18,14 @@ package org.openehealth.ipf.platform.camel.ihe.fhir.pharm5;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.ResourceType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -78,4 +81,15 @@ public class TestPharm5WithBalpAudit extends AbstractTestPharm5 {
 
         assertEquals(1, FhirAuditRepository.getAuditEvents().size());
     }
+
+    /**
+     * Whatever a test in this class did, the AuditEvents it caused have to conform to the profiles they
+     * claim -- checked here rather than per test, so that a new test is covered without having to say so.
+     */
+    @AfterEach
+    public void validateRecordedAuditEvents() {
+        BalpAuditEventValidator.sharedInstance(MhdValidator.MHD_PACKAGE_PATH)
+            .assertAllConformant(FhirAuditRepository.getAuditEvents());
+    }
+
 }

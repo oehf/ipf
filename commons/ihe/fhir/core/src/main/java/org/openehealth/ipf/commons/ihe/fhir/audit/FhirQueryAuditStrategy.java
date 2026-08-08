@@ -17,12 +17,17 @@
 package org.openehealth.ipf.commons.ihe.fhir.audit;
 
 import ca.uhn.fhir.rest.param.BaseParam;
+import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.FhirSearchParameters;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.HTTP_QUERY;
 
@@ -68,6 +73,58 @@ public abstract class FhirQueryAuditStrategy extends FhirAuditStrategy<FhirQuery
         }
 
         return dataset;
+    }
+
+    /**
+     * The search parameters that name the patient a query is about. The server side does not need them:
+     * it gets the request parsed into {@link FhirSearchParameters}, which knows its own patient
+     * parameter. The client side has only the query string it sent, so the names have to be spelled out.
+     * <p>
+     * These are the ones the patient-centric FHIR query transactions use. A transaction whose patient
+     * lives somewhere else overrides this.
+     *
+     * @return names of the search parameters that carry a patient id
+     */
+    protected Set<String> patientIdQueryParameters() {
+        return Set.of("_id", "identifier", "patient", "patient.identifier", "subject", "sourceIdentifier");
+    }
+
+    /**
+     * Fills in the patient from the query string, for the client side.
+     * <p>
+     * This runs here rather than in {@link #enrichAuditDatasetFromRequest} because the query string does
+     * not exist yet when that is called: the client audit dataset only learns it once HAPI has built the
+     * request, which happens on the way out. Without it a client record could never name the patient,
+     * and would be stepped down to a weaker profile than the server record of the same transaction.
+     *
+     * @param auditDataset audit dataset
+     * @param response     response object
+     * @param auditContext audit context
+     * @return whether the transaction is to be considered successful
+     */
+    @Override
+    public boolean enrichAuditDatasetFromResponse(FhirQueryAuditDataset auditDataset, Object response, AuditContext auditContext) {
+        if (!isServerSide() && auditDataset.getPatientIds().isEmpty()) {
+            auditDataset.getPatientIds().addAll(patientIdsIn(auditDataset.getQueryString()));
+        }
+        return super.enrichAuditDatasetFromResponse(auditDataset, response, auditContext);
+    }
+
+    /**
+     * @param queryString the query string of the request, may be null
+     * @return the patient ids it carries, in the FHIR token syntax the server side records them in
+     */
+    private Set<String> patientIdsIn(String queryString) {
+        if (queryString == null) {
+            return Set.of();
+        }
+        var patientIdParameters = patientIdQueryParameters();
+        return Arrays.stream(queryString.split("&"))
+            .map(parameter -> parameter.split("=", 2))
+            .filter(parameter -> parameter.length == 2 && patientIdParameters.contains(parameter[0]))
+            .map(parameter -> parameter[1])
+            .filter(value -> !value.isBlank())
+            .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
     @Override

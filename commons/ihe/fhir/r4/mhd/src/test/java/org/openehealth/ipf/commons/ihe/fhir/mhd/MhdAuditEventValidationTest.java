@@ -35,12 +35,12 @@ import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpConstants;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -55,8 +55,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class MhdAuditEventValidationTest {
 
-    private static final String MHD_PACKAGE_PATH = "classpath:META-INF/profiles/v423/ihe.iti.mhd.tgz";
-
     private static final String CLIENT_URI = "http://localhost:8080/client";
     private static final String SERVER_URI = "http://localhost:8888/fhir";
     private static final String CLIENT_IP = "192.168.0.1";
@@ -66,7 +64,7 @@ public class MhdAuditEventValidationTest {
 
     @BeforeAll
     public static void setUpClass() {
-        validator = new BalpAuditEventValidator(MHD_PACKAGE_PATH);
+        validator = BalpAuditEventValidator.sharedInstance(MhdValidator.MHD_PACKAGE_PATH);
     }
 
     /**
@@ -106,34 +104,76 @@ public class MhdAuditEventValidationTest {
 
     /**
      * A Find Document References that does not name a patient -- searching by author or by status, say.
-     * The MHD profile requires a patient entity, so the record steps down to the BALP query pattern
-     * rather than claiming a profile it cannot satisfy.
+     * The MHD profile requires a patient entity, so one is recorded as explicitly unknown and the record
+     * keeps the profile of its transaction.
      */
     @Test
     public void testIti67ResponderWithoutPatient() {
-        var auditEvent = validator.toAuditEvent(iti67(true, null));
-
-        assertEquals(List.of(BalpConstants.BALP_QUERY_AUDIT_PROFILE),
-            BalpAuditEventValidator.claimedProfiles(auditEvent));
-        // the transaction is still named, so the record is recognisable as an ITI-67
-        assertTrue(auditEvent.getSubtype().stream().anyMatch(subtype -> "ITI-67".equals(subtype.getCode())),
-            "the ITI-67 subtype is missing");
-        validator.assertConformant(iti67(true, null));
+        assertPatientRecordedAsUnknown(iti67(true, null), MhdProfile.FIND_DOCUMENT_REFERENCES_RESPONDER_AUDIT_PROFILE, "ITI-67");
     }
 
     @Test
     public void testIti68Responder() {
-        validator.assertConformant(iti68());
+        validator.assertConformant(iti68(PATIENT_ID));
+    }
+
+    /**
+     * The ordinary Retrieve Document: it downloads a binary from a URL and names no patient at all. The
+     * mandatory patient entity of the MHD profile is therefore recorded as explicitly unknown, which
+     * keeps the record on the profile its transaction prescribes instead of dropping it to a weaker one.
+     */
+    @Test
+    public void testIti68ResponderWithoutPatient() {
+        assertPatientRecordedAsUnknown(iti68(null), MhdProfile.RETRIEVE_DOCUMENT_RESPONDER_AUDIT_PROFILE, "ITI-68");
     }
 
     @Test
     public void testIti105Recipient() {
-        validator.assertConformant(iti105(true));
+        validator.assertConformant(iti105(true, PATIENT_ID));
     }
 
     @Test
     public void testIti105Source() {
-        validator.assertConformant(iti105(false));
+        validator.assertConformant(iti105(false, PATIENT_ID));
+    }
+
+    /**
+     * A Simplified Publish of a DocumentReference without a subject: the patient entity the MHD profile
+     * requires is recorded as explicitly unknown.
+     */
+    @Test
+    public void testIti105RecipientWithoutPatient() {
+        assertPatientRecordedAsUnknown(iti105(true, null), MhdProfile.SIMPLIFIED_PUBLISH_RECIPIENT_AUDIT_PROFILE, "ITI-105");
+    }
+
+    // ------------------------------------------------------------------------------------ assertions
+
+    /**
+     * Asserts that a transaction whose profile requires a patient, but whose audit message names none,
+     * keeps that profile and records the patient as explicitly unknown rather than omitting it.
+     *
+     * @param auditMessage the audit message of the transaction
+     * @param profile      the profile the record is expected to claim
+     * @param transaction  the IHE transaction code the record is expected to keep naming
+     */
+    private void assertPatientRecordedAsUnknown(AuditMessage auditMessage, String profile, String transaction) {
+        var auditEvent = validator.toAuditEvent(auditMessage);
+
+        assertEquals(List.of(profile), BalpAuditEventValidator.claimedProfiles(auditEvent),
+            "an unknown patient must not cost the record its transaction profile");
+        assertTrue(auditEvent.getSubtype().stream().anyMatch(subtype -> transaction.equals(subtype.getCode())),
+            "the " + transaction + " subtype is missing");
+
+        var patient = auditEvent.getEntity().stream()
+            .filter(entity -> "1".equals(entity.getType().getCode()) && "1".equals(entity.getRole().getCode()))
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("the mandatory patient entity is missing"));
+        var dataAbsentReason = patient.getWhat()
+            .getExtensionByUrl("http://hl7.org/fhir/StructureDefinition/data-absent-reason");
+        assertNotNull(dataAbsentReason, "the patient reference is neither filled in nor marked absent");
+        assertEquals("unknown", dataAbsentReason.getValue().primitiveValue());
+
+        validator.assertConformant(auditMessage);
     }
 
     // ------------------------------------------------------------------------------ audit messages
@@ -164,19 +204,23 @@ public class MhdAuditEventValidationTest {
         return message(new Iti67AuditStrategy(serverSide), auditDataset);
     }
 
-    private AuditMessage iti68() {
+    private AuditMessage iti68(String patientId) {
         var auditDataset = new Iti68AuditDataset(true);
         common(auditDataset, true);
-        auditDataset.getPatientIds().add(PATIENT_ID);
+        if (patientId != null) {
+            auditDataset.getPatientIds().add(patientId);
+        }
         auditDataset.setDocumentUniqueId("1.2.3.4.5.6.7.8.9");
         auditDataset.setRepositoryUniqueId("1.2.3.4.5");
         return message(new Iti68ServerAuditStrategy(), auditDataset);
     }
 
-    private AuditMessage iti105(boolean serverSide) {
+    private AuditMessage iti105(boolean serverSide, String patientId) {
         var auditDataset = new Iti105AuditDataset(serverSide);
         common(auditDataset, serverSide);
-        auditDataset.getPatientIds().add(PATIENT_ID);
+        if (patientId != null) {
+            auditDataset.getPatientIds().add(patientId);
+        }
         auditDataset.setDocumentReferenceId("DocumentReference/1");
         return message(serverSide ? new Iti105ServerAuditStrategy() : new Iti105ClientAuditStrategy(), auditDataset);
     }

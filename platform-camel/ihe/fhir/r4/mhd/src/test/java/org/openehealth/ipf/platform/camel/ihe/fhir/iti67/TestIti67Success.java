@@ -112,15 +112,19 @@ public class TestIti67Success extends AbstractTestIti67 {
 
     @Test
     public void testSendEndpointIti67() {
-       var response = sendViaProducer(referencePatientIdentifierParameter());
+        sendViaProducer(referencePatientIdentifierParameter());
         var sender = getAuditSender();
         assertEquals(2, sender.getMessages().size());
 
         // Check the client-side audit
         var event = sender.getMessages().get(1);
 
-        // Query Parameters
-        var query = event.getParticipantObjectIdentifications().get(0);
+        // Query Parameters. Looked up by role rather than by position: the client-side record also
+        // names the patient of the query now, so the query is no longer the only participant object.
+        var query = event.getParticipantObjectIdentifications().stream()
+            .filter(poi -> ParticipantObjectTypeCodeRole.Query == poi.getParticipantObjectTypeCodeRole())
+            .findFirst()
+            .orElseThrow(() -> new AssertionError("no query participant object"));
         assertEquals(ParticipantObjectTypeCode.System, query.getParticipantObjectTypeCode());
         assertEquals(ParticipantObjectTypeCodeRole.Query, query.getParticipantObjectTypeCodeRole());
         assertEquals("patient.identifier=urn:oid:2.16.840.1.113883.3.37.4.1.1.2.1.1|1",

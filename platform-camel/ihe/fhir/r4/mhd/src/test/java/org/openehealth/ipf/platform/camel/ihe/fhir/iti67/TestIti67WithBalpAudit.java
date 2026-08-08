@@ -17,22 +17,24 @@
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti67;
 
 import ca.uhn.fhir.rest.gclient.ICriterion;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.ResourceType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
-
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
 import static ca.uhn.fhir.context.FhirContext.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -230,6 +232,17 @@ public class TestIti67WithBalpAudit extends AbstractTestIti67 {
         return auditEvent.getAgent().stream()
             .filter(p -> p.getType().getCodingFirstRep().getCode().equals(code))
             .findFirst();
+    }
+
+
+    /**
+     * Whatever a test in this class did, the AuditEvents it caused have to conform to the profiles they
+     * claim -- checked here rather than per test, so that a new test is covered without having to say so.
+     */
+    @AfterEach
+    public void validateRecordedAuditEvents() {
+        BalpAuditEventValidator.sharedInstance(MhdValidator.MHD_PACKAGE_PATH)
+            .assertAllConformant(FhirAuditRepository.getAuditEvents());
     }
 
 }

@@ -44,8 +44,6 @@ import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
 import org.openehealth.ipf.commons.ihe.fhir.audit.events.SelfInitializing;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpAuditEventHelper;
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.BalpQueryAuditEvent;
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.PatientQueryAuditEvent;
 
 import java.io.IOException;
 import java.io.Writer;
@@ -132,8 +130,7 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
 
         // A transaction that is profiled in FHIR gets its own AuditEvent, which fills itself in from the
         // audit message -- but only if that AuditEvent can represent the message conformantly. What it
-        // cannot represent is stepped down rather than mislabelled: to the BALP pattern the transaction
-        // profile derives from where there is one, and to the generic translation below otherwise.
+        // cannot represent falls through to the generic translation below rather than be mislabelled.
         var profiledAuditEvent = makeAuditEventInstance(eit, auditMessage.isServerSide());
         var selfInitializing = selfInitializingFor(profiledAuditEvent, auditMessage);
         if (selfInitializing != null) {
@@ -177,29 +174,20 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
 
     /**
      * Picks the AuditEvent that is to convert the audit message itself: the one the transaction's profile
-     * defines, or, when that one cannot represent this particular message, the BALP pattern it derives
-     * from without the constraint it fails.
+     * defines, if it can represent this particular message.
      * <p>
-     * Today the only such step-down is the patient: the query patterns the IHE transactions build on
-     * require a patient entity, and a query that identifies none is audited as the plain BALP query
-     * pattern instead. A message that not even that can represent -- a failed transaction, say -- returns
-     * null and stays on the generic translation.
+     * A message it cannot represent -- a failed transaction, say -- returns null and stays on the generic
+     * translation. An unknown patient is not such a case: the Patient* patterns record one as explicitly
+     * absent rather than give up their profile, so they keep accepting the message.
      *
      * @param profiledAuditEvent the AuditEvent the transaction's profile defines
      * @param auditMessage       the audit message of the transaction being audited
      * @return the AuditEvent to convert the message, or null to translate it generically
      */
     private SelfInitializing selfInitializingFor(AuditEvent profiledAuditEvent, AuditMessage auditMessage) {
-        if (profiledAuditEvent instanceof SelfInitializing selfInitializing) {
-            if (selfInitializing.supports(auditMessage)) {
-                return selfInitializing;
-            }
-            if (profiledAuditEvent instanceof PatientQueryAuditEvent) {
-                var withoutPatient = new BalpQueryAuditEvent();
-                if (withoutPatient.supports(auditMessage)) {
-                    return withoutPatient;
-                }
-            }
+        if (profiledAuditEvent instanceof SelfInitializing selfInitializing
+            && selfInitializing.supports(auditMessage)) {
+            return selfInitializing;
         }
         return null;
     }

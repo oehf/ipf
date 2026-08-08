@@ -17,7 +17,6 @@
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
-import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 
 /**
@@ -33,11 +32,4 @@ import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
     profile = MhdProfile.PROVIDE_BUNDLE_SOURCE_AUDIT_PROFILE)
 public class ProvideBundleSourceAuditEvent extends ProvideBundleAuditEvent {
 
-    /**
-     * @return {@link ActiveParticipantRoleIdCode#Source}, the audit source being the client here
-     */
-    @Override
-    protected ActiveParticipantRoleIdCode localRole() {
-        return ActiveParticipantRoleIdCode.Source;
-    }
 }

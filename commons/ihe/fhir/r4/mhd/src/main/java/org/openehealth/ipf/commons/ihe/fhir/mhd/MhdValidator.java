@@ -27,7 +27,12 @@ import org.openehealth.ipf.commons.ihe.fhir.support.BaseValidator;
  */
 public class MhdValidator extends BaseValidator {
 
-    private static final String MHD_PACKAGE_PATH = "classpath:META-INF/profiles/v423/ihe.iti.mhd.tgz";
+    /**
+     * Classpath location of the implementation guide package this transaction validates against.
+     * Public so that the audit records of the transaction can be validated against the very same
+     * profiles, rather than against a second copy of the path.
+     */
+    public static final String MHD_PACKAGE_PATH = "classpath:META-INF/profiles/v423/ihe.iti.mhd.tgz";
 
     public MhdValidator(FhirContext fhirContext) {
         super(fhirContext, MHD_PACKAGE_PATH);

@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.model;
 
 import org.hl7.fhir.r4.model.AuditEvent;
+import org.hl7.fhir.r4.model.CodeType;
 import org.hl7.fhir.r4.model.CodeableConcept;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Identifier;
@@ -28,6 +29,10 @@ import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.audit.types.EventType;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.events.SelfInitializing;
+
+import java.util.Date;
 
 import java.util.Optional;
 
@@ -35,6 +40,8 @@ import org.apache.commons.lang3.StringUtils;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.AUDIT_ENTITY_TYPE_SYSTEM_NAME;
+import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.DATA_ABSENT_REASON_EXTENSION;
+import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.DATA_ABSENT_REASON_UNKNOWN;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.DCM_OCLIENT_CODE;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.DCM_SYSTEM_NAME;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.OUSER_AGENT_PURPOSE_OF_USE_SYSTEM_NAME;
@@ -56,11 +63,19 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.OUSER_A
  * {@code setServer} for the RESTful patterns, {@code setSource} / {@code setRecipient} for the privacy
  * disclosure ones -- and builds them with the {@code add…} methods here, so that a record populated by
  * hand and one populated from an {@link AuditMessage} come out the same.
+ * <p>
+ * Every pattern is {@link SelfInitializing}: it can convert an ATNA audit record of its own shape into
+ * itself. That conversion runs the same way for all of them, so {@link #initialize(AuditMessage)} is
+ * final here and a pattern contributes what is specific about it by overriding
+ * {@link #initializeFrom(AuditMessage, ActiveParticipantRoleIdCode)} -- which is not defaulted to a
+ * no-op by accident: {@code initialize} is called <em>instead of</em> the generic
+ * AuditMessage-to-AuditEvent translation, so a pattern that added nothing of its own would emit a record
+ * without the interaction subtype, the data entity or the patient its profile requires.
  *
  * @author Christian Ohr
  * @since 5.3
  */
-public abstract class BalpAuditEvent extends AuditEvent {
+public abstract class BalpAuditEvent extends AuditEvent implements SelfInitializing {
 
     /**
      * The client of a transaction is the ATNA source, and its server the ATNA destination. That holds
@@ -69,6 +84,60 @@ public abstract class BalpAuditEvent extends AuditEvent {
      */
     private static final ActiveParticipantRoleIdCode CLIENT_PARTICIPANT = ActiveParticipantRoleIdCode.Source;
     private static final ActiveParticipantRoleIdCode SERVER_PARTICIPANT = ActiveParticipantRoleIdCode.Destination;
+
+    /**
+     * Converts an ATNA audit record into this pattern: the transaction subtype the record names, and then
+     * everything else through {@link #initializeFrom(AuditMessage, ActiveParticipantRoleIdCode)}.
+     * <p>
+     * This is the same for every pattern, which is why it is fixed here. A pattern says what is specific
+     * about it by overriding {@code initializeFrom} -- and, if, which end of the transaction it records
+     * does not follow from the audit message, {@link #localRole(AuditMessage)}.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     */
+    @Override
+    public final void initialize(AuditMessage auditMessage) {
+        addTransactionSubtype(auditMessage);
+        initializeFrom(auditMessage, localRole(auditMessage));
+    }
+
+    /**
+     * Which end of the transaction recorded this event, and therefore which agent the audit source has to
+     * mirror -- BALP states that as the {@code val-audit-source} invariant on the local actor's slice.
+     * <p>
+     * For the RESTful patterns it follows from the audit message: the end that recorded it is the client
+     * or the server of the transaction. The privacy disclosure patterns fix it instead, being by
+     * definition the record of one particular side of the disclosure.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @return the participant standing for the actor that recorded the event
+     */
+    protected ActiveParticipantRoleIdCode localRole(AuditMessage auditMessage) {
+        return auditMessage.isServerSide() ? SERVER_PARTICIPANT : CLIENT_PARTICIPANT;
+    }
+
+    /**
+     * Fills in everything every BALP pattern takes from the audit record the same way: when the event
+     * happened, the client and server agents, the user agents, the audit source, and the entity carrying
+     * the request id that correlates the two ends of the transaction.
+     * <p>
+     * What it deliberately leaves to the pattern is the part the profile fixes differently: the RESTful
+     * interaction subtype next to the transaction subtype, the entity for the data the transaction acted
+     * on, and the patient. A pattern overrides this, calls {@code super}, and adds those around it.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @param localRole    which end of the transaction recorded it, see {@link #localRole(AuditMessage)}
+     */
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        // the time the event happened, as opposed to the time this resource was built
+        setRecorded(Date.from(auditMessage.getEventIdentification().getEventDateTime()));
+
+        setClientAndServer(auditMessage);
+        addUserAgents(auditMessage);
+        setAuditSource(auditMessage, localRole);
+
+        BalpAuditEventHelper.requestId(auditMessage).ifPresent(this::addTransactionEntity);
+    }
 
     /**
      * @return the type this profile fixes for the agent slice of the transaction's client. The BALP
@@ -290,6 +359,47 @@ public abstract class BalpAuditEvent extends AuditEvent {
     }
 
     /**
+     * Adds the patient entity if the audit message names a patient, and does nothing otherwise.
+     * <p>
+     * This is for the profiles whose patient entity is optional -- both PDQm transactions, for instance,
+     * derive from the plain query pattern but say the patient entity "SHOULD be used when one patient is
+     * explicitly identified in the query parameters". Where the entity is mandatory instead, use
+     * {@link #addRequiredPatientEntity(AuditMessage)}.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     */
+    protected void addPatientEntityIfPresent(AuditMessage auditMessage) {
+        BalpAuditEventHelper.patientReference(auditMessage).ifPresent(this::addPatientEntity);
+    }
+
+    /**
+     * Adds the patient entity that the Patient* variant of every BALP pattern requires, recording the
+     * patient as explicitly unknown when the audit message names none.
+     * <p>
+     * Some transactions cannot always name a patient even though their profile insists on one -- Retrieve
+     * Document [ITI-68] never can, as it downloads a binary from a URL. Rather than drop such a record to
+     * a weaker profile, it keeps the profile of its transaction and marks the reference absent with the
+     * FHIR {@code data-absent-reason} extension, which is the standard way of saying that a required
+     * value is expected to exist but is not known. The record then still validates against the profile
+     * the transaction prescribes, and says plainly that the patient could not be determined.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     */
+    protected void addRequiredPatientEntity(AuditMessage auditMessage) {
+        addPatientEntity(BalpAuditEventHelper.patientReference(auditMessage)
+            .orElseGet(BalpAuditEvent::unknownPatient));
+    }
+
+    /**
+     * @return a reference to a patient that is expected to exist but could not be determined
+     */
+    private static Reference unknownPatient() {
+        var reference = new Reference();
+        reference.addExtension(DATA_ABSENT_REASON_EXTENSION, new CodeType(DATA_ABSENT_REASON_UNKNOWN));
+        return reference;
+    }
+
+    /**
      * Adds the entity for the data the transaction acted on.
      *
      * @param entity     what the data is (can be display only)
@@ -372,6 +482,33 @@ public abstract class BalpAuditEvent extends AuditEvent {
             .setSystem(transaction.getCodeSystemName())
             .setDisplay(transaction.getOriginalText());
     }
+
+    /**
+     * Adds the subtype naming the IHE transaction the audit message is about, unless it is already
+     * there. A transaction-specific subclass fixes it in its constructor, because that is what its
+     * profile fixes; a record converted through a bare BALP pattern has no such subclass and takes it
+     * from the message instead.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     */
+    protected final void addTransactionSubtype(AuditMessage auditMessage) {
+        transactionOf(auditMessage)
+            .filter(transaction -> getSubtype().stream()
+                .noneMatch(subtype -> transaction.getCode().equals(subtype.getCode())))
+            .ifPresent(this::addTransactionSubtype);
+    }
+
+    /**
+     * @param auditMessage the audit message of the transaction being audited
+     * @return the IHE transaction it is about, if it names one
+     */
+    protected static Optional<FhirEventTypeCode> transactionOf(AuditMessage auditMessage) {
+        return auditMessage.getEventIdentification().getEventTypeCode().stream()
+            .filter(FhirEventTypeCode.class::isInstance)
+            .map(FhirEventTypeCode.class::cast)
+            .findFirst();
+    }
+
 
     private static CodeableConcept codeableConcept(String system, String code, String display) {
         return new CodeableConcept().addCoding(new Coding(system, code, display));

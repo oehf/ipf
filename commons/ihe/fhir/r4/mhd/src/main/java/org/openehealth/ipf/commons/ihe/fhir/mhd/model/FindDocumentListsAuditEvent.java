@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.SelfInitializingQueryAuditEvent;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.PatientQueryAuditEvent;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode.MobileDocumentManifestQuery;
 
@@ -33,7 +33,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode
  * @see FindDocumentListsConsumerAuditEvent
  * @see FindDocumentListsResponderAuditEvent
  */
-abstract class FindDocumentListsAuditEvent extends SelfInitializingQueryAuditEvent {
+abstract class FindDocumentListsAuditEvent extends PatientQueryAuditEvent {
 
     protected FindDocumentListsAuditEvent() {
         super();

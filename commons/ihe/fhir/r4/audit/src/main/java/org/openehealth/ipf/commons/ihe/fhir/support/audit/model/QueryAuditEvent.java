@@ -52,6 +52,7 @@ public class QueryAuditEvent extends BalpAuditEvent {
             .setDisplay(REST.getDisplay()));
     }
 
+
     /**
      * @return DICOM 110153, which the query pattern fixes for the client agent
      */
@@ -195,17 +196,10 @@ public class QueryAuditEvent extends BalpAuditEvent {
      * @param localRole    which end of the transaction wrote the record
      */
     protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
-        // the time the event happened, as opposed to the time this resource was built
-        setRecorded(Date.from(auditMessage.getEventIdentification().getEventDateTime()));
+        super.initializeFrom(auditMessage, localRole);
 
         // the pattern requires a search subtype next to the transaction subtype
         setSearchType(RestfulInteraction.SEARCH);
-
-        setClientAndServer(auditMessage);
-        addUserAgents(auditMessage);
-        setAuditSource(auditMessage, localRole);
-
-        BalpAuditEventHelper.requestId(auditMessage).ifPresent(this::addTransactionEntity);
         auditMessage.findParticipantObjectIdentifications(
                 poi -> ParticipantObjectTypeCodeRole.Query == poi.getParticipantObjectTypeCodeRole())
             .stream()

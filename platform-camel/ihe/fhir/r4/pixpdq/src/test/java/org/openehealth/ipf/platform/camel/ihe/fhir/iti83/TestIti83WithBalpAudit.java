@@ -16,16 +16,19 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
+import java.util.List;
+import java.util.Optional;
 import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.CanonicalType;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.ihe.fhir.extension.FhirAuditRepository;
-
-import java.util.List;
-import java.util.Optional;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmValidator;
+import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmValidator;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.validate.BalpAuditEventValidator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -230,4 +233,15 @@ public class TestIti83WithBalpAudit extends AbstractTestIti83 {
             .map(subtype -> subtype.getSystem() + "|" + subtype.getCode())
             .toList();
     }
+
+    /**
+     * Whatever a test in this class did, the AuditEvents it caused have to conform to the profiles they
+     * claim -- checked here rather than per test, so that a new test is covered without having to say so.
+     */
+    @AfterEach
+    public void validateRecordedAuditEvents() {
+        BalpAuditEventValidator.sharedInstance(PixmValidator.PIXM_PACKAGE_PATH, PdqmValidator.PDQM_PACKAGE_PATH)
+            .assertAllConformant(FhirAuditRepository.getAuditEvents());
+    }
+
 }

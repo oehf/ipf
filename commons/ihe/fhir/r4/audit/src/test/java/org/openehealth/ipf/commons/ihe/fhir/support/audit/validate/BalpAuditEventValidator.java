@@ -16,28 +16,25 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.audit.validate;
 
 import ca.uhn.fhir.context.FhirContext;
-import ca.uhn.fhir.context.support.DefaultProfileValidationSupport;
 import ca.uhn.fhir.validation.FhirValidator;
 import ca.uhn.fhir.validation.ResultSeverityEnum;
 import ca.uhn.fhir.validation.SingleValidationMessage;
-import org.hl7.fhir.common.hapi.validation.support.CommonCodeSystemsTerminologyService;
-import org.hl7.fhir.common.hapi.validation.support.InMemoryTerminologyServerValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.NpmPackageValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.SnapshotGeneratingValidationSupport;
-import org.hl7.fhir.common.hapi.validation.support.ValidationSupportChain;
-import org.hl7.fhir.common.hapi.validation.validator.FhirInstanceValidator;
+import org.apache.commons.lang3.ArrayUtils;
 import org.hl7.fhir.r4.model.AuditEvent;
 import org.hl7.fhir.r4.model.PrimitiveType;
-import org.hl7.fhir.r5.utils.validation.constants.BestPracticeWarningLevel;
 import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.fhir.support.BaseValidator;
 import org.openehealth.ipf.commons.ihe.fhir.support.audit.marshal.BalpJsonSerializationStrategy;
 
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
+import java.util.Collection;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -71,6 +68,8 @@ public class BalpAuditEventValidator {
     private static final Set<ResultSeverityEnum> CRITICAL = EnumSet.of(
         ResultSeverityEnum.FATAL, ResultSeverityEnum.ERROR);
 
+    private static final Map<List<String>, BalpAuditEventValidator> shared = new ConcurrentHashMap<>();
+
     /**
      * Context used to read the serialized AuditEvent back. Deliberately vanilla: the profiled AuditEvent
      * classes must not be registered here, so that what is validated is the resource as a receiver sees
@@ -87,34 +86,22 @@ public class BalpAuditEventValidator {
      *                        audit profiles, e.g. {@code classpath:META-INF/profiles/v423/ihe.iti.mhd.tgz}
      */
     public BalpAuditEventValidator(String... npmPackagePaths) {
-        this.validator = wireContext.newValidator()
-            .setValidateAgainstStandardSchema(false)
-            .setValidateAgainstStandardSchematron(false)
-            .registerValidatorModule(instanceValidator(npmPackagePaths));
+        this.validator = BaseValidator.createValidator(wireContext,
+            ArrayUtils.addFirst(npmPackagePaths, BALP_PACKAGE_PATH));
     }
 
-    private FhirInstanceValidator instanceValidator(String... npmPackagePaths) {
-        var supportChain = new ValidationSupportChain();
-        var npmSupport = new NpmPackageValidationSupport(wireContext);
-        for (var path : Stream.concat(Stream.of(BALP_PACKAGE_PATH), Stream.of(npmPackagePaths)).toList()) {
-            try {
-                npmSupport.loadPackageFromClasspath(path);
-            } catch (IOException e) {
-                throw new UncheckedIOException("Cannot load validation package " + path, e);
-            }
-        }
-        supportChain.addValidationSupport(npmSupport);
-        supportChain.addValidationSupport(new DefaultProfileValidationSupport(wireContext));
-        supportChain.addValidationSupport(new SnapshotGeneratingValidationSupport(wireContext));
-        supportChain.addValidationSupport(new CommonCodeSystemsTerminologyService(wireContext));
-        supportChain.addValidationSupport(new InMemoryTerminologyServerValidationSupport(wireContext));
-
-        var instanceValidator = new FhirInstanceValidator(supportChain);
-        // an audit record claiming a profile nobody knows is a defect, not something to pass silently
-        instanceValidator.setErrorForUnknownProfiles(true);
-        instanceValidator.setBestPracticeWarningLevel(BestPracticeWarningLevel.Hint);
-        instanceValidator.setAnyExtensionsAllowed(true);
-        return instanceValidator;
+    /**
+     * Returns the validator for the given implementation guides, creating it once.
+     * <p>
+     * Building one reads and snapshots the guides, which takes seconds -- too much to repeat per test
+     * class, and pointless: a validator holds no state beyond the profiles it was built from.
+     *
+     * @param npmPackagePaths classpath locations of the IHE implementation guide packages
+     * @return the shared validator for exactly those packages
+     */
+    public static BalpAuditEventValidator sharedInstance(String... npmPackagePaths) {
+        return shared.computeIfAbsent(List.of(npmPackagePaths),
+            paths -> new BalpAuditEventValidator(paths.toArray(String[]::new)));
     }
 
     /**
@@ -134,11 +121,15 @@ public class BalpAuditEventValidator {
     }
 
     /**
-     * @param auditMessage ATNA audit message of the transaction
-     * @return every validation message about the AuditEvent it turns into
+     * Serializes an AuditEvent and reads it back, which is what an AuditEvent built directly has to go
+     * through before it can be validated: the profile a subclass declares in its {@code @ResourceDef} is
+     * written into {@code meta.profile} by the parser, so an unserialized instance claims nothing yet.
+     *
+     * @param auditEvent an AuditEvent built directly rather than translated from an audit message
+     * @return the AuditEvent a receiver would get
      */
-    public List<SingleValidationMessage> validate(AuditMessage auditMessage) {
-        return validate(toAuditEvent(auditMessage));
+    public AuditEvent onTheWire(AuditEvent auditEvent) {
+        return (AuditEvent) wireContext.newJsonParser().parseResource(asJson(auditEvent));
     }
 
     /**
@@ -178,7 +169,35 @@ public class BalpAuditEventValidator {
      * @throws AssertionError listing every error, with the serialized AuditEvent
      */
     public void assertConformant(AuditMessage auditMessage) {
-        var auditEvent = toAuditEvent(auditMessage);
+        assertConformant(toAuditEvent(auditMessage));
+    }
+
+    /**
+     * Fails unless every one of the given AuditEvents that claims a profile conforms to it.
+     * <p>
+     * For validating what an integration test actually recorded, where the records are whatever the
+     * exchanges happened to produce. One claiming no profile is skipped rather than failed: a transaction
+     * whose IHE profile defines no AuditEvent is translated generically, and there is then nothing to
+     * validate it against. That a transaction which does have a profile claims it is a separate assertion,
+     * and belongs in the test of that transaction.
+     *
+     * @param auditEvents the AuditEvents recorded so far
+     * @throws AssertionError on the first one that does not conform
+     */
+    public void assertAllConformant(Collection<AuditEvent> auditEvents) {
+        auditEvents.stream()
+            .filter(auditEvent -> !claimedProfiles(auditEvent).isEmpty())
+            .forEach(this::assertConformant);
+    }
+
+    /**
+     * Fails unless the AuditEvent conforms to the profile it claims. Use this for an AuditEvent that was
+     * built directly rather than translated from an audit message.
+     *
+     * @param auditEvent the AuditEvent to validate
+     * @throws AssertionError listing every error, with the serialized AuditEvent
+     */
+    public void assertConformant(AuditEvent auditEvent) {
         if (claimedProfiles(auditEvent).isEmpty()) {
             throw new AssertionError("AuditEvent claims no profile:\n" + asJson(auditEvent));
         }

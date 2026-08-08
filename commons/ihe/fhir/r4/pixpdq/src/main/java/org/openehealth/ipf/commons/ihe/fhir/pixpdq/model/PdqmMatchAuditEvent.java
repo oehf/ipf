@@ -16,27 +16,43 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq.model;
 
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.SelfInitializingQueryAuditEvent;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.QueryAuditEvent;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode.PatientDemographicsMatch;
 
 /**
  * The AuditEvent of the Patient Demographics Match [ITI-119] transaction, which PDQm profiles on the
- * BALP Query pattern: the query entity is required, the patient entity is used when the match names one.
+ * BALP Query pattern: the query entity is required and carries the encoded {@code $match} request body,
+ * and the patient entity is used when the match names one.
  * <p>
  * Everything derivable from the audit message is done by the base class; all this adds is the IHE
- * transaction subtype its profile fixes. Which of the two profiles the record claims is decided by the
- * concrete subclass.
+ * transaction subtype its profile fixes and the optional patient. Which of the two profiles the record
+ * claims is decided by the concrete subclass.
  *
  * @author Christian Ohr
  * @since 5.3
  * @see PdqmMatchConsumerAuditEvent
  * @see PdqmMatchSupplierAuditEvent
  */
-abstract class PdqmMatchAuditEvent extends SelfInitializingQueryAuditEvent {
+abstract class PdqmMatchAuditEvent extends QueryAuditEvent {
 
     protected PdqmMatchAuditEvent() {
         super();
         addTransactionSubtype(PatientDemographicsMatch);
+    }
+
+    /**
+     * The patient entity is optional in this profile, and used only when the query explicitly identifies
+     * one, so nothing is recorded for it otherwise.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @param localRole    which end of the transaction recorded it
+     */
+    @Override
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        super.initializeFrom(auditMessage, localRole);
+        addPatientEntityIfPresent(auditMessage);
     }
 }

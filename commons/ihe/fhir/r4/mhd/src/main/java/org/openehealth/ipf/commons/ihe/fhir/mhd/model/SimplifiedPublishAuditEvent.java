@@ -16,7 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
-import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.SelfInitializingCreateAuditEvent;
+import org.openehealth.ipf.commons.ihe.fhir.support.audit.model.PatientCreateAuditEvent;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode.SimplifiedPublish;
 
@@ -33,7 +33,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode
  * @see SimplifiedPublishSourceAuditEvent
  * @see SimplifiedPublishRecipientAuditEvent
  */
-abstract class SimplifiedPublishAuditEvent extends SelfInitializingCreateAuditEvent {
+abstract class SimplifiedPublishAuditEvent extends PatientCreateAuditEvent {
 
     protected SimplifiedPublishAuditEvent() {
         super();

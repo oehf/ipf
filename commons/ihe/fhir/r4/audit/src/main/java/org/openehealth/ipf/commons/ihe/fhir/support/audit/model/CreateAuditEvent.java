@@ -19,8 +19,12 @@ import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Coding;
 import org.hl7.fhir.r4.model.Reference;
 import org.hl7.fhir.r4.model.codesystems.ObjectRole;
+import org.hl7.fhir.r4.model.codesystems.RestfulInteraction;
 import org.hl7.fhir.r4.model.codesystems.V3ParticipationType;
+import org.openehealth.ipf.commons.audit.codes.ActiveParticipantRoleIdCode;
+import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
 import org.openehealth.ipf.commons.audit.model.ActiveParticipantType;
+import org.openehealth.ipf.commons.audit.model.AuditMessage;
 
 import java.util.Date;
 
@@ -48,6 +52,7 @@ public class CreateAuditEvent extends BalpAuditEvent {
             .setSystem(REST.getSystem())
             .setDisplay(REST.getDisplay()));
     }
+
 
     /**
      * @return DICOM 110153, which the create pattern fixes for the client agent
@@ -160,6 +165,31 @@ public class CreateAuditEvent extends BalpAuditEvent {
     public CreateAuditEvent setData(Reference entity, ObjectRole entityRole) {
         addDataEntity(entity, entityRole);
         return this;
+    }
+
+    /**
+     * Fills in everything the create pattern requires and an ATNA audit record provides, except the
+     * patient: the time the event was recorded, the create subtype, the agents, the audit source, and
+     * the transaction and data entities. Shared with {@link PatientCreateAuditEvent}, which is this plus
+     * the patient.
+     *
+     * @param auditMessage the audit message of the transaction being audited
+     * @param localRole    which end of the transaction wrote the record
+     */
+    protected void initializeFrom(AuditMessage auditMessage, ActiveParticipantRoleIdCode localRole) {
+        super.initializeFrom(auditMessage, localRole);
+
+        // the pattern requires a create subtype next to the transaction subtype
+        addSubtype()
+            .setCode(RestfulInteraction.CREATE.toCode())
+            .setSystem(RestfulInteraction.CREATE.getSystem());
+
+        // the resource that was created, which the ATNA record carries as the job it belongs to
+        auditMessage.findParticipantObjectIdentifications(
+                poi -> ParticipantObjectTypeCodeRole.Job == poi.getParticipantObjectTypeCodeRole())
+            .stream()
+            .findFirst()
+            .ifPresent(poi -> setData(BalpAuditEventHelper.reference(poi.getParticipantObjectID()), ObjectRole._20));
     }
 
 }
