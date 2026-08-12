@@ -50,6 +50,10 @@ class StandardTestContainer {
 
     static int port
 
+    static {
+        System.setProperty("org.apache.cxf.ws.addressing.decoupled.enabled", "true")
+    }
+
     /*
      *  Port to be used, when the test is subclassed by java applications.
      */
