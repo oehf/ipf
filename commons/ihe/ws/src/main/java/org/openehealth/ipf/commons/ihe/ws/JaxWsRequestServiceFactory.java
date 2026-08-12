@@ -19,6 +19,7 @@ import org.apache.cxf.frontend.ServerFactoryBean;
 import org.apache.cxf.interceptor.InterceptorProvider;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
+import org.openehealth.ipf.commons.ihe.ws.cxf.DecoupledDestinationApprovalInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.WsRejectionHandlingStrategy;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditInRequestInterceptor;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.AuditResponseInterceptor;
@@ -46,6 +47,12 @@ public class JaxWsRequestServiceFactory<AuditDatasetType extends WsAuditDataset>
     @Override
     protected void configureInterceptors(ServerFactoryBean svrFactory) {
         super.configureInterceptors(svrFactory);
+
+        // permit non-anonymous WS-Addressing ReplyTo/FaultTo for transactions that support
+        // asynchronous responses -- CXF rejects decoupled destinations by default since 4.1.8
+        if (wsTransactionConfiguration.isAllowAsynchrony()) {
+            svrFactory.getInInterceptors().add(new DecoupledDestinationApprovalInterceptor());
+        }
 
         // install auditing-related interceptors if the user has not switched auditing off
         if (auditStrategy != null) {
