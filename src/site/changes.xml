@@ -25,10 +25,7 @@
     <body>
         <release version="6.0.0" description="IPF 6.0.0" date="">
             <action issue="476" dev="ohr" type="add">
-                Support Apache Camel telemetry for the IHE components
-            </action>
-            <action issue="476" dev="ohr" type="remove">
-                Removed MessageTracer in favour of Apache Camel telemetry
+                Support Apache Camel telemetry for the IHE components. Removed MessageTracer in favor of Apache Camel telemetry
             </action>
             <action dev="ohr" type="fix">
                 Spring Boot applications using the ATNA starter (and thus any transaction family starter) no longer
