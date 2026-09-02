@@ -19,7 +19,7 @@
         <equinox-common-version>3.6.200-v20130402-1505</equinox-common-version>
         <groovy-version>5.0.8</groovy-version>
         <hapi-version>2.6.0</hapi-version>
-        <hapi-fhir-version>8.10.1</hapi-fhir-version>
+        <hapi-fhir-version>8.12.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
         <ipf-gazelle-version>3.4.0</ipf-gazelle-version>
         <!-- keep in sync with Spring Boot's managed httpclient5.version -->

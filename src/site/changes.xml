@@ -40,7 +40,7 @@
                 the Iti68BinaryComponent in the wrong package, so routes using the scheme failed to start
             </action>
         </release>
-        <release version="5.3.0" description="IPF 5.3.0" date="">
+        <release version="5.3.0" description="IPF 5.3.0" date="17 Aug 2026">
             <action issue="509" dev="ohr" type="add">
                 Consequently implement FHIR-based ATNA auditing as an alternative to DICOM-based auditing: PIXm [ITI-83],
                 PDQm [ITI-78] and [ITI-119], and MHD [ITI-65], [ITI-66], [ITI-67], [ITI-68] and [ITI-105]
@@ -55,7 +55,7 @@
                 Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323)
             </action>
         </release>
-        <release version="5.2.0" description="IPF 5.2.0" date="">
+        <release version="5.2.0" description="IPF 5.2.0" date="26 May 2026">
             <action issue="512" dev="ohr" type="update">
                 Selecting uniqueIds from a NamingSystem resource by type will now respect the "preferred" flag
             </action>
