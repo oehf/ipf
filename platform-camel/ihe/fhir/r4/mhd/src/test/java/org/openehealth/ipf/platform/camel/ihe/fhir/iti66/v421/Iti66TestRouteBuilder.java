@@ -22,6 +22,8 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.support.ExpressionAdapter;
 import org.hl7.fhir.r4.model.Bundle;
+import org.openehealth.ipf.commons.ihe.fhir.Constants;
+import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66ListSearchParameters;
 import org.openehealth.ipf.platform.camel.ihe.fhir.test.FhirTestContainer;
 
 import java.io.InputStreamReader;
@@ -31,6 +33,17 @@ import java.util.stream.Collectors;
  *
  */
 public class Iti66TestRouteBuilder extends RouteBuilder {
+
+    /** Search parameters of the most recent query, so that tests can assert on the parameter binding. */
+    private static volatile Iti66ListSearchParameters lastSearchParameters;
+
+    public static Iti66ListSearchParameters getLastSearchParameters() {
+        return lastSearchParameters;
+    }
+
+    public static void resetLastSearchParameters() {
+        lastSearchParameters = null;
+    }
 
     private final boolean returnError;
 
@@ -54,6 +67,10 @@ public class Iti66TestRouteBuilder extends RouteBuilder {
 
         @Override
         public Object evaluate(Exchange exchange) {
+            // The search parameters travel in a header, the body carries the payload
+            if (exchange.getIn().getHeader(Constants.FHIR_REQUEST_PARAMETERS) instanceof Iti66ListSearchParameters searchParameters) {
+                lastSearchParameters = searchParameters;
+            }
             if (!returnError) {
                 var resource = FhirContext.forR4().newXmlParser()
                         .parseResource(Bundle.class, new InputStreamReader(getClass().getResourceAsStream("/v421/FindSubmissionSetsResponse.xml")));

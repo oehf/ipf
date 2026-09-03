@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.pixpdq.model;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Bundle;
 import org.hl7.fhir.r4.model.Patient;
-import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Pdqm320;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
 
 import java.util.Collections;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
  * @since 5.2
  */
 @ResourceDef(name = "Bundle", profile = PdqmProfile.ITI78_QUERY_PATIENT_RESOURCE_RESPONSE_MESSAGE_PROFILE)
-public class QueryPatientResourceResponseMessage extends Bundle implements Pdqm320 {
+public class QueryPatientResourceResponseMessage extends Bundle {
 
     private static final Predicate<BundleEntryComponent> IS_PDQ_PATIENT_ENTRY =
         entry -> entry.hasResource() && entry.getResource() instanceof PdqmPatient;

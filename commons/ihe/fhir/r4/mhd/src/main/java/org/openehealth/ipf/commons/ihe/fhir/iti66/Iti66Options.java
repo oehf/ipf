@@ -37,12 +37,12 @@ public enum Iti66Options implements FhirTransactionOptions {
     LENIENT(Iti66DocumentManifestResourceProvider.class),
 
     /**
-     * MHD 4.2.1 Resource Provider, supporting querying List resources
+     * MHD 4.2.x Resource Provider, supporting querying List resources
      */
     LIST(Iti66ListResourceProvider.class),
 
     /**
-     * MHD 3.2.0 and 4.2.1 Resource Provider, supporting both DocumentManifest and List resources
+     * MHD 3.2.0 and 4.2.x Resource Provider, supporting both DocumentManifest and List resources
      */
     COMPATIBILITY(Iti66ListResourceProvider.class, Iti66DocumentManifestResourceProvider.class);
 

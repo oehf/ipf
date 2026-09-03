@@ -30,7 +30,7 @@ import org.openehealth.ipf.commons.ihe.fhir.support.IheFhirProfile;
 import java.util.List;
 import java.util.Optional;
 
-public enum PdqmProfile implements Pdqm320, IheFhirProfile {
+public enum PdqmProfile implements IheFhirProfile {
 
     // Resource profiles
 

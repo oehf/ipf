@@ -19,7 +19,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
+import static org.openehealth.ipf.commons.ihe.hl7v3.XmlYielder.yieldElement
 
 /**
  * Generator for HL7v3 ACK and NAK response messages.

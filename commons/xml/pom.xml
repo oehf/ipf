@@ -44,10 +44,6 @@
             <artifactId>spring-core</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-xml</artifactId>
-        </dependency>
 
 
         <!-- Dependencies for test -->

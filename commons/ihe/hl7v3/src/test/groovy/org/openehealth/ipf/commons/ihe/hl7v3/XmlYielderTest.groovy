@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.openehealth.ipf.commons.xml
+package org.openehealth.ipf.commons.ihe.hl7v3
 
 import groovy.xml.MarkupBuilder
 import groovy.xml.XmlSlurper
@@ -24,8 +24,8 @@ import org.xmlunit.builder.Input
 import org.xmlunit.diff.Diff
 
 import static org.junit.jupiter.api.Assertions.assertFalse
-import static org.openehealth.ipf.commons.xml.XmlYielder.yieldChildren
-import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
+import static org.openehealth.ipf.commons.ihe.hl7v3.XmlYielder.yieldChildren
+import static org.openehealth.ipf.commons.ihe.hl7v3.XmlYielder.yieldElement
 
 /**
  * Unit test for GPath-to-XMLBuilder content yielding.

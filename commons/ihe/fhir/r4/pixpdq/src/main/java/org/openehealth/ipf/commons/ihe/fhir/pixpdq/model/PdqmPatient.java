@@ -34,7 +34,6 @@ import org.hl7.fhir.r4.model.Configuration;
 import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Period;
 import org.hl7.fhir.r4.model.StringType;
-import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Pdqm320;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
 
 import java.util.ArrayList;
@@ -57,7 +56,7 @@ import java.util.List;
  * @see PdqmProfile
  */
 @ResourceDef(name = "Patient", id = "PDQmPatient", profile = PdqmProfile.PDQM_PATIENT_PROFILE)
-public class PdqmPatient extends Patient implements Pdqm320 {
+public class PdqmPatient extends Patient {
 
     public static final TokenClientParam IDENTIFIER = new TokenClientParam(Patient.SP_IDENTIFIER);
     public static final TokenClientParam ACTIVE = new TokenClientParam(Patient.SP_ACTIVE);

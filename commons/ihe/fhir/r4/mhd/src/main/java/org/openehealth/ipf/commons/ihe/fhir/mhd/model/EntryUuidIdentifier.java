@@ -29,7 +29,10 @@ public class EntryUuidIdentifier extends Identifier {
 
     public EntryUuidIdentifier() {
         super();
+        // MHD up to 4.2.3 required the use, 4.2.4 requires the type (CP-ITI-1328-01). Both are
+        // written, so that the identifier conforms to either version of the profile.
         setUse(IdentifierUse.OFFICIAL);
+        setType(MhdIdentifierType.ENTRY_UUID.toCodeableConcept());
         setSystem(Constants.URN_IETF_RFC_3986);
     }
 

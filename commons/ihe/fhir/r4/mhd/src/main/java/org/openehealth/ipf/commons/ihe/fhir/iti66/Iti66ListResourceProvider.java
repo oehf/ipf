@@ -28,6 +28,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.hl7.fhir.instance.model.api.IAnyResource;
 import org.hl7.fhir.r4.model.*;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 
 import java.util.Set;
 
@@ -55,6 +56,8 @@ public class Iti66ListResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = ListResource.SP_STATUS) TokenOrListParam status,
             @OptionalParam(name = SP_SOURCE_ID) TokenOrListParam sourceId,
             @OptionalParam(name = SP_DESIGNATION_TYPE) TokenOrListParam designationType,
+            // MHD 4.2.4 Target Communities Option
+            @OptionalParam(name = MhdProfile.SP_TARGET_COMMUNITY_ID_LIST) UriOrListParam targetCommunityIdList,
             // Extension to ITI-66
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -68,6 +71,7 @@ public class Iti66ListResourceProvider extends AbstractPlainProvider {
                 .date(date)
                 .code(code)
                 .designationType(designationType)
+                .targetCommunityIdList(targetCommunityIdList)
                 .sourceId(sourceId)
                 .status(status)
                 .identifier(identifier)

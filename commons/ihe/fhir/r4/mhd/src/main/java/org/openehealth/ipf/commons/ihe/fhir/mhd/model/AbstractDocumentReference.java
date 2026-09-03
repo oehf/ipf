@@ -15,17 +15,70 @@
  */
 package org.openehealth.ipf.commons.ihe.fhir.mhd.model;
 
+import ca.uhn.fhir.model.api.annotation.Child;
+import ca.uhn.fhir.model.api.annotation.Description;
+import ca.uhn.fhir.model.api.annotation.Extension;
+import ca.uhn.fhir.util.ElementUtil;
+import org.hl7.fhir.r4.model.Base;
 import org.hl7.fhir.r4.model.DocumentReference;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.Mhd423;
+import org.hl7.fhir.r4.model.Identifier;
+import org.hl7.fhir.r4.model.OidType;
+import org.ietf.jgss.Oid;
+import org.openehealth.ipf.commons.core.URN;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 
+import java.util.Optional;
 import java.util.UUID;
 
 abstract class AbstractDocumentReference<T extends AbstractDocumentReference<T>>
-    extends DocumentReference
-    implements Mhd423 {
+    extends DocumentReference {
+
+    @Child(name = "homeCommunityId", type = OidType.class, order = 1)
+    @Extension(url = MhdProfile.HOME_COMMUNITY_ID_PROFILE, definedLocally = false)
+    @Description(shortDefinition = "The homeCommunityId where the artifact resides")
+    private OidType homeCommunityId;
 
     /**
-     * Sets the MasterIdentifier to be a Unique Id as required by the profile
+     * Returns the community this DocumentReference resides in, as introduced by MHD 4.2.4 with the
+     * Target Communities Option (CP-ITI-1326-02).
+     *
+     * @return the homeCommunityId, never {@code null}
+     */
+    public OidType getHomeCommunityId() {
+        if (homeCommunityId == null) {
+            homeCommunityId = new OidType();
+        }
+        return homeCommunityId;
+    }
+
+    public boolean hasHomeCommunityId() {
+        return homeCommunityId != null && !homeCommunityId.isEmpty();
+    }
+
+    @SuppressWarnings("unchecked")
+    public T setHomeCommunityId(OidType homeCommunityId) {
+        this.homeCommunityId = homeCommunityId;
+        return (T)this;
+    }
+
+    /**
+     * Sets the community this DocumentReference resides in. The OID is rendered as a URN, as the
+     * {@code oid} data type requires.
+     *
+     * @param oid homeCommunityId
+     * @return this object
+     */
+    @SuppressWarnings("unchecked")
+    public T setHomeCommunityId(Oid oid) {
+        this.homeCommunityId = new OidType(new URN(oid).toString());
+        return (T)this;
+    }
+
+    /**
+     * Sets the Unique Id of the referenced document. It is written to the MasterIdentifier and, since
+     * MHD 4.2.4 also allows for it, to the Unique Id slice of {@code DocumentReference.identifier},
+     * where the profile requires it to carry the very same value. Both are restricted to one
+     * occurrence, so an already present Unique Id is replaced.
      *
      * @param system system value
      * @param value identifier value
@@ -36,18 +89,69 @@ abstract class AbstractDocumentReference<T extends AbstractDocumentReference<T>>
         setMasterIdentifier(new UniqueIdIdentifier()
             .setSystem(system)
             .setValue(value));
+        MhdIdentifierType.UNIQUE_ID.removeFrom(getIdentifier());
+        getIdentifier().add(new UniqueIdIdentifier()
+            .setSystem(system)
+            .setValue(value));
         return (T)this;
     }
 
     /**
-     * Adds an identifier to be a EntryUuid as required by the profile
+     * Adds an identifier to be a EntryUuid as required by the profile. Since MHD 4.2.4 this slice is
+     * restricted to one occurrence, so an already present EntryUuid identifier is replaced.
+     *
      * @param uuid UUID
      * @return this object
      */
     @SuppressWarnings("unchecked")
     public T setEntryUuidIdentifier(UUID uuid) {
+        MhdIdentifierType.ENTRY_UUID.removeFrom(getIdentifier());
         getIdentifier().add(new EntryUuidIdentifier(uuid));
         return (T)this;
+    }
+
+    /**
+     * Returns the EntryUuid identifier, recognized either by its {@code type} coding (MHD 4.2.4) or
+     * by its {@code use} (MHD 4.2.3 and earlier).
+     *
+     * @return the EntryUuid identifier, if present
+     */
+    public Optional<Identifier> getEntryUuidIdentifier() {
+        return MhdIdentifierType.ENTRY_UUID.find(getIdentifier());
+    }
+
+    /**
+     * Returns the Unique Id identifier, recognized either by its {@code type} coding (MHD 4.2.4) or
+     * by its {@code use} (MHD 4.2.3 and earlier). Looks at {@code DocumentReference.identifier}
+     * first and falls back to the MasterIdentifier, which is where MHD primarily carries it.
+     *
+     * @return the Unique Id identifier, if present
+     */
+    public Optional<Identifier> getUniqueIdIdentifier() {
+        return MhdIdentifierType.UNIQUE_ID.find(getIdentifier())
+            .or(() -> hasMasterIdentifier() ? Optional.of(getMasterIdentifier()) : Optional.empty());
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return super.isEmpty() && ElementUtil.isEmpty(homeCommunityId);
+    }
+
+    @Override
+    public void copyValues(DocumentReference dst) {
+        super.copyValues(dst);
+        if (dst instanceof AbstractDocumentReference<?> documentReference) {
+            documentReference.homeCommunityId = homeCommunityId == null ? null : homeCommunityId.copy();
+        }
+    }
+
+    @Override
+    public boolean equalsDeep(Base other_) {
+        if (!super.equalsDeep(other_))
+            return false;
+        if (!(other_ instanceof AbstractDocumentReference<?> other))
+            return false;
+        return compareDeep(homeCommunityId, other.homeCommunityId, true);
     }
 
 }

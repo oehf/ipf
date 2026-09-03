@@ -50,6 +50,10 @@ public class Iti66ListSearchParameters extends Iti66SearchParameters<ListResourc
     @Getter @Setter private TokenParam patientIdentifier;
     @Getter @Setter private StringParam authorFamilyName;
     @Getter @Setter private StringParam authorGivenName;
+
+    /** MHD 4.2.4 Target Communities Option (CP-ITI-1326-02). */
+    @Getter @Setter private UriOrListParam targetCommunityIdList;
+
     @Getter @Setter private SortSpec sortSpec;
     @Getter @Setter private Set<Include> includeSpec;
 

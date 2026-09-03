@@ -19,8 +19,13 @@ package org.openehealth.ipf.commons.ihe.fhir.iti65;
 import lombok.Getter;
 import lombok.Setter;
 import org.hl7.fhir.r4.model.DocumentManifest;
+import org.hl7.fhir.r4.model.Identifier;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.model.MhdIdentifierType;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.model.SubmissionSetList;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Christian Ohr
@@ -42,10 +47,8 @@ public class Iti65AuditDataset extends FhirAuditDataset {
         getPatientIds().add(reference.getResource() != null ?
                 reference.getResource().getIdElement().getValue() :
                 reference.getReference());
-        // If available, use the documentManifest identifier as submissionSetUuid
-        if (!documentManifest.getIdentifier().isEmpty()) {
-            this.submissionSetUuid = documentManifest.getIdentifier().get(0).getValue();
-        }
+        // If available, use the documentManifest entryUUID identifier as submissionSetUuid
+        entryUuid(documentManifest.getIdentifier()).ifPresent(value -> this.submissionSetUuid = value);
     }
 
     public void enrichDatasetFromSubmissionSetList(SubmissionSetList<?> submissionSetList) {
@@ -53,9 +56,23 @@ public class Iti65AuditDataset extends FhirAuditDataset {
         getPatientIds().add(reference.getResource() != null ?
             reference.getResource().getIdElement().getValue() :
             reference.getReference());
-        // If available, use the submissionSetList identifier as submissionSetUuid
-        if (!submissionSetList.getIdentifier().isEmpty()) {
-            this.submissionSetUuid = submissionSetList.getIdentifier().get(0).getValue();
-        }
+        // If available, use the submissionSetList entryUUID identifier as submissionSetUuid
+        entryUuid(submissionSetList.getIdentifier()).ifPresent(value -> this.submissionSetUuid = value);
+    }
+
+    /**
+     * Picks the entryUUID identifier out of the identifiers of a SubmissionSet. Since MHD 4.2.4 the
+     * SubmissionSet may carry a uniqueId identifier next to the entryUUID one, so the entryUUID has
+     * to be selected by its {@code type} coding (or, for MHD 4.2.3 and earlier, by its {@code use})
+     * rather than by its position. Falls back to the first identifier for senders that provide
+     * neither.
+     *
+     * @param identifiers identifiers of the SubmissionSet
+     * @return value of the entryUUID identifier, if any identifier is present at all
+     */
+    private static Optional<String> entryUuid(List<Identifier> identifiers) {
+        return MhdIdentifierType.ENTRY_UUID.find(identifiers)
+            .or(() -> identifiers.stream().findFirst())
+            .map(Identifier::getValue);
     }
 }

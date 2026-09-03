@@ -34,6 +34,7 @@ import ca.uhn.fhir.rest.param.ReferenceOrListParam;
 import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.UriOrListParam;
 import ca.uhn.fhir.rest.server.exceptions.InvalidRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -44,6 +45,7 @@ import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.r4.model.Practitioner;
 import org.hl7.fhir.r4.model.ResourceType;
 import org.openehealth.ipf.commons.ihe.fhir.AbstractPlainProvider;
+import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile;
 
 import java.util.Set;
 
@@ -75,6 +77,8 @@ public class Iti67StrictResourceProvider extends AbstractPlainProvider {
             @OptionalParam(name = DocumentReference.SP_SECURITY_LABEL) TokenOrListParam securityLabel,
             @OptionalParam(name = DocumentReference.SP_FORMAT) TokenOrListParam format,
             @OptionalParam(name = DocumentReference.SP_RELATED, chainWhitelist = { "", DocumentReference.SP_IDENTIFIER }) ReferenceOrListParam related,
+            // MHD 4.2.4 Target Communities Option
+            @OptionalParam(name = MhdProfile.SP_TARGET_COMMUNITY_ID_LIST) UriOrListParam targetCommunityIdList,
             // Extension to ITI-67
             @OptionalParam(name = IAnyResource.SP_RES_ID) TokenParam resourceId,
             @Sort SortSpec sortSpec,
@@ -118,6 +122,7 @@ public class Iti67StrictResourceProvider extends AbstractPlainProvider {
                 .format(format)
                 .related(relatedParam)
                 .relatedId(relatedIdParam)
+                .targetCommunityIdList(targetCommunityIdList)
                 ._id(resourceId)
                 .sortSpec(sortSpec)
                 .includeSpec(includeSpec)

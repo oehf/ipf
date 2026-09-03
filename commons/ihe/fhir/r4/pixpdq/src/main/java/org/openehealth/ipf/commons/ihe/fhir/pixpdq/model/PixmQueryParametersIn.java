@@ -20,7 +20,6 @@ import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.StringType;
 import org.hl7.fhir.r4.model.UriType;
-import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Pixm310;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
 
 import java.util.List;
@@ -37,7 +36,7 @@ import java.util.stream.Collectors;
  * @since 5.2
  */
 @ResourceDef(name = "Parameters", profile = PixmProfile.PIXM_QUERY_PARAMETERS_IN_PROFILE)
-public class PixmQueryParametersIn extends Parameters implements Pixm310 {
+public class PixmQueryParametersIn extends Parameters {
 
     public static final String SOURCE_IDENTIFIER = "sourceIdentifier";
     public static final String TARGET_SYSTEM = "targetSystem";

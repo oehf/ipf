@@ -16,13 +16,11 @@
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq;
 
 /**
- * Interface for deriving PIXm version
+ * The versions of the PIXm supplement IPF knows about. Note that this is a version of the
+ * <em>profiles</em>, not of the IPF model classes: the resources built by those may well conform to
+ * more than one PIXm version.
  */
-public interface PixmVersion {
+public enum PixmVersion {
 
-    Version supportsVersion();
-
-    enum Version {
-        v310
-    }
+    v310
 }

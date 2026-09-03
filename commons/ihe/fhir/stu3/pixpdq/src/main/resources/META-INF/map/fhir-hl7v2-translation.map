@@ -55,47 +55,47 @@ mappings = {
     )
 
     'hl7v2fhir-patient-religion'(['2.16.840.1.113883.5.6', 'http://hl7.org/fhir/v3/ReligiousAffiliation'],
-        AGN:  1004,             // Agnostic
-        ATH:  1007,             // Atheist
-        BAH:  1008,             // Baha'i
-        BUD:  1059,             // Buddhist
-        BMA:  1029,             // Buddhist: Mahayana
-        BTH:  1051,             // Buddhist: Theravada
-        ANG:  1005,             // Christian: Anglican
-        AOG:  1061,             // Christian: Assembly of God
-        BAP:  1009,             // Christian: Baptist
-        CAT:  1041,             // Christian: Roman Catholic
-        CHS:  1063,             // Christian: Christian Science
-        COC:  1064,             // Christian: Church of Christ
-        COG:  1065,             // Christian: Church of God
-        EOT:  1068,             // Christian: Eastern Orthodox
-        EPI:  1069,             // Christian: Episcopalian
-        FRQ:  1071,             // Christian: Friends
-        GRE:  1068,             // Christian: Greek Orthodox
-        JWN:  1025,             // Christian: Jehovah's Witness
-        LUT:  1028,             // Christian: Lutheran
-        MET:  1073,             // Christian: Methodist
-        MOM:  1027,             // Christian: Latter-day Saints
-        NAZ:  1075,             // Christian: Church of the Nazarene
-        COT:  1013,             // Christian: Other
-        PEN:  1038,             // Christian: Pentecostal
-        PRE:  1076,             // Christian: Presbyterian
-        PRO:  1077,             // Christian: Protestant
-        QUA:  1071,             // Christian: Friends
-        REC:  1079,             // Christian: Reformed Church
-        SAA:  1080,             // Christian: Salvation Army
-        SEV:  1001,             // Christian: Seventh Day Adventist
-        UNU:  1052,             // Christian: Unitarian Universalist
-        CNF:  1014,             // Confucian
-        HIN:  1020,             // Hindu
-        JAI:  1024,             // Jain
-        JEW:  1026,             // Jewish
-        MOS:  1023,             // Muslim
-        MSU:  1049,             // Muslim: Sunni
-        MSH:  1045,             // Muslim: Shiite
-        NAM:  1074,             // Native American
-        SHN:  1046,             // Shintoist
-        SIK:  1047,             // Sikh
+        'AGN': '1004',          // Agnostic
+        'ATH': '1007',          // Atheist
+        'BAH': '1008',          // Baha'i
+        'BUD': '1059',          // Buddhist
+        'BMA': '1029',          // Buddhist: Mahayana
+        'BTH': '1051',          // Buddhist: Theravada
+        'ANG': '1005',          // Christian: Anglican
+        'AOG': '1061',          // Christian: Assembly of God
+        'BAP': '1009',          // Christian: Baptist
+        'CAT': '1041',          // Christian: Roman Catholic
+        'CHS': '1063',          // Christian: Christian Science
+        'COC': '1064',          // Christian: Church of Christ
+        'COG': '1065',          // Christian: Church of God
+        'EOT': '1068',          // Christian: Eastern Orthodox
+        'EPI': '1069',          // Christian: Episcopalian
+        'FRQ': '1071',          // Christian: Friends
+        'GRE': '1068',          // Christian: Greek Orthodox
+        'JWN': '1025',          // Christian: Jehovah's Witness
+        'LUT': '1028',          // Christian: Lutheran
+        'MET': '1073',          // Christian: Methodist
+        'MOM': '1027',          // Christian: Latter-day Saints
+        'NAZ': '1075',          // Christian: Church of the Nazarene
+        'COT': '1013',          // Christian: Other
+        'PEN': '1038',          // Christian: Pentecostal
+        'PRE': '1076',          // Christian: Presbyterian
+        'PRO': '1077',          // Christian: Protestant
+        'QUA': '1071',          // Christian: Friends
+        'REC': '1079',          // Christian: Reformed Church
+        'SAA': '1080',          // Christian: Salvation Army
+        'SEV': '1001',          // Christian: Seventh Day Adventist
+        'UNU': '1052',          // Christian: Unitarian Universalist
+        'CNF': '1014',          // Confucian
+        'HIN': '1020',          // Hindu
+        'JAI': '1024',          // Jain
+        'JEW': '1026',          // Jewish
+        'MOS': '1023',          // Muslim
+        'MSU': '1049',          // Muslim: Sunni
+        'MSH': '1045',          // Muslim: Shiite
+        'NAM': '1074',          // Native American
+        'SHN': '1046',          // Shintoist
+        'SIK': '1047',          // Sikh
         (ELSE) : 'UNK'
     )
 

@@ -88,13 +88,16 @@ public abstract class FolderList<T extends FolderList<T>> extends MhdList<T> {
     }
 
     /**
-     * Adds an identifier to be a EntryUuid as required by the profile
+     * Adds an identifier to be a UniqueId as required by the profile. Since MHD 4.2.4 this slice is
+     * restricted to one occurrence, so an already present UniqueId identifier is replaced.
+     *
      * @param system system
      * @param value value
      * @return this object
      */
     @SuppressWarnings("unchecked")
     public T setUniqueIdIdentifier(String system, String value) {
+        MhdIdentifierType.UNIQUE_ID.removeFrom(getIdentifier());
         getIdentifier().add(new UniqueIdIdentifier()
             .setSystem(system)
             .setValue(value));

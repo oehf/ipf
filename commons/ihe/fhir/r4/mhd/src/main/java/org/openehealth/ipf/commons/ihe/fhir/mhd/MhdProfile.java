@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.ihe.fhir.support.IheFhirProfile;
 
 import java.util.Optional;
 
-public enum MhdProfile implements Mhd423, IheFhirProfile {
+public enum MhdProfile implements IheFhirProfile {
 
     // Bundle Profiles V423
 
@@ -133,6 +133,10 @@ public enum MhdProfile implements Mhd423, IheFhirProfile {
         MhdProfile.SOURCE_ID_PROFILE,
         null),
 
+    HOME_COMMUNITY_ID(
+        MhdProfile.HOME_COMMUNITY_ID_PROFILE,
+        null),
+
     SUBMISSIONSET_UNIQUE_IDENTIFIER(
         MhdProfile.SUBMISSIONSET_UNIQUE_IDENTIFIER_PROFILE,
         null),
@@ -150,6 +154,28 @@ public enum MhdProfile implements Mhd423, IheFhirProfile {
 
     /** Canonical URL prefix of the MHD profiles. */
     private static final String PROFILE_PREFIX = IheFhirProfile.IHE_ITI_PREFIX + "MHD/StructureDefinition/";
+
+    /** Canonical URL prefix of the terminology defined by MHD. */
+    private static final String CODE_SYSTEM_PREFIX = IheFhirProfile.IHE_ITI_PREFIX + "MHD/CodeSystem/";
+
+    /**
+     * Code system telling the entryUUID and the uniqueId identifier apart, introduced by MHD 4.2.4
+     * (CP-ITI-1328-01). See {@link org.openehealth.ipf.commons.ihe.fhir.mhd.model.MhdIdentifierType} for the codes.
+     */
+    public static final String MHD_IDENTIFIER_TYPE_CODE_SYSTEM = CODE_SYSTEM_PREFIX + "IHE.MHD.MHDIdentifierType";
+
+    /** Canonical URL prefix of the search parameters defined by MHD. */
+    private static final String SEARCH_PARAMETER_PREFIX = IheFhirProfile.IHE_ITI_PREFIX + "MHD/SearchParameter/";
+
+    /**
+     * Search parameter restricting an [ITI-66] or [ITI-67] query to the given communities, introduced
+     * by MHD 4.2.4 with the Target Communities Option (CP-ITI-1326-02). Matched against the
+     * {@link #HOME_COMMUNITY_ID_PROFILE} extension of the queried resources.
+     */
+    public static final String TARGET_COMMUNITY_ID_LIST_SEARCH_PARAMETER = SEARCH_PARAMETER_PREFIX + "IHE-TargetCommunityIdList";
+
+    /** Name of the {@link #TARGET_COMMUNITY_ID_LIST_SEARCH_PARAMETER} search parameter. */
+    public static final String SP_TARGET_COMMUNITY_ID_LIST = "targetCommunityIdList";
 
     public static final String ITI65_MINIMAL_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.MHD.Minimal.ProvideBundle";
     public static final String ITI65_COMPREHENSIVE_BUNDLE_PROFILE = PROFILE_PREFIX + "IHE.MHD.Comprehensive.ProvideBundle";
@@ -202,6 +228,9 @@ public enum MhdProfile implements Mhd423, IheFhirProfile {
     public static final String AUTHOR_ORG_PROFILE = PROFILE_PREFIX + "ihe-authorOrg";
     public static final String INTENDED_RECIPIENT_PROFILE = PROFILE_PREFIX + "ihe-intendedRecipient";
     public static final String SOURCE_ID_PROFILE = PROFILE_PREFIX + "ihe-sourceId";
+
+    /** Extension naming the community an artifact resides in, introduced by MHD 4.2.4 (CP-ITI-1326-02). */
+    public static final String HOME_COMMUNITY_ID_PROFILE = PROFILE_PREFIX + "ihe-HomeCommunityId";
     public static final String SUBMISSIONSET_UNIQUE_IDENTIFIER_PROFILE = PROFILE_PREFIX + "IHE.MHD.SubmissionSetUniqueIdIdentifier";
     public static final String UNIQUE_ID_IDENTIFIER_PROFILE = PROFILE_PREFIX + "IHE.MHD.UniqueIdIdentifier";
     public static final String ENTRY_UUID_IDENTIFIER_PROFILE = PROFILE_PREFIX + "IHE.MHD.EntryUUID.Identifier";
