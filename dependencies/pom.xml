@@ -532,31 +532,6 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-stu3-core</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-stu3-audit</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-stu3-mhd</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-stu3-pixpdq</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
-                <artifactId>ipf-commons-ihe-fhir-stu3-qedm</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.commons</groupId>
                 <artifactId>ipf-commons-ihe-fhir-r4-qedm</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -683,32 +658,6 @@
             </dependency>
             <dependency>
                 <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-stu3-audit</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-stu3-mhd</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-stu3-pixpdq</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-stu3-qedm</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
-                <artifactId>ipf-platform-camel-ihe-fhir-stu3-test</artifactId>
-                <version>${project.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.platform-camel</groupId>
                 <artifactId>ipf-platform-camel-ihe-continua</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -765,11 +714,6 @@
             <dependency>
                 <groupId>org.openehealth.ipf.boot</groupId>
                 <artifactId>ipf-fhir-r4-spring-boot-starter</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.openehealth.ipf.boot</groupId>
-                <artifactId>ipf-fhir-stu3-spring-boot-starter</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

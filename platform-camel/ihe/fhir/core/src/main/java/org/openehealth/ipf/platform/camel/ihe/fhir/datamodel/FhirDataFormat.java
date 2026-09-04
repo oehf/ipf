@@ -35,7 +35,7 @@ import java.nio.charset.StandardCharsets;
 public abstract class FhirDataFormat extends ServiceSupport implements DataFormat  {
 
     @Setter
-    private FhirContext defaultFhirContext = FhirContext.forDstu3();
+    private FhirContext defaultFhirContext = FhirContext.forR4Cached();
     private Charset defaultCharset = StandardCharsets.UTF_8;
 
     public void setDefaultCharset(String charset) {
@@ -59,14 +59,18 @@ public abstract class FhirDataFormat extends ServiceSupport implements DataForma
 
     protected FhirContext getFhirContext(Exchange exchange) {
         var context = exchange.getIn().getHeader(Constants.FHIR_CONTEXT, FhirContext.class);
-        if (context == null) context = defaultFhirContext;
+        if (context == null) {
+            context = defaultFhirContext;
+        }
         return context;
     }
 
     protected Charset getCharset(Exchange exchange) {
         var charset = defaultCharset;
         var charsetName = exchange.getProperty(Exchange.CHARSET_NAME, String.class);
-        if (charsetName != null) charset = Charset.forName(charsetName);
+        if (charsetName != null) {
+            charset = Charset.forName(charsetName);
+        }
         return charset;
     }
 

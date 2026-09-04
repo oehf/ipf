@@ -16,7 +16,6 @@
     <modules>
         <module>core</module>
         <module>r4</module>
-        <module>stu3</module>
     </modules>
 
 </project>

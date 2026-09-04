@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.tutorials.fhir
 
+import ca.uhn.fhir.context.FhirVersionEnum
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet
 import org.openehealth.ipf.commons.ihe.ws.server.ServletServer
 import org.openehealth.ipf.commons.ihe.ws.server.TomcatServer
@@ -36,7 +37,7 @@ class Server {
     static void main(String[] args) {
         ClassPathResource contextResource = new ClassPathResource('context.xml')
         
-        IpfFhirServlet servlet = new IpfFhirServlet()
+        IpfFhirServlet servlet = new IpfFhirServlet(FhirVersionEnum.R4)
         
         ServletServer servletServer = new TomcatServer()
         servletServer.contextResource = contextResource.getURI().toString()

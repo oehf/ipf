@@ -17,10 +17,10 @@ package org.openehealth.ipf.tutorials.fhir
 
 import ca.uhn.fhir.context.FhirContext
 import ca.uhn.fhir.rest.client.api.IGenericClient
-import org.hl7.fhir.dstu3.model.Parameters
-import org.hl7.fhir.dstu3.model.Patient
-import org.hl7.fhir.dstu3.model.StringType
-import org.hl7.fhir.dstu3.model.UriType
+import org.hl7.fhir.r4.model.Parameters
+import org.hl7.fhir.r4.model.Patient
+import org.hl7.fhir.r4.model.StringType
+import org.hl7.fhir.r4.model.UriType
 import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83Constants
 
@@ -38,7 +38,7 @@ class Client {
      *          any problem that occurred.
      */
     static void main(String[] args) {
-        FhirContext context = FhirContext.forDstu2Hl7Org()
+        FhirContext context = FhirContext.forR4()
 
         Parameters inParams = new Parameters()
         inParams.addParameter()

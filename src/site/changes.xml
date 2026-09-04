@@ -24,6 +24,12 @@
     </properties>
     <body>
         <release version="6.0.0" description="IPF 6.0.0" date="">
+            <action issue="519" dev="ohr" type="remove">
+                Support for FHIR STU3 (DSTU3) has been removed. The modules ipf-commons-ihe-fhir-stu3-*,
+                ipf-platform-camel-ihe-fhir-stu3-* and ipf-fhir-stu3-spring-boot-starter no longer exist;
+                use their FHIR R4 counterparts instead. The default FhirContext of the Camel FHIR data
+                formats is now R4 instead of DSTU3.
+            </action>
             <action issue="518" dev="ohr" type="update">
                 MHD updated to version 4.2.4. The entryUUID and the uniqueId Identifier are now differentiated
                 by Identifier.type instead of Identifier.use (CP-ITI-1328-01). Canonical references that pin a version,

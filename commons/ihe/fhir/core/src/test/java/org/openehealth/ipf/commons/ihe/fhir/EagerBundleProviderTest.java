@@ -18,7 +18,7 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import io.undertow.servlet.spec.HttpServletResponseImpl;
 import org.easymock.EasyMock;
-import org.hl7.fhir.dstu3.model.Patient;
+import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +27,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -56,7 +57,7 @@ public class EagerBundleProviderTest {
     public void testGetSize() {
         EasyMock.expect(requestConsumer.handleBundleRequest(bundleProvider.getPayload(), bundleProvider.getHeaders(), new HashMap<>())).andReturn(response);
         EasyMock.replay(requestConsumer);
-        assertEquals(response.size(), bundleProvider.size().intValue());
+        assertEquals(response.size(), Objects.requireNonNull(bundleProvider.size()).intValue());
         EasyMock.verify(requestConsumer);
     }
 
