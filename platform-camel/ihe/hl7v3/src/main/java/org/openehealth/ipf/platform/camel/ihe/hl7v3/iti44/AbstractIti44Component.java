@@ -18,7 +18,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti44;
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Endpoint;
@@ -30,19 +29,19 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-abstract class AbstractIti44Component extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
+abstract class AbstractIti44Component extends Hl7v3Component {
 
-    AbstractIti44Component(Hl7v3InteractionId<Hl7v3WsTransactionConfiguration> interactionId) {
+    AbstractIti44Component(Hl7v3InteractionId interactionId) {
         super(interactionId);
     }
 
     @SuppressWarnings({"raw"}) // Required because of base class
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new Hl7v3Endpoint<>(uri, remaining, this, parameters, Iti44Service.class) {
+        return new Hl7v3Endpoint(uri, remaining, this, parameters, Iti44Service.class) {
             @Override
-            public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
-                                                                                                            JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+            public AbstractWsProducer<Hl7v3AuditDataset, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset> endpoint,
+                                                                           JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
                 return new Iti44Producer(endpoint, clientFactory);
             }
         };

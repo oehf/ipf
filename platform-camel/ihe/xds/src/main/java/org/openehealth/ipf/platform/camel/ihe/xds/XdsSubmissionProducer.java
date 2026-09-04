@@ -19,7 +19,6 @@ import jakarta.xml.ws.BindingProvider;
 import org.apache.cxf.binding.soap.SoapHeader;
 import org.apache.cxf.headers.Header;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLSlotList30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
@@ -34,7 +33,7 @@ import javax.xml.parsers.DocumentBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, InType, OutType> {
+abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsProducer<XdsSubmitAuditDataset, InType, OutType> {
 
     public static final String TARGET_HCID_NS = "urn:ihe:iti:xdr:2014";
     public static final String TARGET_HCID_NS_PREFIX = "xdr";
@@ -43,7 +42,7 @@ abstract public class XdsSubmissionProducer<InType, OutType> extends AbstractWsP
     public static final QName  TARGET_HCID_HEADER_NAME = new QName(TARGET_HCID_NS, TARGET_HCID_BLOCK_LOCAL_PART, TARGET_HCID_NS_PREFIX);
 
     public XdsSubmissionProducer(
-            AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
+            AbstractWsEndpoint<XdsSubmitAuditDataset> endpoint,
             JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory,
             Class<InType> requestClass,
             Class<OutType> responseClass) {

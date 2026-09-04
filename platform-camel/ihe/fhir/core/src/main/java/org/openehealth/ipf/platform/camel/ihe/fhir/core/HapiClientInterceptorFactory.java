@@ -31,6 +31,6 @@ public interface HapiClientInterceptorFactory {
      * @param exchange Camel exchange
      * @return client interceptor
      */
-    IClientInterceptor newInstance(FhirEndpoint endpoint, Exchange exchange);
+    IClientInterceptor newInstance(FhirEndpoint<?> endpoint, Exchange exchange);
 
 }

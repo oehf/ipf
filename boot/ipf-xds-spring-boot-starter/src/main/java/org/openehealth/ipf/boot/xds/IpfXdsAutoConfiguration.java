@@ -16,10 +16,15 @@
 
 package org.openehealth.ipf.boot.xds;
 
+import io.micrometer.observation.ObservationRegistry;
+import org.apache.cxf.tracing.micrometer.ObservationFeature;
+import org.openehealth.ipf.boot.ws.CxfObservationConfigurationSupport;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.correlation.AsynchronyCorrelator;
 import org.openehealth.ipf.commons.ihe.ws.correlation.SpringCacheAsynchronyCorrelator;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
@@ -32,7 +37,10 @@ import org.springframework.context.annotation.Configuration;
  * Configure a basic IPF setup, mostly configuring HL7v2 and Mapping stuff
  */
 @Configuration
-@AutoConfigureAfter(IpfAtnaAutoConfiguration.class)
+// the CacheManager that cachingAsynchronyCorrelator asks for is contributed by Spring Boot's cache
+// auto-configuration, which would otherwise run after this one, leaving the condition unsatisfied
+@AutoConfigureAfter(value = IpfAtnaAutoConfiguration.class,
+        name = "org.springframework.boot.cache.autoconfigure.CacheAutoConfiguration")
 @EnableConfigurationProperties(IpfXdsConfigurationProperties.class)
 public class IpfXdsAutoConfiguration {
 
@@ -51,4 +59,15 @@ public class IpfXdsAutoConfiguration {
         return new SpringCacheAsynchronyCorrelator(cacheManager);
     }
 
+
+
+    /**
+     * @see CxfObservationConfigurationSupport
+     */
+    @Configuration
+    @ConditionalOnClass(ObservationFeature.class)
+    @ConditionalOnBean(ObservationRegistry.class)
+    @ConditionalOnProperty("ipf.xds.observing")
+    public static class CxfObservationConfiguration extends CxfObservationConfigurationSupport {
+    }
 }

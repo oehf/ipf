@@ -30,3 +30,5 @@ work
 generated-stubs
 /commons/audit/.vertx
 /local_history.patch
+/CLAUDE.md
+/.claude/settings.local.json

@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.pharm5.Pharm5TransactionConfiguration;
 
 import java.util.List;
@@ -42,10 +41,10 @@ public class CMPD implements IntegrationProfile {
     }
 
     @AllArgsConstructor
-    public enum QueryPharmacyDocumentsInteractions implements FhirInteractionId<FhirQueryAuditDataset> {
+    public enum QueryPharmacyDocumentsInteractions implements FhirInteractionId {
         PHARM_5(PHARM_5_CONFIG);
 
         @Getter
-        private final FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration fhirTransactionConfiguration;
     }
 }

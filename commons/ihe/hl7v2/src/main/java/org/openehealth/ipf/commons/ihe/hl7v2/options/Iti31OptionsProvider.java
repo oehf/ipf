@@ -24,7 +24,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.audit.iti31.Iti31AuditStrategy;
 /**
  * @author Christian Ohr
  */
-public class Iti31OptionsProvider implements Hl7v2TransactionOptionsProvider<FeedAuditDataset, Iti31Options> {
+public class Iti31OptionsProvider implements Hl7v2TransactionOptionsProvider<Iti31Options> {
 
     @Override
     public Class<Iti31Options> getTransactionOptionsType() {

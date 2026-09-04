@@ -1,12 +1,12 @@
 /*
  * Copyright 2009 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti42;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -45,10 +44,10 @@ public class Iti42Component extends XdsComponent<XdsSubmitAuditDataset> {
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<>(uri, remaining, this, parameters, Iti42Service.class) {
             @Override
-            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
-                                                                                                                                  JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+            public AbstractWsProducer<XdsSubmitAuditDataset, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset> endpoint,
+                                                                               JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
-                        endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
+                    endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
             }
         };
     }

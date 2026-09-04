@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti55.deferredresponse;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3AsyncResponseEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
@@ -32,7 +31,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.XCPD.Interactions.ITI_55_DEF
  * Camel component for the ITI-55 XCPD Initiating Gateway actor
  * (receivers of deferred responses).
  */
-public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransactionConfiguration> {
+public class Iti55DeferredResponseComponent extends Hl7v3Component {
 
     public static final String THREAD_POOL_NAME = "iti55.deferred.response";
 
@@ -42,10 +41,10 @@ public class Iti55DeferredResponseComponent extends Hl7v3Component<Hl7v3WsTransa
 
     @Override
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
-        return new Hl7v3AsyncResponseEndpoint<>(uri, remaining, this, parameters, Iti55DeferredResponseService.class) {
+        return new Hl7v3AsyncResponseEndpoint(uri, remaining, this, parameters, Iti55DeferredResponseService.class) {
             @Override
-            public AbstractWsProducer<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3WsTransactionConfiguration> endpoint,
-                                                                                                            JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
+            public AbstractWsProducer<Hl7v3AuditDataset, ?, ?> getProducer(AbstractWsEndpoint<Hl7v3AuditDataset> endpoint,
+                                                                           JaxWsClientFactory<Hl7v3AuditDataset> clientFactory) {
                 return new Iti55DeferredResponseProducer(endpoint, clientFactory);
             }
         };

@@ -16,13 +16,11 @@
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq;
 
 /**
- * Interface for deriving PDQm version
+ * The versions of the PDQm supplement IPF knows about. Note that this is a version of the
+ * <em>profiles</em>, not of the IPF model classes: the resources built by those may well conform to
+ * more than one PDQm version.
  */
-public interface PdqmVersion {
+public enum PdqmVersion {
 
-    Version supportsVersion();
-
-    enum Version {
-        v320
-    }
+    v320
 }

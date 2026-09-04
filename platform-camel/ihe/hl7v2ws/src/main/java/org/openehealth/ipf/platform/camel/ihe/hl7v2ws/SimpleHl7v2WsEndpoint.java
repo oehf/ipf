@@ -21,8 +21,10 @@ import org.apache.camel.Producer;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
-import org.openehealth.ipf.commons.ihe.ws.*;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.core.Interceptor;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptorUtils;
@@ -46,12 +48,12 @@ import java.util.Map;
  */
 public abstract class SimpleHl7v2WsEndpoint<
         ComponentType extends AbstractHl7v2WsComponent>
-        extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> implements HL7v2Endpoint<MllpAuditDataset> {
+        extends AbstractWsEndpoint<WsAuditDataset> implements HL7v2Endpoint {
 
     public SimpleHl7v2WsEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> component,
+            AbstractWsComponent<WsAuditDataset> component,
             Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass) {
         super(endpointUri, address, component, parameters, serviceClass);
@@ -121,17 +123,17 @@ public abstract class SimpleHl7v2WsEndpoint<
     }
 
     @Override
-    public Hl7v2TransactionConfiguration<MllpAuditDataset> getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return getComponent().getHl7v2TransactionConfiguration();
     }
 
     @Override
-    public NakFactory<MllpAuditDataset> getNakFactory() {
+    public NakFactory getNakFactory() {
         return getComponent().getNakFactory();
     }
 
     @Override
-    public Hl7v2InteractionId<MllpAuditDataset> getInteractionId() {
+    public Hl7v2InteractionId getInteractionId() {
         return getComponent().getInteractionId();
     }
 }

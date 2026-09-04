@@ -15,8 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.core;
 
-import java.util.Map;
-
 import ca.uhn.hl7v2.DefaultHapiContext;
 import ca.uhn.hl7v2.ErrorCode;
 import ca.uhn.hl7v2.Version;
@@ -24,17 +22,18 @@ import org.apache.camel.component.netty.NettyEndpoint;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.NakFactory;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
+
+import java.util.Map;
 
 /**
  * MLLP dispatching Camel component.
  * @author Dmytro Rud
  */
-public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointConfiguration, MllpAuditDataset> {
+public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointConfiguration> {
 
-    public static final Hl7v2TransactionConfiguration<MllpAuditDataset> CONFIGURATION =
-            new Hl7v2TransactionConfiguration<>(
+    public static final Hl7v2TransactionConfiguration CONFIGURATION =
+            new Hl7v2TransactionConfiguration(
                     "mllp-dispatch",
                     "MLLP Dispatcher",
                     false,
@@ -53,7 +52,7 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
                     new boolean[] {false},      // interactive continuation (if any) will be delegated
                     new DefaultHapiContext());
 
-    private static final NakFactory<MllpAuditDataset> NAK_FACTORY = new NakFactory<>(CONFIGURATION);
+    private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
     static {
         CONFIGURATION.getHapiContext().getParserConfiguration().setEscaping(DefaultEscaping.INSTANCE);
@@ -61,26 +60,26 @@ public class MllpDispatchComponent extends MllpComponent<MllpDispatchEndpointCon
 
     @Override
     protected MllpDispatchEndpointConfiguration createConfig(String uri, Map<String, Object> parameters) {
-        return new MllpDispatchEndpointConfiguration(this, uri, parameters);
+        return new MllpDispatchEndpointConfiguration(this, parameters);
     }
 
     @Override
-    protected MllpEndpoint<?, ?, ?> createEndpoint(NettyEndpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
+    protected MllpEndpoint<MllpDispatchEndpointConfiguration, ?> createEndpoint(NettyEndpoint wrappedEndpoint, MllpDispatchEndpointConfiguration config) {
         return new MllpDispatchEndpoint(this, wrappedEndpoint, config);
     }
 
     @Override
-    public Hl7v2InteractionId<MllpAuditDataset> getInteractionId() {
+    public Hl7v2InteractionId getInteractionId() {
         return null;
     }
 
     @Override
-    public Hl7v2TransactionConfiguration<MllpAuditDataset> getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return CONFIGURATION;
     }
 
     @Override
-    public NakFactory<MllpAuditDataset> getNakFactory() {
+    public NakFactory getNakFactory() {
         return NAK_FACTORY;
     }
 }

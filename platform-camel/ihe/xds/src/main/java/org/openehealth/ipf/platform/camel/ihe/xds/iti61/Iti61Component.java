@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti61;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.SubmitObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -45,10 +44,10 @@ public class Iti61Component extends XdsComponent<XdsSubmitAuditDataset> {
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<>(uri, remaining, this, parameters, Iti61Service.class) {
             @Override
-            public AbstractWsProducer<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset, WsTransactionConfiguration<XdsSubmitAuditDataset>> endpoint,
-                                                                                                                                  JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
+            public AbstractWsProducer<XdsSubmitAuditDataset, ?, ?> getProducer(AbstractWsEndpoint<XdsSubmitAuditDataset> endpoint,
+                                                                               JaxWsClientFactory<XdsSubmitAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
-                        endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
+                    endpoint, clientFactory, SubmitObjectsRequest.class, RegistryResponseType.class);
             }
         };
     }

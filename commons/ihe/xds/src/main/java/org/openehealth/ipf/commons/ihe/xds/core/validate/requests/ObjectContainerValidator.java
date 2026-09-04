@@ -18,15 +18,34 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 import org.openehealth.ipf.commons.core.modules.api.Validator;
-import org.openehealth.ipf.commons.ihe.xds.*;
+import org.openehealth.ipf.commons.ihe.xds.CONTINUA_HRN;
+import org.openehealth.ipf.commons.ihe.xds.RMU;
+import org.openehealth.ipf.commons.ihe.xds.XCDR;
+import org.openehealth.ipf.commons.ihe.xds.XCF;
+import org.openehealth.ipf.commons.ihe.xds.XDM;
+import org.openehealth.ipf.commons.ihe.xds.XDR;
+import org.openehealth.ipf.commons.ihe.xds.XDS;
 import org.openehealth.ipf.commons.ihe.xds.core.XdsRuntimeException;
-import org.openehealth.ipf.commons.ihe.xds.core.ebxml.*;
-import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAssociation;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLExtrinsicObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectContainer;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryObject;
+import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationLabel;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AssociationType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.ErrorCode;
 import org.openehealth.ipf.commons.ihe.xds.core.responses.Severity;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
@@ -347,12 +366,12 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
 
         for (var docEntry : container.getExtrinsicObjects(DocumentEntryType.STABLE_OR_ON_DEMAND)) {
             var patientIdDocEntry = docEntry.getExternalIdentifierValue(DOC_ENTRY_PATIENT_ID_EXTERNAL_ID);
-            metaDataAssert(StringUtils.equals(patientId, patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
+            metaDataAssert(Objects.equals(patientId, patientIdDocEntry), DOC_ENTRY_PATIENT_ID_WRONG);
         }
 
         for (var folder : container.getRegistryPackages(FOLDER_CLASS_NODE)) {
             var patientIdFolder = folder.getExternalIdentifierValue(FOLDER_PATIENT_ID_EXTERNAL_ID);
-            metaDataAssert(StringUtils.equals(patientId, patientIdFolder), FOLDER_PATIENT_ID_WRONG);
+            metaDataAssert(Objects.equals(patientId, patientIdFolder), FOLDER_PATIENT_ID_WRONG);
         }
     }
 

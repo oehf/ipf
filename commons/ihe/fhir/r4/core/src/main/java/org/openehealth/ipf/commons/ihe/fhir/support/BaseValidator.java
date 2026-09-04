@@ -177,6 +177,10 @@ public abstract class BaseValidator extends FhirTransactionValidator.Support {
         // 5. In-memory terminology server for code validation
         supportChain.addValidationSupport(new InMemoryTerminologyServerValidationSupport(fhirContext));
 
+        // 6. Last resort for canonical references that pin a version, as written by the snapshots of
+        // implementation guides built with recent IG publisher versions
+        supportChain.addValidationSupport(new VersionedCanonicalUrlValidationSupport(fhirContext, supportChain));
+
         return supportChain;
     }
 

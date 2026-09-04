@@ -20,7 +20,10 @@ import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.svs.core.audit.SvsAuditDataset;
 import org.openehealth.ipf.commons.ihe.svs.core.requests.RetrieveValueSetRequest;
 import org.openehealth.ipf.commons.ihe.svs.core.responses.RetrieveValueSetResponse;
-import org.openehealth.ipf.commons.ihe.ws.*;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
@@ -35,7 +38,7 @@ import static org.openehealth.ipf.commons.ihe.svs.SVS.Interactions.ITI_48;
  *
  * @author Quentin Ligier
  */
-public class Iti48Component extends AbstractWsComponent<SvsAuditDataset, WsTransactionConfiguration<SvsAuditDataset>, WsInteractionId<WsTransactionConfiguration<SvsAuditDataset>>> {
+public class Iti48Component extends AbstractWsComponent<SvsAuditDataset> {
 
     public Iti48Component() {
         super(ITI_48);
@@ -72,7 +75,7 @@ public class Iti48Component extends AbstractWsComponent<SvsAuditDataset, WsTrans
             }
 
             @Override
-            public AbstractWsProducer<SvsAuditDataset, WsTransactionConfiguration<SvsAuditDataset>, RetrieveValueSetRequest, RetrieveValueSetResponse> getProducer(AbstractWsEndpoint<SvsAuditDataset, WsTransactionConfiguration<SvsAuditDataset>> endpoint, JaxWsClientFactory<SvsAuditDataset> clientFactory) {
+            public AbstractWsProducer<SvsAuditDataset, RetrieveValueSetRequest, RetrieveValueSetResponse> getProducer(AbstractWsEndpoint<SvsAuditDataset> endpoint, JaxWsClientFactory<SvsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
                     endpoint, clientFactory, RetrieveValueSetRequest.class, RetrieveValueSetResponse.class
                 );

@@ -15,7 +15,6 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.mllp.iti8
 
-import brave.Span
 import ca.uhn.hl7v2.HL7Exception
 import ca.uhn.hl7v2.parser.PipeParser
 import org.apache.camel.Exchange
@@ -39,8 +38,6 @@ import static org.junit.jupiter.api.Assertions.*
 @ContextConfiguration('/iti8/iti-8.xml')
 class TestIti8 extends AbstractMllpTest {
 
-    @Autowired
-    private MockReporter reporter
 
     @BeforeAll
     static void setUpClass() {
@@ -69,21 +66,6 @@ class TestIti8 extends AbstractMllpTest {
     @Test
     void testHappyCaseAndAudit3() {
         doTestHappyCaseAndAudit("xds-iti8://localhost:18081?audit=false&timeout=${TIMEOUT}&interceptorFactories=#clientInLogger,#clientOutLogger", 0)
-    }
-
-    @Test
-    void testHappyCaseAndTrace() {
-        doTestHappyCaseAndAudit("pix-iti8://localhost:18083?interceptorFactories=#producerTracingInterceptor,#clientInLogger,#clientOutLogger&timeout=${TIMEOUT}", 2)
-        assertEquals(2, reporter.spans.size())
-
-        def clientSpan = reporter.spans.find { span -> span.kind() == Span.Kind.CLIENT }
-        def serverSpan = reporter.spans.find { span -> span.kind() == Span.Kind.SERVER }
-
-        assertFalse(clientSpan.tags().isEmpty())
-        assertEquals(new HashMap<>(clientSpan.tags()), new HashMap<>(serverSpan.tags()))
-        assertNotEquals(clientSpan.id(), serverSpan.id())
-        assertEquals(clientSpan.traceId(), serverSpan.traceId())
-        assertEquals(clientSpan.id(), serverSpan.parentId())
     }
 
     def doTestHappyCaseAndAudit(String endpointUri, int expectedAuditItemsCount) {

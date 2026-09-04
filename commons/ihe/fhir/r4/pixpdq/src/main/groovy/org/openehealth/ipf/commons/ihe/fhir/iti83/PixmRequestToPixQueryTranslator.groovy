@@ -107,29 +107,28 @@ class PixmRequestToPixQueryTranslator implements FhirTranslator<Message> {
      * @return PixmQueryParametersIn instance
      */
     protected PixmQueryParametersIn convertToPixmQueryParametersIn(Object request) {
-        if (request instanceof PixmQueryParametersIn) {
-            return (PixmQueryParametersIn) request
+        if (request instanceof PixmQueryParametersIn pixmQueryParametersIn) {
+            return pixmQueryParametersIn
         }
-        
-        if (request instanceof Parameters) {
-            Parameters params = (Parameters) request
+
+        if (request instanceof Parameters params) {
             PixmQueryParametersIn pixmParams = new PixmQueryParametersIn()
             
             // Extract sourceIdentifier parameter
             params.parameter.each { param ->
                 if (PixmQueryParametersIn.SOURCE_IDENTIFIER == param.name) {
-                    if (param.value instanceof StringType) {
-                        pixmParams.setSourceIdentifier(((StringType) param.value).value)
-                    } else if (param.value instanceof Identifier) {
-                        pixmParams.setSourceIdentifier((Identifier) param.value)
+                    if (param.value instanceof StringType sourceIdentifier) {
+                        pixmParams.setSourceIdentifier(sourceIdentifier.value)
+                    } else if (param.value instanceof Identifier sourceIdentifier) {
+                        pixmParams.setSourceIdentifier(sourceIdentifier)
                     }
                 } else if (PixmQueryParametersIn.TARGET_SYSTEM == param.name) {
-                    if (param.value instanceof UriType) {
-                        pixmParams.addTargetSystem(((UriType) param.value).value)
+                    if (param.value instanceof UriType targetSystem) {
+                        pixmParams.addTargetSystem(targetSystem.value)
                     }
                 } else if (PixmQueryParametersIn._FORMAT == param.name) {
-                    if (param.value instanceof StringType) {
-                        pixmParams.setFormat(((StringType) param.value).value)
+                    if (param.value instanceof StringType format) {
+                        pixmParams.setFormat(format.value)
                     }
                 }
             }

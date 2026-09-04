@@ -26,17 +26,12 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptions;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti105.Iti105AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti105.Iti105TransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67ClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67TransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti68bin.Iti68BinaryTransactionConfiguration;
 
@@ -52,23 +47,23 @@ import java.util.List;
 public class MHD implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum SubmitInteractions implements FhirInteractionId<Iti65AuditDataset> {
+    public enum SubmitInteractions implements FhirInteractionId {
         ITI_65(ITI_65_CONFIG);
 
         @Getter
-        private final FhirTransactionConfiguration<Iti65AuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration fhirTransactionConfiguration;
     }
 
-    public enum QueryDocumentManifestInteractions implements FhirInteractionId<FhirQueryAuditDataset> {
+    public enum QueryDocumentManifestInteractions implements FhirInteractionId {
 
         ITI_66;
 
-        @Getter private FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        @Getter private FhirTransactionConfiguration fhirTransactionConfiguration;
 
         @Override
-        public void init(FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider,
+        public void init(FhirTransactionOptionsProvider<? extends FhirTransactionOptions> optionsProvider,
                          List<? extends FhirTransactionOptions> options) {
-            this.fhirTransactionConfiguration = new FhirTransactionConfiguration<>(
+            this.fhirTransactionConfiguration = new FhirTransactionConfiguration(
                     "mhd-iti66",
                     "Mobile Query for Existing Data",
                     true,
@@ -81,16 +76,16 @@ public class MHD implements IntegrationProfile {
         }
     }
 
-    public enum QueryDocumentReferenceInteractions implements FhirInteractionId<FhirQueryAuditDataset> {
+    public enum QueryDocumentReferenceInteractions implements FhirInteractionId {
 
         ITI_67;
 
-        @Getter private FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        @Getter private FhirTransactionConfiguration fhirTransactionConfiguration;
 
         @Override
-        public void init(FhirTransactionOptionsProvider<FhirQueryAuditDataset, ? extends FhirTransactionOptions> optionsProvider,
+        public void init(FhirTransactionOptionsProvider<? extends FhirTransactionOptions> optionsProvider,
                          List<? extends FhirTransactionOptions> options) {
-            this.fhirTransactionConfiguration = new FhirTransactionConfiguration<>(
+            this.fhirTransactionConfiguration = new FhirTransactionConfiguration(
                     "mhd-iti67",
                     "Mobile Query for Existing Data",
                     true,
@@ -108,7 +103,7 @@ public class MHD implements IntegrationProfile {
         ITI_68(ITI_68_CONFIG);
 
         @Getter
-        private final TransactionConfiguration<Iti68AuditDataset> transactionConfiguration;
+        private final TransactionConfiguration transactionConfiguration;
     }
 
     @AllArgsConstructor
@@ -116,15 +111,15 @@ public class MHD implements IntegrationProfile {
         ITI_68_BIN(ITI_68_BIN_CONFIG);
 
         @Getter
-        private final TransactionConfiguration<FhirAuditDataset> transactionConfiguration;
+        private final FhirTransactionConfiguration transactionConfiguration;
     }
 
     @AllArgsConstructor
-    public enum SimplifiedPublishInteractions implements FhirInteractionId<Iti105AuditDataset> {
+    public enum SimplifiedPublishInteractions implements FhirInteractionId {
         ITI_105(ITI_105_CONFIG);
 
         @Getter
-        private final FhirTransactionConfiguration<Iti105AuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration fhirTransactionConfiguration;
     }
 
     @Override

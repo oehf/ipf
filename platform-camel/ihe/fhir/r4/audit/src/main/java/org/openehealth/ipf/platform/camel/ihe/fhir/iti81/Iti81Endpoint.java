@@ -24,9 +24,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti81Endpoint extends FhirEndpoint<FhirAuditEventQueryAuditDataset, Iti81Component> {
+public class Iti81Endpoint extends FhirEndpoint<FhirAuditEventQueryAuditDataset> {
 
-    public Iti81Endpoint(String uri, Iti81Component fhirComponent, FhirEndpointConfiguration<FhirAuditEventQueryAuditDataset> config) {
+    public Iti81Endpoint(String uri, Iti81Component fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent, config);
     }
 

@@ -16,13 +16,14 @@
 package org.openehealth.ipf.commons.ihe.fhir.mhd;
 
 /**
- * Interface for deriving MHD version
+ * The versions of the MHD supplement IPF knows about. Note that this is a version of the
+ * <em>profiles</em>, not of the IPF model classes: the resources built by those conform to more than
+ * one MHD version, e.g. they carry both the {@code Identifier.use} of MHD 4.2.3 and the
+ * {@code Identifier.type} of MHD 4.2.4 (CP-ITI-1328-01).
+ *
+ * @see MhdValidator#packagePathFor(MhdVersion)
  */
-public interface MhdVersion {
+public enum MhdVersion {
 
-    Version supportsVersion();
-
-    enum Version {
-        v320, v423
-    }
+    v320, v423, v424
 }

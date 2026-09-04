@@ -31,7 +31,7 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.4
  */
-public class Iti78RetrieveResourceClientRequestFactory implements ClientRequestFactory<IReadExecutable<Patient>> {
+public class Iti78RetrieveResourceClientRequestFactory implements ClientRequestFactory {
 
     @Override
     public IClientExecutable<IReadExecutable<Patient>, Patient> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters) {

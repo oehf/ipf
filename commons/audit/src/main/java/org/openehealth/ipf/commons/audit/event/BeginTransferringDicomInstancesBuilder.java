@@ -25,7 +25,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a Begin Transferring DICOM Instances event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.3
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.3">Part 15, A.5.3.3</a>
  * <p>
  * This message describes the event of a system beginning to transfer a set of DICOM instances
  * from one node to another node within control of the system's security domain.

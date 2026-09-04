@@ -90,8 +90,8 @@ class PdqmRequestToPdqQueryTranslator implements FhirTranslator<Message> {
     QBP_Q21 translateFhir(Object request, Map<String, Object> parameters) {
         if (request == null && parameters != null && parameters.containsKey(Constants.FHIR_REQUEST_PARAMETERS)) {
             return translateFhirSearchToHL7v2(parameters.get(Constants.FHIR_REQUEST_PARAMETERS))
-        } else if (request != null && request instanceof IdType) {
-            return translateFhirReadToHL7v2((IdType) request)
+        } else if (request instanceof IdType idType) {
+            return translateFhirReadToHL7v2(idType)
         } else {
             throw new FhirTranslationException("Expected either PDQ parameters or an Patient ID")
         }

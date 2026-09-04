@@ -40,8 +40,8 @@ public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> im
      * @param <E>           interaction ID type, which must be an enum
      * @return serializable version of the given {@link InteractionId}
      */
-    public static <E extends Enum<E> & InteractionId> SerializableEnumInteractionId create(E interactionId) {
-        return new SerializableEnumInteractionId(interactionId);
+    public static <E extends Enum<E> & InteractionId> SerializableEnumInteractionId<E> create(E interactionId) {
+        return new SerializableEnumInteractionId<>(interactionId);
     }
 
     private static <E extends Enum<E> & InteractionId> E getInteractionId(String interaction) {
@@ -66,30 +66,8 @@ public class SerializableEnumInteractionId<E extends Enum<E> & InteractionId> im
         return interactionId;
     }
 
-    /*
     @Override
-    public String getName() {
-        return getInteractionId().getName();
+    public TransactionConfiguration getTransactionConfiguration() {
+        return getInteractionId().getTransactionConfiguration();
     }
-
-    @Override
-    public String getDescription() {
-        return getInteractionId().getDescription();
-    }
-
-    @Override
-    public boolean isQuery() {
-        return getInteractionId().isQuery();
-    }
-
-    @Override
-    public <T extends AuditDataset> AuditStrategy<T> getClientAuditStrategy() {
-        return getInteractionId().getClientAuditStrategy();
-    }
-
-    @Override
-    public <T extends AuditDataset> AuditStrategy<T> getServerAuditStrategy() {
-        return getInteractionId().getServerAuditStrategy();
-    }
-    */
 }

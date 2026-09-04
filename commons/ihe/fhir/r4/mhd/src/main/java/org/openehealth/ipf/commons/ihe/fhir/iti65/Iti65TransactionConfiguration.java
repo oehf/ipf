@@ -16,16 +16,21 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti65;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
-import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory;
 import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider;
 import org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector;
+import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 
 import java.util.Set;
 
-import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.*;
-import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.*;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_COMPREHENSIVE_METADATA_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_LEGACY_METADATA_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_MINIMAL_METADATA_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_COMPREHENSIVE_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_MINIMAL_BUNDLE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE;
+import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_UNCONTAINED_COMPREHENSIVE_BUNDLE_PROFILE;
 
 /**
  * Standard Configuration for Iti65Component.
@@ -33,7 +38,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.*;
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti65TransactionConfiguration extends FhirTransactionConfiguration<Iti65AuditDataset> {
+public class Iti65TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti65TransactionConfiguration() {
         super("mhd-iti65",

@@ -21,37 +21,34 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptions;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * Base class for FHIR components offering a options and optionsProvider endpoint parameters
+ * Base class for FHIR components offering options and optionsProvider endpoint parameters
  *
  * @author Christian Ohr
  * @since 4.1
  */
-public abstract class FhirComponentWithOptions<AuditDatasetType extends FhirAuditDataset,
-        O extends Enum<O> & FhirTransactionOptions,
-        P extends FhirTransactionOptionsProvider<FhirQueryAuditDataset, O>>
+public abstract class FhirComponentWithOptions<AuditDatasetType extends FhirAuditDataset, O extends Enum<O> & FhirTransactionOptions>
         extends FhirComponent<AuditDatasetType> {
 
-    private final Supplier<P> optionsProviderSupplier;
+    private final Supplier<FhirTransactionOptionsProvider<O>> optionsProviderSupplier;
 
-    public FhirComponentWithOptions(FhirInteractionId<AuditDatasetType> fhirInteractionId, Supplier<P> optionsProviderSupplier) {
+    public FhirComponentWithOptions(FhirInteractionId fhirInteractionId, Supplier<FhirTransactionOptionsProvider<O>> optionsProviderSupplier) {
         super(fhirInteractionId);
         this.optionsProviderSupplier = optionsProviderSupplier;
     }
 
-    public FhirComponentWithOptions(CamelContext context, FhirInteractionId<AuditDatasetType> fhirInteractionId, Supplier<P> optionsProviderSupplier) {
+    public FhirComponentWithOptions(CamelContext context, FhirInteractionId fhirInteractionId, Supplier<FhirTransactionOptionsProvider<O>> optionsProviderSupplier) {
         super(context, fhirInteractionId);
         this.optionsProviderSupplier = optionsProviderSupplier;
     }
 
     @Override
-    protected FhirEndpointConfiguration<AuditDatasetType> createConfig(String remaining, Map<String, Object> parameters) throws Exception {
-        FhirTransactionOptionsProvider<AuditDatasetType, O> optionsProvider =
+    protected FhirEndpointConfiguration createConfig(String remaining, Map<String, Object> parameters) throws Exception {
+        FhirTransactionOptionsProvider<O> optionsProvider =
                 getAndRemoveOrResolveReferenceParameter(parameters, "iheOptionsProvider", FhirTransactionOptionsProvider.class, optionsProviderSupplier.get());
         var options = getAndRemoveParameter(parameters, "iheOptions", String.class, optionsProvider.getDefaultOption().name());
         var itiOptions = TransactionOptionsUtils.split(options, optionsProvider.getTransactionOptionsType());

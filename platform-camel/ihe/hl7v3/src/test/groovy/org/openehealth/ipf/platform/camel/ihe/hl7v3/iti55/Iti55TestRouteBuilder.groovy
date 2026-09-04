@@ -48,7 +48,7 @@ class Iti55TestRouteBuilder extends RouteBuilder {
 
     static boolean errorOccurred = false
 
-    static int jettyPort = ServletServer.freePort
+    static int freePort = ServletServer.freePort
 
     @Override
     public void configure() throws Exception {
@@ -166,8 +166,10 @@ class Iti55TestRouteBuilder extends RouteBuilder {
 
     }
 
+    // Jetty 12.1 not supported by Camel
+
     private void soapFaultEndpoint(int index, String headers) {
-        from("jetty:http://localhost:${jettyPort}/iti55-fault-${index}")
+        from("netty-http:http://0.0.0.0:${freePort}/iti55-fault-${index}")
             .process {
                 it.message.body = """\
                     <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope">

@@ -33,9 +33,11 @@ internal class RepeatableStructure(
 
     override fun iterator(): Iterator<Structure> = elements.iterator()
 
-    override fun accept(visitor: MessageVisitor?, currentLocation: Location?): Boolean {
-        TODO("not implemented")
-    }
+    // Not TODO(): that throws NotImplementedError, an Error rather than an Exception, which escapes
+    // the catch(Exception) handlers of callers such as the HL7 validators.
+    override fun accept(visitor: MessageVisitor?, currentLocation: Location?): Boolean =
+            throw UnsupportedOperationException(
+                    "A repeatable structure cannot be visited as a whole; visit its repetitions individually")
 
     override fun getMessage(): Message = group.message
 
@@ -44,7 +46,7 @@ internal class RepeatableStructure(
 
     override fun getParent(): Group = group
 
-    override fun isEmpty(): Boolean = !elements.any { !it.isEmpty }
+    override fun isEmpty(): Boolean = elements.all { it.isEmpty }
 
     override fun getName(): String = name
 

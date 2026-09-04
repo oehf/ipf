@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.controls.strategies;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JsonNode;
 import org.openehealth.ipf.commons.ihe.hpd.controls.sorting.SortResponseControl2;
 
 import javax.naming.ldap.BasicControl;
@@ -40,9 +40,9 @@ public class SortResponseControlStrategy implements ControlStrategy {
     @Override
     public void serializeJson(BasicControl control, JsonGenerator gen) throws IOException {
         var sortResponseControl = (SortResponseControl2) control;
-        gen.writeNumberField("resultCode", sortResponseControl.getResultCode());
+        gen.writeNumberProperty("resultCode", sortResponseControl.getResultCode());
         if (sortResponseControl.getFailedAttributeName() != null) {
-            gen.writeStringField("failedAttrId", sortResponseControl.getFailedAttributeName());
+            gen.writeStringProperty("failedAttrId", sortResponseControl.getFailedAttributeName());
         }
     }
 

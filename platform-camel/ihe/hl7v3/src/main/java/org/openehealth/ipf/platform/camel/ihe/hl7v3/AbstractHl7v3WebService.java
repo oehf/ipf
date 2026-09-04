@@ -16,6 +16,7 @@
 package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import groovy.xml.slurpersupport.GPathResult;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.cxf.jaxws.context.WebServiceContextImpl;
 import org.apache.cxf.message.Message;
@@ -38,12 +39,13 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Dmytro Rud
  */
+@Getter
 @Slf4j
 abstract public class AbstractHl7v3WebService extends AbstractWebService {
 
     private final Hl7v3WsTransactionConfiguration wsTransactionConfiguration;
 
-    public AbstractHl7v3WebService(Hl7v3InteractionId<? extends Hl7v3WsTransactionConfiguration> hl7v3InteractionId) {
+    public AbstractHl7v3WebService(Hl7v3InteractionId hl7v3InteractionId) {
         this.wsTransactionConfiguration = requireNonNull(hl7v3InteractionId.getWsTransactionConfiguration(), "TransactionConfiguration is null");
     }
     
@@ -87,10 +89,6 @@ abstract public class AbstractHl7v3WebService extends AbstractWebService {
                 wsTransactionConfiguration.getControlActProcessCode(),
                 wsTransactionConfiguration.isUseCAckTypeCodes(),
                 wsTransactionConfiguration.isIncludeQuantities());
-    }
-
-    public Hl7v3WsTransactionConfiguration getWsTransactionConfiguration() {
-        return wsTransactionConfiguration;
     }
 
 

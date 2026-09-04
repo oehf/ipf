@@ -35,7 +35,7 @@ import java.util.Map;
 public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> extends MllpTransactionComponent<AuditDatasetType> {
 
     @Setter
-    private Hl7v2TransactionConfiguration<AuditDatasetType> transactionConfiguration;
+    private Hl7v2TransactionConfiguration transactionConfiguration;
 
     public CustomMllpComponent() {
         super(null);
@@ -70,22 +70,24 @@ public class CustomMllpComponent<AuditDatasetType extends MllpAuditDataset> exte
     }
 
     @Override
-    public Hl7v2TransactionConfiguration<AuditDatasetType> getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return transactionConfiguration;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return transactionConfiguration.getClientAuditStrategy();
+        return (AuditStrategy<AuditDatasetType>)transactionConfiguration.getClientAuditStrategy();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return transactionConfiguration.getServerAuditStrategy();
+        return (AuditStrategy<AuditDatasetType>)transactionConfiguration.getServerAuditStrategy();
     }
 
     @Override
-    public NakFactory<AuditDatasetType> getNakFactory() {
+    public NakFactory getNakFactory() {
         return new NakFactory(transactionConfiguration);
     }
 

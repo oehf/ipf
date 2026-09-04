@@ -34,7 +34,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
 public class JaxWsRequestServiceFactory<AuditDatasetType extends WsAuditDataset> extends JaxWsServiceFactory<AuditDatasetType> {
 
     public JaxWsRequestServiceFactory(
-            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<AuditDatasetType> auditStrategy,
             AuditContext auditContext,

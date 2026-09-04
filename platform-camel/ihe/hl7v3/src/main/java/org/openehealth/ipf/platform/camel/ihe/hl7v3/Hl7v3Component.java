@@ -17,19 +17,17 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3;
 
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 
 /**
  * Base class for all Camel components implementing IHE HL7v3 transactions
  *
- * @param <ConfigType> configuration type
  * @since 3.1
  */
-public abstract class Hl7v3Component<ConfigType extends Hl7v3WsTransactionConfiguration>
-        extends AbstractWsComponent<Hl7v3AuditDataset, ConfigType, Hl7v3InteractionId<ConfigType>> {
+public abstract class Hl7v3Component
+        extends AbstractWsComponent<Hl7v3AuditDataset> {
 
-    public Hl7v3Component(Hl7v3InteractionId<ConfigType> interactionId) {
+    public Hl7v3Component(Hl7v3InteractionId interactionId) {
         super(interactionId);
     }
 

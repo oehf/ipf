@@ -22,7 +22,7 @@ import static org.openehealth.ipf.commons.audit.XMLNames.AUDIT_SOURCE_TYPE_CODE;
 
 /**
  * CP 1638: Unify encoding of code values in DICOM audit message
- * http://dicom.nema.org/Dicom/News/November2016/docs/cpack90/cp1638.pdf
+ * <a href="https://dicom.nema.org/Dicom/News/November2016/docs/cpack90/cp1638.pdf">CP-1638</a>
  *
  * @author Christian Ohr
  * @since 3.5

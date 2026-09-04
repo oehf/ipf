@@ -26,7 +26,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.event.AbstractAuthenticationEvent;
 
-@ConditionalOnClass({AbstractAuthenticationEvent.class})
+// AuthenticationListener extends AbstractAuthenticationAuditListener, so the actuator must be present as well
+@ConditionalOnClass({AbstractAuthenticationEvent.class, AbstractAuthenticationAuditListener.class})
 @Configuration
 @EnableConfigurationProperties(IpfAtnaConfigurationProperties.class)
 public class IpfAtnaSpringSecurityAutoConfiguration {

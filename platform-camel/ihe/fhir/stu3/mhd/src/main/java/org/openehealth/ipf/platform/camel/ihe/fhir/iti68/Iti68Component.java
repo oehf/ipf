@@ -62,13 +62,15 @@ public class Iti68Component extends ServletComponent implements InterceptableCom
         return false;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<Iti68AuditDataset> getClientAuditStrategy() {
-        return MHD.RetrieveInteractions.ITI_68.getTransactionConfiguration().getClientAuditStrategy();
+        return (AuditStrategy<Iti68AuditDataset>)MHD.RetrieveInteractions.ITI_68.getTransactionConfiguration().getClientAuditStrategy();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<Iti68AuditDataset> getServerAuditStrategy() {
-        return MHD.RetrieveInteractions.ITI_68.getTransactionConfiguration().getServerAuditStrategy();
+        return (AuditStrategy<Iti68AuditDataset>)MHD.RetrieveInteractions.ITI_68.getTransactionConfiguration().getServerAuditStrategy();
     }
 }

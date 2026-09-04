@@ -16,14 +16,14 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.pcc44;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * @author Christian Ohr
  */
-public class Pcc44OptionsProvider implements FhirTransactionOptionsProvider<FhirQueryAuditDataset, Pcc44Options> {
+public class Pcc44OptionsProvider implements FhirTransactionOptionsProvider<Pcc44Options> {
 
     @Override
     public Class<Pcc44Options> getTransactionOptionsType() {
@@ -36,7 +36,7 @@ public class Pcc44OptionsProvider implements FhirTransactionOptionsProvider<Fhir
     }
 
     @Override
-    public AuditStrategy<FhirQueryAuditDataset> getAuditStrategy(boolean serverSide) {
+    public FhirAuditStrategy<FhirQueryAuditDataset> getAuditStrategy(boolean serverSide) {
         return new Pcc44AuditStrategy(serverSide);
     }
 }

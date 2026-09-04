@@ -17,7 +17,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83;
 
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmValidator;
 
@@ -31,7 +30,7 @@ import java.util.Set;
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti83TransactionConfiguration extends FhirTransactionConfiguration<FhirQueryAuditDataset> {
+public class Iti83TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti83TransactionConfiguration() {
         super(

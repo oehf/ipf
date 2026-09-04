@@ -28,7 +28,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a DICOM Study Deleted event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.8
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.8">Part 15, A.5.3.8</a>8
  * <p>
  * This message describes the event of deletion of one or more studies and all associated
  * SOP Instances in a single action. This message shall only include information about a

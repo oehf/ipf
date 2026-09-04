@@ -29,7 +29,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseT
  * Basis for Strategy pattern implementation for ATNA Auditing in XDS transactions.
  * @author Dmytro Rud
  */
-public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditStrategySupport<T> {
+public abstract class XdsAuditStrategy<AuditDatasetType extends XdsAuditDataset> extends AuditStrategySupport<AuditDatasetType> {
 
     /**
      * Constructs an XDS audit strategy.
@@ -81,21 +81,21 @@ public abstract class XdsAuditStrategy<T extends XdsAuditDataset> extends AuditS
 
 
     @Override
-    public EventOutcomeIndicator getEventOutcomeIndicator(T auditDataset, Object pojo) {
+    public EventOutcomeIndicator getEventOutcomeIndicator(AuditDatasetType auditDataset, Object pojo) {
         var response = (RegistryResponseType) pojo;
         EbXMLRegistryResponse<RegistryResponseType> ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeCodeFromRegistryResponse(ebXML);
     }
 
     @Override
-    public String getEventOutcomeDescription(T auditDataset, Object pojo) {
+    public String getEventOutcomeDescription(AuditDatasetType auditDataset, Object pojo) {
         var response = (RegistryResponseType) pojo;
         EbXMLRegistryResponse<RegistryResponseType> ebXML = new EbXMLRegistryResponse30(response);
         return getEventOutcomeDescriptionFromRegistryResponse(ebXML);
     }
 
     @Override
-    public boolean enrichAuditDatasetFromResponse(T auditDataset, Object response, AuditContext auditContext) {
+    public boolean enrichAuditDatasetFromResponse(AuditDatasetType auditDataset, Object response, AuditContext auditContext) {
         var outcomeCodes = getEventOutcomeIndicator(auditDataset, response);
         auditDataset.setEventOutcomeIndicator(outcomeCodes);
         auditDataset.setEventOutcomeDescription(getEventOutcomeDescription(auditDataset, response));

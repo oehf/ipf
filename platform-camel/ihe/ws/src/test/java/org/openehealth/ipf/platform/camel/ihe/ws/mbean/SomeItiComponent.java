@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.ws.mbean;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -24,11 +23,11 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import javax.xml.namespace.QName;
 import java.util.Map;
 
-public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> {
+public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset> {
 
     private static final String NS_URI = "urn:iti:some:mai:2011";
 
-    public static final WsTransactionConfiguration<WsAuditDataset> WS_CONFIG = new WsTransactionConfiguration<>(
+    public static final WsTransactionConfiguration WS_CONFIG = new WsTransactionConfiguration(
             "foo",
             "Some Component",
             false,
@@ -49,7 +48,7 @@ public class SomeItiComponent extends AbstractWsComponent<WsAuditDataset, WsTran
     }
 
     @Override
-    public WsTransactionConfiguration<WsAuditDataset> getWsTransactionConfiguration() {
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
         return WS_CONFIG;
     }
 

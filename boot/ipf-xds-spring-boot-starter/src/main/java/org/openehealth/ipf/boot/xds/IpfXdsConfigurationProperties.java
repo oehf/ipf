@@ -29,4 +29,22 @@ public class IpfXdsConfigurationProperties {
     @Getter
     @Setter
     private boolean caching;
+
+    /**
+     * Whether the CXF interceptors that create observations for the SOAP calls of this transaction
+     * family shall be made available as Spring beans, so that they can be attached to endpoints with
+     * the {@code features} endpoint option:
+     * <pre>
+     * from("xds-iti18:my-service?features=#observationFeature")
+     *     .to("xds-iti18://peer:8080/service?features=#observationClientFeature");
+     * </pre>
+     * Requires {@code cxf-integration-tracing-micrometer} on the classpath and an
+     * {@link io.micrometer.observation.ObservationRegistry} bean, which Spring Boot provides.
+     * <p>
+     * Trace context is propagated by these interceptors, not by IPF: the spans that
+     * {@code camel-telemetry} creates for the transaction join the context they establish.
+     */
+    @Getter
+    @Setter
+    private boolean observing;
 }

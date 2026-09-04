@@ -15,7 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
+import tools.jackson.databind.SerializationFeature;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 
@@ -100,8 +100,10 @@ public class SerializationTest {
     }
 
     private void checkJacksonSerialization(Object original) throws IOException {
-        var objectMapper = createObjectMapper();
-        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        var objectMapper = createObjectMapper()
+                .rebuild()
+                .enable(SerializationFeature.INDENT_OUTPUT)
+                .build();
 
         var json = objectMapper.writeValueAsString(original);
 

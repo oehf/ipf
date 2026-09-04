@@ -24,7 +24,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a Network Entry event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.9
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.9">Part 15, A.5.3.9</a>
  * <p>
  * This message describes the event of a system, such as a mobile device, intentionally entering or leaving the network.
  * </p>

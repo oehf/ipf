@@ -16,10 +16,15 @@
 
 package org.openehealth.ipf.boot.hl7v3;
 
+import io.micrometer.observation.ObservationRegistry;
+import org.apache.cxf.tracing.micrometer.ObservationFeature;
+import org.openehealth.ipf.boot.ws.CxfObservationConfigurationSupport;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
-import org.openehealth.ipf.commons.ihe.hl7v3.storage.SpringCacheHl7v3ContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v3.storage.Hl7v3ContinuationStorage;
+import org.openehealth.ipf.commons.ihe.hl7v3.storage.SpringCacheHl7v3ContinuationStorage;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
@@ -46,4 +51,15 @@ public class IpfHl7v3AutoConfiguration {
         return new SpringCacheHl7v3ContinuationStorage(cacheManager);
     }
 
+
+
+    /**
+     * @see CxfObservationConfigurationSupport
+     */
+    @Configuration
+    @ConditionalOnClass(ObservationFeature.class)
+    @ConditionalOnBean(ObservationRegistry.class)
+    @ConditionalOnProperty("ipf.hl7v3.observing")
+    public static class CxfObservationConfiguration extends CxfObservationConfigurationSupport {
+    }
 }

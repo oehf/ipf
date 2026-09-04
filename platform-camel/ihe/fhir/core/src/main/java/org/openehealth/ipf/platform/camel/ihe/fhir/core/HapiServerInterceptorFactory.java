@@ -22,5 +22,5 @@ import ca.uhn.fhir.rest.server.interceptor.IServerInterceptor;
  * @since 3.1
  */
 public interface HapiServerInterceptorFactory {
-    IServerInterceptor newInstance(FhirEndpoint endpoint);
+    IServerInterceptor newInstance(FhirEndpoint<?> endpoint);
 }

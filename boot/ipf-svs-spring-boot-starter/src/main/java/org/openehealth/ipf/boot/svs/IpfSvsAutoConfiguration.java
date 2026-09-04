@@ -15,8 +15,14 @@
  */
 package org.openehealth.ipf.boot.svs;
 
+import io.micrometer.observation.ObservationRegistry;
+import org.apache.cxf.tracing.micrometer.ObservationFeature;
+import org.openehealth.ipf.boot.ws.CxfObservationConfigurationSupport;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
@@ -29,5 +35,15 @@ public class IpfSvsAutoConfiguration {
 
     public IpfSvsAutoConfiguration(IpfSvsConfigurationProperties properties) {
         this.properties = properties;
+    }
+
+    /**
+     * @see CxfObservationConfigurationSupport
+     */
+    @Configuration
+    @ConditionalOnClass(ObservationFeature.class)
+    @ConditionalOnBean(ObservationRegistry.class)
+    @ConditionalOnProperty("ipf.svs.observing")
+    public static class CxfObservationConfiguration extends CxfObservationConfigurationSupport {
     }
 }

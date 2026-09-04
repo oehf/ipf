@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.ihe.core;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 
 /**
@@ -26,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
  *
  * @author Christian Ohr
  */
-public interface TransactionOptionsProvider<S extends AuditDataset, T extends Enum<T> & TransactionOptions<?>> {
+public interface TransactionOptionsProvider<S, T extends Enum<T> & TransactionOptions<S>> {
 
     /**
      * @return the class that lists the options for a transaction
@@ -43,6 +42,6 @@ public interface TransactionOptionsProvider<S extends AuditDataset, T extends En
      * @param serverSide true for server-side auditing, false for client-side
      * @return audit strategy for the transaction
      */
-    AuditStrategy<S> getAuditStrategy(boolean serverSide);
+    AuditStrategy<?> getAuditStrategy(boolean serverSide);
 
 }

@@ -134,35 +134,6 @@ class TestIti21 extends AbstractMllpTest {
         }
     }
 
-    @Disabled
-    void testSendAndReceiveTracingInformation() {
-        String msg = getMessageString('QBP^Q22', '2.5')
-        var qbp = hapiContext.getPipeParser().parse(msg)
-        Map<String, Object> headers = [
-                (Constants.TRACE_ID)      : 'trace_id',
-                (Constants.SPAN_ID)       : 'span_id',
-                (Constants.PARENT_SPAN_ID): 'parent_span_id',
-                (Constants.SAMPLED)       : '1',
-                (Constants.FLAGS)         : '1'
-        ]
-
-        // Expect that the headers being sent arrive at the mock endpoint
-        mockEndpoint.expectedMessageCount(1)
-        mockEndpoint.expectedMessagesMatches(new Predicate() {
-            @Override
-            boolean matches(final Exchange exchange) {
-                for (Map.Entry<String, Object> entry : headers.entrySet()) {
-                    if (!entry.value.equals(exchange.in.getHeader(entry.key))) {
-                        return false
-                    }
-                }
-                return true
-            }
-        })
-        var response = send("pdq-iti21://localhost:18225?timeout=${TIMEOUT}&interceptorFactories=#sendTracingData", qbp, headers)
-        mockEndpoint.assertIsSatisfied(2000)
-    }
-
     /**
      * Inacceptable messages (wrong message type, wrong trigger event, wrong version),
      * on consumer side, audit enabled.

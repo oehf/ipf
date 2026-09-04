@@ -28,9 +28,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.FhirEndpointConfiguratio
  */
 @UriEndpoint(scheme = "fhir", title = "Generic FHIR", syntax = "fhir:host:port", category = Category.HTTP)
 public class CustomFhirEndpoint<AuditDatasetType extends FhirAuditDataset>
-        extends FhirEndpoint<AuditDatasetType, CustomFhirComponent<AuditDatasetType>> {
+        extends FhirEndpoint<AuditDatasetType> {
 
-    public CustomFhirEndpoint(String uri, CustomFhirComponent<AuditDatasetType> fhirComponent, FhirEndpointConfiguration<AuditDatasetType> config) {
+    public CustomFhirEndpoint(String uri, CustomFhirComponent<AuditDatasetType> fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent, config);
     }
 

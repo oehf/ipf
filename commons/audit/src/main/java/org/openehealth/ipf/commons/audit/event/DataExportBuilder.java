@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Builds an Audit Event representing a Data Export event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.4
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.4">Part 15, A.5.3.4</a>
  * <p>
  * This message describes the event of exporting data from a system, meaning that the data
  * is leaving control of the system's security domain. Examples of exporting include printing to paper,
@@ -119,11 +119,39 @@ public class DataExportBuilder extends BaseAuditMessageBuilder<DataExportBuilder
                                                             String mediaIdentifier,
                                                             MediaType mediaType) {
         return addActiveParticipant(
+            userId,
+            altUserId,
+            userName,
+            false,
+            Collections.singletonList(ActiveParticipantRoleIdCode.DestinationMedia),
+            networkAccessPointId,
+            networkAccessPointTypeCode,
+            mediaIdentifier,
+            requireNonNull(mediaType));
+    }
+
+    /**
+     * @param userId               UserID
+     * @param altUserId            Alternate UserID
+     * @param userName             UserName
+     * @param activeParticipantRoleIdCode Role ID Code
+     * @param networkAccessPointId Network Access Point ID
+     * @param mediaIdentifier      Media Identifier
+     * @param mediaType            Media Type
+     * @return this
+     */
+    public DataExportBuilder setDestinationMediaParticipant(String userId, String altUserId, String userName,
+                                                            String networkAccessPointId,
+                                                            ActiveParticipantRoleIdCode activeParticipantRoleIdCode,
+                                                            NetworkAccessPointTypeCode networkAccessPointTypeCode,
+                                                            String mediaIdentifier,
+                                                            MediaType mediaType) {
+        return addActiveParticipant(
                 userId,
                 altUserId,
                 userName,
                 false,
-                Collections.singletonList(ActiveParticipantRoleIdCode.DestinationMedia),
+                Collections.singletonList(activeParticipantRoleIdCode),
                 networkAccessPointId,
                 networkAccessPointTypeCode,
                 mediaIdentifier,

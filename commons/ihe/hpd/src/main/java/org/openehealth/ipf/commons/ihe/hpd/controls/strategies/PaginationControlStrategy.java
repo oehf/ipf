@@ -15,8 +15,8 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.controls.strategies;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.JsonNode;
 
 import javax.naming.ldap.BasicControl;
 import javax.naming.ldap.PagedResultsControl;
@@ -41,9 +41,9 @@ public class PaginationControlStrategy implements ControlStrategy {
     @Override
     public void serializeJson(BasicControl control, JsonGenerator gen) throws IOException {
         PagedResultsResponseControl paginationControl = (PagedResultsResponseControl) control;
-        gen.writeNumberField("size", paginationControl.getResultSize());
+        gen.writeNumberProperty("size", paginationControl.getResultSize());
         if (paginationControl.getCookie() != null) {
-            gen.writeBinaryField("cookie", paginationControl.getCookie());
+            gen.writeBinaryProperty("cookie", paginationControl.getCookie());
         }
     }
 

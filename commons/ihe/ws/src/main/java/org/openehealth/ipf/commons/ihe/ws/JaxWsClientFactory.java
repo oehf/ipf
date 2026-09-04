@@ -20,9 +20,11 @@ import static java.util.Objects.requireNonNull;
 import java.util.List;
 import java.util.Map;
 import javax.xml.namespace.QName;
+
 import jakarta.xml.ws.BindingProvider;
 import jakarta.xml.ws.Service;
 import jakarta.xml.ws.soap.SOAPBinding;
+import lombok.Getter;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.frontend.ClientProxy;
@@ -44,6 +46,7 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.OutStreamSubstituteInterce
 import org.openehealth.ipf.commons.ihe.ws.utils.SoapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.openehealth.ipf.commons.core.pool.PoolEvictor;
 import org.vibur.objectpool.ConcurrentPool;
 import org.vibur.objectpool.PoolObjectFactory;
 import org.vibur.objectpool.PoolService;
@@ -61,14 +64,19 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
     private static final int DEFAULT_POOL_SIZE = 100;
 
     protected final PoolService<Object> clientPool;
-    protected final WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration;
+
+    /**
+     * the service info of this factory.
+     */
+    @Getter
+    protected final WsTransactionConfiguration wsTransactionConfiguration;
     protected final String serviceUrl;
     protected final InterceptorProvider customInterceptors;
     protected final List<AbstractFeature> features;
     protected final Map<String, Object> properties;
     protected final AuditStrategy<AuditDatasetType> auditStrategy;
     protected final AuditContext auditContext;
-    protected final AsynchronyCorrelator<AuditDatasetType> correlator;
+    protected final AsynchronyCorrelator correlator;
     protected final WsSecurityInformation securityInformation;
     protected final HTTPClientPolicy httpClientPolicy;
 
@@ -82,17 +90,16 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
      * @param correlator                 optional asynchrony correlator.
      */
     public JaxWsClientFactory(
-            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
-            String serviceUrl,
-            AuditStrategy<AuditDatasetType> auditStrategy,
-            AuditContext auditContext,
-            InterceptorProvider customInterceptors,
-            List<AbstractFeature> features,
-            Map<String, Object> properties,
-            AsynchronyCorrelator<AuditDatasetType> correlator,
-            WsSecurityInformation securityInformation,
-            HTTPClientPolicy httpClientPolicy)
-    {
+        WsTransactionConfiguration wsTransactionConfiguration,
+        String serviceUrl,
+        AuditStrategy<AuditDatasetType> auditStrategy,
+        AuditContext auditContext,
+        InterceptorProvider customInterceptors,
+        List<AbstractFeature> features,
+        Map<String, Object> properties,
+        AsynchronyCorrelator correlator,
+        WsSecurityInformation securityInformation,
+        HTTPClientPolicy httpClientPolicy) {
         requireNonNull(wsTransactionConfiguration, "wsTransactionConfiguration");
         this.wsTransactionConfiguration = wsTransactionConfiguration;
         this.serviceUrl = serviceUrl;
@@ -107,7 +114,13 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
 
         int poolSize = Integer.getInteger(POOL_SIZE_PROPERTY, -1);
         clientPool = new ConcurrentPool<>(new ConcurrentLinkedQueueCollection<>(), new PortFactory(),
-                0, (poolSize > 0) ? poolSize : DEFAULT_POOL_SIZE, false);
+            0, (poolSize > 0) ? poolSize : DEFAULT_POOL_SIZE, false);
+
+        // Each pooled stub retains a CXF service model, interceptor chains and an HTTP conduit, so a
+        // pool left at its high-water mark after a traffic burst holds on to a lot of memory.
+        // PoolEvictor shrinks it again; it keeps only a weak reference, so nothing here needs to be
+        // deregistered when the endpoint owning this factory goes away.
+        PoolEvictor.register(clientPool, "JaxWsClientFactory(" + wsTransactionConfiguration.getServiceName() + ")");
     }
 
     /**
@@ -117,13 +130,6 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
      */
     public synchronized Object getClient() {
         return clientPool.take();
-    }
-
-    /**
-     * @return the service info of this factory.
-     */
-    public WsTransactionConfiguration<AuditDatasetType> getWsTransactionConfiguration() {
-        return wsTransactionConfiguration;
     }
 
 
@@ -216,7 +222,7 @@ public class JaxWsClientFactory<AuditDatasetType extends WsAuditDataset> {
         }
     }
 
-    
+
     class PortFactory implements PoolObjectFactory<Object> {
         @Override
         public Object create() {

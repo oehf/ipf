@@ -40,7 +40,7 @@ public class Pharm5Component extends FhirComponent<FhirQueryAuditDataset> {
 
     @Override
     protected Pharm5Endpoint doCreateEndpoint(final String uri,
-                                              final FhirEndpointConfiguration<FhirQueryAuditDataset> config) {
+                                              final FhirEndpointConfiguration config) {
         return new Pharm5Endpoint(uri, this, config);
     }
 }

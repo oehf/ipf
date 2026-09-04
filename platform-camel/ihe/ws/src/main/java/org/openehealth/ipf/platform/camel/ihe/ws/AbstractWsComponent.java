@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import lombok.Getter;
 import org.apache.camel.support.DefaultComponent;
 import org.apache.cxf.feature.AbstractFeature;
 import org.apache.cxf.interceptor.AbstractBasicInterceptorProvider;
@@ -25,6 +26,7 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
+import org.openehealth.ipf.platform.camel.ihe.core.InteractionAwareComponent;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableComponent;
@@ -37,23 +39,16 @@ import java.util.Map;
  * Base component class for Web Service-based IHE components.
  *
  * @param <AuditDatasetType> audit type
- * @param <ConfigType>       configuration type
  * @author Dmytro Rud
  */
-abstract public class AbstractWsComponent<
-        AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration<AuditDatasetType>,
-        InteractionIdType extends WsInteractionId<ConfigType>>
-        extends DefaultComponent implements AuditableComponent<AuditDatasetType> {
+@Getter
+abstract public class AbstractWsComponent<AuditDatasetType extends WsAuditDataset>
+        extends DefaultComponent implements AuditableComponent<AuditDatasetType>, InteractionAwareComponent {
 
-    private final InteractionIdType interactionId;
+    private final WsInteractionId interactionId;
 
-    public AbstractWsComponent(InteractionIdType interactionId) {
+    public AbstractWsComponent(WsInteractionId interactionId) {
         this.interactionId = interactionId;
-    }
-
-    public InteractionIdType getInteractionId() {
-        return interactionId;
     }
 
     protected InterceptorProvider getCustomInterceptors(Map<String, Object> parameters) {
@@ -96,21 +91,23 @@ abstract public class AbstractWsComponent<
         return resolveAndRemoveReferenceParameter(parameters, "httpClientPolicy", HTTPClientPolicy.class);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<AuditDatasetType> getClientAuditStrategy() {
-        return getWsTransactionConfiguration().getClientAuditStrategy();
+        return (AuditStrategy<AuditDatasetType>) getWsTransactionConfiguration().getClientAuditStrategy();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<AuditDatasetType> getServerAuditStrategy() {
-        return getWsTransactionConfiguration().getServerAuditStrategy();
+        return (AuditStrategy<AuditDatasetType>) getWsTransactionConfiguration().getServerAuditStrategy();
     }
 
     /**
      * @return static configuration parameters of the Web Service which
      * server endpoints of this transaction.
      */
-    public ConfigType getWsTransactionConfiguration() {
+    public WsTransactionConfiguration getWsTransactionConfiguration() {
         return interactionId.getWsTransactionConfiguration();
     }
 

@@ -18,26 +18,17 @@ package org.openehealth.ipf.commons.ihe.fhir.mhd;
 
 import ca.uhn.fhir.context.FhirContext;
 import ca.uhn.fhir.rest.server.exceptions.UnprocessableEntityException;
-import org.hl7.fhir.r4.model.*;
-import org.ietf.jgss.Oid;
+import org.hl7.fhir.r4.model.OperationOutcome;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.fhir.Constants;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveDocumentReference;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveProvideDocumentBundle;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.model.ComprehensiveSubmissionSetList;
-import org.openehealth.ipf.commons.ihe.fhir.mhd.model.Source;
 import org.openehealth.ipf.commons.ihe.fhir.support.FhirUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.security.MessageDigest;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.openehealth.ipf.commons.ihe.fhir.Constants.URN_IETF_RFC_3986;
 
 /**
  * @author Christian Ohr
@@ -46,17 +37,31 @@ public class MhdValidatorTest {
 
     private static final Logger log = LoggerFactory.getLogger(MhdValidatorTest.class);
 
-    private static final String BINARY_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bb";
-    private static final String REFERENCE_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bc";
-    private static final String MANIFEST_FULL_URL = "urn:uuid:8da1cfcc-05db-4aca-86ad-82aa756a64bd";
+    private static final FhirContext FHIR_CONTEXT = FhirContext.forR4();
+
+    static {
+        MhdProfile.registerDefaultTypes(FHIR_CONTEXT);
+    }
 
     @Test
     public void testBundle() throws Exception {
-        var context = FhirContext.forR4();
-        MhdProfile.registerDefaultTypes(context);
-        var bundle = provideAndRegister();
+        assertNoValidationErrors(new MhdValidator(FHIR_CONTEXT));
+    }
+
+    /**
+     * The resources built by the model classes must remain valid against MHD 4.2.3, which requires
+     * the {@code Identifier.use}, as well as against MHD 4.2.4, which requires the
+     * {@code Identifier.type} instead (CP-ITI-1328-01).
+     */
+    @Test
+    public void testBundleConformsToBothMhdVersions() throws Exception {
+        assertNoValidationErrors(new MhdValidator(FHIR_CONTEXT, MhdVersion.v423));
+        assertNoValidationErrors(new MhdValidator(FHIR_CONTEXT, MhdVersion.v424));
+    }
+
+    private void assertNoValidationErrors(MhdValidator mhdValidator) throws Exception {
+        var bundle = MhdTestBundles.provideAndRegister();
         try {
-            var mhdValidator = new MhdValidator(context);
             mhdValidator.validateRequest(bundle, Map.of(
                 Constants.INTERACTION_REQUEST_VALIDATION_PROFILES,
                 Set.of(MhdProfile.ITI65_COMPREHENSIVE_BUNDLE_PROFILE)));
@@ -67,92 +72,5 @@ public class MhdValidatorTest {
                 .anyMatch(i -> i.getSeverity() == OperationOutcome.IssueSeverity.ERROR),
                 "There are validation errors in the bundle");
         }
-    }
-
-    private Bundle provideAndRegister() throws Exception {
-
-        var practitioner = new Practitioner();
-        practitioner.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
-        practitioner.getText().setDivAsString("<div>empty</div>");
-
-        var sourcePatient = new Patient();
-        sourcePatient.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
-        sourcePatient.getText().setDivAsString("<div>empty</div>");
-
-        var submissionSetList = new ComprehensiveSubmissionSetList();
-        var authorOrg = new Reference();
-        authorOrg.setResource(new Organization().setName("myOrg"));
-        var source = new Source();
-        source
-            .setAuthorOrg(authorOrg)
-            .setResource(new Practitioner());
-        submissionSetList
-            .linkDocumentReference(REFERENCE_FULL_URL)
-            .setSubmissionSetUniqueIdIdentifier(new Oid("1.2.58.92.23"))
-            .setEntryUuidIdentifier(UUID.randomUUID())
-            .setSourceId(new Oid("1.2.58.92.24"))
-            .setDesignationType(new CodeableConcept(
-                new Coding("http://snomed.info/sct", "225728007", "")
-            ))
-            .addIntendedRecipient(new Reference(practitioner))
-            .setSubject(new Reference("Patient/a2"))
-            .setTitle("description")
-            .setSource(source);
-        submissionSetList.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
-        submissionSetList.getText().setDivAsString("<div>empty</div>");
-
-        var documentContent = "YXNkYXNkYXNkYXNkYXNk".getBytes();
-        var documentReference = new ComprehensiveDocumentReference();
-        documentReference
-            .setUniqueIdIdentifier(URN_IETF_RFC_3986, "urn:oid:129.6.58.92.88336")
-            .setEntryUuidIdentifier(UUID.randomUUID())
-            .addAuthor(practitioner)
-            .addCategory(new CodeableConcept(
-                new Coding("http://loinc.org", "11369-6", "History of Immunization Narrative")))
-            .addSecurityLabel(new CodeableConcept(
-                new Coding("http://terminology.hl7.org/CodeSystem/v3-Confidentiality", "N", "normal")
-            ))
-            .setContext(new DocumentReference.DocumentReferenceContextComponent()
-                .addEncounter(new Reference(
-                    new Encounter()
-                        .setStatus(Encounter.EncounterStatus.PLANNED)
-                        .setClass_(new Coding("http://terminology.hl7.org/CodeSystem/v3-ActCode", "IMP", "inpatient"))))
-                .addEvent(new CodeableConcept(
-                    new Coding("http://terminology.hl7.org/CodeSystem/v3-ActCode", "PATDOC", "PATDOC")))
-                .setPracticeSetting(new CodeableConcept(
-                    new Coding("http://snomed.info/sct", "408467006", "Adult mental illness")))
-                .setFacilityType(new CodeableConcept(
-                    new Coding("http://snomed.info/sct", "82242000", "Hospital-children's")))
-                .setSourcePatientInfo(new Reference(sourcePatient))
-            )
-            .setDescription("Physical")
-            .setStatus(Enumerations.DocumentReferenceStatus.CURRENT)
-            .setSubject(new Reference("Patient/a2"));
-        documentReference.getType().addCoding()
-            .setSystem("http://ihe.net/connectathon/classCodes")
-            .setCode("History and Physical")
-            .setDisplay("History and Physical");
-        documentReference.addContent()
-            .setAttachment(
-                new Attachment()
-                    .setCreation(new Date())
-                    .setContentType("text/plain")
-                    .setLanguage("en-US")
-                    .setSize(documentContent.length)
-                    .setHash(MessageDigest.getInstance("SHA-1").digest(documentContent))
-                    .setUrl(BINARY_FULL_URL))
-            .setFormat(new Coding("http://ihe.net/fhir/ihe.formatcode.fhir/CodeSystem/formatcode", "urn:ihe:iti:xds-sd:text:2008", "ITI XDS-SD TEXT"));
-        documentReference.getText().setStatus(Narrative.NarrativeStatus.EMPTY);
-        documentReference.getText().setDivAsString("<div>empty</div>");
-
-        // Binary
-
-        var binary = new Binary().setContentType("text/plain");
-        binary.setContent(documentContent);
-
-        return new ComprehensiveProvideDocumentBundle()
-            .addSubmissionSetList(MANIFEST_FULL_URL, submissionSetList)
-            .addDocumentReference(REFERENCE_FULL_URL, documentReference)
-            .addBinary(BINARY_FULL_URL, binary);
     }
 }

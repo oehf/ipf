@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.ihe.ech.ech0213.Ech0213PortType;
 import org.openehealth.ipf.commons.ihe.ech.ech0214.Ech0214PortType;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -34,12 +33,12 @@ public class ECH implements IntegrationProfile {
     private static final ECH Instance = new ECH();
 
     @AllArgsConstructor
-    public enum Interactions implements WsInteractionId<WsTransactionConfiguration<WsAuditDataset>> {
+    public enum Interactions implements WsInteractionId {
         ECH_0213(ECH_0213_CONFIG),
         ECH_0214(ECH_0214_CONFIG);
 
         @Getter
-        private final WsTransactionConfiguration<WsAuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @Override
@@ -47,7 +46,7 @@ public class ECH implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration<WsAuditDataset> ECH_0213_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ECH_0213_CONFIG = new WsTransactionConfiguration(
         "ech-0213",
         "EPR-SPID Management Service",
         false,
@@ -63,7 +62,7 @@ public class ECH implements IntegrationProfile {
         false,
         false);
 
-    private final static WsTransactionConfiguration<WsAuditDataset> ECH_0214_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration ECH_0214_CONFIG = new WsTransactionConfiguration(
         "ech-0214",
         "EPR-SPID Query Service",
         false,

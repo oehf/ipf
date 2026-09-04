@@ -42,8 +42,8 @@ class DelegatingPredicate implements FilterIterator.Predicate {
 		try {
 			return closure.call(args)
 		} catch (InvokerInvocationException e) {
-			if (e.getCause() instanceof RuntimeException) {
-				throw (RuntimeException)e.getCause()
+			if (e.getCause() instanceof RuntimeException cause) {
+				throw cause
 			} else {
 				throw e
 			}

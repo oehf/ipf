@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 
 import java.util.List;
 
@@ -25,14 +25,19 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public interface FhirInteractionId<T extends FhirAuditDataset> extends InteractionId {
+public interface FhirInteractionId extends InteractionId {
 
-    FhirTransactionConfiguration<T> getFhirTransactionConfiguration();
+    FhirTransactionConfiguration getFhirTransactionConfiguration();
+
+    @Override
+    default TransactionConfiguration getTransactionConfiguration() {
+        return getFhirTransactionConfiguration();
+    }
 
     /**
      * Optional initialization with dynamic TransactionOptions
      * @param options transaction options
      */
-    default void init(FhirTransactionOptionsProvider<T, ? extends FhirTransactionOptions> optionsProvider,
+    default void init(FhirTransactionOptionsProvider<? extends FhirTransactionOptions> optionsProvider,
                       List<? extends FhirTransactionOptions> options) {}
 }

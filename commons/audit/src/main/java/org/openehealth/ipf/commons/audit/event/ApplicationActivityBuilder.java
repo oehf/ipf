@@ -26,7 +26,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a Application Activity event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.1
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.1">Part 15, A.5.3.1</a>
  * <p>
  * This audit message describes the event of an Application Entity starting or stopping.
  * This is closely related to the more general case of any kind of application startup or shutdown,

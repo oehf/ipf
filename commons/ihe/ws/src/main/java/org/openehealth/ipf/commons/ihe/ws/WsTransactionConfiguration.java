@@ -27,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  * Contains information about a Web Service-based transaction.
  * All parameters are static, i. e. do not depend on the endpoint configuration.
  */
-public class WsTransactionConfiguration<T extends WsAuditDataset> extends TransactionConfiguration<T> {
+public class WsTransactionConfiguration extends TransactionConfiguration {
     private final QName bindingName;
     private final Class<?> sei;
     private final QName serviceName;
@@ -76,8 +76,8 @@ public class WsTransactionConfiguration<T extends WsAuditDataset> extends Transa
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<T> clientAuditStrategy,
-            AuditStrategy<T> serverAuditStrategy,
+            AuditStrategy<? extends WsAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends WsAuditDataset> serverAuditStrategy,
             QName serviceName,
             Class<?> sei,
             QName bindingName,

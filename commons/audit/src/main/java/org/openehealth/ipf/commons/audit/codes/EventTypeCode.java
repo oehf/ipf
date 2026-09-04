@@ -23,9 +23,9 @@ import org.openehealth.ipf.commons.audit.types.EventType;
 
 /**
  * Audit Event Type Code as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_401
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_401">Part 16, CID 401</a>
  * 1.2.840.10008.6.1.904
- * and http://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_403
+ * and <a href="https://dicom.nema.org/medical/dicom/current/output/html/part16.html#sect_CID_403">CID 403.</a>
  * 1.2.840.10008.6.1.906
  *
  * @author Christian Ohr

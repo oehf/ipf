@@ -21,8 +21,6 @@ import org.openehealth.ipf.commons.ihe.hpd.iti59.Iti59AuditDataset;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
@@ -34,7 +32,7 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTransactionConfiguration<Iti59AuditDataset>, WsInteractionId<WsTransactionConfiguration<Iti59AuditDataset>>> {
+public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset> {
 
     public Iti59Component() {
         super(HPD.FeedInteractions.ITI_59);
@@ -44,7 +42,7 @@ public class Iti59Component extends AbstractWsComponent<Iti59AuditDataset, WsTra
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new HpdEndpoint<>(uri, remaining, this, parameters, Iti59Service.class) {
             @Override
-            public AbstractWsProducer<Iti59AuditDataset, WsTransactionConfiguration<Iti59AuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<Iti59AuditDataset, WsTransactionConfiguration<Iti59AuditDataset>> endpoint, JaxWsClientFactory<Iti59AuditDataset> clientFactory) {
+            public AbstractWsProducer<Iti59AuditDataset, ?, ?> getProducer(AbstractWsEndpoint<Iti59AuditDataset> endpoint, JaxWsClientFactory<Iti59AuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, BatchRequest.class, BatchResponse.class);
             }
         };

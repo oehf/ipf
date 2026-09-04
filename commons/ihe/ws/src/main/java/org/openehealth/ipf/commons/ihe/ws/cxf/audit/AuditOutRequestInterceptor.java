@@ -36,18 +36,18 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  *
  * @author Dmytro Rud
  */
-public class AuditOutRequestInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
-    private final AsynchronyCorrelator<T> correlator;
-    private final WsTransactionConfiguration<T> wsTransactionConfiguration;
+public class AuditOutRequestInterceptor<AuditDatasetType extends WsAuditDataset> extends AbstractAuditInterceptor<AuditDatasetType> {
+    private final AsynchronyCorrelator correlator;
+    private final WsTransactionConfiguration wsTransactionConfiguration;
 
     /**
      * Constructor.
      */
     public AuditOutRequestInterceptor(
-            AuditStrategy<T> auditStrategy,
+            AuditStrategy<AuditDatasetType> auditStrategy,
             AuditContext auditContext,
-            AsynchronyCorrelator<T> correlator,
-            WsTransactionConfiguration<T> wsTransactionConfiguration)
+            AsynchronyCorrelator correlator,
+            WsTransactionConfiguration wsTransactionConfiguration)
     {
         super(Phase.PRE_PROTOCOL_ENDING, auditStrategy, auditContext);
         addAfter(OutPayloadExtractorInterceptor.class.getName());

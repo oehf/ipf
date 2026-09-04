@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.ws;
 
+import jakarta.jws.WebMethod;
 import org.apache.cxf.endpoint.ClientImpl;
 import org.apache.cxf.frontend.ClientProxy;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
-
-import jakarta.jws.WebMethod;
 
 /**
  * Generic producer for Web Services which have only one operation.
@@ -29,8 +27,7 @@ import jakarta.jws.WebMethod;
  */
 public class SimpleWsProducer<
         AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration<AuditDatasetType>,
-        InType, OutType> extends AbstractWsProducer<AuditDatasetType, ConfigType, InType, OutType> {
+        InType, OutType> extends AbstractWsProducer<AuditDatasetType, InType, OutType> {
     private final String operationName;
 
     /**
@@ -45,7 +42,7 @@ public class SimpleWsProducer<
      *          type of response messages.
      */
     public SimpleWsProducer(
-            AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint,
+            AbstractWsEndpoint<AuditDatasetType> endpoint,
             JaxWsClientFactory<AuditDatasetType> clientFactory,
             Class<InType> requestClass,
             Class<OutType> responseClass)

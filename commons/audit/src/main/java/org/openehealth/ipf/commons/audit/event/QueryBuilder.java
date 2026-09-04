@@ -29,7 +29,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a Query event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.10
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.10">Part 15, A.5.3.10</a>0
  * <p>
  * This message describes the event of a Query being issued or received.
  * The message does NOT record the response to the query, but merely records the fact

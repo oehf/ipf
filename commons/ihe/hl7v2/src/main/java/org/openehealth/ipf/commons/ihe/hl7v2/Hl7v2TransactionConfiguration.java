@@ -42,7 +42,7 @@ import static org.apache.commons.lang3.Validate.*;
  *
  * @author Dmytro Rud
  */
-public class Hl7v2TransactionConfiguration<AuditDatasetType extends MllpAuditDataset> extends TransactionConfiguration<AuditDatasetType> {
+public class Hl7v2TransactionConfiguration extends TransactionConfiguration {
 
     private static class Definition {
         private final Set<String> triggerEvents;
@@ -106,8 +106,8 @@ public class Hl7v2TransactionConfiguration<AuditDatasetType extends MllpAuditDat
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<AuditDatasetType> clientAuditStrategy,
-            AuditStrategy<AuditDatasetType> serverAuditStrategy,
+            AuditStrategy<? extends MllpAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends MllpAuditDataset> serverAuditStrategy,
             Version[] hl7Versions,
             String sendingApplication,
             String sendingFacility,
@@ -174,8 +174,8 @@ public class Hl7v2TransactionConfiguration<AuditDatasetType extends MllpAuditDat
             String name,
             String description,
             boolean isQuery,
-            AuditStrategy<AuditDatasetType> clientAuditStrategy,
-            AuditStrategy<AuditDatasetType> serverAuditStrategy,
+            AuditStrategy<? extends MllpAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends MllpAuditDataset> serverAuditStrategy,
             Version hl7Version,
             String sendingApplication,
             String sendingFacility,

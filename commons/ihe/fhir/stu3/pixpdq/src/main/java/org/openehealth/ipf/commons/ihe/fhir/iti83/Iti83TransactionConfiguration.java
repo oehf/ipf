@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.fhir.iti83;
 import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * Standard Configuration for Iti83Component. Lazy-loading of results is by default not supported.
@@ -26,7 +25,7 @@ import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
  * @author Christian Ohr
  * @since 3.4
  */
-public class Iti83TransactionConfiguration extends FhirTransactionConfiguration<FhirQueryAuditDataset> {
+public class Iti83TransactionConfiguration extends FhirTransactionConfiguration {
 
     public Iti83TransactionConfiguration() {
         super(

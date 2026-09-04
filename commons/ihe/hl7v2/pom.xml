@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons-ihe</artifactId>
-        <version>5.4-SNAPSHOT</version>
+        <version>6.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
@@ -58,11 +58,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing</artifactId>
-            <optional>true</optional>
-        </dependency>
-        <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-handler</artifactId>
             <optional>true</optional>
@@ -83,16 +78,6 @@
             <groupId>org.openehealth.ipf.commons</groupId>
             <artifactId>ipf-commons-xml</artifactId>
             <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-brave</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>micrometer-tracing-bridge-otel</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

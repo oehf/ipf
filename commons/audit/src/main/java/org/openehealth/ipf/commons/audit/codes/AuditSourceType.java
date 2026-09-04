@@ -21,8 +21,8 @@ import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 import org.openehealth.ipf.commons.audit.types.EnumeratedValueSet;
 
 /**
- * Audit Source Type Codes as originally specified in https://tools.ietf.org/html/rfc3881#section-5.4
- * and now maintained in http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.1.2
+ * Audit Source Type Codes as originally specified in <a href="https://tools.ietf.org/html/rfc3881#section-5.4">RFC 3881</a>
+ * and now maintained in <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.1.2">Part 15, A.5.1.2</a>.
  * This value set is a literal part of the audit schema, ie.e. no other codes may be used.
  *
  * @author Christian Ohr

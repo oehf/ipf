@@ -22,7 +22,6 @@ import ca.uhn.fhir.model.api.annotation.Extension;
 import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import ca.uhn.fhir.util.ElementUtil;
 import org.hl7.fhir.r4.model.*;
-import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Pdqm320;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
 
 import java.util.ArrayList;
@@ -53,7 +52,7 @@ import java.util.List;
  * @see PdqmProfile#PDQM_MATCH_INPUT_PATIENT_PROFILE
  */
 @ResourceDef(name = "Patient", id = "pdqm", profile = PdqmProfile.PDQM_MATCH_INPUT_PATIENT_PROFILE)
-public class PdqmMatchInputPatient extends Patient implements Pdqm320 {
+public class PdqmMatchInputPatient extends Patient {
 
     @Child(name = "mothersMaidenName")
     @Extension(url = PdqmProfile.MOTHERS_MAIDEN_NAME_EXTENSION, definedLocally = false)

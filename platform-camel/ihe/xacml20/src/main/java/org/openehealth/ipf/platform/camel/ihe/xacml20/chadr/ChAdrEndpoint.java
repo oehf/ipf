@@ -16,8 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chadr;
 
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.chadr.ChAdrAuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
@@ -35,19 +33,19 @@ public class ChAdrEndpoint extends Xacml20Endpoint<ChAdrAuditDataset> {
     public ChAdrEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<ChAdrAuditDataset, WsTransactionConfiguration<ChAdrAuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<ChAdrAuditDataset>>> component,
+            AbstractWsComponent<ChAdrAuditDataset> component,
             Map<String, Object> parameters)
     {
         super(endpointUri, address, component, parameters, ChAdrService.class);
     }
 
     @Override
-    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<ChAdrAuditDataset, WsTransactionConfiguration<ChAdrAuditDataset>> endpoint) {
+    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<ChAdrAuditDataset> endpoint) {
         return new ChAdrService(endpoint.getHomeCommunityId());
     }
 
     @Override
-    public AbstractWsProducer<ChAdrAuditDataset, WsTransactionConfiguration<ChAdrAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<ChAdrAuditDataset, WsTransactionConfiguration<ChAdrAuditDataset>> endpoint, JaxWsClientFactory<ChAdrAuditDataset> clientFactory) {
+    public AbstractWsProducer<ChAdrAuditDataset, ?, ?> getProducer(AbstractWsEndpoint<ChAdrAuditDataset> endpoint, JaxWsClientFactory<ChAdrAuditDataset> clientFactory) {
         return new SimpleWsProducer<>(this, clientFactory, XACMLAuthzDecisionQueryType.class, ResponseType.class);
     }
 

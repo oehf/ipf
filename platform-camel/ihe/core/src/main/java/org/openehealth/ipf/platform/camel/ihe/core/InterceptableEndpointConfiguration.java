@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.core;
 
+import lombok.Getter;
 import org.apache.camel.support.DefaultComponent;
 
 import java.util.List;
@@ -27,8 +28,12 @@ import java.util.Map;
  *
  * @since 3.1
  */
+@Getter
 public abstract class InterceptableEndpointConfiguration {
 
+    /**
+     * configured interceptor factories for the endpoint
+     */
     private final List<InterceptorFactory> customInterceptorFactories;
 
     protected InterceptableEndpointConfiguration(DefaultComponent component, Map<String, Object> parameters) {
@@ -36,10 +41,4 @@ public abstract class InterceptableEndpointConfiguration {
                 parameters, "interceptorFactories", InterceptorFactory.class);
     }
 
-    /**
-     * @return configured interceptor factories for the endpoint
-     */
-    public List<InterceptorFactory> getCustomInterceptorFactories() {
-        return customInterceptorFactories;
-    }
 }

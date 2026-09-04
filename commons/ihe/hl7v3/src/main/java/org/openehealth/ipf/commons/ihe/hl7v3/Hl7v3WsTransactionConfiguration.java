@@ -26,7 +26,7 @@ import javax.xml.namespace.QName;
 /**
  * @author Dmytro Rud
  */
-public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration<Hl7v3AuditDataset> {
+public class Hl7v3WsTransactionConfiguration extends WsTransactionConfiguration{
 
     @Getter private final String nakRootElementName;
     @Getter private final String controlActProcessCode;

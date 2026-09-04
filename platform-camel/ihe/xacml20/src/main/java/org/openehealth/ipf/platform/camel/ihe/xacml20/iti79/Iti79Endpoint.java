@@ -16,12 +16,14 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.iti79;
 
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.iti79.Iti79AuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLAuthzDecisionQueryType;
-import org.openehealth.ipf.platform.camel.ihe.ws.*;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
+import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
+import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 import org.openehealth.ipf.platform.camel.ihe.xacml20.Xacml20Endpoint;
 
 import java.util.Map;
@@ -33,21 +35,20 @@ import java.util.Map;
 public class Iti79Endpoint extends Xacml20Endpoint<Iti79AuditDataset> {
 
     public Iti79Endpoint(
-            String endpointUri,
-            String address,
-            AbstractWsComponent<Iti79AuditDataset, WsTransactionConfiguration<Iti79AuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<Iti79AuditDataset>>> component,
-            Map<String, Object> parameters)
-    {
+        String endpointUri,
+        String address,
+        AbstractWsComponent<Iti79AuditDataset> component,
+        Map<String, Object> parameters) {
         super(endpointUri, address, component, parameters, Iti79Service.class);
     }
 
     @Override
-    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Iti79AuditDataset, WsTransactionConfiguration<Iti79AuditDataset>> endpoint) {
+    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Iti79AuditDataset> endpoint) {
         return new Iti79Service(endpoint.getHomeCommunityId());
     }
 
     @Override
-    public AbstractWsProducer<Iti79AuditDataset, WsTransactionConfiguration<Iti79AuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<Iti79AuditDataset, WsTransactionConfiguration<Iti79AuditDataset>> endpoint, JaxWsClientFactory<Iti79AuditDataset> clientFactory) {
+    public AbstractWsProducer<Iti79AuditDataset, ?, ?> getProducer(AbstractWsEndpoint<Iti79AuditDataset> endpoint, JaxWsClientFactory<Iti79AuditDataset> clientFactory) {
         return new SimpleWsProducer<>(this, clientFactory, XACMLAuthzDecisionQueryType.class, ResponseType.class);
     }
 

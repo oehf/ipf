@@ -19,7 +19,6 @@ import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Parameters;
 import org.hl7.fhir.r4.model.Reference;
-import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Pixm310;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
 
 import java.util.List;
@@ -36,7 +35,7 @@ import java.util.stream.Collectors;
  * @since 5.2
  */
 @ResourceDef(name = "Parameters", profile = PixmProfile.PIXM_QUERY_PARAMETERS_OUT_PROFILE)
-public class PixmQueryParametersOut extends Parameters implements Pixm310 {
+public class PixmQueryParametersOut extends Parameters {
 
     public static final String TARGET_IDENTIFIER = "targetIdentifier";
     public static final String TARGET_ID = "targetId";

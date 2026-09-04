@@ -16,7 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq1;
 
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.chppq1.ChPpq1PortType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.ehealthswiss.*;
@@ -27,9 +26,9 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
  * @since 3.5.1
  * @author Dmytro Rud
  */
-public class ChPpq1Producer extends AbstractWsProducer<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, AssertionBasedRequestType, EprPolicyRepositoryResponse> {
+public class ChPpq1Producer extends AbstractWsProducer<ChPpqAuditDataset, AssertionBasedRequestType, EprPolicyRepositoryResponse> {
 
-    public ChPpq1Producer(AbstractWsEndpoint<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>> endpoint, JaxWsClientFactory<ChPpqAuditDataset> clientFactory) {
+    public ChPpq1Producer(AbstractWsEndpoint<ChPpqAuditDataset> endpoint, JaxWsClientFactory<ChPpqAuditDataset> clientFactory) {
         super(endpoint, clientFactory, AssertionBasedRequestType.class, EprPolicyRepositoryResponse.class);
     }
 

@@ -25,19 +25,13 @@
     <parent>
         <groupId>org.openehealth.ipf.modules</groupId>
         <artifactId>ipf-modules</artifactId>
-        <version>5.4-SNAPSHOT</version>
+        <version>6.0-SNAPSHOT</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib-jdk8</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-stdlib-common</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -62,17 +56,13 @@
             <exclusions>
                 <exclusion>
                     <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-stdlib-jdk8</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.jetbrains.kotlin</groupId>
-                    <artifactId>kotlin-stdlib-common</artifactId>
+                    <artifactId>kotlin-stdlib</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
-            <artifactId>kotlin-stdlib-common</artifactId>
+            <artifactId>kotlin-stdlib</artifactId>
         </dependency>
 
         <!-- dependencies for test -->
@@ -150,7 +140,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <jvmTarget>11</jvmTarget>
+                    <jvmTarget>${maven.compiler.target}</jvmTarget>
                 </configuration>
             </plugin>
         </plugins>

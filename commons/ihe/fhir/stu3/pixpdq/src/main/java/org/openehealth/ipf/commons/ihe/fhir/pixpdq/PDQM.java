@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78TransactionConfiguration;
 
 import java.util.Arrays;
@@ -34,12 +33,12 @@ import java.util.List;
 public class PDQM implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements FhirInteractionId<FhirQueryAuditDataset> {
+    public enum Interactions implements FhirInteractionId {
 
         ITI_78(ITI_78_CONFIG);
 
         @Getter
-        private final FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration fhirTransactionConfiguration;
     }
 
     @Override

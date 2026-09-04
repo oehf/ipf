@@ -25,7 +25,10 @@ public class UniqueIdIdentifier extends Identifier {
 
     public UniqueIdIdentifier() {
         super();
+        // MHD up to 4.2.3 required the use, 4.2.4 requires the type (CP-ITI-1328-01). Both are
+        // written, so that the identifier conforms to either version of the profile.
         setUse(IdentifierUse.USUAL);
+        setType(MhdIdentifierType.UNIQUE_ID.toCodeableConcept());
     }
 
     @Override

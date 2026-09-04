@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v2ws.pcd01;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.AbstractHl7v2WsComponent;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2ws.SimpleHl7v2WsEndpoint;
@@ -43,8 +42,8 @@ public class Pcd01Component extends AbstractHl7v2WsComponent {
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new SimpleHl7v2WsEndpoint<Pcd01Component>(uri, remaining, this, parameters, Pcd01Service.class) {
             @Override
-            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(
-                    AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint,
+            public AbstractWsProducer<WsAuditDataset, ?, ?> getProducer(
+                    AbstractWsEndpoint<WsAuditDataset> endpoint,
                     JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, String.class, String.class);
             }

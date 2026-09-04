@@ -9,4 +9,4 @@
 
 # Camel registration for the custom FHIR component
  
-class=org.openehealth.ipf.platform.camel.ihe.fhir.custom.CustomFhirComponent
+class=org.openehealth.ipf.platform.camel.ihe.fhir.core.custom.CustomFhirComponent

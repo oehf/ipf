@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.hpd.controls.pagination.ProducerPaginatio
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.BatchResponse;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
 
@@ -30,7 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.SimpleWsProducer;
  * @since 4.3
  */
 @Slf4j
-public class HpdQueryProducer<AuditDatasetType extends WsAuditDataset> extends SimpleWsProducer<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, BatchRequest, BatchResponse>
+public class HpdQueryProducer<AuditDatasetType extends WsAuditDataset> extends SimpleWsProducer<AuditDatasetType, BatchRequest, BatchResponse>
         implements ProducerHandler<BatchRequest, BatchResponse>
 {
 

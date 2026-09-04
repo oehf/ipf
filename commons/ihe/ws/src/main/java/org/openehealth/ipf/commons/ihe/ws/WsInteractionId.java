@@ -16,13 +16,18 @@
 package org.openehealth.ipf.commons.ihe.ws;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 
 /**
  * @author Christian Ohr
  * @since 3.2
  */
-public interface WsInteractionId<ConfigType extends WsTransactionConfiguration<? extends WsAuditDataset>> extends InteractionId {
+public interface WsInteractionId extends InteractionId {
 
-    ConfigType getWsTransactionConfiguration();
+    WsTransactionConfiguration getWsTransactionConfiguration();
+
+    @Override
+    default TransactionConfiguration getTransactionConfiguration() {
+        return getWsTransactionConfiguration();
+    }
 }

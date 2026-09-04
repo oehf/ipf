@@ -26,7 +26,7 @@ import java.util.Collections;
 
 /**
  * Builds an Audit Event representing a Security Alert event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.11
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.11">Part 15, A.5.3.11</a>1
  * <p>
  * This message describes any event for which a node needs to report a security alert,
  * e.g., a node authentication failure when establishing a secure communications channel.

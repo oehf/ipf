@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti51;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsQueryAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResponse;
@@ -46,10 +45,10 @@ public class Iti51Component extends XdsComponent<XdsQueryAuditDataset> {
         return new XdsEndpoint<>(uri, remaining, this, parameters, Iti51Service.class) {
 
             @Override
-            public AbstractWsProducer<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset, WsTransactionConfiguration<XdsQueryAuditDataset>> endpoint,
-                                                                                                                                JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
+            public AbstractWsProducer<XdsQueryAuditDataset, ?, ?> getProducer(AbstractWsEndpoint<XdsQueryAuditDataset> endpoint,
+                                                                              JaxWsClientFactory<XdsQueryAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
-                        endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
+                    endpoint, clientFactory, AdhocQueryRequest.class, AdhocQueryResponse.class);
             }
 
         };

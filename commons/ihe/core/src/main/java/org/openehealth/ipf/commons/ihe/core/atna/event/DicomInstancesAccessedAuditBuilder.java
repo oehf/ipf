@@ -44,21 +44,21 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
  * @since 3.5
  */
 public class DicomInstancesAccessedAuditBuilder<T extends DicomInstancesAccessedAuditBuilder<T>>
-        extends IHEAuditMessageBuilder<T, DicomInstancesAccessedBuilder> {
+    extends IHEAuditMessageBuilder<T, DicomInstancesAccessedBuilder> {
 
     public DicomInstancesAccessedAuditBuilder(final AuditContext auditContext,
-            final AuditDataset auditDataset,
-            final EventOutcomeIndicator eventOutcomeIndicator,
-            final String eventOutcomeDescription,
-            final EventActionCode eventActionCode,
-            final EventType eventType,
-            final PurposeOfUse... purposesOfUse) {
+                                              final AuditDataset auditDataset,
+                                              final EventOutcomeIndicator eventOutcomeIndicator,
+                                              final String eventOutcomeDescription,
+                                              final EventActionCode eventActionCode,
+                                              final EventType eventType,
+                                              final PurposeOfUse... purposesOfUse) {
         super(auditContext, auditDataset, new DicomInstancesAccessedBuilder(
-                eventOutcomeIndicator,
-                eventOutcomeDescription,
-                eventActionCode,
-                eventType,
-                purposesOfUse));
+            eventOutcomeIndicator,
+            eventOutcomeDescription,
+            eventActionCode,
+            eventType,
+            purposesOfUse));
 
         // First the source, then the destination
         if (auditDataset.isServerSide()) {
@@ -75,45 +75,45 @@ public class DicomInstancesAccessedAuditBuilder<T extends DicomInstancesAccessed
     public T setPatient(final String patientId) {
         if (patientId != null) {
             delegate.addPatientParticipantObject(
-                    patientId,
-                    null,
-                    Collections.emptyList(),
-                    null);
+                patientId,
+                null,
+                Collections.emptyList(),
+                null);
         }
         return self();
     }
 
     public T addExportedEntity(
-            final String objectId,
-            final ParticipantObjectIdType participantObjectIdType,
-            final ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
-            final List<TypeValuePairType> details) {
+        final String objectId,
+        final ParticipantObjectIdType participantObjectIdType,
+        final ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
+        final List<TypeValuePairType> details) {
         return addExportedEntity(
-                objectId,
-                participantObjectIdType,
-                ParticipantObjectTypeCode.System,
-                participantObjectTypeCodeRole,
-                null,
-                details);
+            objectId,
+            participantObjectIdType,
+            ParticipantObjectTypeCode.System,
+            participantObjectTypeCodeRole,
+            null,
+            details);
     }
 
     public T addExportedEntity(
-            final String objectId,
-            final ParticipantObjectIdType participantObjectIdType,
-            final ParticipantObjectTypeCode participantObjectTypeCode,
-            final ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
-            final ParticipantObjectDataLifeCycle participantObjectDataLifeCycle,
-            final List<TypeValuePairType> details) {
+        final String objectId,
+        final ParticipantObjectIdType participantObjectIdType,
+        final ParticipantObjectTypeCode participantObjectTypeCode,
+        final ParticipantObjectTypeCodeRole participantObjectTypeCodeRole,
+        final ParticipantObjectDataLifeCycle participantObjectDataLifeCycle,
+        final List<TypeValuePairType> details) {
         delegate.addParticipantObjectIdentification(
-                requireNonNull(participantObjectIdType, "Exported entity ID type must not be null"),
-                null,
-                null,
-                details,
-                objectId != null ? objectId : getAuditContext().getAuditValueIfMissing(),
-                participantObjectTypeCode,
-                participantObjectTypeCodeRole,
-                participantObjectDataLifeCycle,
-                null);
+            requireNonNull(participantObjectIdType, "Exported entity ID type must not be null"),
+            null,
+            null,
+            details,
+            objectId != null ? objectId : getAuditContext().getAuditValueIfMissing(),
+            participantObjectTypeCode,
+            participantObjectTypeCodeRole,
+            participantObjectDataLifeCycle,
+            null);
         return self();
     }
 

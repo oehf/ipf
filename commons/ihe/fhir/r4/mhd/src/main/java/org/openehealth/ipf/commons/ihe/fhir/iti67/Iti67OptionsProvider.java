@@ -16,15 +16,15 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.iti67;
 
-import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionOptionsProvider;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
 
 /**
  * @author Christian Ohr
  * @since 4.1
  */
-public class Iti67OptionsProvider implements FhirTransactionOptionsProvider<FhirQueryAuditDataset, Iti67Options> {
+public class Iti67OptionsProvider implements FhirTransactionOptionsProvider<Iti67Options> {
 
     @Override
     public Class<Iti67Options> getTransactionOptionsType() {
@@ -37,7 +37,7 @@ public class Iti67OptionsProvider implements FhirTransactionOptionsProvider<Fhir
     }
 
     @Override
-    public AuditStrategy<FhirQueryAuditDataset> getAuditStrategy(boolean serverSide) {
+    public FhirAuditStrategy<FhirQueryAuditDataset> getAuditStrategy(boolean serverSide) {
         return new Iti67AuditStrategy(serverSide);
     }
 }

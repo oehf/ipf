@@ -21,15 +21,15 @@ http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <bean id="cachingProvider" class="javax.cache.Caching" factory-method="getCachingProvider" />
-    <bean id="ehcacheManager" factory-bean="cachingProvider" factory-method="getCacheManager">
+    <bean id="ehCacheManager" factory-bean="cachingProvider" factory-method="getCacheManager">
             <constructor-arg><value type="java.net.URI">classpath:ehcache.xml</value></constructor-arg>
         <constructor-arg><bean class="org.springframework.util.ClassUtils" factory-method="getDefaultClassLoader"/></constructor-arg>
     </bean>
 
     <bean id="correlator"
-          class="org.openehealth.ipf.commons.ihe.ws.correlation.EhcacheAsynchronyCorrelator">
+          class="org.openehealth.ipf.commons.ihe.ws.correlation.JCacheAsynchronyCorrelator">
         <constructor-arg>
-            <bean factory-bean="ehcacheManager" factory-method="getCache">
+            <bean factory-bean="ehCacheManager" factory-method="getCache">
                 <constructor-arg value="wsCorrelationCache" />
             </bean>
         </constructor-arg>

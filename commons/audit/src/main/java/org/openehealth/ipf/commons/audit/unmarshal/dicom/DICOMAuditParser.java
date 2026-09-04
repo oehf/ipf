@@ -61,7 +61,7 @@ import static org.openehealth.ipf.commons.audit.XMLNames.*;
 
 /**
  * Parses XML-formatted Audit messages as written by
- * {@link org.openehealth.ipf.commons.audit.marshal.dicom.DICOM2017c}
+ * {@link org.openehealth.ipf.commons.audit.marshal.dicom.DICOM2024d}
  *
  * @author Christian Ohr
  * @since 4.0

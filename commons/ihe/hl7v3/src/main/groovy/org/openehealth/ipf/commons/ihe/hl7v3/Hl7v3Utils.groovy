@@ -18,7 +18,6 @@ package org.openehealth.ipf.commons.ihe.hl7v3
 import groovy.xml.XmlSlurper
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
-import org.openehealth.ipf.commons.xml.XmlYielder
 
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter

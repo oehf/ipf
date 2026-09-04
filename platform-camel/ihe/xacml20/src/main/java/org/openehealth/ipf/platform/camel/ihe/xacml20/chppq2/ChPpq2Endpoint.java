@@ -17,8 +17,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.chppq2;
 
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.audit.ChPpqAuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.saml20.protocol.ResponseType;
 import org.openehealth.ipf.commons.ihe.xacml20.stub.xacml20.saml.protocol.XACMLPolicyQueryType;
@@ -30,21 +28,20 @@ import java.util.Map;
 public class ChPpq2Endpoint extends Xacml20Endpoint<ChPpqAuditDataset> {
 
     public ChPpq2Endpoint(
-            String endpointUri,
-            String address,
-            AbstractWsComponent<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, ? extends WsInteractionId<WsTransactionConfiguration<ChPpqAuditDataset>>> component,
-            Map<String, Object> parameters)
-    {
+        String endpointUri,
+        String address,
+        AbstractWsComponent<ChPpqAuditDataset> component,
+        Map<String, Object> parameters) {
         super(endpointUri, address, component, parameters, ChPpq2Service.class);
     }
 
     @Override
-    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>> endpoint) {
+    protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<ChPpqAuditDataset> endpoint) {
         return new ChPpq2Service(endpoint.getHomeCommunityId());
     }
 
     @Override
-    public AbstractWsProducer<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<ChPpqAuditDataset, WsTransactionConfiguration<ChPpqAuditDataset>> endpoint, JaxWsClientFactory<ChPpqAuditDataset> clientFactory) {
+    public AbstractWsProducer<ChPpqAuditDataset, ?, ?> getProducer(AbstractWsEndpoint<ChPpqAuditDataset> endpoint, JaxWsClientFactory<ChPpqAuditDataset> clientFactory) {
         return new SimpleWsProducer<>(this, clientFactory, XACMLPolicyQueryType.class, ResponseType.class);
     }
 

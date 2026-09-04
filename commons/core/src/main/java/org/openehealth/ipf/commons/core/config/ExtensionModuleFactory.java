@@ -61,8 +61,6 @@ public class ExtensionModuleFactory extends PropertiesModuleFactory {
                 log.warn("Unable to initialize extension using {}.", initializerClassName, e);
             }
         }
-
-
         return module;
     }
 

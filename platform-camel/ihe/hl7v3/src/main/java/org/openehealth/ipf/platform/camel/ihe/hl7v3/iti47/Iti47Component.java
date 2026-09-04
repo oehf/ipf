@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.iti47;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.hl7v3.audit.Hl7v3AuditDataset;
-import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3ContinuationAwareWsTransactionConfiguration;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3Component;
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.Hl7v3ContinuationAwareEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
@@ -30,7 +29,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.PDQV3.Interactions.ITI_47;
 /**
  * The Camel component for the ITI-47 transaction (PDQ v3).
  */
-public class Iti47Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTransactionConfiguration> {
+public class Iti47Component extends Hl7v3Component {
 
     public Iti47Component() {
         super(ITI_47);
@@ -41,7 +40,7 @@ public class Iti47Component extends Hl7v3Component<Hl7v3ContinuationAwareWsTrans
         return new Hl7v3ContinuationAwareEndpoint(uri, remaining, this, parameters) {
 
             @Override
-            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset, Hl7v3ContinuationAwareWsTransactionConfiguration> endpoint) {
+            protected AbstractWebService getCustomServiceInstance(AbstractWsEndpoint<Hl7v3AuditDataset> endpoint) {
                 var endpoint2 = (Hl7v3ContinuationAwareEndpoint) endpoint;
                 return endpoint2.isSupportContinuation() ?
                         new Iti47ContinuationAwareService(endpoint2) :

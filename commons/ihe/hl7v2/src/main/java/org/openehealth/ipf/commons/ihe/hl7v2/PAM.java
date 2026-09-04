@@ -21,7 +21,7 @@ import lombok.Getter;
 import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.FeedAuditDataset;
+import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory;
 import org.openehealth.ipf.gazelle.validation.profile.pam.PamTransactions;
 
@@ -34,10 +34,10 @@ import java.util.List;
  */
 public class PAM implements IntegrationProfile {
 
-    public enum Interactions implements Hl7v2InteractionId<FeedAuditDataset> {
+    public enum Interactions implements Hl7v2InteractionId {
         ITI_30 {
             @Override
-            public void init(Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider,
+            public void init(Hl7v2TransactionOptionsProvider<? extends Hl7v2TransactionOptions> optionsProvider,
                              List<? extends Hl7v2TransactionOptions> options) {
                 init("pam-iti30",
                         "Patient Identity Management",
@@ -50,7 +50,7 @@ public class PAM implements IntegrationProfile {
         },
         ITI_31 {
             @Override
-            public void init(Hl7v2TransactionOptionsProvider<FeedAuditDataset, ? extends Hl7v2TransactionOptions> optionsProvider,
+            public void init(Hl7v2TransactionOptionsProvider<? extends Hl7v2TransactionOptions> optionsProvider,
                              List<? extends Hl7v2TransactionOptions> options) {
                 init("pam-iti31",
                         "Patient Encounter Management",
@@ -62,19 +62,19 @@ public class PAM implements IntegrationProfile {
             }
         };
 
-        @Getter private Hl7v2TransactionConfiguration<FeedAuditDataset> hl7v2TransactionConfiguration;
-        @Getter private NakFactory<FeedAuditDataset> nakFactory;
+        @Getter private Hl7v2TransactionConfiguration hl7v2TransactionConfiguration;
+        @Getter private NakFactory nakFactory;
 
         protected void init(
                 String name,
                 String description,
                 boolean isQuery,
-                AuditStrategy<FeedAuditDataset> clientAuditStrategy,
-                AuditStrategy<FeedAuditDataset> serverAuditStrategy,
+                AuditStrategy<? extends MllpAuditDataset> clientAuditStrategy,
+                AuditStrategy<? extends MllpAuditDataset> serverAuditStrategy,
                 PamTransactions pamTransactions,
                 List<? extends Hl7v2TransactionOptions> options)
         {
-            this.hl7v2TransactionConfiguration = new Hl7v2TransactionConfiguration<>(
+            this.hl7v2TransactionConfiguration = new Hl7v2TransactionConfiguration(
                     name,
                     description,
                     isQuery,
@@ -93,7 +93,7 @@ public class PAM implements IntegrationProfile {
                     new boolean[]{false},
                     HapiContextFactory.createHapiContext(pamTransactions));
 
-            this.nakFactory = new NakFactory<>(this.hl7v2TransactionConfiguration);
+            this.nakFactory = new NakFactory(this.hl7v2TransactionConfiguration);
         }
     }
 

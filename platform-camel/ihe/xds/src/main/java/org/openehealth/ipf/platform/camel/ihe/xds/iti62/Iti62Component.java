@@ -1,12 +1,12 @@
 /*
  * Copyright 2013 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
- *     
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.xds.iti62;
 
 import org.apache.camel.Endpoint;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsRemoveMetadataAuditDataset;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.lcm.RemoveObjectsRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.rs.RegistryResponseType;
@@ -44,10 +43,10 @@ public class Iti62Component extends XdsComponent<XdsRemoveMetadataAuditDataset> 
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new XdsEndpoint<>(uri, remaining, this, parameters, Iti62Service.class) {
             @Override
-            public AbstractWsProducer<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration<XdsRemoveMetadataAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<XdsRemoveMetadataAuditDataset, WsTransactionConfiguration<XdsRemoveMetadataAuditDataset>> endpoint,
-                                                                                                                                                  JaxWsClientFactory<XdsRemoveMetadataAuditDataset> clientFactory) {
+            public AbstractWsProducer<XdsRemoveMetadataAuditDataset, ?, ?> getProducer(AbstractWsEndpoint<XdsRemoveMetadataAuditDataset> endpoint,
+                                                                                       JaxWsClientFactory<XdsRemoveMetadataAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(
-                        endpoint, clientFactory, RemoveObjectsRequest.class, RegistryResponseType.class);
+                    endpoint, clientFactory, RemoveObjectsRequest.class, RegistryResponseType.class);
             }
         };
     }

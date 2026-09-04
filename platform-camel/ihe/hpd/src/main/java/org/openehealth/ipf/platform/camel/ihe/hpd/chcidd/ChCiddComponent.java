@@ -20,8 +20,6 @@ import org.openehealth.ipf.commons.ihe.hpd.HPD;
 import org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadRequest;
 import org.openehealth.ipf.commons.ihe.hpd.stub.chcidd.DownloadResponse;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.hpd.HpdEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -34,7 +32,7 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public class ChCiddComponent extends AbstractWsComponent<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, WsInteractionId<WsTransactionConfiguration<WsAuditDataset>>> {
+public class ChCiddComponent extends AbstractWsComponent<WsAuditDataset> {
 
     public ChCiddComponent() {
         super(HPD.ReadInteractions.CH_CIDD);
@@ -44,7 +42,7 @@ public class ChCiddComponent extends AbstractWsComponent<WsAuditDataset, WsTrans
     protected Endpoint createEndpoint(String uri, String remaining, Map<String, Object> parameters) {
         return new HpdEndpoint<>(uri, remaining, this, parameters, ChCiddService.class) {
             @Override
-            public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
+            public AbstractWsProducer<WsAuditDataset, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
                 return new SimpleWsProducer<>(endpoint, clientFactory, DownloadRequest.class, DownloadResponse.class);
             }
         };

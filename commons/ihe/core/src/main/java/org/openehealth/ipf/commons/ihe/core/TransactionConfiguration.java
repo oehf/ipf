@@ -26,7 +26,7 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
  * @author Dmytro Rud
  */
 @RequiredArgsConstructor
-abstract public class TransactionConfiguration<AuditDatasetType extends AuditDataset> {
+abstract public class TransactionConfiguration {
 
     /**
      * name of the transaction
@@ -50,13 +50,13 @@ abstract public class TransactionConfiguration<AuditDatasetType extends AuditDat
      * {@link AuditStrategy} to be used on client side to accomplish ATNA audit
      */
     @Getter
-    private final AuditStrategy<AuditDatasetType> clientAuditStrategy;
+    private final AuditStrategy<? extends AuditDataset> clientAuditStrategy;
 
     /**
      * {@link AuditStrategy} to be used on server side to accomplish ATNA audit
      */
     @Getter
-    private final AuditStrategy<AuditDatasetType> serverAuditStrategy;
+    private final AuditStrategy<? extends AuditDataset> serverAuditStrategy;
 
     /**
      * whether strict validation rules are applied to the transaction

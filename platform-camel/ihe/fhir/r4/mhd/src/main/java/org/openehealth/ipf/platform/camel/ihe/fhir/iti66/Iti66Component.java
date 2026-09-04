@@ -31,7 +31,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.mhd.MHD.QueryDocumentManifest
  * @author Christian Ohr
  * @since 3.6
  */
-public class Iti66Component extends FhirComponentWithOptions<FhirQueryAuditDataset, Iti66Options, Iti66OptionsProvider> {
+public class Iti66Component extends FhirComponentWithOptions<FhirQueryAuditDataset, Iti66Options> {
 
     public Iti66Component() {
         super(ITI_66, Iti66OptionsProvider::new);
@@ -42,7 +42,7 @@ public class Iti66Component extends FhirComponentWithOptions<FhirQueryAuditDatas
     }
 
     @Override
-    protected Iti66Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration<FhirQueryAuditDataset> config) {
+    protected Iti66Endpoint doCreateEndpoint(String uri, FhirEndpointConfiguration config) {
         return new Iti66Endpoint(uri, this, config);
     }
 

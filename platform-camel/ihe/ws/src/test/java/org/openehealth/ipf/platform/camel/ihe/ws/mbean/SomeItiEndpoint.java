@@ -24,7 +24,6 @@ import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
 import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
@@ -32,7 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsProducer;
 import java.util.List;
 import java.util.Map;
 
-public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> {
+public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset> {
 
     public SomeItiEndpoint(
             String endpointUri,
@@ -64,7 +63,7 @@ public class SomeItiEndpoint extends AbstractWsEndpoint<WsAuditDataset, WsTransa
     }
 
     @Override
-    public AbstractWsProducer<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset, WsTransactionConfiguration<WsAuditDataset>> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
+    public AbstractWsProducer<WsAuditDataset, ?, ?> getProducer(AbstractWsEndpoint<WsAuditDataset> endpoint, JaxWsClientFactory<WsAuditDataset> clientFactory) {
         return null;
     }
 

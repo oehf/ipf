@@ -23,7 +23,46 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="5.3.0" description="IPF 5.3.0" date="">
+        <release version="6.0.0" description="IPF 6.0.0" date="">
+            <action issue="518" dev="ohr" type="update">
+                MHD updated to version 4.2.4. The entryUUID and the uniqueId Identifier are now differentiated
+                by Identifier.type instead of Identifier.use (CP-ITI-1328-01). Canonical references that pin a version,
+                e.g. .../Encounter|4.0.1, are resolved again during profile validation. MHD marker interfaces have been removed.
+                The Target Communities Option (CP-ITI-1326-02) is supported with the homeCommunityId extension on the
+                DocumentReference and List model classes and the targetCommunityIdList search parameter of [ITI-66] and [ITI-67].
+            </action>
+            <action issue="517" dev="ohr" type="add">
+                Support FHIR Binary streaming uploads (Base64SplittingFilter)
+            </action>
+            <action issue="516" dev="ohr" type="fix">
+                Improve and harden XML related processing (Pools, XXE and SSRF prevention)
+            </action>
+            <action issue="513" dev="ohr" type="update">
+                Upgrade Jakarta EE stack to 11 and Spring Boot support to 4.1+ (including various transitive dependencies)
+            </action>
+            <action issue="476" dev="ohr" type="add">
+                Support Apache Camel telemetry for the IHE components. Removed MessageTracer in favor of Apache Camel telemetry
+            </action>
+            <action dev="ohr" type="fix">
+                Spring Boot applications using the ATNA starter (and thus any transaction family starter) no longer
+                fail to start when spring-boot-actuator is absent from the classpath
+            </action>
+            <action dev="ohr" type="fix">
+                ipf.xds.caching now also picks up the CacheManager contributed by Spring Boot's cache
+                auto-configuration, not only a user-declared one
+            </action>
+            <action dev="ohr" type="update">
+                XmlYielder moved from ipf-commons-xml to ipf-commons-ihe-hl7v3 (package
+                org.openehealth.ipf.commons.ihe.hl7v3), its only user. ipf-commons-xml no longer
+                requires Groovy; modules relying on its transitive groovy-xml dependency must now
+                declare it themselves
+            </action>
+            <action dev="ohr" type="fix">
+                The mhd-iti68-bin endpoint scheme is resolvable again: its Camel component descriptor named
+                the Iti68BinaryComponent in the wrong package, so routes using the scheme failed to start
+            </action>
+        </release>
+        <release version="5.3.0" description="IPF 5.3.0" date="17 Aug 2026">
             <action issue="509" dev="ohr" type="add">
                 Consequently implement FHIR-based ATNA auditing as an alternative to DICOM-based auditing: PIXm [ITI-83],
                 PDQm [ITI-78] and [ITI-119], and MHD [ITI-65], [ITI-66], [ITI-67], [ITI-68] and [ITI-105]
@@ -38,7 +77,7 @@
                 Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323)
             </action>
         </release>
-        <release version="5.2.0" description="IPF 5.2.0" date="">
+        <release version="5.2.0" description="IPF 5.2.0" date="26 May 2026">
             <action issue="512" dev="ohr" type="update">
                 Selecting uniqueIds from a NamingSystem resource by type will now respect the "preferred" flag
             </action>

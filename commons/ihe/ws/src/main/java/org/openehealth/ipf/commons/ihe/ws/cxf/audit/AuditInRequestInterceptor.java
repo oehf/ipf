@@ -31,14 +31,14 @@ import org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder;
  *
  * @author Dmytro Rud
  */
-public class AuditInRequestInterceptor<T extends WsAuditDataset> extends AbstractAuditInterceptor<T> {
+public class AuditInRequestInterceptor<AuditDatasetType extends WsAuditDataset> extends AbstractAuditInterceptor<AuditDatasetType> {
 
-    private final WsTransactionConfiguration<T> wsTransactionConfiguration;
+    private final WsTransactionConfiguration wsTransactionConfiguration;
 
     /**
      * Constructor.
      */
-    public AuditInRequestInterceptor(AuditStrategy<T> auditStrategy, AuditContext auditContext, WsTransactionConfiguration<T> wsTransactionConfiguration) {
+    public AuditInRequestInterceptor(AuditStrategy<AuditDatasetType> auditStrategy, AuditContext auditContext, WsTransactionConfiguration wsTransactionConfiguration) {
         super(Phase.UNMARSHAL, auditStrategy, auditContext);
         addAfter(DocLiteralInInterceptor.class.getName());
         this.wsTransactionConfiguration = wsTransactionConfiguration;

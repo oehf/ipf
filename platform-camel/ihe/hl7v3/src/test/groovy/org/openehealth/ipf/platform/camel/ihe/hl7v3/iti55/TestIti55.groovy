@@ -231,7 +231,7 @@ class TestIti55 extends HL7v3StandardTestContainer {
         for (int i = 1; i <= 5; ++i) {
             def requestExchange = new DefaultExchange(camelContext)
             requestExchange.in.body = '<PRPA_IN201305UV02 ITSVersion="XML_1.0" xmlns="urn:hl7-org:v3"/>'
-            producerTemplate.send("xcpd-iti55://localhost:${Iti55TestRouteBuilder.jettyPort}/iti55-fault-${i}", requestExchange)
+            producerTemplate.send("xcpd-iti55://localhost:${Iti55TestRouteBuilder.freePort}/iti55-fault-${i}", requestExchange)
             assert requestExchange.exception.cause instanceof SoapFault
             assert requestExchange.exception.cause.message == 'fault issue 480'
 

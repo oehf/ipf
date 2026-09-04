@@ -22,8 +22,6 @@ import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92PortType;
 import org.openehealth.ipf.commons.ihe.xds.iti92.Iti92ServerAuditStrategy;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsAuditDataset;
-import org.openehealth.ipf.commons.ihe.xds.core.audit.XdsSubmitAuditDataset;
 
 import javax.xml.namespace.QName;
 import java.util.Arrays;
@@ -44,7 +42,7 @@ public class RMU implements XdsIntegrationProfile {
 		ITI_92(ITI_92_WS_CONFIG);
 
 		@Getter
-		private final WsTransactionConfiguration<? extends XdsAuditDataset> wsTransactionConfiguration;
+		private final WsTransactionConfiguration wsTransactionConfiguration;
 
 		@Override
 		public XdsIntegrationProfile getInteractionProfile() {
@@ -62,7 +60,7 @@ public class RMU implements XdsIntegrationProfile {
 		return Arrays.asList(Interactions.values());
 	}
 
-	private final static WsTransactionConfiguration<XdsSubmitAuditDataset> ITI_92_WS_CONFIG = new WsTransactionConfiguration<>(
+	private final static WsTransactionConfiguration ITI_92_WS_CONFIG = new WsTransactionConfiguration(
 		"rmu-iti92",
 		"Restricted Update Document Set",
 		false,

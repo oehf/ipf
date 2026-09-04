@@ -16,8 +16,9 @@
 package org.openehealth.ipf.commons.ihe.hpd.stub.json
 
 import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.SerializationFeature
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.SerializationFeature
+import tools.jackson.databind.json.JsonMapper
 import groovy.util.logging.Slf4j
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -42,11 +43,10 @@ class JsonTest {
 
     @BeforeAll
     static void beforeAll() {
-        mapper = new ObjectMapper()
-        mapper.enable(SerializationFeature.INDENT_OUTPUT)
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY)
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT)
+        mapper = JsonMapper.builder()
+            .enable(SerializationFeature.INDENT_OUTPUT)
+            .changeDefaultPropertyInclusion({ incl -> incl.withValueInclusion(JsonInclude.Include.NON_DEFAULT) })
+            .build()
     }
 
     @Test

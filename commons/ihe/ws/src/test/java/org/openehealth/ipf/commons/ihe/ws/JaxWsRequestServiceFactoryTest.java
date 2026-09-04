@@ -24,7 +24,6 @@ import org.apache.cxf.ws.addressing.ContextUtils;
 import org.apache.cxf.ws.addressing.MAPAggregator;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.ws.cxf.DecoupledDestinationApprovalInterceptor;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import javax.xml.namespace.QName;
 
@@ -49,8 +48,8 @@ public class JaxWsRequestServiceFactoryTest {
     public interface DummyPortType {
     }
 
-    private static WsTransactionConfiguration<WsAuditDataset> transactionConfiguration(boolean allowAsynchrony) {
-        return new WsTransactionConfiguration<>(
+    private static WsTransactionConfiguration transactionConfiguration(boolean allowAsynchrony) {
+        return new WsTransactionConfiguration(
                 "dummy",
                 "Dummy transaction",
                 true,

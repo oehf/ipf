@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.openehealth.ipf.boot</groupId>
         <artifactId>ipf-spring-boot</artifactId>
-        <version>5.4-SNAPSHOT</version>
+        <version>6.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>ipf-xds-spring-boot-starter</artifactId>
@@ -13,6 +13,15 @@
     <description>Spring Boot support for XD* components</description>
 
     <dependencies>
+        <!--
+          CXF's micrometer observation integration, needed only when ipf.xds.observing is switched on. Optional so
+          that neither micrometer nor a tracing library is pulled in otherwise.
+        -->
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-integration-tracing-micrometer</artifactId>
+            <optional>true</optional>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -52,6 +61,38 @@
             <artifactId>ipf-platform-camel-ihe-xds</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.openehealth.ipf.boot</groupId>
+            <artifactId>ipf-ws-spring-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- dependencies for test -->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- SampleData, for a real ITI-18 request in the startup test -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-xds</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+            <type>test-jar</type>
+        </dependency>
     </dependencies>
 
 </project>

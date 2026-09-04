@@ -37,11 +37,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.ssl.NoSuchSslBundleException;
 import org.springframework.boot.ssl.SslBundles;
 import org.springframework.boot.web.server.Ssl;
+import org.springframework.boot.web.server.autoconfigure.ServerProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -100,7 +100,7 @@ public class IpfAutoConfiguration {
     @ConditionalOnProperty(prefix = "ipf.commons", name = "reuse-ssl-config", havingValue = "true")
     public TlsParameters tlsParameters(SslBundles sslBundles, ServerProperties serverProperties) {
         var sslConfig = serverProperties.getSsl();
-        if (sslConfig.getBundle() != null) {
+        if (sslConfig != null && sslConfig.getBundle() != null) {
             try {
                 return new SslBundleTlsParameters(sslBundles, sslConfig.getBundle());
             } catch (NoSuchSslBundleException e) {
@@ -129,7 +129,7 @@ public class IpfAutoConfiguration {
     @ConditionalOnProperty(prefix = "ipf.commons", name = "reuse-ssl-config", havingValue = "true")
     public SSLContextParameters sslContextParameters(SslBundles sslBundles, ServerProperties serverProperties) {
         var sslConfig = serverProperties.getSsl();
-        if (sslConfig.getBundle() != null) {
+        if (sslConfig != null && sslConfig.getBundle() != null) {
             try {
                 var sslBundle = sslBundles.getBundle(sslConfig.getBundle());
                 return new SSLContextParameters() {

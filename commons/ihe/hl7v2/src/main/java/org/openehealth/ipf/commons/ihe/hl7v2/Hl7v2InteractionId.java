@@ -16,7 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2;
 
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 
 import java.util.List;
 
@@ -26,16 +26,21 @@ import java.util.List;
  * @author Christian Ohr
  * @since 3.2
  */
-public interface Hl7v2InteractionId<T extends MllpAuditDataset> extends InteractionId {
+public interface Hl7v2InteractionId extends InteractionId {
 
-    Hl7v2TransactionConfiguration<T> getHl7v2TransactionConfiguration();
+    Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration();
 
-    NakFactory<T> getNakFactory();
+    @Override
+    default TransactionConfiguration getTransactionConfiguration() {
+        return getHl7v2TransactionConfiguration();
+    }
+
+    NakFactory getNakFactory();
 
     /**
      * Optional initialization with dynamic TransactionOptions
      * @param options transaction options
      */
-    default void init(Hl7v2TransactionOptionsProvider<T, ? extends Hl7v2TransactionOptions> optionsProvider,
+    default void init(Hl7v2TransactionOptionsProvider<? extends Hl7v2TransactionOptions> optionsProvider,
                       List<? extends Hl7v2TransactionOptions> options) {}
 }

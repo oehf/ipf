@@ -17,11 +17,14 @@
 package org.openehealth.ipf.commons.ihe.fhir;
 
 import org.openehealth.ipf.commons.ihe.core.TransactionOptionsProvider;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditStrategy;
 
 /**
  * @author Christian Ohr
  */
-public interface FhirTransactionOptionsProvider<S extends FhirAuditDataset, T extends Enum<T> & FhirTransactionOptions>
-        extends TransactionOptionsProvider<S, T> {
+public interface FhirTransactionOptionsProvider<T extends Enum<T> & FhirTransactionOptions>
+        extends TransactionOptionsProvider<Class<? extends FhirProvider>, T> {
+
+    @Override
+    FhirAuditStrategy<?> getAuditStrategy(boolean serverSide);
 }

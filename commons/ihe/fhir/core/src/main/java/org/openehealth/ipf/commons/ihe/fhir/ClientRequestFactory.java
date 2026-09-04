@@ -27,7 +27,7 @@ import java.util.Map;
  * @author Christian Ohr
  * @since 3.1
  */
-public interface ClientRequestFactory<T extends IClientExecutable<?, ?>> {
+public interface ClientRequestFactory {
 
     /**
      * Returns a FHIR request using a FHIR client and a sequence of input data
@@ -37,5 +37,5 @@ public interface ClientRequestFactory<T extends IClientExecutable<?, ?>> {
      * @param parameters  parameter map
      * @return FHIR request executable
      */
-    IClientExecutable<T, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters);
+    IClientExecutable<?, ?> getClientExecutable(IGenericClient client, Object requestData, Map<String, Object> parameters);
 }

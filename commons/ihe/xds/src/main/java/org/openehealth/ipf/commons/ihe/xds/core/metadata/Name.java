@@ -67,7 +67,7 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
      * Class name-aware instance creator for JSON deserialization using Jackson.
      */
     @JsonCreator
-    private static Name createInstance(String type, String family, String given, String secondAndFurtherGiven, String suffix, String prefix, String degree) {
+    private static Name<?> createInstance(String type, String family, String given, String secondAndFurtherGiven, String suffix, String prefix, String degree) {
         if (XcnName.class.getName().equals(type)) {
             return new XcnName(family, given, secondAndFurtherGiven, suffix, prefix, degree);
         }
@@ -82,7 +82,7 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
      * 
      * @param name name to be copied
      */
-    protected void copyFrom(Name name) {
+    protected void copyFrom(Name<?> name) {
         setDegree(name.getDegree());
         setFamilyName(name.getFamilyName());
         setGivenName(name.getGivenName());

@@ -39,7 +39,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="auditEnabled" value="true"/>
         <property name="tlsParameters" ref="tlsParameters" />
         <property name="auditMessageQueue" ref="auditMessageQueue"/>
-        <property name="auditRepositoryTransport" value="FHIR-REST-TLS"/>
+        <property name="auditRepositoryTransport" value="FHIR-REST-APACHE5-TLS"/>
         <property name="serializationStrategy" ref="fhirXmlStrategy"/>
         <property name="auditSourceId" value="IPF"/>
         <property name="auditEnterpriseSiteId" value="IPF"/>

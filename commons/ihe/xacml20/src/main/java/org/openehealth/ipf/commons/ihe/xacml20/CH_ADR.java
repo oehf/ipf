@@ -21,7 +21,6 @@ import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
 import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.xacml20.chadr.ChAdrAuditDataset;
 import org.openehealth.ipf.commons.ihe.xacml20.chadr.ChAdrAuditStrategy;
 import org.openehealth.ipf.commons.ihe.xacml20.chadr.ChAdrPortType;
 
@@ -38,11 +37,11 @@ import java.util.List;
 public class CH_ADR implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum Interactions implements WsInteractionId<WsTransactionConfiguration<ChAdrAuditDataset>> {
+    public enum Interactions implements WsInteractionId {
         CH_ADR(CH_ADR_WS_CONFIG);
 
         @Getter
-        private final WsTransactionConfiguration<ChAdrAuditDataset> wsTransactionConfiguration;
+        private final WsTransactionConfiguration wsTransactionConfiguration;
     }
 
     @Override
@@ -50,7 +49,7 @@ public class CH_ADR implements IntegrationProfile {
         return Arrays.asList(Interactions.values());
     }
 
-    private final static WsTransactionConfiguration<ChAdrAuditDataset> CH_ADR_WS_CONFIG = new WsTransactionConfiguration<>(
+    private final static WsTransactionConfiguration CH_ADR_WS_CONFIG = new WsTransactionConfiguration(
         "ch-adr",
         "Authorization Decisions Query",
         true,

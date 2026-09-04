@@ -24,7 +24,7 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.HapiClientInterceptorFac
 public class LoggingInterceptorFactory implements HapiClientInterceptorFactory {
 
     @Override
-    public IClientInterceptor newInstance(FhirEndpoint endpoint, Exchange exchange) {
+    public IClientInterceptor newInstance(FhirEndpoint<?> endpoint, Exchange exchange) {
         LoggingInterceptor interceptor = new LoggingInterceptor(false);
         interceptor.setLogResponseHeaders(true);
         return interceptor;

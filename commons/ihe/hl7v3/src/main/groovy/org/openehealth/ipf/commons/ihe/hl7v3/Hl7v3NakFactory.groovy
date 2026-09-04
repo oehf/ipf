@@ -19,7 +19,7 @@ import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import static org.openehealth.ipf.commons.xml.XmlYielder.yieldElement
+import static org.openehealth.ipf.commons.ihe.hl7v3.XmlYielder.yieldElement
 
 /**
  * Generator for HL7v3 ACK and NAK response messages.
@@ -115,8 +115,7 @@ class Hl7v3NakFactory {
             detectedIssueEventCodeSystem0      = '2.16.840.1.113883.5.4'
             detectedIssueManagementCodeSystem0 = '2.16.840.1.113883.5.4'
         }
-        if (throwable instanceof Hl7v3Exception) {
-            Hl7v3Exception hl7v3exception = (Hl7v3Exception) throwable
+        if (throwable instanceof Hl7v3Exception hl7v3exception) {
             typeCode0                          = hl7v3exception.typeCode
             acknowledgementDetailCode0         = hl7v3exception.acknowledgementDetailCode
             acknowledgementDetailCodeSystem0   = hl7v3exception.acknowledgementDetailCodeSystem

@@ -20,7 +20,7 @@ import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Message
 import groovy.xml.slurpersupport.GPathResult
 import groovy.xml.MarkupBuilder
-import org.openehealth.ipf.commons.xml.XmlYielder
+import org.openehealth.ipf.commons.ihe.hl7v3.XmlYielder
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 
 import static org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3Utils.*

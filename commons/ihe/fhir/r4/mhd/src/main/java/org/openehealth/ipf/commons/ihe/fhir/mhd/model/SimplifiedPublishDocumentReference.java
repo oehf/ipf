@@ -19,11 +19,9 @@ import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.Attachment;
 import org.hl7.fhir.r4.model.DocumentReference;
 import org.hl7.fhir.r4.model.Enumerations;
-import org.hl7.fhir.r4.model.Identifier;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Date;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.SIMPLIFIED_PUBLISH_DOCUMENT_REFERENCE;
@@ -47,8 +45,7 @@ public class SimplifiedPublishDocumentReference extends DocumentReference {
      * @return this object
      */
     public SimplifiedPublishDocumentReference setUniqueIdIdentifier(String system, String value) {
-        setMasterIdentifier(new Identifier()
-            .setUse(Identifier.IdentifierUse.USUAL)
+        setMasterIdentifier(new UniqueIdIdentifier()
             .setSystem(system)
             .setValue(value));
         return this;
@@ -58,7 +55,9 @@ public class SimplifiedPublishDocumentReference extends DocumentReference {
         try {
             addContent().setAttachment(new Attachment()
                 .setContentType(contentType)
-                .setData(Base64.getEncoder().encode(content))
+                // The plain document: FHIR renders it as base64 (CP-ITI-1325-02), and HAPI does
+                // that encoding when the resource is serialized
+                .setData(content)
                 .setSize(content.length)
                 .setHash(MessageDigest.getInstance("SHA-1").digest(content)));
             return this;

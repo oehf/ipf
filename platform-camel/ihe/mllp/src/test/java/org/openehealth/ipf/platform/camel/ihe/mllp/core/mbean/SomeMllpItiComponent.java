@@ -28,8 +28,8 @@ import org.openehealth.ipf.platform.camel.ihe.mllp.core.MllpTransactionComponent
  */
 public class SomeMllpItiComponent extends MllpTransactionComponent<MllpAuditDataset> {
     
-    private static final Hl7v2TransactionConfiguration<MllpAuditDataset> CONFIGURATION =
-        new Hl7v2TransactionConfiguration<>(
+    private static final Hl7v2TransactionConfiguration CONFIGURATION =
+        new Hl7v2TransactionConfiguration(
                 "foo",
                 "Some MLLP Component",
                 false,
@@ -52,15 +52,15 @@ public class SomeMllpItiComponent extends MllpTransactionComponent<MllpAuditData
         super(null);
     }
 
-    private static final NakFactory<MllpAuditDataset> NAK_FACTORY = new NakFactory<>(CONFIGURATION);
+    private static final NakFactory NAK_FACTORY = new NakFactory(CONFIGURATION);
 
     @Override
-    public NakFactory<MllpAuditDataset> getNakFactory() {
+    public NakFactory getNakFactory() {
         return NAK_FACTORY;
     }
     
     @Override
-    public Hl7v2TransactionConfiguration<MllpAuditDataset> getHl7v2TransactionConfiguration() {
+    public Hl7v2TransactionConfiguration getHl7v2TransactionConfiguration() {
         return CONFIGURATION;
     }
     

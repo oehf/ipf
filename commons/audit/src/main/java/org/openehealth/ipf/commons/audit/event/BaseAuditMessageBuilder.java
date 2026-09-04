@@ -355,7 +355,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                                          ParticipantObjectDataLifeCycle lifecycle) {
         return addParticipantObjectIdentification(
                 ParticipantObjectIdTypeCode.PatientNumber,
-                patientName,
+                patientName != null ? patientName : requireNonNull(patientId, "patient ID must be not null"),
                 null,
                 details,
                 requireNonNull(patientId, "patient ID must be not null"),
@@ -445,7 +445,7 @@ public abstract class BaseAuditMessageBuilder<T extends BaseAuditMessageBuilder<
                                                 final List<DicomObjectDescriptionType> dicomDescriptions) {
         final var poit = new ParticipantObjectIdentificationType(objectID, objectIDTypeCode);
 
-        poit.setParticipantObjectName(objectName);
+        poit.setParticipantObjectName(objectName != null ? objectName : objectID);
         poit.setParticipantObjectQuery(objectQuery);
         if (null != objectDetails) {
             objectDetails.stream()

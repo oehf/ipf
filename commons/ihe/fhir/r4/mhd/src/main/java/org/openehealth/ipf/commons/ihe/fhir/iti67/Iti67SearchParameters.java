@@ -27,6 +27,7 @@ import ca.uhn.fhir.rest.param.ReferenceParam;
 import ca.uhn.fhir.rest.param.StringParam;
 import ca.uhn.fhir.rest.param.TokenOrListParam;
 import ca.uhn.fhir.rest.param.TokenParam;
+import ca.uhn.fhir.rest.param.UriOrListParam;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -73,6 +74,9 @@ public class Iti67SearchParameters extends FhirSearchAndSortParameters<DocumentR
     @Getter @Setter private TokenOrListParam event;
     @Getter @Setter private TokenOrListParam securityLabel;
     @Getter @Setter private TokenOrListParam format;
+
+    /** MHD 4.2.4 Target Communities Option (CP-ITI-1326-02). */
+    @Getter @Setter private UriOrListParam targetCommunityIdList;
 
     @Getter @Setter private ReferenceOrListParam related;
     @Getter @Setter private TokenOrListParam relatedId;

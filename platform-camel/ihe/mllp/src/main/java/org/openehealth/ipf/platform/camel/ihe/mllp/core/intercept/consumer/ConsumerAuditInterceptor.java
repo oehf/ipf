@@ -38,9 +38,10 @@ public class ConsumerAuditInterceptor<AuditDatasetType extends MllpAuditDataset>
         super(auditContext);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public AuditStrategy<AuditDatasetType> getAuditStrategy() {
-        return getEndpoint(AuditableEndpoint.class).getServerAuditStrategy();
+        return (AuditStrategy<AuditDatasetType>)getEndpoint(AuditableEndpoint.class).getServerAuditStrategy();
     }
 
     @Override

@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3;
 
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import ca.uhn.fhir.rest.client.api.IGenericClient;
 import ca.uhn.fhir.rest.gclient.IClientExecutable;
 import org.hl7.fhir.r4.model.Consent;
@@ -25,10 +26,10 @@ import org.openehealth.ipf.commons.ihe.fhir.chppqm.ChPpqmUtils;
 
 import java.util.Map;
 
-public class ChPpq3RequestFactory implements ClientRequestFactory<IClientExecutable<?, ?>> {
+public class ChPpq3RequestFactory implements ClientRequestFactory {
 
     @Override
-    public IClientExecutable getClientExecutable(
+    public IClientExecutable<?, MethodOutcome> getClientExecutable(
             IGenericClient client,
             Object requestData,
             Map<String, Object> parameters)

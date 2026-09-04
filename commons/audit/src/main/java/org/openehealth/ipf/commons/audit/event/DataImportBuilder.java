@@ -28,7 +28,7 @@ import static java.util.Objects.requireNonNull;
 
 /**
  * Builds an Audit Event representing a Data Export event as specified in
- * http://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.4
+ * <a href="https://dicom.nema.org/medical/dicom/current/output/html/part15.html#sect_A.5.3.4">Part 15. A.5.3.4</a>
  * <p>
  * This message describes the event of exporting data from a system, meaning that the data
  * is leaving control of the system's security domain. Examples of exporting include printing to paper,
@@ -103,11 +103,29 @@ public class DataImportBuilder extends BaseAuditMessageBuilder<DataImportBuilder
                                                        String mediaIdentifier,
                                                        MediaType mediaType) {
         return addActiveParticipant(
+            userId,
+            altUserId,
+            userName,
+            false,
+            Collections.singletonList(ActiveParticipantRoleIdCode.SourceMedia),
+            networkAccessPointId,
+            networkAccessPointType,
+            mediaIdentifier,
+            requireNonNull(mediaType));
+    }
+
+    public DataImportBuilder setSourceMediaParticipant(String userId, String altUserId, String userName,
+                                                       ActiveParticipantRoleIdCode activeParticipantRoleIdCode,
+                                                       NetworkAccessPointTypeCode networkAccessPointType,
+                                                       String networkAccessPointId,
+                                                       String mediaIdentifier,
+                                                       MediaType mediaType) {
+        return addActiveParticipant(
                 userId,
                 altUserId,
                 userName,
                 false,
-                Collections.singletonList(ActiveParticipantRoleIdCode.SourceMedia),
+                Collections.singletonList(activeParticipantRoleIdCode),
                 networkAccessPointId,
                 networkAccessPointType,
                 mediaIdentifier,

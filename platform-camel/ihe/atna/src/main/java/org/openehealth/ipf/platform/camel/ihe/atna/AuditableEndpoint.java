@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
  * Endpoint that supports ATNA auditing. Usually the {@link AuditStrategy}
  * instances are obtained from the accompanying {@link AuditableComponent}.
  *
+ * @param <AuditDatasetType> type of the audit data set created by the {@link AuditStrategy}
+ *
  * @since 3.1
  */
 public interface AuditableEndpoint<AuditDatasetType extends AuditDataset> extends Endpoint {

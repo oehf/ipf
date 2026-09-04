@@ -67,11 +67,4 @@ http://camel.apache.org/schema/spring/camel-spring.xsd">
         <constructor-arg ref="hapiContext"/>
     </bean>
 
-    <!--
-    <bean id="sendTracingData"
-          class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTracingInterceptor$Factory"/>
-
-    <bean id="receiveTracingData"
-          class="org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerTracingInterceptor$Factory"/>
-    -->
 </beans>

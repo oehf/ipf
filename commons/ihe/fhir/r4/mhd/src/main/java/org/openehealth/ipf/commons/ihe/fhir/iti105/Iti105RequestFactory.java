@@ -17,7 +17,7 @@
 package org.openehealth.ipf.commons.ihe.fhir.iti105;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
-import ca.uhn.fhir.rest.gclient.IClientExecutable;
+import ca.uhn.fhir.rest.gclient.ICreateTyped;
 import org.hl7.fhir.r4.model.DocumentReference;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
 
@@ -29,10 +29,10 @@ import java.util.Map;
  * @author Boris Stanojevic
  * @since 4.8
  */
-public class Iti105RequestFactory implements ClientRequestFactory<IClientExecutable<?, ?>> {
+public class Iti105RequestFactory implements ClientRequestFactory {
 
     @Override
-    public IClientExecutable getClientExecutable(
+    public ICreateTyped getClientExecutable(
             IGenericClient client,
             Object requestData,
             Map<String, Object> parameters) {

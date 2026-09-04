@@ -16,15 +16,26 @@
 
 package org.openehealth.ipf.commons.ihe.hl7v2ws;
 
+import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2InteractionId;
-import org.openehealth.ipf.commons.ihe.hl7v2.audit.MllpAuditDataset;
 import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 /**
  * @author Christian Ohr
  * @since 3.2
  */
-public interface Hl7v2WsInteractionId extends Hl7v2InteractionId<MllpAuditDataset>, WsInteractionId<WsTransactionConfiguration<WsAuditDataset>> {
+public interface Hl7v2WsInteractionId extends Hl7v2InteractionId, WsInteractionId {
+
+    /**
+     * Transactions of this kind are the only ones with two transaction configurations, an HL7v2 one
+     * for the message semantics and a Web Service one for the transport, so both parent interfaces
+     * offer a way to answer this and the ambiguity has to be resolved explicitly. The Web Service
+     * configuration is returned because it is the one describing the endpoint, which is what generic
+     * callers such as telemetry are after; the HL7v2 configuration remains available through
+     * {@link #getHl7v2TransactionConfiguration()}.
+     */
+    @Override
+    default TransactionConfiguration getTransactionConfiguration() {
+        return getWsTransactionConfiguration();
+    }
 }

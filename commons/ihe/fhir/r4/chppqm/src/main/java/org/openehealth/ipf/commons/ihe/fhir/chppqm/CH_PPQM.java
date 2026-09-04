@@ -25,8 +25,11 @@ import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionClientRequestFactory
 import org.openehealth.ipf.commons.ihe.fhir.BatchTransactionResourceProvider;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3.*;
+import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3.ChPpq3ClientAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3.ChPpq3RequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3.ChPpq3ResourceProvider;
+import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3.ChPpq3ServerAuditStrategy;
+import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq3.ChPpq3Validator;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq4.ChPpq4ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq4.ChPpq4ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.chppqm.chppq4.ChPpq4Validator;
@@ -42,20 +45,20 @@ import java.util.List;
 public class CH_PPQM implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum SubmitInteractions implements FhirInteractionId<ChPpqmAuditDataset> {
+    public enum SubmitInteractions implements FhirInteractionId {
         CH_PPQ_3(CH_PPQ_3_CONFIG),
         CH_PPQ_4(CH_PPQ_4_CONFIG);
 
         @Getter
-        private final FhirTransactionConfiguration<ChPpqmAuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration fhirTransactionConfiguration;
     }
 
     @AllArgsConstructor
-    public enum QueryInteractions implements FhirInteractionId<FhirQueryAuditDataset> {
+    public enum QueryInteractions implements FhirInteractionId {
         CH_PPQ_5(CH_PPQ_5_CONFIG);
 
         @Getter
-        private final FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration fhirTransactionConfiguration;
     }
 
     @Override
@@ -66,8 +69,8 @@ public class CH_PPQM implements IntegrationProfile {
         return Collections.unmodifiableList(result);
     }
 
-    private static final FhirTransactionConfiguration<ChPpqmAuditDataset> CH_PPQ_3_CONFIG =
-            new FhirTransactionConfiguration<>(
+    private static final FhirTransactionConfiguration CH_PPQ_3_CONFIG =
+            new FhirTransactionConfiguration(
                     "ch-ppq3",
                     "Mobile Privacy Policy Feed",
                     false,
@@ -78,8 +81,8 @@ public class CH_PPQM implements IntegrationProfile {
                     new ChPpq3RequestFactory(),
                     ChPpq3Validator::new);
 
-    private static final FhirTransactionConfiguration<ChPpqmAuditDataset> CH_PPQ_4_CONFIG =
-            new FhirTransactionConfiguration<>(
+    private static final FhirTransactionConfiguration CH_PPQ_4_CONFIG =
+            new FhirTransactionConfiguration(
                     "ch-ppq4",
                     "Mobile Privacy Policy Bundle Feed",
                     false,
@@ -90,8 +93,8 @@ public class CH_PPQM implements IntegrationProfile {
                     BatchTransactionClientRequestFactory.getInstance(),
                     ChPpq4Validator::new);
 
-    private static final FhirTransactionConfiguration<FhirQueryAuditDataset> CH_PPQ_5_CONFIG =
-            new FhirTransactionConfiguration<>(
+    private static final FhirTransactionConfiguration CH_PPQ_5_CONFIG =
+            new FhirTransactionConfiguration(
                     "ch-ppq5",
                     "Mobile Privacy Policy Query",
                     true,

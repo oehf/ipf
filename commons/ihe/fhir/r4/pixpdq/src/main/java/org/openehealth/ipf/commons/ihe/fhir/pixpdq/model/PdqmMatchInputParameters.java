@@ -19,7 +19,6 @@ import ca.uhn.fhir.model.api.annotation.ResourceDef;
 import org.hl7.fhir.r4.model.BooleanType;
 import org.hl7.fhir.r4.model.IntegerType;
 import org.hl7.fhir.r4.model.Parameters;
-import org.openehealth.ipf.commons.ihe.fhir.pixpdq.Pdqm320;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
 
 /**
@@ -32,7 +31,7 @@ import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
  * @since 5.2
  */
 @ResourceDef(name = "Parameters", profile = PdqmProfile.ITI119_MATCH_INPUT_PARAMETERS_PROFILE)
-public class PdqmMatchInputParameters extends Parameters implements Pdqm320 {
+public class PdqmMatchInputParameters extends Parameters {
 
     public static final String RESOURCE_PARAM = "resource";
     public static final String ONLY_CERTAIN_MATCHES_PARAM = "onlyCertainMatches";

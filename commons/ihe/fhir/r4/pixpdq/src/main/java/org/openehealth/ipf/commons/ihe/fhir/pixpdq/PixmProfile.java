@@ -37,7 +37,7 @@ import java.util.Optional;
  * @author Christian Ohr
  * @since 5.2
  */
-public enum PixmProfile implements Pixm310, IheFhirProfile {
+public enum PixmProfile implements IheFhirProfile {
 
     // Parameters profiles for ITI-83
 

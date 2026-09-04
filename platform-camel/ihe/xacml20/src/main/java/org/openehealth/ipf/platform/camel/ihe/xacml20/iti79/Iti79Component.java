@@ -16,8 +16,6 @@
 package org.openehealth.ipf.platform.camel.ihe.xacml20.iti79;
 
 import org.apache.camel.Endpoint;
-import org.openehealth.ipf.commons.ihe.ws.WsInteractionId;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.xacml20.SER;
 import org.openehealth.ipf.commons.ihe.xacml20.iti79.Iti79AuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -28,7 +26,7 @@ import java.util.Map;
  * @author Dmytro Rud
  * @since 4.8.0
  */
-public class Iti79Component extends AbstractWsComponent<Iti79AuditDataset, WsTransactionConfiguration<Iti79AuditDataset>, WsInteractionId<WsTransactionConfiguration<Iti79AuditDataset>>> {
+public class Iti79Component extends AbstractWsComponent<Iti79AuditDataset> {
 
     public Iti79Component() {
         super(SER.Interactions.ITI_79);

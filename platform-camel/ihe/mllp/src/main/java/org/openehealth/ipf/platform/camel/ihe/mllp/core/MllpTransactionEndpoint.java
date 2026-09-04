@@ -31,6 +31,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerR
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTraceContextInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerResponseAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.intercept.consumer.ConsumerAuditInterceptor;
@@ -52,7 +53,7 @@ import java.util.List;
  * @author Dmytro Rud
  */
 public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
-        extends MllpEndpoint<MllpTransactionEndpointConfiguration, AuditDatasetType, MllpTransactionComponent<AuditDatasetType>>
+        extends MllpEndpoint<MllpTransactionEndpointConfiguration, MllpTransactionComponent<AuditDatasetType>>
         implements AuditableEndpoint<AuditDatasetType> {
 
     /**
@@ -105,6 +106,9 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
         initialChain.add(isSupportInteractiveContinuation()
                 ? new ProducerMarshalAndInteractiveResponseReceiverInterceptor(getCharsetName())
                 : new ProducerMarshalInterceptor(getCharsetName()));
+        // the chain is ordered innermost first, so this runs directly before marshalling, while the
+        // message is still parsed and HAPI can do the encoding
+        initialChain.add(new ProducerTraceContextInterceptor());
         initialChain.add(new ProducerResponseAcceptanceInterceptor());
         if (isAudit()) {
             initialChain.add(new ProducerAuditInterceptor<AuditDatasetType>(getAuditContext()));

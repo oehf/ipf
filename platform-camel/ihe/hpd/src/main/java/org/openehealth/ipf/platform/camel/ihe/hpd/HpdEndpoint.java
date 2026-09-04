@@ -15,7 +15,10 @@
  */
 package org.openehealth.ipf.platform.camel.ihe.hpd;
 
-import org.openehealth.ipf.commons.ihe.ws.*;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestClientFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsRequestServiceFactory;
+import org.openehealth.ipf.commons.ihe.ws.JaxWsServiceFactory;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWebService;
 import org.openehealth.ipf.platform.camel.ihe.ws.AbstractWsComponent;
@@ -26,12 +29,12 @@ import java.util.Map;
 /**
  * @author Dmytro Rud
  */
-public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>> {
+public abstract class HpdEndpoint<AuditDatasetType extends WsAuditDataset> extends AbstractWsEndpoint<AuditDatasetType> {
 
     protected HpdEndpoint(
             String endpointUri,
             String address,
-            AbstractWsComponent<AuditDatasetType, WsTransactionConfiguration<AuditDatasetType>, ? extends WsInteractionId<WsTransactionConfiguration<AuditDatasetType>>> component,
+            AbstractWsComponent<AuditDatasetType> component,
             Map<String, Object> parameters,
             Class<? extends AbstractWebService> serviceClass) {
         super(endpointUri, address, component, parameters, serviceClass);

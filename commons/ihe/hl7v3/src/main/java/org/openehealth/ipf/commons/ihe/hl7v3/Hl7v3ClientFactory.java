@@ -62,7 +62,7 @@ public class Hl7v3ClientFactory extends JaxWsRequestClientFactory<Hl7v3AuditData
             InterceptorProvider customInterceptors,
             List<AbstractFeature> features,
             Map<String, Object> properties,
-            AsynchronyCorrelator<Hl7v3AuditDataset> correlator,
+            AsynchronyCorrelator correlator,
             WsSecurityInformation securityInformation,
             HTTPClientPolicy httpClientPolicy)
     {

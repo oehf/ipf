@@ -26,7 +26,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @author Dmytro Rud
  */
-public class SpringCacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDataset> implements AsynchronyCorrelator<AuditDatasetType> {
+public class SpringCacheAsynchronyCorrelator implements AsynchronyCorrelator {
 
     private static final String ASYNCHRONY_CORRELATOR_CACHE = "asynchronyCorrelatorCache";
     private static final String SERVICE_ENDPOINT_URI_SUFFIX = ".serviceEndpoint";
@@ -67,9 +67,9 @@ public class SpringCacheAsynchronyCorrelator<AuditDatasetType extends WsAuditDat
     }
 
     @Override
-    public AuditDatasetType getAuditDataset(String messageId) {
+    public WsAuditDataset getAuditDataset(String messageId) {
         var value = cache.get(messageId + AUDIT_DATASET_SUFFIX);
-        return value == null || value.get() == null ? null : (AuditDatasetType) value.get();
+        return value == null || value.get() == null ? null : (WsAuditDataset) value.get();
     }
 
     @Override

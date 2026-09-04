@@ -15,14 +15,15 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.stub.json;
 
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.databind.SerializerProvider;
-import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.apache.commons.lang3.NotImplementedException;
 import org.openehealth.ipf.commons.ihe.hpd.controls.ControlUtils;
 import org.openehealth.ipf.commons.ihe.hpd.stub.dsmlv2.Control;
+import tools.jackson.core.JsonGenerator;
+import tools.jackson.databind.SerializationContext;
+import tools.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.List;
 
 /**
@@ -37,18 +38,22 @@ public class ControlListSerializer extends StdSerializer<List> {
     }
 
     @Override
-    public void serialize(List list, JsonGenerator gen, SerializerProvider provider) throws IOException {
+    public void serialize(List list, JsonGenerator gen, SerializationContext provider) {
         gen.writeStartArray(list);
         for (var object : list) {
             var dsmlcontrol = (Control) object;
             var strategy = ControlUtils.getStrategies().get(dsmlcontrol.getType());
             if (strategy != null) {
-                var control = strategy.deserializeDsml2((byte[]) dsmlcontrol.getControlValue(), dsmlcontrol.isCriticality());
-                gen.writeStartObject();
-                gen.writeStringField("type", control.getID());
-                gen.writeBooleanField("critical", control.isCritical());
-                strategy.serializeJson(control, gen);
-                gen.writeEndObject();
+                try {
+                    var control = strategy.deserializeDsml2((byte[]) dsmlcontrol.getControlValue(), dsmlcontrol.isCriticality());
+                    gen.writeStartObject();
+                    gen.writeStringProperty("type", control.getID());
+                    gen.writeBooleanProperty("critical", control.isCritical());
+                    strategy.serializeJson(control, gen);
+                    gen.writeEndObject();
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
             } else {
                 throw new NotImplementedException("Cannot handle control type " + dsmlcontrol.getType());
             }

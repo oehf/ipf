@@ -22,7 +22,7 @@ import org.openehealth.ipf.commons.xml.CombinedXmlValidationProfile;
  * @author Christian Ohr
  * @since 3.2
  */
-public interface Hl7v3InteractionId<ConfigType extends Hl7v3WsTransactionConfiguration> extends WsInteractionId<ConfigType> {
+public interface Hl7v3InteractionId extends WsInteractionId {
 
     default CombinedXmlValidationProfile getRequestValidationProfile() {
         return getWsTransactionConfiguration().getRequestValidationProfile();
@@ -32,4 +32,6 @@ public interface Hl7v3InteractionId<ConfigType extends Hl7v3WsTransactionConfigu
         return getWsTransactionConfiguration().getResponseValidationProfile();
     }
 
+    @Override
+    Hl7v3WsTransactionConfiguration getWsTransactionConfiguration();
 }

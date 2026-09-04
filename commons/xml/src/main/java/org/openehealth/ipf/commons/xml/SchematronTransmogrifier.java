@@ -65,12 +65,15 @@ public class SchematronTransmogrifier<T> extends XsltTransmogrifier<T> {
         this((Class<T>) String.class);
     }
 
+    // The inner transmogrifier only ever transforms the bundled Schematron rule sets, which are
+    // composed from .ent entity files, so it needs to resolve local external entities. Instance
+    // documents go through this class's own inherited factory, which stays strictly hardened.
     public SchematronTransmogrifier(Class<T> outputFormat) {
-        this(new XsltTransmogrifier<>(String.class), outputFormat);
+        this(XsltTransmogrifier.forTrustedResources(), outputFormat);
     }
-    
+
     public SchematronTransmogrifier(Class<T> outputFormat, Map<String, Object> staticParams) {
-        this(new XsltTransmogrifier<>(String.class), outputFormat, staticParams);
+        this(XsltTransmogrifier.forTrustedResources(), outputFormat, staticParams);
     }
 
     public SchematronTransmogrifier(XsltTransmogrifier<String> t, Class<T> outputFormat) {

@@ -22,12 +22,9 @@ import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.core.TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
-import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti66.Iti66TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti67.Iti67TransactionConfiguration;
-import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68AuditDataset;
 import org.openehealth.ipf.commons.ihe.fhir.iti68.Iti68TransactionConfiguration;
 
 import java.util.ArrayList;
@@ -42,20 +39,20 @@ import java.util.List;
 public class MHD implements IntegrationProfile {
 
     @AllArgsConstructor
-    public enum SubmitInteractions implements FhirInteractionId<Iti65AuditDataset> {
+    public enum SubmitInteractions implements FhirInteractionId {
         ITI_65(ITI_65_CONFIG);
 
         @Getter
-        private final FhirTransactionConfiguration<Iti65AuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration fhirTransactionConfiguration;
     }
 
     @AllArgsConstructor
-    public enum QueryInteractions implements FhirInteractionId<FhirQueryAuditDataset> {
+    public enum QueryInteractions implements FhirInteractionId {
         ITI_66(ITI_66_CONFIG),
         ITI_67(ITI_67_CONFIG);
 
         @Getter
-        private final FhirTransactionConfiguration<FhirQueryAuditDataset> fhirTransactionConfiguration;
+        private final FhirTransactionConfiguration fhirTransactionConfiguration;
     }
 
     @AllArgsConstructor
@@ -63,7 +60,7 @@ public class MHD implements IntegrationProfile {
         ITI_68(ITI_68_CONFIG);
 
         @Getter
-        private final TransactionConfiguration<Iti68AuditDataset> transactionConfiguration;
+        private final TransactionConfiguration transactionConfiguration;
     }
 
     @Override

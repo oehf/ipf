@@ -32,7 +32,7 @@ import static org.openehealth.ipf.commons.ihe.ws.cxf.payload.StringPayloadHolder
  */
 public class JaxWsAsyncResponseServiceFactory<AuditDatasetType extends WsAuditDataset> extends JaxWsServiceFactory<AuditDatasetType> {
 
-    protected final AsynchronyCorrelator<AuditDatasetType> correlator;
+    protected final AsynchronyCorrelator correlator;
 
     /**
      * Constructs the factory.
@@ -48,12 +48,12 @@ public class JaxWsAsyncResponseServiceFactory<AuditDatasetType extends WsAuditDa
      *          correlator for asynchronous interactions.
      */
     public JaxWsAsyncResponseServiceFactory(
-            WsTransactionConfiguration<AuditDatasetType> wsTransactionConfiguration,
+            WsTransactionConfiguration wsTransactionConfiguration,
             String serviceAddress,
             AuditStrategy<AuditDatasetType> auditStrategy,
             AuditContext auditContext,
             InterceptorProvider customInterceptors,
-            AsynchronyCorrelator<AuditDatasetType> correlator)
+            AsynchronyCorrelator correlator)
     {
         super(wsTransactionConfiguration, serviceAddress, auditStrategy, auditContext,
                 customInterceptors, null);

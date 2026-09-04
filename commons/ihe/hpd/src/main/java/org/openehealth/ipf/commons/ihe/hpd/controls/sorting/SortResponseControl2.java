@@ -15,12 +15,16 @@
  */
 package org.openehealth.ipf.commons.ihe.hpd.controls.sorting;
 
-import org.apache.commons.lang3.StringUtils;
-import org.bouncycastle.asn1.*;
+import org.bouncycastle.asn1.ASN1EncodableVector;
+import org.bouncycastle.asn1.ASN1Enumerated;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DERTaggedObject;
+import org.bouncycastle.asn1.DERUTF8String;
 
 import javax.naming.ldap.BasicControl;
 import javax.naming.ldap.SortResponseControl;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author Dmytro Rud
@@ -76,7 +80,7 @@ public class SortResponseControl2 extends BasicControl {
         }
         var that = (SortResponseControl2) o;
         return (getResultCode() == that.getResultCode()) &&
-               StringUtils.equals(getFailedAttributeName(), that.getFailedAttributeName());
+               Objects.equals(getFailedAttributeName(), that.getFailedAttributeName());
     }
 
 }

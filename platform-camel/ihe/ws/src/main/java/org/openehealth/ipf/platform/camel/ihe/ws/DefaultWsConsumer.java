@@ -20,7 +20,6 @@ import org.apache.camel.Processor;
 import org.apache.camel.support.DefaultConsumer;
 import org.apache.cxf.endpoint.Server;
 import org.openehealth.ipf.commons.ihe.core.Constants;
-import org.openehealth.ipf.commons.ihe.ws.WsTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.ws.cxf.audit.WsAuditDataset;
 
 import static java.util.Objects.requireNonNull;
@@ -33,8 +32,7 @@ import static java.util.Objects.requireNonNull;
  * @author Dmytro Rud
  */
 public class DefaultWsConsumer<
-        AuditDatasetType extends WsAuditDataset,
-        ConfigType extends WsTransactionConfiguration<AuditDatasetType>> extends DefaultConsumer {
+        AuditDatasetType extends WsAuditDataset> extends DefaultConsumer {
     private final Server server;
 
     /**
@@ -48,7 +46,7 @@ public class DefaultWsConsumer<
      * @param server
      *          the CXF server instance driving the service.
      */
-    public DefaultWsConsumer(AbstractWsEndpoint<AuditDatasetType, ConfigType> endpoint, Processor processor, AbstractWebService service, Server server) {
+    public DefaultWsConsumer(AbstractWsEndpoint<AuditDatasetType> endpoint, Processor processor, AbstractWebService service, Server server) {
         super(endpoint, processor);
         requireNonNull(service, "service cannot be null");
         requireNonNull(server, "server cannot be null");
@@ -56,9 +54,10 @@ public class DefaultWsConsumer<
         this.server = server;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public AbstractWsEndpoint<AuditDatasetType, ConfigType> getEndpoint() {
-        return (AbstractWsEndpoint<AuditDatasetType, ConfigType>)super.getEndpoint();
+    public AbstractWsEndpoint<AuditDatasetType> getEndpoint() {
+        return (AbstractWsEndpoint<AuditDatasetType>)super.getEndpoint();
     }
 
     /**

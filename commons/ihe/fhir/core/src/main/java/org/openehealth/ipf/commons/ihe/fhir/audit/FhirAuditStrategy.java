@@ -27,7 +27,7 @@ import static org.openehealth.ipf.commons.ihe.fhir.audit.BaseOperationOutcomeUti
 /**
  * @author Christian Ohr
  */
-public abstract class FhirAuditStrategy<T extends FhirAuditDataset> extends AbstractFhirAuditStrategy<T, IBaseOperationOutcome> {
+public abstract class FhirAuditStrategy<AuditDatasetType extends FhirAuditDataset> extends AbstractFhirAuditStrategy<AuditDatasetType, IBaseOperationOutcome> {
 
     public FhirAuditStrategy(boolean serverSide) {
         super(serverSide);
