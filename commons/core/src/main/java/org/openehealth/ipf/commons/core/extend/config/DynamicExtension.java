@@ -25,9 +25,10 @@ package org.openehealth.ipf.commons.core.extend.config;
  * http://docs.codehaus.org/display/GROOVY/Creating+an+extension+module.
  * </p><p>
  * This interface defines method that provide information that the module descriptor
- * would usually deliver. Bean instance of this type are picked up by Spring when
- * it contains a {@link DynamicExtensionConfigurer} and dynamically registered in
- * Groovy's metaclass/metamethod registry.
+ * would usually deliver. Bean instances of this type are picked up by Spring when the
+ * application context contains a
+ * {@code org.openehealth.ipf.commons.spring.core.extend.SpringDynamicExtensionRegistrar}
+ * and dynamically registered in Groovy's metaclass/metamethod registry.
  * </p><p>
  * The advantage is that due to late initialization your extensions can be stateful (e.g.
  * providing a configuration object), which is normally only possible by accessing a
@@ -35,7 +36,7 @@ package org.openehealth.ipf.commons.core.extend.config;
  * The disadvantage is that you need to define a bunch of Spring beans (including the extension
  * bean) in order to get the machinery working.
  *
- * @see DynamicExtensionConfigurer
+ * @see DynamicExtensions
  * 
  * @author Christian Ohr
  */

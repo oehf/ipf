@@ -14,8 +14,8 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory">
     </bean>    
 
-    <bean id="customModelClassFactoryConfigurer" 
-        class="org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer">
+    <bean id="customModelClassesRegistrar" 
+        class="org.openehealth.ipf.modules.hl7.config.CustomModelClassesRegistrar">
         <property name="customModelClassFactory" ref="customModelClassFactory" />
     </bean>
 </beans>

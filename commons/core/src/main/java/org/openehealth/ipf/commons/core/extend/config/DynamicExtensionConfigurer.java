@@ -15,20 +15,11 @@
  */
 package org.openehealth.ipf.commons.core.extend.config;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 
-import groovy.lang.GroovySystem;
-import groovy.lang.MetaMethod;
-import org.codehaus.groovy.reflection.CachedClass;
 import org.codehaus.groovy.runtime.m12n.ExtensionModule;
-import org.codehaus.groovy.runtime.metaclass.MetaClassRegistryImpl;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Configurer used to autowire all classes implementing the
@@ -39,11 +30,20 @@ import org.slf4j.LoggerFactory;
  *
  * @see DynamicExtension
  * @see DynamicExtensionModule
+ *
+ * @deprecated this configurer requires a
+ * {@code org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor}
+ * to drive it, and only runs once the application context has been fully refreshed. Declare a
+ * {@code org.openehealth.ipf.commons.spring.core.extend.SpringDynamicExtensionRegistrar}
+ * bean instead, which collects the {@link DynamicExtension} beans itself and registers them
+ * while the singletons are being initialized. Both mechanisms may be active at the same time;
+ * {@link DynamicExtensions#register(DynamicExtension)} makes sure that no extension is
+ * registered twice.
  */
+@Deprecated(since = "6.0.0", forRemoval = true)
+@SuppressWarnings("removal")
 public class DynamicExtensionConfigurer<R extends Registry> extends
         OrderedConfigurer<DynamicExtension, R> {
-
-    private static final Logger log = LoggerFactory.getLogger(DynamicExtensionConfigurer.class);
 
     public DynamicExtensionConfigurer() {
         setOrder(2);
@@ -51,36 +51,15 @@ public class DynamicExtensionConfigurer<R extends Registry> extends
 
     @Override
     public void configure(DynamicExtension extension) {
-        if (extension != null) {
-            log.info("Registering new extension module {} defined in class {}",
-                    extension.getModuleName(), extension.getClass());
-            var module = DynamicExtensionModule.newModule(extension);
-            addExtensionMethods(module);
-        }
+        DynamicExtensions.register(extension);
     }
 
+    /**
+     * @deprecated use {@link DynamicExtensions#addExtensionMethods(ExtensionModule)}
+     */
+    @Deprecated(since = "6.0.0", forRemoval = true)
     public static void addExtensionMethods(ExtensionModule module) {
-        var metaClassRegistry = GroovySystem.getMetaClassRegistry();
-        ((MetaClassRegistryImpl) metaClassRegistry).getModuleRegistry().addModule(module);
-        var classMap = new HashMap<CachedClass, List<MetaMethod>>();
-        for (var metaMethod : module.getMetaMethods()){
-            if (classMap.containsKey(metaMethod.getDeclaringClass())){
-                classMap.get(metaMethod.getDeclaringClass()).add(metaMethod);
-            } else {
-                var methodList = new ArrayList<MetaMethod>();
-                methodList.add(metaMethod);
-                classMap.put(metaMethod.getDeclaringClass(), methodList);
-            }
-            if (metaMethod.isStatic()){
-                ((MetaClassRegistryImpl)metaClassRegistry).getStaticMethods().add(metaMethod);
-            } else {
-                ((MetaClassRegistryImpl)metaClassRegistry).getInstanceMethods().add(metaMethod);
-            }
-            log.debug("registered method: {}", metaMethod);
-        }
-        for (var cachedClassEntry : classMap.entrySet()) {
-            cachedClassEntry.getKey().addNewMopMethods(cachedClassEntry.getValue());
-        }
+        DynamicExtensions.addExtensionMethods(module);
     }
 
     @Override

@@ -29,11 +29,11 @@ import org.slf4j.LoggerFactory
  * found, it delegates to the wrapped ModelClassFactory.
  * <p>
  * GroovyCustomModelClassFactory is particularly useful together with the 
- * IPF extension mechanism by setting 
- * CustomModelClassFactoryConfigurer#customModelClassFactory to an instance of
- * this class. You can also wrap a normal CustomModelClassFactory to have a 
- * hierarchy of custom Groovy model classes, custom Java model classes, and 
- * default model classes to search in.
+ * IPF extension mechanism: declare it as the ModelClassFactory bean and let a
+ * CustomModelClassesRegistrar add the CustomModelClasses contributions of the
+ * application context to it. You can also wrap a normal CustomModelClassFactory
+ * to have a hierarchy of custom Groovy model classes, custom Java model classes,
+ * and default model classes to search in.
  *
  * @author Christian Ohr
  *

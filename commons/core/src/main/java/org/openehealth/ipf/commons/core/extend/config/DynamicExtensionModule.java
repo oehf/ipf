@@ -24,7 +24,7 @@ import org.codehaus.groovy.runtime.m12n.SimpleExtensionModule;
  * A primitive factory for a {@link org.codehaus.groovy.runtime.m12n.ExtensionModule}
  * that simply takes an already loaded {@link DynamicExtension} instance.
  *
- * @see DynamicExtensionConfigurer
+ * @see DynamicExtensions
  */
 class DynamicExtensionModule extends SimpleExtensionModule {
 

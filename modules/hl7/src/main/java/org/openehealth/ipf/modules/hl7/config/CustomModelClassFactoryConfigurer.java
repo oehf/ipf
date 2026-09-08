@@ -17,12 +17,9 @@ package org.openehealth.ipf.modules.hl7.config;
 
 import java.util.Collection;
 
-import ca.uhn.hl7v2.parser.ModelClassFactory;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Configurer used to configure all {@link CustomModelClasses}
@@ -32,12 +29,24 @@ import org.slf4j.LoggerFactory;
  *
  * @author Boris Stanojevic
  * @author Christian Ohr
+ *
+ * @deprecated declare a {@link CustomModelClassesRegistrar} instead, which collects the
+ * {@link CustomModelClasses} beans of the application context itself and therefore needs
+ * neither this configurer nor a
+ * {@code org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor}:
+ * <pre class="code">
+ *     &lt;bean class="org.openehealth.ipf.modules.hl7.config.CustomModelClassesRegistrar"/&gt;
+ * </pre>
+ * The registrar also works in Spring Boot, where custom HL7 model classes could not be
+ * contributed through this configurer at all. Both mechanisms may be active at the same time:
+ * {@link CustomModelClassesRegistrar#addModels} skips package definitions the factory already
+ * knows about.
  */
+@Deprecated(since = "6.0.0", forRemoval = true)
+@SuppressWarnings("removal")
 public class CustomModelClassFactoryConfigurer<R extends Registry> extends OrderedConfigurer<CustomModelClasses, R> {
 
     private CustomModelClassFactory customModelClassFactory;
-
-    private static final Logger log = LoggerFactory.getLogger(CustomModelClassFactoryConfigurer.class);
 
     boolean configureRecursively = true;
 
@@ -48,21 +57,7 @@ public class CustomModelClassFactoryConfigurer<R extends Registry> extends Order
 
     @Override
     public void configure(CustomModelClasses configuration) {
-        // update the top ModelClassFactory
-        var delegateFactory = configureAndDelegate(customModelClassFactory, configuration);
-        // delegate if required
-        CustomModelClassFactory currentFactory;
-        while (isConfigureRecursively() && (delegateFactory instanceof CustomModelClassFactory)) {
-            currentFactory = (CustomModelClassFactory) delegateFactory;
-            delegateFactory = configureAndDelegate(currentFactory, configuration);
-        }
-        log.debug("Custom model classes configured: {}", configuration);
-    }
-
-    private ModelClassFactory configureAndDelegate(CustomModelClassFactory factory,
-                                                   CustomModelClasses configuration) {
-        factory.addModels(configuration.getModelClasses());
-        return factory.getDelegate();
+        CustomModelClassesRegistrar.addModels(customModelClassFactory, configuration, isConfigureRecursively());
     }
 
     public CustomModelClassFactory getCustomModelClassFactory() {

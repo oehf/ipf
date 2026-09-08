@@ -20,7 +20,12 @@ package org.openehealth.ipf.commons.core.config;
  * for lookup and configure.
  *
  * @author Boris Stanojevic
+ *
+ * @deprecated see {@link Configurer}. Ordering between contributions is now expressed with
+ * Spring's {@code @Order} / {@code Ordered} on the contributing bean itself, which is finer
+ * grained than a single order value shared by everything a configurer collected.
  */
+@Deprecated(since = "6.0.0", forRemoval = true)
 public abstract class OrderedConfigurer<T, R extends Registry> implements Configurer<T, R>, Comparable<OrderedConfigurer<T, R>> {
 
     private int order = Integer.MAX_VALUE;

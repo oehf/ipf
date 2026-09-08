@@ -1,5 +1,5 @@
 <!--
-    Copyright 2009 the original author or authors.
+    Copyright 2026 the original author or authors.
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -14,6 +14,11 @@
     limitations under the License.
 -->
 
+<!--
+    The deprecated configurer/post-processor style, running alongside the self-collecting
+    registrar. Both paths see the same CustomModelClasses beans, so this context asserts
+    that no package definition is added twice.
+-->
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
@@ -29,9 +34,17 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         class="org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory" >
   </bean>
 
-  <!-- collects the CustomModelClasses beans of this context by itself -->
   <bean id="registrar" 
         class="org.openehealth.ipf.modules.hl7.config.CustomModelClassesRegistrar">
     <property name="customModelClassFactory" ref="groovyCustomModelClassFactory" />
   </bean>
+
+  <bean id="configurer" 
+        class="org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer">
+    <property name="customModelClassFactory" ref="groovyCustomModelClassFactory" />
+  </bean>
+  
+  <bean id="postProcessor" 
+        class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
+  </bean>   
 </beans>

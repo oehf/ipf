@@ -18,12 +18,14 @@ package org.openehealth.ipf.modules.hl7.parser;
 import ca.uhn.hl7v2.HL7Exception;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openehealth.ipf.modules.hl7.config.CustomModelClassFactoryConfigurer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "/context-custom-configurer.xml",
@@ -31,22 +33,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class GroovyCustomModelClassFactoryTest {
 
     @Autowired
-    private CustomModelClassFactoryConfigurer configurer;
-    
+    private CustomModelClassFactory groovyCustomModelClassFactory;
+
     @Test
     public void testMappings() throws HL7Exception {
-        var map = configurer.getCustomModelClassFactory().getCustomModelClasses();
-        assertTrue(map.containsKey("2.5"));
-        assertTrue(map.containsKey("2.4"));
-        Class<?> clazz = configurer.getCustomModelClassFactory()
-                .getMessageClass("MDM_T01", "2.5", false);
-        assertNotNull(clazz);
-        assertEquals("org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25.message.MDM_T01",
-                clazz.getCanonicalName());
-        Class<?> clazz1 = configurer.getCustomModelClassFactory()
-                .getMessageClass("MDM_T02", "2.4", false);
-        assertNotNull(clazz1);
-        assertEquals("org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v24.message.MDM_T02",
-                clazz1.getCanonicalName());
+        var map = groovyCustomModelClassFactory.getCustomModelClasses();
+        assertThat(map, hasKey("2.5"));
+        assertThat(map, hasKey("2.4"));
+        Class<?> clazz = groovyCustomModelClassFactory.getMessageClass("MDM_T01", "2.5", false);
+        assertThat(clazz, is(notNullValue()));
+        assertThat(clazz.getCanonicalName(),
+                is("org.openehealth.ipf.modules.hl7.parser.test.hl7v2.def.v25.message.MDM_T01"));
+        Class<?> clazz1 = groovyCustomModelClassFactory.getMessageClass("MDM_T02", "2.4", false);
+        assertThat(clazz1, is(notNullValue()));
+        assertThat(clazz1.getCanonicalName(),
+                is("org.openehealth.ipf.modules.hl7.parser.groovytest.hl7v2.def.v24.message.MDM_T02"));
     }	
 }

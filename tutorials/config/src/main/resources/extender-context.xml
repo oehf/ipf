@@ -1,31 +1,32 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:ipf="http://openehealth.org/schema/ipf-commons-core"
        xsi:schemaLocation="
 http://www.springframework.org/schema/beans 
-http://www.springframework.org/schema/beans/spring-beans.xsd">
+http://www.springframework.org/schema/beans/spring-beans.xsd
+http://openehealth.org/schema/ipf-commons-core
+http://openehealth.org/schema/ipf-commons-core.xsd">
 
-  <!-- Extension mechanism configurers and post processor -->
-  <bean id="customMappingsConfigurer" 
-      class="org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer">
-      <property name="mappingService" ref="bidiMappingService" />
-  </bean>
+  <!--
+       Extension mechanism. Each of these beans collects its own contributions from the
+       application context, so no post processor is needed:
+
+       - the SpringBidiMappingService declared in base-context.xml picks up the
+         CustomMappings beans
+       - the registrar below picks up the DynamicExtension beans
+       - the configurer below picks up the CustomRouteBuilder beans
+  -->
+
+  <!-- populates the ContextFacade, which the stateful Groovy extensions look beans up in.
+       This used to be a side effect of the SpringConfigurationPostProcessor. -->
+  <ipf:globalContext id="globalContext"/>
+
+  <bean id="customExtensionModuleRegistrar"
+        class="org.openehealth.ipf.commons.spring.core.extend.SpringDynamicExtensionRegistrar" />
 
   <bean id="customRouteBuilderConfigurer"
         class="org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilderConfigurer">
     <property name="camelContext" ref="camelContext" />
   </bean>
 
-  <bean id="customExtensionModuleConfigurer"
-        class="org.openehealth.ipf.commons.core.extend.config.DynamicExtensionConfigurer" />
-    
-  <bean id="postProcessor" 
-        class="org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor">
-    <property name="springConfigurers" >
-      <list>
-        <ref bean="customMappingsConfigurer" />
-        <ref bean="customRouteBuilderConfigurer" />
-        <ref bean="customExtensionModuleConfigurer" />
-      </list>
-    </property>
-  </bean>    
 </beans>

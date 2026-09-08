@@ -25,14 +25,11 @@ import org.apache.camel.support.jsse.SSLContextParameters;
 import org.apache.camel.support.jsse.SSLContextServerParameters;
 import org.apache.camel.support.jsse.SecureSocketProtocolsParameters;
 import org.apache.camel.support.jsse.TrustManagersParameters;
-import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.core.ssl.CustomTlsParameters;
 import org.openehealth.ipf.commons.core.ssl.TlsParameters;
-import org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor;
 import org.openehealth.ipf.commons.spring.core.config.SpringRegistry;
 import org.openehealth.ipf.commons.spring.map.SpringBidiMappingService;
-import org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -47,7 +44,6 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.net.ssl.SSLContext;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -69,25 +65,9 @@ public class IpfAutoConfiguration {
         return new SpringRegistry();
     }
 
-    // Dynamically collect CustomMappings, if available
-
-    @Bean
-    @ConditionalOnMissingBean(SpringConfigurationPostProcessor.class)
-    public SpringConfigurationPostProcessor postProcessor(CustomMappingsConfigurer<SpringRegistry> customMappingsConfigurer) {
-        var processor = new SpringConfigurationPostProcessor();
-        var list = new ArrayList<OrderedConfigurer>();
-        if (customMappingsConfigurer != null) list.add(customMappingsConfigurer);
-        processor.setSpringConfigurers(list);
-        return processor;
-    }
-
-    @Bean
-    @ConditionalOnMissingBean(CustomMappingsConfigurer.class)
-    protected CustomMappingsConfigurer<SpringRegistry> customMappingsConfigurer(SpringBidiMappingService mappingService) {
-        var configurer = new CustomMappingsConfigurer<SpringRegistry>();
-        configurer.setMappingService(mappingService);
-        return configurer;
-    }
+    // The mapping service dynamically collects the CustomMappings beans of the application
+    // context itself, so neither a CustomMappingsConfigurer nor a
+    // SpringConfigurationPostProcessor is required.
 
     @Bean
     @ConditionalOnMissingBean(SpringBidiMappingService.class)

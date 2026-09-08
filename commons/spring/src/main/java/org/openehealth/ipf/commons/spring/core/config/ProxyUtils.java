@@ -33,10 +33,10 @@ final class ProxyUtils {
 
     static <T> Class<T> getFirstProxiedInterface(Class<?> proxyClass) {
         var nonUserInterfaceCount = 0;
-        if (proxyClass.isAssignableFrom(SpringProxy.class)) {
+        if (SpringProxy.class.isAssignableFrom(proxyClass)) {
             ++nonUserInterfaceCount;
         }
-        if (proxyClass.isAssignableFrom(Advised.class)) {
+        if (Advised.class.isAssignableFrom(proxyClass)) {
             ++nonUserInterfaceCount;
         }
         var proxyInterfaces = proxyClass.getInterfaces();

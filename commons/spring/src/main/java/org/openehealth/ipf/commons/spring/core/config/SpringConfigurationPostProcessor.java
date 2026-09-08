@@ -33,8 +33,27 @@ import java.util.List;
  * instances are collected from the Spring context on a {@link ContextRefreshedEvent}.
  *
  * @author Boris Stanojevic
+ *
+ * @deprecated the holders and registrars that used to be filled by this listener now collect
+ * their own contributions, so this bean can simply be removed from the application context.
+ * Running on a {@link ContextRefreshedEvent} was also too late: every singleton has been created
+ * by then, so anything resolving e.g. a mapping during bean initialization saw an empty
+ * {@link org.openehealth.ipf.commons.map.MappingService}. See
+ * {@link org.openehealth.ipf.commons.spring.map.SpringBidiMappingService},
+ * {@link org.openehealth.ipf.commons.spring.core.extend.SpringDynamicExtensionRegistrar},
+ * {@code org.openehealth.ipf.modules.hl7.config.CustomModelClassesRegistrar} and
+ * {@code org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilderConfigurer}.
+ * <p>
+ * Note that this listener also created a {@link SpringRegistry} as a side effect, and thereby
+ * initialized the {@link org.openehealth.ipf.commons.core.config.ContextFacade} that the
+ * stateful Groovy and Kotlin extensions look up beans in. Contexts that relied on that side
+ * effect have to declare the registry explicitly when dropping this bean:
+ * <pre class="code">
+ *     &lt;ipf:globalContext/&gt;
+ * </pre>
  */
-@SuppressWarnings({"rawtypes", "unchecked"})
+@Deprecated(since = "6.0.0", forRemoval = true)
+@SuppressWarnings({"rawtypes", "unchecked", "removal"})
 public class SpringConfigurationPostProcessor implements
         ApplicationListener<ContextRefreshedEvent> {
 

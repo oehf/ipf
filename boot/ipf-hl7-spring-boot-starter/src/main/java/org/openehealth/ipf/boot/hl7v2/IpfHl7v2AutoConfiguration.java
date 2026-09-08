@@ -37,6 +37,7 @@ import org.openehealth.ipf.commons.ihe.hl7v2.storage.InteractiveContinuationStor
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheInteractiveContinuationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.SpringCacheUnsolicitedFragmentationStorage;
 import org.openehealth.ipf.commons.ihe.hl7v2.storage.UnsolicitedFragmentationStorage;
+import org.openehealth.ipf.modules.hl7.config.CustomModelClassesRegistrar;
 import org.openehealth.ipf.modules.hl7.parser.CustomModelClassFactory;
 import org.openehealth.ipf.modules.hl7.parser.DefaultEscaping;
 import org.openehealth.ipf.platform.camel.ihe.mllp.core.Hl7CorrelationManager;
@@ -54,6 +55,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -64,7 +66,7 @@ import java.util.Map;
 @EnableConfigurationProperties(IpfHl7v2ConfigurationProperties.class)
 public class IpfHl7v2AutoConfiguration {
 
-    private static final String IPF_HL7_DEFINITIONS_PREFIX = "org.openehealth.ipf.commons.ihe.hl7v2.definitions";
+    private static final String IPF_HL7_DEFINITIONS_PREFIX = "org.openehealth.ipf.commons.ihe.hl7v2.definitions.";
 
     private final IpfHl7v2ConfigurationProperties properties;
 
@@ -98,13 +100,24 @@ public class IpfHl7v2AutoConfiguration {
     @Bean
     @ConditionalOnMissingBean(CustomModelClassFactory.class)
     public CustomModelClassFactory mllpModelClassFactory() {
-        var eventMap = Map.of(
+        // Must be mutable: a CustomModelClassesRegistrar adds the application's
+        // CustomModelClasses contributions straight into this map.
+        var eventMap = new HashMap<>(Map.of(
                 "2.3.1", new String[] { IPF_HL7_DEFINITIONS_PREFIX + "pix.v231" },
                 "2.5", new String[] { IPF_HL7_DEFINITIONS_PREFIX + "pdq.v25", IPF_HL7_DEFINITIONS_PREFIX + "pix.v25" }
-        );
+        ));
         var modelClassFactory = new CustomModelClassFactory(eventMap);
         modelClassFactory.setEventMapDirectory("org/openehealth/ipf/commons/ihe/hl7v2/");
         return modelClassFactory;
+    }
+
+    // Adds the CustomModelClasses beans of the application context to the CustomModelClassFactory
+    // beans, whichever of them the application ends up contributing.
+
+    @Bean
+    @ConditionalOnMissingBean(CustomModelClassesRegistrar.class)
+    public CustomModelClassesRegistrar customModelClassesRegistrar() {
+        return new CustomModelClassesRegistrar();
     }
 
     @Bean

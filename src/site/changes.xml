@@ -24,6 +24,13 @@
     </properties>
     <body>
         <release version="6.0.0" description="IPF 6.0.0" date="">
+            <action issue="521" dev="ohr" type="update">
+                The Configurer SPI is deprecated for removal. Holders and registrars now collect
+                their own contributions from the Spring application context, so Configurer,
+                OrderedConfigurer, SpringConfigurationPostProcessor, CustomMappingsConfigurer,
+                CustomModelClassFactoryConfigurer (Java and Kotlin) and DynamicExtensionConfigurer
+                are no longer needed and will be removed in the next major release.
+            </action>
             <action issue="519" dev="ohr" type="remove">
                 Support for FHIR STU3 (DSTU3) has been removed. The modules ipf-commons-ihe-fhir-stu3-*,
                 ipf-platform-camel-ihe-fhir-stu3-* and ipf-fhir-stu3-spring-boot-starter no longer exist;

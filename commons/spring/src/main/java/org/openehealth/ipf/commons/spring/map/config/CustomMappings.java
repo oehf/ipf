@@ -45,7 +45,7 @@ import java.util.Collections;
  *        &lt;property name="mappingResource" value="classpath:configurer3.map" /&gt;
  *    &lt;/bean&gt;</pre>
  *
- * @see CustomMappingsConfigurer
+ * @see org.openehealth.ipf.commons.spring.map.SpringBidiMappingService
  * @author Christian Ohr
  * @author Boris Stanojevic
  *

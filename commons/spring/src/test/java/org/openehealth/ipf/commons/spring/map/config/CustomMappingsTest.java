@@ -27,33 +27,31 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 
 /**
- * Asserts that the deprecated {@link CustomMappingsConfigurer} still works, and that having it
- * around next to the self-collecting {@link SpringBidiMappingService} does not register any
- * mapping resource twice.
+ * Asserts that {@link SpringBidiMappingService} collects the {@link CustomMappings} beans of
+ * the application context by itself, i.e. without a configurer and a post processor.
  */
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(locations = { "/context-legacy-configurer.xml",
+@ContextConfiguration(locations = { "/context-custom-configurer.xml",
         "/context-custom-mappings.xml" })
-@SuppressWarnings("removal")
-public class CustomMappingsConfigurerTest {
+public class CustomMappingsTest {
 
     @Autowired
-    private CustomMappingsConfigurer<?> configurer;
+    private SpringBidiMappingService mappingService;
 
     @Test
     public void testMappings() {
-        assertThat(configurer.getMappingService().get("m1", "a1"), is("b1"));
-        assertThat(configurer.getMappingService().get("m2", "a2"), is("b2"));
-        assertThat(configurer.getMappingService().get("m3", "a3"), is("b3"));
+        assertThat(mappingService.get("m1", "a1"), is("b1"));
+        assertThat(mappingService.get("m2", "a2"), is("b2"));
+        assertThat(mappingService.get("m3", "a3"), is("b3"));
 
-        assertThat(configurer.getMappingService().get("m4", "d1"), is("c1"));
-        assertThat(configurer.getMappingService().get("m5", "d2"), is("c2"));
-        assertThat(configurer.getMappingService().get("m6", "d3"), is("c3"));
+        assertThat(mappingService.get("m4", "d1"), is("c1"));
+        assertThat(mappingService.get("m5", "d2"), is("c2"));
+        assertThat(mappingService.get("m6", "d3"), is("c3"));
     }
 
     @Test
-    public void testNoMappingResourceRegisteredTwice() {
-        assertThat(configurer.getMappingService().getMappingResources(), hasSize(6));
+    public void testEveryMappingResourceRegisteredOnce() {
+        assertThat(mappingService.getMappingResources(), hasSize(6));
     }
 
 }

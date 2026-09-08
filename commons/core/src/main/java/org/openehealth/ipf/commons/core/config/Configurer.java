@@ -21,7 +21,19 @@ import java.util.Collection;
  * Base interface to implement for any custom configurers.  
  * 
  * @author Boris Stanojevic
+ *
+ * @deprecated the whole {@code Configurer} SPI only ever expressed "collect all beans of type
+ * {@code T} and push them into some holder", which core Spring expresses as
+ * {@code beanFactory.getBeanProvider(T.class).orderedStream()}.
+ * Holders now collect their own contributions while the singletons are being initialized instead of being filled from the
+ * outside once an application context has been refreshed.
+ * See
+ * {@code org.openehealth.ipf.commons.spring.map.SpringBidiMappingService},
+ * {@code org.openehealth.ipf.commons.spring.core.extend.SpringDynamicExtensionRegistrar},
+ * {@code org.openehealth.ipf.modules.hl7.config.CustomModelClassesRegistrar} and
+ * {@code org.openehealth.ipf.platform.camel.core.config.CustomRouteBuilderConfigurer}.
  */
+@Deprecated(since = "6.0.0", forRemoval = true)
 public interface Configurer<T, R extends Registry> {
 
     /**

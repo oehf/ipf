@@ -16,18 +16,25 @@
 
 package org.openehealth.ipf.modules.hl7.kotlin.config
 
-import ca.uhn.hl7v2.parser.ModelClassFactory
-import io.github.oshai.kotlinlogging.KLogging
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.modules.hl7.kotlin.parser.CustomModelClassFactory
 
 /**
  * @author Christian Ohr
+ *
+ * @deprecated declare a [CustomModelClassesRegistrar] instead, which collects the
+ * [CustomModelClasses] beans of the application context itself and therefore needs neither this
+ * configurer nor a `SpringConfigurationPostProcessor`:
+ * ```
+ *     <bean class="org.openehealth.ipf.modules.hl7.kotlin.config.CustomModelClassesRegistrar"/>
+ * ```
+ * Both mechanisms may be active at the same time: [CustomModelClassesRegistrar.addModels] skips
+ * package definitions the factory already knows about.
  */
+@Deprecated("Declare a CustomModelClassesRegistrar bean instead",
+        ReplaceWith("CustomModelClassesRegistrar"))
 class CustomModelClassFactoryConfigurer<R : Registry> : OrderedConfigurer<CustomModelClasses, R>() {
-
-    companion object: KLogging()
 
     var customModelClassFactory: CustomModelClassFactory? = null
     var configureRecursively = true
@@ -37,21 +44,7 @@ class CustomModelClassFactoryConfigurer<R : Registry> : OrderedConfigurer<Custom
     }
 
     override fun configure(configuration: CustomModelClasses) {
-        // update the top ModelClassFactory
-        var delegateFactory = configureAndDelegate(customModelClassFactory, configuration)
-        // delegate if required
-        while (configureRecursively && delegateFactory is CustomModelClassFactory) {
-            val currentFactory = delegateFactory
-            delegateFactory = configureAndDelegate(currentFactory, configuration)
-        }
-        logger.debug {"Custom model classes configured: $configuration"}
+        CustomModelClassesRegistrar.addModels(customModelClassFactory, configuration, configureRecursively)
     }
-
-    private fun configureAndDelegate(factory: CustomModelClassFactory?,
-                                     configuration: CustomModelClasses): ModelClassFactory? {
-        factory?.addModels(configuration.modelClasses)
-        return factory?.delegate
-    }
-
 
 }

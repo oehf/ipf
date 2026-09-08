@@ -31,7 +31,22 @@ import java.util.Collection;
  * to the provided {@link SpringBidiMappingService}.
  * 
  * @author Boris Stanojevic
+ *
+ * @deprecated {@link SpringBidiMappingService} collects the {@link MappingResourceHolder} beans
+ * of the application context itself, so this configurer -- and the
+ * {@link org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor} that
+ * drives it -- are no longer needed:
+ * <pre class="code">
+ *     &lt;bean id="mappingService"
+ *           class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService"/&gt;
+ * </pre>
+ * Doing so also populates the mapping service before the {@code ContextRefreshedEvent} instead of
+ * after it, so that mappings can already be resolved while beans are being initialized. Both
+ * mechanisms may be active at the same time: {@link SpringBidiMappingService#setMappingResource}
+ * ignores resources it has already evaluated.
  */
+@Deprecated(since = "6.0.0", forRemoval = true)
+@SuppressWarnings("removal")
 public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigurer<MappingResourceHolder, R> {
 
     private SpringBidiMappingService mappingService;

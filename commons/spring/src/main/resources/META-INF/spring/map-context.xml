@@ -14,9 +14,4 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <property name="mappingService" ref="mappingService" />
     </bean>
 
-    <bean id="customMappingsConfigurer"
-          class="org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer">
-        <property name="mappingService" ref="mappingService" />
-    </bean>
-    
 </beans>
