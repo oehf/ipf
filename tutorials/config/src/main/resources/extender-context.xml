@@ -7,7 +7,7 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
   <!-- Extension mechanism configurers and post processor -->
   <bean id="customMappingsConfigurer" 
       class="org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer">
-      <property name="mappingService" ref="bidiMappingService" />
+      <property name="mappingService" ref="mappings" />
   </bean>
 
   <bean id="customRouteBuilderConfigurer"

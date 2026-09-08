@@ -21,8 +21,7 @@ import org.apache.commons.io.IOUtils
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
 import org.openehealth.ipf.commons.ihe.hl7v3.Hl7v3InteractionId
-import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.commons.xml.CombinedXmlValidator
 import org.openehealth.ipf.modules.hl7.validation.Validator
 import org.xmlunit.builder.DiffBuilder
@@ -61,11 +60,12 @@ class Hl7TranslationTestContainer {
         Hl7TranslationTestContainer.v2tov3Translator = v2tov3Translator
         Hl7TranslationTestContainer.context = context
 
-        BidiMappingService mappingService = new BidiMappingService()
-        mappingService.setMappingScript(Hl7TranslationTestContainer.class.getResource('/META-INF/map/hl7-v2-v3-translation.map'))
+        Mappings mappingService = Mappings.builder()
+                .load(Hl7TranslationTestContainer.class.getResource('/META-INF/map/hl7-v2-v3-translation.mapping.xml'))
+                .build()
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)
-        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        expect(registry.bean(Mappings)).andReturn(mappingService).anyTimes()
         expect(registry.bean(HapiContext)).andReturn(context).anyTimes()
         replay(registry)
     }      

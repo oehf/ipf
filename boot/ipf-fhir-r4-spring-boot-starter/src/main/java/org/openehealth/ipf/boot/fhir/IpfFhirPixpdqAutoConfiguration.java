@@ -43,7 +43,7 @@ public class IpfFhirPixpdqAutoConfiguration {
     @Bean
     public CustomMappings translationFhirHl7v2Mappings(FhirMappingCustomizer fhirMappingCustomizer) {
         var mappings = new CustomMappings();
-        mappings.addMappingResource(new ClassPathResource("META-INF/map/fhir-hl7v2-translation.map"));
+        mappings.addMappingResource(new ClassPathResource("META-INF/map/fhir-hl7v2-translation.mapping.xml"));
         config.getMappings().forEach(mappings::addMappingResource);
         fhirMappingCustomizer.customizeFhirMapping(mappings);
         return mappings;

@@ -23,6 +23,9 @@ import java.util.Collection;
 /**
  * Interface that isolates methods for registering {@link Resource resources} for a
  * {@link org.openehealth.ipf.commons.map.MappingService mapping service}.
+ * <p>
+ * A resource may be in any mapping format whose loader is on the classpath; the file extension
+ * decides which one reads it, unless the holder names a format for all of its resources.
  */
 public interface MappingResourceHolder {
 
@@ -46,5 +49,17 @@ public interface MappingResourceHolder {
      * @return immutable registered mapping resources
      */
     Collection<? extends Resource> getMappingResources();
+
+    /**
+     * The format the resources of this holder are read in, for resources whose name does not
+     * identify one. One holder groups the mappings of one module, which are typically all in the
+     * same format, so it is declared here rather than per resource.
+     *
+     * @return a {@link org.openehealth.ipf.commons.map.MappingLoader#format() format id}, or
+     * {@code null} to dispatch each resource by its file extension
+     */
+    default String getMappingFormat() {
+        return null;
+    }
 
 }

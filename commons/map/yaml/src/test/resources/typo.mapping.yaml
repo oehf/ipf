@@ -1,0 +1,5 @@
+mappings:
+  typo:
+    keysystem: "2.16.840.1.113883.12.4"
+    entries:
+      E: EMER

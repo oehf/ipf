@@ -22,13 +22,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 /**
  * @author Martin Krasser
  */
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = { "/context-configurer.xml" })
+@SuppressWarnings("removal")
 public class SpringBidiMappingServiceConfigurerTest {
 
     @Autowired
@@ -36,9 +38,9 @@ public class SpringBidiMappingServiceConfigurerTest {
     
     @Test
     public void testMappings() {
-        assertEquals("b1", mappingService.get("m1", "a1"));
-        assertEquals("b2", mappingService.get("m2", "a2"));
-        assertEquals("b3", mappingService.get("m3", "a3"));
+        assertThat(mappingService.get("m1", "a1"), is("b1"));
+        assertThat(mappingService.get("m2", "a2"), is("b2"));
+        assertThat(mappingService.get("m3", "a3"), is("b3"));
     }
     
 }

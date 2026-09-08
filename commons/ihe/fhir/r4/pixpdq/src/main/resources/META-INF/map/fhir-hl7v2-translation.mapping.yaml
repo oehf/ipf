@@ -1,0 +1,192 @@
+# yaml-language-server: $schema=http://openehealth.org/schema/ipf-commons-map.json
+#
+# Mappings between HL7v2 code systems and their FHIR counterparts. Most of them are derived
+# directly from the FHIR specification.
+#
+# Where several keys map onto one value, all but one are marked narrower so that the value has
+# exactly one inverse. The one left as "equal" is in every case the last of the group, which is
+# the inverse the Groovy mapping service happened to pick before IPF 6.0; the choice is
+# therefore behavior-preserving rather than considered, and worth revisiting per mapping.
+mappings:
+
+  hl7v2fhir-patient-maritalStatus:
+    keySystem:   "2.16.840.1.113883.5.2"
+    valueSystem: http://hl7.org/fhir/v3/MaritalStatus
+    entries:
+      A: N                                        # separated
+      B: U                                        # unmarried
+      C: P                                        # common law
+      D: D                                        # divorced
+      E: {value: L, equivalence: narrower}        # legally separated
+      G: {value: T, equivalence: narrower}        # living together
+      I: I                                        # interlocutory
+      M: M                                        # married
+      N: A                                        # anulled
+      L: L                                        # legally separated
+      O: {value: UNK, equivalence: narrower}      # other
+      P: {value: T, equivalence: narrower}        # domestic partner
+      R: T                                        # registered domestic partner
+      S: S                                        # never married AKA single
+      T: {value: UNK, equivalence: narrower}      # unreported
+      U: UNK                                      # unknown
+      W: W                                        # widowed
+    unmatched: {fixed: UNK}                       # unknown stuff
+
+  hl7v2fhir-patient-religion:
+    keySystem:   "2.16.840.1.113883.5.6"
+    valueSystem: http://hl7.org/fhir/v3/ReligiousAffiliation
+    # quoted: a mapping value is a string, not a number
+    entries:
+      AGN: "1004"                                     # Agnostic
+      ATH: "1007"                                     # Atheist
+      BAH: "1008"                                     # Baha'i
+      BUD: "1059"                                     # Buddhist
+      BMA: "1029"                                     # Buddhist: Mahayana
+      BTH: "1051"                                     # Buddhist: Theravada
+      ANG: "1005"                                     # Christian: Anglican
+      AOG: "1061"                                     # Christian: Assembly of God
+      BAP: "1009"                                     # Christian: Baptist
+      CAT: "1041"                                     # Christian: Roman Catholic
+      CHS: "1063"                                     # Christian: Christian Science
+      COC: "1064"                                     # Christian: Church of Christ
+      COG: "1065"                                     # Christian: Church of God
+      EOT: {value: "1068", equivalence: narrower}     # Christian: Eastern Orthodox
+      EPI: "1069"                                     # Christian: Episcopalian
+      FRQ: {value: "1071", equivalence: narrower}     # Christian: Friends
+      GRE: "1068"                                     # Christian: Greek Orthodox
+      JWN: "1025"                                     # Christian: Jehovah's Witness
+      LUT: "1028"                                     # Christian: Lutheran
+      MET: "1073"                                     # Christian: Methodist
+      MOM: "1027"                                     # Christian: Latter-day Saints
+      NAZ: "1075"                                     # Christian: Church of the Nazarene
+      COT: "1013"                                     # Christian: Other
+      PEN: "1038"                                     # Christian: Pentecostal
+      PRE: "1076"                                     # Christian: Presbyterian
+      PRO: "1077"                                     # Christian: Protestant
+      QUA: "1071"                                     # Christian: Friends
+      REC: "1079"                                     # Christian: Reformed Church
+      SAA: "1080"                                     # Christian: Salvation Army
+      SEV: "1001"                                     # Christian: Seventh Day Adventist
+      UNU: "1052"                                     # Christian: Unitarian Universalist
+      CNF: "1014"                                     # Confucian
+      HIN: "1020"                                     # Hindu
+      JAI: "1024"                                     # Jain
+      JEW: "1026"                                     # Jewish
+      MOS: "1023"                                     # Muslim
+      MSU: "1049"                                     # Muslim: Sunni
+      MSH: "1045"                                     # Muslim: Shiite
+      NAM: "1074"                                     # Native American
+      SHN: "1046"                                     # Shintoist
+      SIK: "1047"                                     # Sikh
+    unmatched: {fixed: UNK}
+    # Deliberately unmapped HL7 v2 table 0006 codes, kept for the record:
+    #
+    # BTA  Buddhist: Tantrayana                 CFR  Chinese Folk Religionist
+    # CHR  Christian                            ABC  Christian: American Baptist Church
+    # AMT  Christian: African Methodist Episcopal
+    # AME  Christian: African Methodist Episcopal Zion
+    # CRR  Christian: Christian Reformed        CMA  Christian: Christian Missionary Alliance
+    # COI  Christian: Church of God in Christ   COM  Christian: Community
+    # COL  Christian: Congregational            EVC  Christian: Evangelical Church
+    # FWB  Christian: Free Will Baptist         LMS  Christian: Lutheran Missouri Synod
+    # MEN  Christian: Mennonite                 ORT  Christian: Orthodox
+    # PRC  Christian: Other Protestant          COP  Christian: Other Pentecostal
+    # REO  Christian: Reorganized Church of Jesus Christ LDS
+    # SOU  Christian: Southern Baptist          UCC  Christian: United Church of Christ
+    # UMD  Christian: United Methodist          UNI  Christian: Unitarian
+    # WES  Christian: Wesleyan                  WMC  Christian: Wesleyan Methodist
+    # ERL  Ethnic Religionist                   HVA  Hindu: Vaishnavites
+    # HSH  Hindu: Shaivites                     HOT  Hindu: Other
+    # JCO  Jewish: Conservative                 JOR  Jewish: Orthodox
+    # JOT  Jewish: Other                        JRC  Jewish: Reconstructionist
+    # JRF  Jewish: Reform                       JRN  Jewish: Renewal
+    # MOT  Muslim: Other                        NRL  New Religionist
+    # NOE  Nonreligious                         OTH  Other
+    # SPI  Spiritist                            VAR  Unknown
+
+  # ISO 3166 country codes pass through unchanged in both directions
+  hl7v2fhir-patient-citizenship:
+    keySystem:   "1.0.3166"
+    valueSystem: urn:iso:std:iso:3166
+    unmatched: identity
+    reverse:
+      unmatched: identity
+
+  hl7v2fhir-address-use:
+    keySystem:   "2.16.840.1.113883.5.290"
+    valueSystem: http://hl7.org/fhir/address-use
+    entries:
+      H:  {value: home, equivalence: narrower}
+      L:  home
+      O:  {value: work, equivalence: narrower}
+      B:  work
+      BA: old
+    unmatched: {fixed: ""}
+
+  hl7v2fhir-name-use:
+    keySystem:   "2.16.840.1.113883.5.200"
+    valueSystem: http://hl7.org/fhir/name-use
+    entries:
+      D:    usual
+      L:    official
+      TEMP: temp
+      N:    nickname
+      S:    anonymous
+      BAD:  old
+      M:    {value: maiden, equivalence: narrower}
+      B:    maiden
+    unmatched: {fixed: ""}
+
+  hl7v2fhir-telecom-use:
+    keySystem:   "2.16.840.1.113883.5.201"
+    valueSystem: http://hl7.org/fhir/contact-point-use
+    entries:
+      PRN: {value: home, equivalence: narrower}
+      ORN: {value: home, equivalence: narrower}
+      VHN: home
+      WPN: work
+      PRS: mobile
+    unmatched: {fixed: ""}
+
+  hl7v2fhir-telecom-type:
+    keySystem:   "2.16.840.1.113883.5.202"
+    valueSystem: http://hl7.org/fhir/contact-point-system
+    entries:
+      PH:       {value: phone, equivalence: narrower}
+      FX:       fax
+      Internet: email
+      BP:       pager
+      CP:       phone
+    unmatched: {fixed: other}
+
+  hl7v2fhir-patient-gender:
+    keySystem:   http://hl7.org/fhir/administrative-gender
+    valueSystem: "2.16.840.1.113883.12.1"
+    entries:
+      male:    M
+      female:  F
+      other:   O
+      unknown: U
+    unmatched: {fixed: O}
+
+  hl7v2fhir-patient-administrativeGender:
+    keySystem:   "2.16.840.1.113883.12.1"
+    valueSystem: http://hl7.org/fhir/administrative-gender
+    entries:
+      M: male
+      F: female
+      A: {value: other, equivalence: narrower}
+      O: other
+      U: unknown
+    unmatched: {fixed: other}
+
+  hl7v2fhir-patient-genderIdentity:
+    keySystem:   "2.16.840.1.113883.12.1"
+    valueSystem: http://hl7.org/fhir/StructureDefinition/patient-genderIdentity
+    entries:
+      M: male
+      F: female
+      A: {value: non-binary, equivalence: narrower}
+      D: {value: non-binary, equivalence: narrower}
+      I: non-binary
+    unmatched: {fixed: other}

@@ -33,13 +33,15 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.RSP_K21
-import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 import java.nio.charset.StandardCharsets
 
-import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.Matchers.hasSize
+import static org.hamcrest.Matchers.is
+
 /**
  *
  */
@@ -50,14 +52,14 @@ class PdqQueryResponseToPdqmResponseTranslatorTest {
             PixPdqTransactions.ITI21)
 
     private PdqResponseToPdqmResponseTranslator translator
-    MappingService mappingService
+    Mappings mappingService
 
     @BeforeEach
     void setup() {
-        mappingService = new BidiMappingService()
-        mappingService.setMappingScripts(
-                [ getClass().getClassLoader().getResource('mapping.map'),
-                  getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map') ] as URL[])
+        mappingService = Mappings.builder()
+                .load(getClass().getClassLoader().getResource('mapping.map'))
+                .load(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.mapping.xml'))
+                .build()
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PdqResponseToPdqmResponseTranslator(mapper)
         translator.setPdqSupplierResourceIdentifierUri('urn:oid:1.2.3.4')
@@ -65,7 +67,7 @@ class PdqQueryResponseToPdqmResponseTranslatorTest {
 
         Registry registry = EasyMock.createMock(Registry)
         ContextFacade.setRegistry(registry)
-        EasyMock.expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        EasyMock.expect(registry.bean(Mappings)).andReturn(mappingService).anyTimes()
         EasyMock.replay(registry)
     }
 
@@ -73,45 +75,47 @@ class PdqQueryResponseToPdqmResponseTranslatorTest {
     void testTranslateRegularSearchResponse() {
         RSP_K21 message = loadMessage('ok-1_Response')
         List<PdqmPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
-        assertEquals(9, patients.size())
+        assertThat(patients, hasSize(9))
     }
 
     @Test
     void testTranslateRegularGetResponse() {
         RSP_K21 message = loadMessage('ok-2_Response')
         List<PdqmPatient> patients = translator.translateToFhir(message, new HashMap<String, Object>())
-        assertEquals(1, patients.size())
+        assertThat(patients, hasSize(1))
 
         PdqmPatient patient = ++patients.iterator()
 
-        assertEquals('http://org.openehealth/ipf/commons/ihe/fhir/1', patient.identifier[0].system)
-        assertEquals('79007', patient.identifierFirstRep.value)
+        assertThat(patient.identifier[0].system, is('http://org.openehealth/ipf/commons/ihe/fhir/1'))
+        assertThat(patient.identifierFirstRep.value, is('79007'))
 
         patient.nameFirstRep.with {
-            assertEquals('Beckenbauer', it.family)
-            assertEquals('Michael', it.given[0].value)
-            assertEquals('Joachim', it.given[1].value)
-            assertEquals(HumanName.NameUse.OFFICIAL, it.use)
+            assertThat(it.family, is('Beckenbauer'))
+            assertThat(it.given[0].value, is('Michael'))
+            assertThat(it.given[1].value, is('Joachim'))
+            assertThat(it.use, is(HumanName.NameUse.OFFICIAL))
         }
         patient.addressFirstRep.with {
-            assertEquals('Muenchner Freiheit 1', it.line[0].value)
-            assertEquals('Muenchen', it.city)
-            assertEquals('89000', it.postalCode)
-            assertEquals('DE', it.country)
+            assertThat(it.line[0].value, is('Muenchner Freiheit 1'))
+            assertThat(it.city, is('Muenchen'))
+            assertThat(it.postalCode, is('89000'))
+            assertThat(it.country, is('DE'))
         }
 
-        assertEquals(ContactPoint.ContactPointUse.MOBILE, patient.telecomFirstRep.use)
-        assertEquals(ContactPoint.ContactPointSystem.PHONE, patient.telecomFirstRep.system)
-        assertEquals(Enumerations.AdministrativeGender.MALE, patient.gender)
-        assertEquals(GenderIdentity.MALE.toCode(), patient.genderIdentityFirstRep.value.codingFirstRep.code)
-        assertEquals('http://hl7.org/fhir/StructureDefinition/patient-genderIdentity', patient.genderIdentityFirstRep.value.codingFirstRep.system)
-        assertEquals('01511134556', patient.telecomFirstRep.value)
-        assertEquals('Paukenbecker', patient.mothersMaidenName)
-        assertEquals('Passau', patient.birthPlace.city)
-        assertEquals('deu',patient.citizenshipFirstRep.code.codingFirstRep.code)
-        assertEquals('1041', patient.religionFirstRep.codingFirstRep.code)
-        assertEquals('M', patient.maritalStatus.codingFirstRep.code)
-        assertEquals(2, patient.multipleBirthIntegerType.value)
+        assertThat(patient.telecomFirstRep.use, is(ContactPoint.ContactPointUse.MOBILE))
+        assertThat(patient.telecomFirstRep.system, is(ContactPoint.ContactPointSystem.PHONE))
+        assertThat(patient.gender, is(Enumerations.AdministrativeGender.MALE))
+        assertThat(patient.genderIdentityFirstRep.value.codingFirstRep.code,
+                is(GenderIdentity.MALE.toCode()))
+        assertThat(patient.genderIdentityFirstRep.value.codingFirstRep.system,
+                is('http://hl7.org/fhir/StructureDefinition/patient-genderIdentity'))
+        assertThat(patient.telecomFirstRep.value, is('01511134556'))
+        assertThat(patient.mothersMaidenName, is('Paukenbecker'))
+        assertThat(patient.birthPlace.city, is('Passau'))
+        assertThat(patient.citizenshipFirstRep.code.codingFirstRep.code, is('deu'))
+        assertThat(patient.religionFirstRep.codingFirstRep.code, is('1041'))
+        assertThat(patient.maritalStatus.codingFirstRep.code, is('M'))
+        assertThat(patient.multipleBirthIntegerType.value, is(2))
     }
 
     RSP_K21 loadMessage(String name) {

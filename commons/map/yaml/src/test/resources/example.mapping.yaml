@@ -1,0 +1,65 @@
+# yaml-language-server: $schema=http://openehealth.org/schema/ipf-commons-map.json
+mappings:
+
+  hl7v2v3-bidi-administrativeGender:
+    keySystem:   "2.16.840.1.113883.5.1"
+    valueSystem: "2.16.840.1.113883.12.1"
+    entries:
+      M:  M
+      F:  F
+      UN: O
+      "": ""
+    unmatched: {fixed: O}
+    reverse:
+      unmatched: {fixed: UN}
+
+  hl7v2fhir-patient-administrativeGender:
+    keySystem:   "2.16.840.1.113883.12.1"
+    valueSystem: http://hl7.org/fhir/administrative-gender
+    entries:
+      M: male
+      F: female
+      A: {value: other, equivalence: narrower}   # not invertible
+      O: other
+      U: unknown
+    unmatched: {fixed: other}
+
+  # one-directional: several keys may share a value without an equivalence
+  hl7v2fhir-address-use:
+    reversible: false
+    entries:
+      H: home
+      L: home
+    unmatched: {fixed: ""}
+
+  hl7v2v3-patient-maritalStatus:
+    entries:
+      D: {value: D, keyDisplay: Divorced, valueDisplay: Divorced}
+      M: M        # married
+      X: {value: U, equivalence: disjoint}   # explicitly not the same concept
+    unmatched: identity
+
+  atnaCodingSystem:
+    entries:
+      DCM:                http://dicom.nema.org/resources/ontology/DCM
+      IHE Transactions:   urn:ihe:event-type-code
+      IHE XDS Metadata:   urn:oid:1.3.6.1.4.1.19376.1.2.6
+      RFC-3881:           urn:ietf:rfc:3881
+    unmatched: {function: oidUri}
+
+  hl7v2fhir-patient-religion:
+    entries:
+      AGN: "1004"     # quoted: a mapping value is a string, not a number
+      ATH: "1007"
+    unmatched: {fixed: UNK}
+
+  # declares only what differs; the rest is answered by the mapping above, in full
+  hl7v2fhir-patient-administrativeGender-custom:
+    entries:
+      CUSTOM: other
+    unmatched: {delegate: hl7v2fhir-patient-administrativeGender}
+
+  strictMapping:
+    entries:
+      a: b
+    unmatched: fail

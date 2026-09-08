@@ -32,8 +32,7 @@ import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationTy
 import org.openehealth.ipf.commons.audit.unmarshal.dicom.DICOMAuditParser;
 import org.openehealth.ipf.commons.core.config.ContextFacade;
 import org.openehealth.ipf.commons.core.config.Registry;
-import org.openehealth.ipf.commons.map.BidiMappingService;
-import org.openehealth.ipf.commons.map.MappingService;
+import org.openehealth.ipf.commons.map.Mappings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,10 +41,10 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 
 /**
  * @author Dmytro Rud
@@ -55,17 +54,17 @@ class AuditRecordTranslatorTest {
     private static final Logger log = LoggerFactory.getLogger(AuditRecordTranslatorTest.class);
     private static final FhirContext FHIR_CONTEXT = FhirContext.forR4();
 
-    static MappingService mappingService;
+    static Mappings mappings;
 
     @BeforeAll
     static void beforeClass() {
-        mappingService = new BidiMappingService();
-        ((BidiMappingService) mappingService).setMappingScript(
-                AuditRecordTranslatorTest.class.getClassLoader().getResource("META-INF/map/atna2fhir.map"));
+        mappings = Mappings.builder()
+                .load("classpath:/META-INF/map/atna2fhir.mapping.xml")
+                .build();
 
         Registry registry = EasyMock.createMock(Registry.class);
         ContextFacade.setRegistry(registry);
-        EasyMock.expect(registry.bean(MappingService.class)).andReturn(mappingService).anyTimes();
+        EasyMock.expect(registry.bean(Mappings.class)).andReturn(mappings).anyTimes();
         EasyMock.replay(registry);
     }
 
@@ -74,15 +73,15 @@ class AuditRecordTranslatorTest {
         var auditMessage = createAuditMessage1();
         log.debug("ATNA Record:{}", auditMessage);
 
-        var translator = new AuditRecordTranslator(mappingService);
+        var translator = new AuditRecordTranslator(mappings);
         var auditEvent = translator.translate(auditMessage);
         log.debug("FHIR Resource:{}",
                 FHIR_CONTEXT.newXmlParser().setPrettyPrint(true).encodeResourceToString(auditEvent));
 
         auditEvent.getEntity().forEach(entity -> 
-                assertNotNull(entity.getWhat().getIdentifier().getType()));
+                assertThat(entity.getWhat().getIdentifier().getType(), is(notNullValue())));
         
-        assertEquals(47, auditEvent.getEntity().get(2).getQuery().length);
+        assertThat(auditEvent.getEntity().get(2).getQuery().length, is(47));
     }
 
     static AuditMessage createAuditMessage1() {
@@ -168,7 +167,7 @@ class AuditRecordTranslatorTest {
                 StandardCharsets.UTF_8);
         
         var atna = new DICOMAuditParser().parse(atnaString, true);
-        var fhir = new AuditRecordTranslator(mappingService).translate(atna);
+        var fhir = new AuditRecordTranslator(mappings).translate(atna);
         log.debug("FHIR resource:{}", parser.encodeResourceToString(fhir));
 
         var validator = FHIR_CONTEXT.newValidator();
@@ -179,25 +178,26 @@ class AuditRecordTranslatorTest {
         validationResult.populateOperationOutcome(operationOutcome);
         log.debug("FHIR validation result:{}", parser.encodeResourceToString(operationOutcome));
 
-        assertTrue(validationResult.isSuccessful());
+        assertThat(validationResult.isSuccessful(), is(true));
 
-        assertEquals(4, fhir.getAgent().size());
+        assertThat(fhir.getAgent(), hasSize(4));
 
-        assertEquals("110153", fhir.getAgent().get(0).getType().getCoding().get(0).getCode());
-        assertEquals("https://community.epr.ch/Repository", 
-                fhir.getAgent().get(0).getWho().getIdentifier().getValue());
-        assertFalse(fhir.getAgent().get(0).hasRole());
+        assertThat(fhir.getAgent().get(0).getType().getCoding().get(0).getCode(), is("110153"));
+        assertThat(fhir.getAgent().get(0).getWho().getIdentifier().getValue(),
+                is("https://community.epr.ch/Repository"));
+        assertThat(fhir.getAgent().get(0).hasRole(), is(false));
 
-        assertEquals("110152", fhir.getAgent().get(1).getType().getCoding().get(0).getCode());
-        assertEquals("1234", fhir.getAgent().get(1).getWho().getIdentifier().getValue());
-        assertFalse(fhir.getAgent().get(1).hasRole());
+        assertThat(fhir.getAgent().get(1).getType().getCoding().get(0).getCode(), is("110152"));
+        assertThat(fhir.getAgent().get(1).getWho().getIdentifier().getValue(), is("1234"));
+        assertThat(fhir.getAgent().get(1).hasRole(), is(false));
 
-        assertFalse(fhir.getAgent().get(2).hasType());
-        assertEquals("7601002860123", fhir.getAgent().get(2).getWho().getIdentifier().getValue());
-        assertFalse(fhir.getAgent().get(2).hasRole());
+        assertThat(fhir.getAgent().get(2).hasType(), is(false));
+        assertThat(fhir.getAgent().get(2).getWho().getIdentifier().getValue(), is("7601002860123"));
+        assertThat(fhir.getAgent().get(2).hasRole(), is(false));
 
-        assertEquals("HCP", fhir.getAgent().get(3).getType().getCoding().get(0).getCode());
-        assertEquals("7601002860123", fhir.getAgent().get(3).getWho().getIdentifier().getValue());
-        assertEquals("223366009", fhir.getAgent().get(3).getRole().get(0).getCoding().get(0).getCode());
+        assertThat(fhir.getAgent().get(3).getType().getCoding().get(0).getCode(), is("HCP"));
+        assertThat(fhir.getAgent().get(3).getWho().getIdentifier().getValue(), is("7601002860123"));
+        assertThat(fhir.getAgent().get(3).getRole().get(0).getCoding().get(0).getCode(),
+                is("223366009"));
     }
 }

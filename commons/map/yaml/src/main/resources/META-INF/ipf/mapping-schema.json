@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "http://openehealth.org/schema/ipf-commons-map.json",
+  "title": "IPF mapping file",
+  "description": "Named translation tables for the IPF mapping service. Reference this schema from a mapping file with the comment '# yaml-language-server: $schema=http://openehealth.org/schema/ipf-commons-map.json' so that an editor validates it while it is being typed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "mappings"
+  ],
+  "properties": {
+    "mappings": {
+      "description": "The mappings in this file, by name. A name must be unique across all mapping files loaded together unless the later declaration sets override.",
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "$ref": "#/$defs/mapping"
+      }
+    }
+  },
+  "$defs": {
+    "mapping": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "keySystem": {
+          "description": "Formal identifier of the code system the keys belong to, usually an OID or a URI.",
+          "type": "string"
+        },
+        "valueSystem": {
+          "description": "Formal identifier of the code system the values belong to.",
+          "type": "string"
+        },
+        "reversible": {
+          "description": "Whether a reverse index is built. A mapping that is not reversible may map several keys onto the same value without declaring an equivalence.",
+          "type": "boolean",
+          "default": true
+        },
+        "override": {
+          "description": "Whether this declaration replaces a mapping of the same name that was loaded earlier. Without it, a duplicate name is a load-time error.",
+          "type": "boolean",
+          "default": false
+        },
+        "entries": {
+          "description": "The key/value pairs. Both sides are strings, so a numeric code needs quoting.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/entry"
+          }
+        },
+        "unmatched": {
+          "description": "What the mapping answers with when the requested key has no entry. Omit it, or say 'absent', for no answer at all.",
+          "$ref": "#/$defs/unmatched"
+        },
+        "reverse": {
+          "description": "Behavior of the reverse direction, i.e. of a value that no entry maps onto.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unmatched"
+          ],
+          "properties": {
+            "unmatched": {
+              "$ref": "#/$defs/unmatched"
+            }
+          }
+        }
+      }
+    },
+    "entry": {
+      "oneOf": [
+        {
+          "description": "The value, for an entry whose key and value are equal concepts.",
+          "type": "string"
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "value"
+          ],
+          "properties": {
+            "value": {
+              "type": "string"
+            },
+            "equivalence": {
+              "$ref": "#/$defs/equivalence"
+            },
+            "keyDisplay": {
+              "description": "Human-readable name of the key in its code system. Informative: nothing is looked up by its display.",
+              "type": "string"
+            },
+            "valueDisplay": {
+              "description": "Human-readable name of the value in its code system, for a caller that builds a coding out of a translation.",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "equivalence": {
+      "description": "Degree of correspondence between key and value, using the vocabulary of FHIR ConceptMap. Only equal and equivalent entries contribute to the reverse index, so marking an entry narrower or wider is how several keys may share a value in a reversible mapping.",
+      "enum": [
+        "equal",
+        "equivalent",
+        "wider",
+        "narrower",
+        "inexact",
+        "disjoint"
+      ],
+      "default": "equal"
+    },
+    "unmatched": {
+      "oneOf": [
+        {
+          "enum": [
+            "absent",
+            "identity",
+            "provided",
+            "fail"
+          ],
+          "description": "absent: no answer. identity (alias provided): the key itself. fail: an unmatched key is an error."
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fixed"
+          ],
+          "properties": {
+            "fixed": {
+              "description": "A constant answer.",
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "function"
+          ],
+          "properties": {
+            "function": {
+              "description": "Name of a function registered with the MappingFunctionRegistry, which receives the unmatched key and returns the answer.",
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "delegate"
+          ],
+          "properties": {
+            "delegate": {
+              "description": "Name of another mapping, asked in full - its entries and then its own unmatched - so that mapping decides the outcome. It must already be loaded.",
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

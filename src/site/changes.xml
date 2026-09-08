@@ -24,6 +24,17 @@
     </properties>
     <body>
         <release version="6.0.0" description="IPF 6.0.0" date="">
+            <action dev="ohr" type="update">
+                The mapping service has been reimplemented. ipf-commons-map is now a parent POM over
+                ipf-commons-map-core, which holds the model and the typed, Optional-returning
+                Mappings API, and one module per mapping file format: ipf-commons-map-xml,
+                ipf-commons-map-yaml, ipf-commons-map-groovy for the legacy .map scripts, and a FHIR
+                ConceptMap loader in ipf-commons-ihe-fhir-r4-core. MappingService,
+                BidiMappingService, SpringBidiMappingService, SpringBidiMappingServiceConfigurer and
+                the Groovy .map DSL are deprecated and will be removed in IPF 7.0; nothing inside IPF
+                uses them any more. Wire SpringMappings instead, and see commons/map/README.md for
+                the formats, the migration path and MappingConverter.
+            </action>
             <action issue="519" dev="ohr" type="remove">
                 Support for FHIR STU3 (DSTU3) has been removed. The modules ipf-commons-ihe-fhir-stu3-*,
                 ipf-platform-camel-ihe-fhir-stu3-* and ipf-fhir-stu3-spring-boot-starter no longer exist;

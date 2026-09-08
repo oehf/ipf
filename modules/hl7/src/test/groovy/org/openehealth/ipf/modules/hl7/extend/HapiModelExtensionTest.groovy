@@ -33,8 +33,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
-import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory
 
 import static org.easymock.EasyMock.*
@@ -50,13 +49,14 @@ class HapiModelExtensionTest {
 
     @BeforeAll
     static void setUp() {
-        BidiMappingService mappingService = new BidiMappingService()
-        mappingService.setMappingScript(HapiModelExtensionTest.class.getResource("/example2.map"))
+        Mappings mappingService = Mappings.builder()
+                .load(HapiModelExtensionTest.class.getResource("/example2.map"))
+                .build()
         ModelClassFactory mcf = new CustomModelClassFactory()
         HapiContext context = new DefaultHapiContext(mcf)
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)
-        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        expect(registry.bean(Mappings)).andReturn(mappingService).anyTimes()
         expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
         expect(registry.bean(HapiContext)).andReturn(context).anyTimes()
         replay(registry)

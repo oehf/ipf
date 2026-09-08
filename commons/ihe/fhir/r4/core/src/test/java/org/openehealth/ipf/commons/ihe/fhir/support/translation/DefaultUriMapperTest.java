@@ -19,10 +19,10 @@ package org.openehealth.ipf.commons.ihe.fhir.support.translation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper;
-import org.openehealth.ipf.commons.map.BidiMappingService;
+import org.openehealth.ipf.commons.map.Mappings;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 /**
  *
@@ -33,46 +33,46 @@ public class DefaultUriMapperTest {
 
     @BeforeEach
     public void setup() {
-        BidiMappingService mappingService = new BidiMappingService();
-        mappingService.setMappingScript(getClass().getResource("/mapping.map"));
-        uriMapper = new DefaultUriMapper(mappingService, "uriToOid", "uriToNamespace");
+        var mappings = Mappings.builder().load("classpath:/mapping.map").build();
+        uriMapper = new DefaultUriMapper(mappings, "uriToOid", "uriToNamespace");
     }
 
     @Test
     public void testTranslateOidUrn() {
         var oid = "1.2.3.4.5.6.7.8.9";
-        assertEquals(oid, uriMapper.uriToOid("urn:oid:" + oid).orElse(null));
+        assertThat(uriMapper.uriToOid("urn:oid:" + oid).orElse(null), is(oid));
     }
 
     @Test
     public void testTranslateUriToOid() {
         var uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
-        assertEquals("1.2.3.4", uriMapper.uriToOid(uri).orElse(null));
+        assertThat(uriMapper.uriToOid(uri).orElse(null), is("1.2.3.4"));
     }
 
     @Test
     public void testTranslateUriToOidFails() {
         var uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
-        assertFalse(uriMapper.uriToOid(uri).isPresent());
+        assertThat(uriMapper.uriToOid(uri).isPresent(), is(false));
     }
 
     @Test
     public void testTranslatePinUrn() {
         var namespace = "namespace";
-        assertEquals(namespace, uriMapper.uriToNamespace("urn:pin:" + namespace).orElse(null));
+        assertThat(uriMapper.uriToNamespace("urn:pin:" + namespace).orElse(null), is(namespace));
     }
 
     @Test
     public void testTranslateUriToNamespace() {
         var uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
-        assertEquals("fhir1", uriMapper.uriToNamespace(uri).get());
+        assertThat(uriMapper.uriToNamespace(uri).get(), is("fhir1"));
         uri = "http://org.openehealth/ipf/commons/ihe/fhir/9";
-        assertFalse(uriMapper.uriToNamespace(uri).isPresent());
+        assertThat(uriMapper.uriToNamespace(uri).isPresent(), is(false));
     }
 
     @Test
     public void testTranslateNamespaceToUri() {
         var namespace = "fhir1";
-        assertEquals("http://org.openehealth/ipf/commons/ihe/fhir/1", uriMapper.namespaceToUri(namespace));
+        assertThat(uriMapper.namespaceToUri(namespace),
+                is("http://org.openehealth/ipf/commons/ihe/fhir/1"));
     }
 }

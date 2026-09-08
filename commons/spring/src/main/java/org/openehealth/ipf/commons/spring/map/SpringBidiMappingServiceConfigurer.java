@@ -29,8 +29,13 @@ import java.util.List;
  * specific configurer is deprecated.
  *
  * @author Martin Krasser
- *
+ * @deprecated as of 6.0, along with {@link SpringBidiMappingService}. Configure
+ * {@link SpringMappings} with its {@code mappingResources} property, or let
+ * {@link org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer} collect
+ * {@link org.openehealth.ipf.commons.spring.map.config.CustomMappings} beans.
  */
+@Deprecated(since = "6.0", forRemoval = true)
+@SuppressWarnings("removal")
 public class SpringBidiMappingServiceConfigurer implements InitializingBean {
 
     @Getter @Setter

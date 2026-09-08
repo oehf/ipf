@@ -1,0 +1,80 @@
+# yaml-language-server: $schema=http://openehealth.org/schema/ipf-commons-map.json
+mappings:
+
+  # HL7 v3 interaction id -> HL7 v2 trigger event.
+  #
+  # Until IPF 6.0 this was one mapping, hl7v2v3-interactionId-eventStructure, whose values were
+  # composite ("A01~ADT_A01") and split on the tilde by the mapping service. The model has no
+  # composite values, so the two halves are two mappings; only the trigger event was ever read.
+  hl7v2v3-interactionId-triggerEvent:
+    keySystem:   "2.16.840.1.113883.5.4"
+    valueSystem: "2.16.840.1.113883.12.76"
+    entries:
+      PRPA_IN201301UV02: A01
+      PRPA_IN201302UV02: A08
+      PRPA_IN201304UV02: A40
+
+  # HL7 v3 interaction id -> HL7 v2 message structure
+  hl7v2v3-interactionId-messageStructure:
+    keySystem:   "2.16.840.1.113883.5.4"
+    valueSystem: "2.16.840.1.113883.12.354"
+    entries:
+      # ADT_A01 is the structure of both A01 and A08, so only one of them can be its inverse
+      PRPA_IN201301UV02: {value: ADT_A01, equivalence: narrower}
+      PRPA_IN201302UV02: ADT_A01
+      PRPA_IN201304UV02: ADT_A39
+
+  hl7v2v3-bidi-administrativeGender-administrativeGender:
+    keySystem:   "2.16.840.1.113883.5.1"
+    valueSystem: "2.16.840.1.113883.12.1"
+    entries:
+      M:  M
+      F:  F
+      UN: O
+      "": ""
+    unmatched: {fixed: O}
+    reverse:
+      unmatched: {fixed: UN}
+
+  # patient marital status v3 -> v2
+  hl7v2v3-patient-maritalStatus:
+    entries:
+      D: D        # divorced
+      L: A        # legally separated
+      M: M        # married
+      S: S        # never married AKA single
+      W: W        # widowed
+      I: I        # interlocutory
+      A: N        # annulled
+      T: P        # domestic partner
+      P: O        # polygamic
+    unmatched: identity        # unknown stuff
+
+  # values are of code system 2.16.840.1.113883.5.1100
+  hl7v2v3-error-codes:
+    entries:
+      "101": SYN105
+      "102": SYN102
+      "103": SYN103
+      # 200 and 201 both report NS200; 201 stays its inverse, as before IPF 6.0
+      "200": {value: NS200, equivalence: narrower}
+      "201": NS200
+      "202": NS202
+      "203": NS203
+    unmatched: identity
+
+  hl7v2v3_familyNameType-familyNameQualifier:
+    entries:
+      B: BR
+    unmatched: {fixed: ""}
+
+  hl7v2v3_nameTypeCode-nameUse:
+    entries:
+      # A and S both mean P, M and B both mean BR; the later one stays the inverse
+      A: {value: P, equivalence: narrower}
+      S: P
+      M: {value: BR, equivalence: narrower}
+      B: BR
+      L: L
+      T: I
+    unmatched: {fixed: L}

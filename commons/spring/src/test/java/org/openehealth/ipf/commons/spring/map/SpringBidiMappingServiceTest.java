@@ -25,12 +25,14 @@ import org.springframework.core.io.Resource;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  *
  */
+@SuppressWarnings("removal")
 public class SpringBidiMappingServiceTest {
 
     SpringBidiMappingService mappingService;
@@ -46,26 +48,26 @@ public class SpringBidiMappingServiceTest {
     @Test
     public void testIgnoreResourceNotFound() {
         List<? extends Resource> resources = Arrays.asList(
-                new ClassPathResource("example2.map.NONEXISTENT"),
+                new ClassPathResource("example2.NONEXISTENT.map"),
                 new ClassPathResource("example3.map")
         );
 
         mappingService.setIgnoreResourceNotFound(true);
         mappingService.setMappingResources(resources);
-        assertEquals("PRPA_IN401001", mappingService.get("messageType", "ADT^A04"));
+        assertThat(mappingService.get("messageType", "ADT^A04"), is("PRPA_IN401001"));
 
         try {
             mappingService.get("O", "encounterType");
             fail();
         } catch (IllegalArgumentException e) {
-            assertEquals("Unknown key O", e.getMessage());
+            assertThat(e.getMessage(), is("Unknown key O"));
         }
     }
 
     @Test
     public void testFailResourceNotFound() {
         List<? extends Resource> resources = Arrays.asList(
-                new ClassPathResource("example2.map.NONEXISTENT"),
+                new ClassPathResource("example2.NONEXISTENT.map"),
                 new ClassPathResource("example3.map")
         );
         mappingService.setIgnoreResourceNotFound(false);

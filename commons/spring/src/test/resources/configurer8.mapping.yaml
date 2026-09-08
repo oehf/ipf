@@ -1,0 +1,6 @@
+# yaml-language-server: $schema=http://openehealth.org/schema/ipf-commons-map.json
+mappings:
+  m8:
+    entries:
+      d8: c8
+    unmatched: identity

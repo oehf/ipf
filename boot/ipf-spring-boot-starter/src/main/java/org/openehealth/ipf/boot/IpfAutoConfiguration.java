@@ -32,9 +32,11 @@ import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor;
 import org.openehealth.ipf.commons.spring.core.config.SpringRegistry;
 import org.openehealth.ipf.commons.spring.map.SpringBidiMappingService;
+import org.openehealth.ipf.commons.spring.map.SpringMappings;
 import org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -55,6 +57,7 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableConfigurationProperties(IpfConfigurationProperties.class)
+@SuppressWarnings("removal")
 public class IpfAutoConfiguration {
 
     public static final String SERVER_SSL_CONTEXT_PARAMETERS = "bootSslContextParameters";
@@ -83,16 +86,39 @@ public class IpfAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(CustomMappingsConfigurer.class)
-    protected CustomMappingsConfigurer<SpringRegistry> customMappingsConfigurer(SpringBidiMappingService mappingService) {
+    protected CustomMappingsConfigurer<SpringRegistry> customMappingsConfigurer(
+            SpringMappings mappings, ObjectProvider<SpringBidiMappingService> mappingService) {
         var configurer = new CustomMappingsConfigurer<SpringRegistry>();
-        configurer.setMappingService(mappingService);
+        // Normally the mappings below, but an application that brought its own untyped service
+        // rather than letting us wrap ours must still receive its CustomMappings.
+        var legacy = mappingService.getIfAvailable();
+        configurer.setMappingService(legacy != null && legacy.getMappings() != mappings
+                ? legacy
+                : mappings);
         return configurer;
     }
 
+    /**
+     * The mappings themselves. Inject this, or {@link org.openehealth.ipf.commons.map.Mappings},
+     * in new code.
+     */
     @Bean
+    @ConditionalOnMissingBean(SpringMappings.class)
+    public SpringMappings mappings() {
+        return new SpringMappings();
+    }
+
+    /**
+     * The untyped mapping service over the very same mappings, for code that still needs a
+     * {@link org.openehealth.ipf.commons.map.MappingService}.
+     *
+     * @deprecated as of 6.0, inject {@link SpringMappings} instead
+     */
+    @Bean
+    @Deprecated(since = "6.0", forRemoval = true)
     @ConditionalOnMissingBean(SpringBidiMappingService.class)
-    public SpringBidiMappingService mappingService() {
-        return new SpringBidiMappingService();
+    public SpringBidiMappingService mappingService(SpringMappings mappings) {
+        return new SpringBidiMappingService(mappings);
     }
 
 
