@@ -49,6 +49,9 @@
                 FHIR: default resource providers are instantiated per FHIR servlet instead of JVM-wide, (dis)connecting
                 consumers is thread-safe, and FhirRegistry can be injected (IpfFhirServlet, endpoint parameter fhirRegistry).
             </action>
+            <action issue="522" dev="ohr" type="add">
+                Optional support for ordering and paging [ITI-18] stored query results.
+            </action>
         </release>
         <release version="6.0.0" description="IPF 6.0.0" date="13 Oct 2026">
             <action issue="527" dev="ohr" type="update">
@@ -113,7 +116,8 @@
                 Thanks to rbastiaansen732 for reporting and proposing a fix.
             </action>
             <action issue="515" dev="ohr" type="add">
-                Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323)
+                Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323).
+                The registry of the XDS tutorial serves this query as well.
             </action>
         </release>
         <release version="5.2.0" description="IPF 5.2.0" date="26 May 2026">

@@ -27,6 +27,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SortOrder;
 
 /**
  * Contains the response data for a query.
@@ -35,7 +36,8 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "QueryResponse", propOrder = {
-        "references", "submissionSets", "folders", "documentEntries", "associations", "documents"})
+        "references", "submissionSets", "folders", "documentEntries", "associations", "documents",
+        "honoredSortOrder"})
 @XmlRootElement(name = "queryResponse")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
@@ -55,7 +57,44 @@ public class QueryResponse extends Response implements Serializable {
     @Getter @Setter private List<Association> associations = new ArrayList<>();
     @XmlElementRef
     @Getter @Setter private List<Document> documents = new ArrayList<>();
-    
+
+    /**
+     * Identifier of the request this responds to, as the requester set it in
+     * {@link org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry#getRequestId()}.
+     */
+    @XmlAttribute
+    @Getter @Setter private String requestId;
+
+    /**
+     * Index of the first result in this response, or null if it is not a window into a larger set.
+     */
+    @XmlAttribute
+    @Getter @Setter private Integer startIndex;
+
+    /**
+     * Size of the whole result set this response is a window into, or null if the registry does not
+     * report one.
+     * <p>
+     * The one piece of the paging extension that costs nothing to standardise: ebRS 3.0 defines the
+     * attribute already, so a registry can report a total without any bilateral agreement, and a
+     * requester gets the count without fetching the results.
+     */
+    @XmlAttribute
+    @Getter @Setter private Integer totalResultCount;
+
+    /**
+     * The order the registry says it actually applied, or null if it said nothing.
+     * <p>
+     * A registry that does not implement the sort extension ignores the request, as ITI-18 requires of
+     * any parameter it does not understand -- which means an ignored order looks exactly like an
+     * honoured one. Echoing the applied order back is what makes the difference observable, so that a
+     * requester can fall back to sorting itself, or fail, rather than silently return arbitrary order.
+     *
+     * @see org.openehealth.ipf.commons.ihe.xds.core.requests.query.SortOrder
+     */
+    @XmlElement
+    @Getter @Setter private SortOrder honoredSortOrder;
+
     /**
      * Constructs the response.
      */
