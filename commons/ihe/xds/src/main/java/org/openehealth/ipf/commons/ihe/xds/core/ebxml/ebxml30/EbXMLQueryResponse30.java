@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNull;
+import java.math.BigInteger;
 
 /**
  * Encapsulation of {@link AdhocQueryResponse}.
@@ -128,6 +129,66 @@ public class EbXMLQueryResponse30 extends EbXMLObjectContainer30 implements EbXM
         }
         
         return results;
+    }
+
+    @Override
+    public void addResponseSlot(String slotName, String... slotValues) {
+        responseSlotList().addSlot(slotName, slotValues);
+    }
+
+    @Override
+    public List<String> getResponseSlotValues(String slotName) {
+        return responseSlotList().getSlotValues(slotName);
+    }
+
+    /**
+     * The response slot list is optional in ebRS and absent until something is put into it.
+     */
+    private EbXMLSlotList30 responseSlotList() {
+        if (response.getResponseSlotList() == null) {
+            response.setResponseSlotList(EbXMLFactory30.RIM_FACTORY.createSlotListType());
+        }
+        return new EbXMLSlotList30(response.getResponseSlotList().getSlot());
+    }
+
+    @Override
+    public String getRequestId() {
+        return response.getRequestId();
+    }
+
+    @Override
+    public void setRequestId(String requestId) {
+        response.setRequestId(requestId);
+    }
+
+    /**
+     * As on the request side, ebRS defaults {@code startIndex} to 0 and its getter reports the default
+     * rather than null, so 0 is read as "not a window".
+     */
+    @Override
+    public Integer getStartIndex() {
+        var startIndex = response.getStartIndex();
+        return (startIndex == null || startIndex.signum() <= 0) ? null : startIndex.intValue();
+    }
+
+    @Override
+    public void setStartIndex(Integer startIndex) {
+        response.setStartIndex(startIndex != null ? BigInteger.valueOf(startIndex) : null);
+    }
+
+    /**
+     * Unlike the two index attributes, {@code totalResultCount} has no default, so absent really is
+     * absent -- a registry that does not count says nothing rather than saying zero.
+     */
+    @Override
+    public Integer getTotalResultCount() {
+        var totalResultCount = response.getTotalResultCount();
+        return totalResultCount != null ? totalResultCount.intValue() : null;
+    }
+
+    @Override
+    public void setTotalResultCount(Integer totalResultCount) {
+        response.setTotalResultCount(totalResultCount != null ? BigInteger.valueOf(totalResultCount) : null);
     }
 
     @Override

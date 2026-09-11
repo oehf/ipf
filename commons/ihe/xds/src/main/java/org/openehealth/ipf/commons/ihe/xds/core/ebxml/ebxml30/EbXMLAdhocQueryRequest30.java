@@ -20,6 +20,7 @@ import static java.util.Objects.requireNonNull;
 import lombok.experimental.Delegate;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
+import java.math.BigInteger;
 
 /**
  * Encapsulation of {@link AdhocQueryRequest}.
@@ -66,6 +67,48 @@ public class EbXMLAdhocQueryRequest30 implements EbXMLAdhocQueryRequest<AdhocQue
     @Override
     public void setHome(String homeCommunityID) {
         request.getAdhocQuery().setHome(homeCommunityID);
+    }
+
+    @Override
+    public String getRequestId() {
+        return request.getId();
+    }
+
+    @Override
+    public void setRequestId(String requestId) {
+        request.setId(requestId);
+    }
+
+    /**
+     * The stub cannot say "absent": ebRS defaults {@code startIndex} to 0, and its getter returns that
+     * default rather than null. Absent and 0 mean the same thing -- start at the beginning -- so 0 is
+     * reported as no window, at the price of not round-tripping an explicitly written {@code
+     * startIndex="0"}, which carries no information anyway.
+     */
+    @Override
+    public Integer getStartIndex() {
+        var startIndex = request.getStartIndex();
+        return (startIndex == null || startIndex.signum() <= 0) ? null : startIndex.intValue();
+    }
+
+    @Override
+    public void setStartIndex(Integer startIndex) {
+        request.setStartIndex(startIndex != null ? BigInteger.valueOf(startIndex) : null);
+    }
+
+    /**
+     * As with {@link #getStartIndex()}: ebRS defaults {@code maxResults} to -1, meaning unbounded, which
+     * is the same as asking for no window at all.
+     */
+    @Override
+    public Integer getMaxResults() {
+        var maxResults = request.getMaxResults();
+        return (maxResults == null || maxResults.signum() < 0) ? null : maxResults.intValue();
+    }
+
+    @Override
+    public void setMaxResults(Integer maxResults) {
+        request.setMaxResults(maxResults != null ? BigInteger.valueOf(maxResults) : null);
     }
 
     @Override
