@@ -17,6 +17,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query;
 
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLSlot;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SortOrder;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.StoredQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.TargetCommunityIdListBasedStoredQuery;
 import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryRequest;
@@ -74,6 +75,10 @@ abstract class AbstractStoredQueryTransformer<T extends StoredQuery> {
      */
     protected void toEbXML(T query, QuerySlotHelper slots) {
         query.getExtraParameters().forEach(slots::fromStringList);
+        var sortOrder = query.getSortOrder();
+        if (sortOrder != null && !sortOrder.isEmpty()) {
+            slots.fromStringList(SortOrder.getSlotName(), sortOrder.encode());
+        }
         if (query instanceof TargetCommunityIdListBasedStoredQuery query2) {
             slots.fromStringList(QueryParameter.TARGET_COMMUNITY_IDS, query2.getTargetCommunityIds());
         }
@@ -87,8 +92,13 @@ abstract class AbstractStoredQueryTransformer<T extends StoredQuery> {
      * @param slots the slots to transform.
      */
     protected void fromEbXML(T query, QuerySlotHelper slots) {
+        query.setSortOrder(SortOrder.decode(slots.toStringList(SortOrder.getSlotName())));
+
         slots.getSlots().stream()
                 .map(EbXMLSlot::getName)
+                // the sort order is an extra slot, but a known one -- without excluding it here it would
+                // arrive twice, once typed and once as an uninterpreted extra parameter
+                .filter(slotName -> !SortOrder.getSlotName().equals(slotName))
                 .filter(slotName -> (QueryParameter.valueOfSlotName(slotName) == null) && (!query.getExtraParameters().containsKey(slotName)))
                 .forEach(slotName -> {
                     var queryList = slots.toStringQueryList(slotName);

@@ -58,6 +58,38 @@ public interface EbXMLAdhocQueryRequest<E> extends EbXMLSlotList {
     String getHome();
 
     /**
+     * @param requestId identifier of this request, echoed by the registry in the response.
+     */
+    void setRequestId(String requestId);
+
+    /**
+     * @return identifier of this request, or <code>null</code> if it does not carry one.
+     */
+    String getRequestId();
+
+    /**
+     * @param startIndex index of the first result the registry is to return, or <code>null</code> to
+     *                   request the whole result set.
+     */
+    void setStartIndex(Integer startIndex);
+
+    /**
+     * @return index of the first result to return, or <code>null</code> if no window was requested.
+     */
+    Integer getStartIndex();
+
+    /**
+     * @param maxResults maximum number of results the registry is to return, or <code>null</code> to
+     *                   request the whole result set.
+     */
+    void setMaxResults(Integer maxResults);
+
+    /**
+     * @return maximum number of results to return, or <code>null</code> if no window was requested.
+     */
+    Integer getMaxResults();
+
+    /**
      * @return the ebXML object wrapped by this object.
      */
     E getInternal();

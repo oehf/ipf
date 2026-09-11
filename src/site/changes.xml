@@ -24,6 +24,9 @@
     </properties>
     <body>
         <release version="6.0.0" description="IPF 6.0.0" date="">
+            <action issue="522" dev="ohr" type="add">
+                Optional support for ordering and paging [ITI-18] stored query results.
+            </action>
             <action issue="368" dev="ohr" type="add">
                 Support for PIXm Patient Identity Feed FHIR [ITI-104] (pixm-iti104) and translators
                 to/from PIX Feed V2 (ITI-8).
@@ -82,7 +85,8 @@
                 Thanks to rbastiaansen732 for reporting and proposing a fix.
             </action>
             <action issue="515" dev="ohr" type="add">
-                Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323)
+                Support the FindDocumentsExclude stored query and Option in [ITI-18] Registry Stored Query (CP-ITI-1323).
+                The registry of the XDS tutorial serves this query as well.
             </action>
         </release>
         <release version="5.2.0" description="IPF 5.2.0" date="26 May 2026">

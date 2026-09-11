@@ -137,4 +137,40 @@ public class EbXMLRemoveMetadataRequest30 implements EbXMLRemoveMetadataRequest<
     public RemoveObjectsRequest getInternal() {
         return removeObjectsRequest;
     }
+
+    @Override
+    public String getRequestId() {
+        return removeObjectsRequest.getId();
+    }
+
+    @Override
+    public void setRequestId(String requestId) {
+        removeObjectsRequest.setId(requestId);
+    }
+
+    /**
+     * Remove Metadata selects the objects to delete, it does not return a result set, so the ebRS
+     * pagination attributes do not exist on its request type. The four methods below are inherited from
+     * {@link org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLAdhocQueryRequest} because this request
+     * does carry an AdhocQuery, and they report that there is no window rather than pretending one.
+     */
+    @Override
+    public Integer getStartIndex() {
+        return null;
+    }
+
+    @Override
+    public void setStartIndex(Integer startIndex) {
+        // no result set to window into
+    }
+
+    @Override
+    public Integer getMaxResults() {
+        return null;
+    }
+
+    @Override
+    public void setMaxResults(Integer maxResults) {
+        // no result set to window into
+    }
 }

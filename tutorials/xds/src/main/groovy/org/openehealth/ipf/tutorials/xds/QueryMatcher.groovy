@@ -45,6 +45,35 @@ class QueryMatcher {
     }
 
     static def matches(DocumentEntry entry, FindDocumentsQuery query) {
+        matchesFindDocuments(entry, query)
+    }
+
+    /**
+     * FindDocumentsExclude is a FindDocuments query with a second set of parameters naming the values
+     * that must <em>not</em> occur in the returned metadata (ITI TF-2: 3.18.4.1.2.3.7.15). Groovy
+     * dispatches on the runtime type of the query, so this overload is chosen for it and the inherited
+     * criteria are applied by delegating to the shared implementation -- a cast would not help, as it
+     * does not change the runtime type and would call this method again.
+     * <p>
+     * Each excluding parameter is mutually exclusive with its non-excluding counterpart, which the
+     * request validator enforces, so the two sets never contradict each other here.
+     */
+    static def matches(DocumentEntry entry, FindDocumentsExcludeQuery query) {
+        matchesFindDocuments(entry, query) &&
+        none(query.excludedClassCodes) { matchesCode(it, entry.classCode) } &&
+        none(query.excludedTypeCodes) { matchesCode(it, entry.typeCode) } &&
+        none(query.excludedFormatCodes) { matchesCode(it, entry.formatCode) } &&
+        none(query.excludedHealthcareFacilityTypeCodes) { matchesCode(it, entry.healthcareFacilityTypeCode) } &&
+        none(query.excludedPracticeSettingCodes) { matchesCode(it, entry.practiceSettingCode) } &&
+        evalExcludedQueryList(query.excludedEventCodes, entry.eventCodeList) &&
+        evalExcludedQueryList(query.excludedConfidentialityCodes, entry.confidentialityCodes) &&
+        matchesNoAuthor(query.excludedAuthorPersons, entry.authors) &&
+        containsNot(query.excludedDocumentEntryTypes, entry.type) &&
+        evalReferenceIdList(query.referenceIds, entry.referenceIdList) &&
+        evalExcludedReferenceIdList(query.excludedReferenceIds, entry.referenceIdList)
+    }
+
+    private static def matchesFindDocuments(DocumentEntry entry, FindDocumentsQuery query) {
         equals(query.patientId, entry.patientId) &&
         contains(query.status, entry.availabilityStatus) &&
         isInRange(query.creationTime, entry.creationTime) &&
