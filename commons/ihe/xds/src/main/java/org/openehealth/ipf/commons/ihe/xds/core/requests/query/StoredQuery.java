@@ -33,7 +33,7 @@ import java.util.Map;
  * @author Jens Riemschneider
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "StoredQuery", propOrder = {"homeCommunityId", "extraParameters"})
+@XmlType(name = "StoredQuery", propOrder = {"homeCommunityId", "extraParameters", "sortOrder"})
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public abstract class StoredQuery extends Query {
@@ -42,6 +42,21 @@ public abstract class StoredQuery extends Query {
 
     @Getter @Setter private String homeCommunityId;
     @Getter private final Map<String, QueryList<String>> extraParameters = new HashMap<>();
+
+    /**
+     * The order the result set is requested in, or null to leave it to the registry.
+     * <p>
+     * ITI-18 defines no ordering, so this is carried as an extension slot and a registry that does not
+     * implement the extension will ignore it. Sits here rather than on the individual query types
+     * because it applies to all of them, the way {@link #homeCommunityId} does.
+     * <p>
+     * Typed rather than left to {@link #getExtraParameters()}, which could carry the very same slot: this
+     * way the encoding, the slot name and the tiebreaker rule exist once instead of in every consumer and
+     * registry that speaks the extension, and the responding side gets the parsed form it needs to build
+     * a comparator from. Because of that, the slot is read back into this field rather than into the extra
+     * parameters -- setting it through those works on the wire, but it returns here.
+     */
+    @Getter @Setter private SortOrder sortOrder;
 
     /**
      * For JAXB serialization only.

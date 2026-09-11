@@ -87,6 +87,20 @@ public enum ValidationMessage {
     DOCUMENT_NOT_ALLOWED_IN_DOC_ENTRY("Document attachment is not allowed in entry with UUID=%1s"),
     UNKNOWN_QUERY_TYPE("Unknown query type: %1s", ErrorCode.UNKNOWN_STORED_QUERY),
     UNSUPPORTED_QUERY_TYPE("Query type not supported: %s"),
+    /**
+     * Only an open-ended search can return more than the requester bargained for. A lookup returns the
+     * objects whose ids the requester passed in, and for several of them a window would additionally
+     * break the associations tying the result together.
+     */
+    QUERY_TYPE_NOT_PAGEABLE("Paging is only supported for search queries, not for: %s"),
+    /** The sort order slot holds something that is not a list of metadata attribute names. */
+    INVALID_SORT_ORDER("Not a valid sort order key: '%s'"),
+    /**
+     * A window starting past the end of the result set. Answering it with an empty page would be
+     * ambiguous -- the requester could not tell it apart from a query that simply matched nothing -- so a
+     * registry rejects it instead. Only the registry can detect this, since only it knows the total.
+     */
+    START_INDEX_BEYOND_END("Start index %s is beyond the end of the result set"),
     MISSING_SQL_QUERY_TEXT("Missing SQL query text"),
     UNKNOWN_RETURN_TYPE("Unknown return type: %1s"),
     MISSING_REQUIRED_QUERY_PARAMETER("Missing required query parameter: %1s", ErrorCode.STORED_QUERY_MISSING_PARAM),

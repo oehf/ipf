@@ -31,6 +31,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SortKey
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SortOrder
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.platform.camel.ihe.xds.XdsStandardTestContainer
 
@@ -52,6 +54,7 @@ class TestIti18 extends XdsStandardTestContainer {
     def SERVICE1 = "xds-iti18://localhost:${port}/xds-iti18-service1"
     def SERVICE2 = "xds-iti18://localhost:${port}/xds-iti18-service2"
     def SAMPLE_SERVICE = "xds-iti18://localhost:${port}/myIti18Service?features=#loggingFeature"
+    def SORTING_SERVICE = "xds-iti18://localhost:${port}/xds-iti18-sorting"
 
     def SERVICE2_ADDR = "http://localhost:${port}/xds-iti18-service2"
     
@@ -105,6 +108,46 @@ class TestIti18 extends XdsStandardTestContainer {
         assert SUCCESS == sendIt(SERVICE2, 'service 2').status
         assert auditSender.messages.size() == 4
         checkAudit(EventOutcomeIndicator.Success)
+    }
+
+    /**
+     * ITI-18 has no ordering or paging of its own, so both travel as the bilaterally agreed extension:
+     * the order as the $ipfSortOrder slot, the window as the ebRS pagination attributes. This checks
+     * that they survive the actual web service round trip rather than only the in-memory transformation,
+     * and that the registry can report back what it honored.
+     */
+    @Test
+    void testSortOrderAndPagingReachTheRegistry() {
+        def sortOrder = new SortOrder(
+                SortKey.descending('$XDSDocumentEntryCreationTime'),
+                SortKey.ascending('$XDSDocumentEntryAuthorPerson')).withStableTiebreaker()
+        query.sortOrder = sortOrder
+        request.startIndex = 100
+        request.maxResults = 50
+        request.requestId = 'urn:uuid:6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd'
+
+        def response = send(SORTING_SERVICE, request, QueryResponse.class)
+
+        assert SUCCESS == response.status
+        assert sortOrder == response.honoredSortOrder
+        assert 100 == response.startIndex
+        assert 50 == response.totalResultCount
+        assert 'urn:uuid:6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd' == response.requestId
+    }
+
+    /**
+     * A query that asks for neither must reach the registry exactly as it always did -- the extension is
+     * only on the wire when it was requested.
+     */
+    @Test
+    void testWithoutTheExtensionNothingIsReported() {
+        def response = send(SORTING_SERVICE, request, QueryResponse.class)
+
+        assert SUCCESS == response.status
+        assert null == response.honoredSortOrder
+        assert null == response.startIndex
+        assert null == response.totalResultCount
+        assert null == response.requestId
     }
 
     @Test

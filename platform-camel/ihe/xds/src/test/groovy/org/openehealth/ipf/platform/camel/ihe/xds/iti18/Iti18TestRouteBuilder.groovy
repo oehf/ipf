@@ -72,6 +72,19 @@ class Iti18TestRouteBuilder extends RouteBuilder {
                 .otherwise()
                     .process { it.message.body = new QueryResponse(FAILURE) }
 
+        // Reports back what the registry received of the ordering and paging extension, so that a test
+        // can tell whether it survived the wire rather than only the in-memory transformation
+        from('xds-iti18:xds-iti18-sorting')
+            .process {
+                def request = it.in.getBody(QueryRegistry.class)
+                def response = new QueryResponse(SUCCESS)
+                response.honoredSortOrder = request.query.sortOrder
+                response.startIndex = request.startIndex
+                response.totalResultCount = request.maxResults
+                response.requestId = request.requestId
+                it.message.body = response
+            }
+
         from('xds-iti18:featuresTest?features=#policyFeature,#gzipFeature')
             .process(iti18RequestValidator())
             .process { checkValue(it, 'service 1') }

@@ -25,6 +25,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.stub.ebrs30.query.AdhocQueryResp
 import org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml.LeafClassTransformer;
 
 import jakarta.activation.DataHandler;
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SortOrder;
+import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.QuerySlotHelper;
 
 /**
  * Transforms between {@link QueryResponse} and the {@link EbXMLQueryResponse} representation.
@@ -88,6 +90,16 @@ public class QueryResponseTransformer extends LeafClassTransformer {
 
         response.getReferences().forEach(ebXML::addReference);
 
+        ebXML.setRequestId(response.getRequestId());
+        ebXML.setStartIndex(response.getStartIndex());
+        ebXML.setTotalResultCount(response.getTotalResultCount());
+        if (response.getHonoredSortOrder() != null && !response.getHonoredSortOrder().isEmpty()) {
+            ebXML.addResponseSlot(SortOrder.getSlotName(),
+                response.getHonoredSortOrder().encode().stream()
+                    .map(QuerySlotHelper::encodeAsStringList)
+                    .toArray(String[]::new));
+        }
+
         return ebXML;
     }
 
@@ -104,6 +116,12 @@ public class QueryResponseTransformer extends LeafClassTransformer {
 
         var response = new QueryResponse();
         response.setStatus(ebXML.getStatus());
+        response.setRequestId(ebXML.getRequestId());
+        response.setStartIndex(ebXML.getStartIndex());
+        response.setTotalResultCount(ebXML.getTotalResultCount());
+        response.setHonoredSortOrder(SortOrder.decode(ebXML.getResponseSlotValues(SortOrder.getSlotName()).stream()
+            .flatMap(value -> QuerySlotHelper.decodeStringList(value).stream())
+            .toList()));
 
         if (!ebXML.getErrors().isEmpty()) {
             response.setErrors(errorInfoListTransformer.fromEbXML(ebXML.getErrors()));

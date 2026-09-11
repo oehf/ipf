@@ -57,8 +57,11 @@ public class QueryRegistryTransformer {
         query.accept(new ToEbXMLVisitor(ebXML));        
 
         ebXML.setReturnType(request.getReturnType().getCode());
+        ebXML.setRequestId(request.getRequestId());
+        ebXML.setStartIndex(request.getStartIndex());
+        ebXML.setMaxResults(request.getMaxResults());
 
-        return ebXML;        
+        return ebXML;
     }
 
     /**
@@ -83,6 +86,9 @@ public class QueryRegistryTransformer {
 
         var queryRegistry = new QueryRegistry(query);
         queryRegistry.setReturnType(QueryReturnType.valueOfCode(ebXML.getReturnType()));
+        queryRegistry.setRequestId(ebXML.getRequestId());
+        queryRegistry.setStartIndex(ebXML.getStartIndex());
+        queryRegistry.setMaxResults(ebXML.getMaxResults());
 
         return queryRegistry;
     }

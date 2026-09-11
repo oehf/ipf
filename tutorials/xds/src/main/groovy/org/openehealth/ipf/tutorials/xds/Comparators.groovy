@@ -28,27 +28,75 @@ class Comparators {
      static def contains(expected, actual) { expected == null || expected.contains(actual) }
      static def any(expected, closure) { expected == null || expected.any(closure) } 
 
+     /** The excluding counterparts: nothing to exclude means nothing is excluded. */
+     static def containsNot(excluded, actual) { excluded == null || !excluded.contains(actual) }
+     static def none(excluded, closure) { excluded == null || !excluded.any(closure) }
+
      static def matchesCode(expected, actual) {
          (expected.code == null || expected.code == actual.code) && 
          (expected.schemeName == null || expected.schemeName == actual.schemeName)
      }    
 
-     static def evalQueryList(eventCodes, eventCodeList) {
-         if (eventCodes == null || eventCodes.outerList.isEmpty())
+     static def evalQueryList(codes, codeList) {
+         evalList(codes, codeList) { expected, actual -> matchesCode(expected, actual) }
+     }
+
+     /**
+      * Reference ids are carried by the query as the rendered HL7 v2 CX strings
+      * (ITI TF-2: 3.18.4.1.2.3.7.7), so they are matched against the rendering of the entry's ones.
+      */
+     static def evalReferenceIdList(referenceIds, referenceIdList) {
+         evalList(referenceIds, referenceIdList) { expected, actual ->
+             expected == Hl7v2Based.render(actual)
+         }
+     }
+
+     /**
+      * The excluding counterpart of {@link #evalQueryList}: an entry survives unless it matches the
+      * excluded query list. An entry carrying no such codes at all matches nothing and hence survives.
+      */
+     static def evalExcludedQueryList(codes, codeList) {
+         isEmpty(codes) || !evalQueryList(codes, codeList)
+     }
+
+     /** The excluding counterpart of {@link #evalReferenceIdList}. */
+     static def evalExcludedReferenceIdList(referenceIds, referenceIdList) {
+         isEmpty(referenceIds) || !evalReferenceIdList(referenceIds, referenceIdList)
+     }
+
+     /**
+      * Evaluates a query list with its AND/OR semantics: every element of the outer list must be
+      * satisfied, and an element is satisfied by any value of its inner list matching any value the
+      * entry carries.
+      */
+     private static def evalList(queryList, values, Closure matcher) {
+         if (isEmpty(queryList))
              return true
          
-         if (eventCodeList.isEmpty())
+         if (values.isEmpty())
              return false
          
-         eventCodes.outerList.every { innerList ->
+         queryList.outerList.every { innerList ->
              innerList.any { inner ->
-                 eventCodeList.any { matchesCode(inner, it) }
+                 values.any { matcher(inner, it) }
              }
          }
      }
 
+     private static def isEmpty(queryList) {
+         queryList == null || queryList.outerList.isEmpty()
+     }
+
      static def matchesAuthor(authorPerson, authors) {
          authorPerson == null || matchesAuthors([authorPerson], authors)
+     }
+
+     /**
+      * The excluding counterpart of {@link #matchesAuthors}: an entry survives unless one of its
+      * authors matches an excluded author person.
+      */
+     static def matchesNoAuthor(authorPersons, authors) {
+         authorPersons == null || authorPersons.isEmpty() || !matchesAuthors(authorPersons, authors)
      }
 
      static def matchesAuthors(authorPersons, authors) {

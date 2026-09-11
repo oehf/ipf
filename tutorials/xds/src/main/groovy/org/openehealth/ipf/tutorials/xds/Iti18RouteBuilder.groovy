@@ -18,8 +18,11 @@ package org.openehealth.ipf.tutorials.xds
 import org.apache.camel.builder.RouteBuilder
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SortOrderComparators
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.StoredQuery
 import org.openehealth.ipf.commons.ihe.xds.core.responses.QueryResponse
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage
+import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -66,6 +69,7 @@ class Iti18RouteBuilder extends RouteBuilder {
             // Dispatch to the correct query implementation
             .choice()
                 .when().exchange { queryType(it) == FIND_DOCUMENTS }.to('direct:findDocs')
+                .when().exchange { queryType(it) == FIND_DOCUMENTS_EXCLUDE }.to('direct:findDocs')
                 .when().exchange { queryType(it) == FIND_SUBMISSION_SETS }.to('direct:findSets')
                 .when().exchange { queryType(it) == FIND_FOLDERS }.to('direct:findFolders')
                 .when().exchange { queryType(it) == GET_SUBMISSION_SET_AND_CONTENTS }.to('direct:getSetAndContents')
@@ -79,6 +83,8 @@ class Iti18RouteBuilder extends RouteBuilder {
                 .when().exchange { queryType(it) == GET_RELATED_DOCUMENTS }.to('direct:getRelatedDocs')                
                 .otherwise().fail(ValidationMessage.UNKNOWN_QUERY_TYPE)
             .end()
+            // Apply the ordering and the window the consumer asked for, before anything is thrown away
+            .process { sortAndPage(it) }
             // Convert to object references if requested
             .choice()
                 .when().body({body -> body.req.returnType == QueryReturnType.OBJECT_REF } as Function )
@@ -96,7 +102,11 @@ class Iti18RouteBuilder extends RouteBuilder {
             .convertToObjectRefs{it.resp.folders}
             .convertToObjectRefs{it.resp.associations}
             
-        // FindDocumentsQuery logic
+        // FindDocumentsQuery logic -- this also serves FindDocumentsExclude, which searches the same
+        // document entries and only adds parameters naming what shall not be returned, so the whole
+        // difference is in the matching and no separate search is needed. Note that the option is
+        // defined for XDS.b only (ITI TF-1: 10.2.12), and the request validator refuses the query for
+        // ITI-38.
         from('direct:findDocs')
             .search(DOC_ENTRY).byQuery(QUERY).patientId(PATIENT_ID).into(DOCS)
 
@@ -170,5 +180,88 @@ class Iti18RouteBuilder extends RouteBuilder {
     }
 
     static def queryType(exchange) { exchange.in.body.req.query.type }
+
+    /**
+     * Serves the ordering and paging extension of ITI-18: the requested order arrives in the
+     * {@code $ipfSortOrder} slot of the stored query, the requested window in the ebRS pagination
+     * attributes of the AdhocQueryRequest.
+     * <p>
+     * Neither is defined by ITI-18, so a registry is free to ignore them -- which is precisely why this
+     * reports back what it did. Without {@code honoredSortOrder} a consumer cannot tell an applied order
+     * from an ignored one, and would have to assume the worst and sort again itself.
+     * <p>
+     * Document entries, folders and submission sets are each ordered by their own comparator, because
+     * the attribute names differ by object type -- the same concept is
+     * {@code $XDSDocumentEntryUniqueId} for a document entry and {@code $XDSFolderUniqueId} for a
+     * folder. Associations carry no orderable metadata and are left alone.
+     * <p>
+     * Windowing, on the other hand, only happens for queries that return a single kind of object, which
+     * {@link org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType#isPageable()} decides. A
+     * query such as GetSubmissionSetAndContents returns sets, folders, documents and the associations
+     * tying them together, and there is no sensible reading of "the second page" of that: cutting the
+     * lists would answer with associations whose endpoints are no longer in the response. The request
+     * validator rejects such a request before it gets here; this guard keeps the rule true for a route
+     * that does not validate.
+     */
+    static def sortAndPage(exchange) {
+        def request = exchange.in.body.req
+        def response = exchange.in.body.resp
+
+        if (!(request.query instanceof StoredQuery)) {
+            return
+        }
+        def sortOrder = request.query.sortOrder
+
+        // Order first -- a window into an undefined order can repeat and skip entries. An order naming
+        // document entry attributes yields no folder comparator and vice versa, so in practice only the
+        // kind the consumer asked about is reordered. Sorting an empty list does not count as honoring
+        // the order: a folder query ordered by a document attribute would otherwise sort no documents,
+        // report success, and leave the consumer believing its folders came back ordered.
+        def ordered = sortInPlace(response.documentEntries, SortOrderComparators.documentEntryComparator(sortOrder))
+        ordered |= sortInPlace(response.folders, SortOrderComparators.folderComparator(sortOrder))
+        ordered |= sortInPlace(response.submissionSets, SortOrderComparators.submissionSetComparator(sortOrder))
+        if (ordered) {
+            response.honoredSortOrder = sortOrder
+        }
+
+        if ((request.startIndex == null && request.maxResults == null) || !request.query.type.pageable) {
+            return
+        }
+
+        // The total is what the consumer would have received without a window, which is the point of
+        // reporting it: it can render a result count without fetching every result. Reporting it is
+        // optional, and a registry that authorizes per document against an inbound token may well omit
+        // it -- the only honest total is then the number the requester may see, and working that out
+        // means authorizing the whole match set to answer for one window. This tutorial has no
+        // authorization and the whole result in memory, so the count is free.
+        def total = response.documentEntries.size()
+        def from = request.startIndex ?: 0
+
+        // A window starting past the end is refused rather than answered with an empty page, which the
+        // consumer could not tell apart from a query that simply matched nothing. Offset zero is exempt:
+        // a search with no matches is a legitimate empty answer, not a window out of range.
+        if (from > 0 && from >= total) {
+            throw new XDSMetaDataException(ValidationMessage.START_INDEX_BEYOND_END, from)
+        }
+
+        response.totalResultCount = total
+        def to = (request.maxResults != null) ? Math.min(from + request.maxResults, total) : total
+        response.documentEntries = new ArrayList<>(response.documentEntries.subList(from, to))
+        response.startIndex = from
+    }
+
+    /**
+     * @param results    the results to order, in place
+     * @param comparator the order to apply, or null if the requested one names none of this kind's
+     *                   attributes
+     * @return whether results were actually ordered, which is what the registry reports back as honored
+     */
+    private static boolean sortInPlace(List results, Comparator comparator) {
+        if (comparator == null || results.isEmpty()) {
+            return false
+        }
+        results.sort(comparator)
+        return true
+    }
 }
 

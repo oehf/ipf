@@ -223,7 +223,18 @@ public class QuerySlotHelper {
      * @return the string list.
      */
     public List<String> toStringList(QueryParameter param) {
-        var slotValues = ebXML.getSlotValues(param.getSlotName());
+        return toStringList(param.getSlotName());
+    }
+
+    /**
+     * Retrieves a list of strings from a slot.
+     *
+     * @param slotName name of the source slot, may correspond to either
+     *                 a standard query parameter or an extra parameter.
+     * @return the string list.
+     */
+    public List<String> toStringList(String slotName) {
+        var slotValues = ebXML.getSlotValues(slotName);
         if (slotValues.isEmpty()) {
             return null;
         }

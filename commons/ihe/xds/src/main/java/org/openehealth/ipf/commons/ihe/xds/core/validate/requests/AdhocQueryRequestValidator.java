@@ -364,6 +364,10 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
         var allowedQueryTypes = ALLOWED_QUERY_TYPES.getOrDefault(profile.getInteractionId(), Collections.emptySet());
         metaDataAssert(allowedQueryTypes.contains(queryType), UNSUPPORTED_QUERY_TYPE, queryType);
 
+        if (request.getStartIndex() != null || request.getMaxResults() != null) {
+            metaDataAssert(queryType.isPageable(), QUERY_TYPE_NOT_PAGEABLE, queryType);
+        }
+
         getRules(queryType, profile).validate(request);
     }
 }
