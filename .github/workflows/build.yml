@@ -38,6 +38,11 @@ jobs:
         with:
           ignore-maven-wrapper: true
 
+      - name: Write Maven settings
+        env:
+          SETTINGS_XML: ${{ secrets.PUBLISH_SETTINGS_XML }}
+        run: printf '%s' "$SETTINGS_XML" > "$RUNNER_TEMP/settings-deploy.xml"
+
       - name: Deploy to Sonatype
         if: github.ref == 'refs/heads/master'
-        run: mvn -B deploy -DskipTests
+        run: mvn -B deploy -DskipTests --settings "$RUNNER_TEMP/settings-deploy.xml"
