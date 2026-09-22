@@ -17,17 +17,20 @@ package org.openehealth.ipf.tutorials.xds
 
 import org.apache.commons.io.IOUtils
 import org.apache.cxf.transport.servlet.CXFServlet
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.AvailabilityStatus
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.DocumentReference
 import org.openehealth.ipf.commons.ihe.xds.core.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RetrieveDocumentSet
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsExcludeQuery
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindFoldersQuery
+import org.openehealth.ipf.commons.ihe.xds.core.requests.query.GetDocumentsQuery
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryReturnType
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.SortKey
@@ -41,6 +44,7 @@ import org.openehealth.ipf.platform.camel.ihe.ws.StandardTestContainer
 import jakarta.activation.DataHandler
 
 import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.junit.jupiter.api.Assertions.assertTrue
 
 /**
  * Tests against the registry/repository.
@@ -274,6 +278,273 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
         assertEquals(3, excludeQuery(patientId) { it.excludedEventCodes = partiallyMatchingEventCodes }
                 .documentEntries.size())
     }
+
+    /**
+     * The window indexes the <em>authorized</em> set, not the match set, so a page stays full even when
+     * entries inside the scanned band are denied. If it indexed the match set, a consumer asking for
+     * twenty would receive however many of those twenty survived enforcement -- and a short page is the
+     * signal a consumer without a total uses to detect the end of the result set, so every page would
+     * look like the last one.
+     */
+    @Test
+    void testADeniedBandDoesNotShortenThePage() {
+        def patientId = seedDocuments(60).first().patientId
+        denyEveryThird()
+
+        def response = query(patientId, ascendingByUniqueId(), 0, 20)
+
+        assertEquals(Status.SUCCESS, response.status, response.toString())
+        assertEquals(20, response.documentEntries.size())
+        assertEquals(permittedUniqueIds(patientId).subList(0, 20), response.documentEntries.collect { it.uniqueId })
+    }
+
+    /**
+     * Consecutive windows are contiguous in the authorized set: the second page starts where the first
+     * one ended, not twenty <em>matches</em> in. Enforcement is invisible in the shape of the answer,
+     * which is what lets a consumer walk the result set at all.
+     */
+    @Test
+    void testStartIndexCountsAuthorizedEntries() {
+        def patientId = seedDocuments(60).first().patientId
+        denyEveryThird()
+        def permitted = permittedUniqueIds(patientId)
+
+        def first = query(patientId, ascendingByUniqueId(), 0, 10)
+        def second = query(patientId, ascendingByUniqueId(), 10, 10)
+
+        assertEquals(permitted.subList(0, 10), first.documentEntries.collect { it.uniqueId })
+        assertEquals(permitted.subList(10, 20), second.documentEntries.collect { it.uniqueId })
+        // an echoed start index of zero arrives as absent: ebRS defaults the attribute to 0, so the
+        // two are indistinguishable on the wire, exactly as on the request side
+        assertEquals(null, first.startIndex)
+        assertEquals(10, second.startIndex)
+    }
+
+    /**
+     * What the lazy fill is for: the decisions a page costs are bounded by the page, not by the match
+     * set. Enforcing everything and then slicing would take sixty decisions to return twenty, and take
+     * them again for the next page.
+     */
+    @Test
+    void testTheWindowBoundsTheDecisions() {
+        def patientId = seedDocuments(240).first().patientId
+        denyEveryThird()
+        def decisionPoint = decisionPoint()
+        decisionPoint.reset()
+
+        def response = query(patientId, ascendingByUniqueId(), 0, 20)
+
+        assertEquals(20, response.documentEntries.size())
+        // the first prefetch is the window and comes up short of it, so the loop reaches for the next
+        // rung of the ladder -- and stops there, far short of the two hundred and forty a registry that
+        // enforced the whole match set would have paid, and would have paid again for the next page
+        assertTrue(decisionPoint.decisions <= 100,
+                "decided ${decisionPoint.decisions} entries of a match set of 240 to fill a page of 20")
+        assertTrue(decisionPoint.decisions >= 20, 'a page of twenty cannot cost fewer than twenty decisions')
+        assertTrue(decisionPoint.calls <= 3, "took ${decisionPoint.calls} round trips to the decision point")
+    }
+
+    /**
+     * Permitting everything is the cheap case the block estimate starts from: one batched call, and no
+     * overshoot beyond the window.
+     */
+    @Test
+    void testPermittingEverythingCostsOneCall() {
+        def patientId = seedDocuments(60).first().patientId
+        def decisionPoint = decisionPoint()
+        decisionPoint.reset()
+
+        def response = query(patientId, ascendingByUniqueId(), 0, 20)
+
+        assertEquals(20, response.documentEntries.size())
+        assertEquals(1, decisionPoint.calls)
+        assertEquals(20, decisionPoint.decisions)
+    }
+
+    /**
+     * Above the threshold the total is omitted: the only honest total is the size of the authorized set,
+     * and producing it means deciding the entire match set to answer one window. Reporting the size of
+     * the match set instead would tell the consumer exactly how many documents are being withheld.
+     */
+    @Test
+    void testTheTotalIsOmittedAboveTheThreshold() {
+        def patientId = seedDocuments(60).first().patientId
+        denyEveryThird()
+
+        def response = query(patientId, ascendingByUniqueId(), 0, 20)
+
+        assertEquals(Status.SUCCESS, response.status, response.toString())
+        assertEquals(null, response.totalResultCount)
+        assertEquals(20, response.documentEntries.size())
+    }
+
+    /**
+     * Below the threshold deciding the whole match set is cheap regardless, so the total can be reported
+     * -- and it is the size of the authorized set, not of the match set.
+     */
+    @Test
+    void testTheTotalBelowTheThresholdCountsAuthorizedEntries() {
+        def patientId = seedDocuments(6).first().patientId
+        denyEveryThird()
+
+        def response = query(patientId, ascendingByUniqueId(), 0, 10)
+
+        assertEquals(Status.SUCCESS, response.status, response.toString())
+        assertEquals(4, response.totalResultCount)
+        assertEquals(4, response.documentEntries.size())
+    }
+
+    /**
+     * Folders are searched for, ordered and paged like documents are -- the window applies to whichever
+     * kind the query asked about, not to document entries by default.
+     */
+    @Test
+    void testAPagedFolderQuery() {
+        def patientId = registerThreeDocuments()
+
+        def query = new FindFoldersQuery()
+        query.patientId = patientId
+        query.status = [AvailabilityStatus.APPROVED]
+        query.sortOrder = new SortOrder(SortKey.ascending('$XDSFolderUniqueId')).withStableTiebreaker()
+        def queryReg = new QueryRegistry(query)
+        queryReg.returnType = QueryReturnType.LEAF_CLASS
+        queryReg.startIndex = 1
+        queryReg.maxResults = 1
+
+        def response = send(ITI18, queryReg, QueryResponse.class)
+
+        assertEquals(Status.SUCCESS, response.status, response.toString())
+        assertEquals(1, response.folders.size())
+        assertEquals(3, response.totalResultCount)
+        assertEquals(1, response.startIndex)
+    }
+
+    /**
+     * And they are enforced like documents are: a folder the requestor may not see is missing from the
+     * result, and the page is filled from what is left.
+     */
+    @Test
+    void testFoldersAreEnforced() {
+        def patientId = registerThreeDocuments()
+        def denied = queryFolders(patientId).folders.first().uniqueId
+        enforce { entry -> entry.uniqueId != denied }
+
+        def response = queryFolders(patientId)
+
+        assertEquals(Status.SUCCESS, response.status, response.toString())
+        assertEquals(2, response.folders.size())
+        assertEquals(false, response.folders.any { it.uniqueId == denied })
+    }
+
+    private def queryFolders(patientId) {
+        def query = new FindFoldersQuery()
+        query.patientId = patientId
+        query.status = [AvailabilityStatus.APPROVED]
+        def queryReg = new QueryRegistry(query)
+        queryReg.returnType = QueryReturnType.LEAF_CLASS
+        send(ITI18, queryReg, QueryResponse.class)
+    }
+
+    /**
+     * The GetDocuments call that follows a two-phase query is not pageable -- the requestor names the
+     * UUIDs -- but it is still enforced against the same policy, or the second phase becomes a way
+     * around the first.
+     */
+    @Test
+    void testTheSecondPhaseIsEnforced() {
+        def entries = seedDocuments(6)
+        denyEveryThird()
+
+        def query = new GetDocumentsQuery()
+        query.uuids = entries*.entryUuid
+        def queryReg = new QueryRegistry(query)
+        queryReg.returnType = QueryReturnType.LEAF_CLASS
+        def response = send(ITI18, queryReg, QueryResponse.class)
+
+        assertEquals(Status.SUCCESS, response.status, response.toString())
+        assertEquals(permittedUniqueIds(entries.first().patientId),
+                response.documentEntries.collect { it.uniqueId }.toSorted())
+    }
+
+    /**
+     * Leaves the decision point as the other tests expect to find it: permitting everything, and with
+     * nothing remembered. Replacing the rule is a policy change, and a policy change has to bump the
+     * epoch -- a cache that outlived one would answer from the policy that was in force before it.
+     */
+    @AfterEach
+    void restorePermitAll() {
+        decisionPoint().permitAll()
+        decisionPoint().reset()
+        appContext.getBean('cachingDecisionPoint', CachingDecisionPoint.class).invalidate()
+    }
+
+    private DemoDecisionPoint decisionPoint() {
+        appContext.getBean('decisionPoint', DemoDecisionPoint.class)
+    }
+
+    /**
+     * Denies every third document, by the numeric tail of its unique id -- a stand-in for a consent rule
+     * that has to be evaluated per document.
+     */
+    private void denyEveryThird() {
+        enforce { entry -> tailOf(entry.uniqueId) % 3 != 0 }
+    }
+
+    /**
+     * Installs a rule, and forgets what was decided under the previous one. Changing the policy is
+     * exactly the event the verdict cache has to be told about -- without that, this registry keeps
+     * answering from the consent that was in force before.
+     */
+    private void enforce(Closure<Boolean> rule) {
+        decisionPoint().rule = rule
+        appContext.getBean('cachingDecisionPoint', CachingDecisionPoint.class).invalidate()
+    }
+
+    private static int tailOf(String uniqueId) {
+        uniqueId.substring(uniqueId.lastIndexOf('.') + 1) as int
+    }
+
+    private static SortOrder ascendingByUniqueId() {
+        new SortOrder(SortKey.ascending('$XDSDocumentEntryUniqueId')).withStableTiebreaker()
+    }
+
+    /**
+     * The unique ids {@link #denyEveryThird()} leaves, in ascending order -- what the authorized set of a
+     * seeded patient looks like.
+     */
+    private def permittedUniqueIds(patientId) {
+        appContext.getBean('dataStore', DataStore.class).entries
+                .findAll { it instanceof DocumentEntry && it.patientId == patientId }
+                .collect { it.uniqueId }
+                .findAll { tailOf(it) % 3 != 0 }
+                .toSorted()
+    }
+
+    /**
+     * Puts document entries into the store directly rather than registering them over ITI-42: the point
+     * of these tests is the query side, and a match set has to be big enough for the lazy fill to have
+     * something to be lazy about.
+     */
+    private def seedDocuments(int count) {
+        def store = appContext.getBean('dataStore', DataStore.class)
+        def patientId = SampleData.createRegisterDocumentSet().documentEntries[0].patientId
+        patientId.id = UUID.randomUUID().toString()
+        def prefix = '1.2.3.' + (++seedCount) + '.'
+
+        (1..count).collect { i ->
+            def entry = SampleData.createRegisterDocumentSet().documentEntries[0]
+            entry.entryUuid = 'urn:uuid:' + UUID.randomUUID()
+            // three digits without a leading zero, so that the lexicographic order of the unique ids is
+            // their numeric order and the expected page is easy to state
+            entry.uniqueId = prefix + (100 + i)
+            entry.patientId = patientId
+            entry.availabilityStatus = AvailabilityStatus.APPROVED
+            store.store(entry)
+            entry
+        }
+    }
+
+    private static int seedCount = 0
 
     private def excludeQuery(patientId, Closure parameters) {
         def query = new FindDocumentsExcludeQuery()

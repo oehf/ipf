@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.platform.camel.ihe.fhir.iti83;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import org.hl7.fhir.r4.model.AuditEvent;
@@ -179,6 +180,31 @@ public class TestIti83WithBalpAudit extends AbstractTestIti83 {
     }
 
 
+
+    /**
+     * A query may name the patient by resource id -- {@code GET [base]/Patient/[id]/$ihe-pix} -- rather
+     * than by sourceIdentifier, and that URL carries no query string. The record still has to be a
+     * conformant PIXm one, so the criteria the transaction ran are recorded as the query the pattern
+     * requires, and the patient is named by the id without a namespace being invented for it.
+     */
+    @Test
+    public void testQueryByResourceIdIsAuditedConformantly() {
+        sendManuallyOnInstanceWithoutQuery("0815");
+        var auditEvent = FhirAuditRepository.getAuditEvents().get(0);
+
+        var queries = entitiesWithTypeAndRole(auditEvent, "2", "24");
+        assertEquals(1, queries.size(), "the query entity is missing: " + entityDescription(auditEvent));
+        assertEquals("sourceIdentifier=0815",
+            new String(queries.get(0).getQuery(), StandardCharsets.UTF_8));
+
+        var patients = entitiesWithTypeAndRole(auditEvent, "1", "1");
+        assertEquals(1, patients.size(), "the patient entity is missing: " + entityDescription(auditEvent));
+        var patient = patients.get(0).getWhat().getIdentifier();
+        assertEquals("0815", patient.getValue());
+        // the resource id names no namespace, and rendering the missing one anyway would leave the
+        // string "null" as Identifier.system, which is not an absolute URI
+        assertFalse(patient.hasSystem(), "unexpected system recorded: " + patient.getSystem());
+    }
 
     /**
      * PIXm fixes the transaction subtype as a pattern of system, code <em>and</em> display, so a

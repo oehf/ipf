@@ -51,6 +51,24 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
 
     <bean id="iti18RouteBuilder"
         class="org.openehealth.ipf.tutorials.xds.Iti18RouteBuilder">
+        <property name="pager" ref="authorizedPager"/>
+        <property name="totalCountThreshold" value="50"/>
+    </bean>
+
+    <!-- Enforcement of the ITI-18 result set. The decision point of a real registry evaluates consent
+         per document and per requestor, and is the expensive part of the transaction; this one permits
+         everything and counts what it was asked, so that the economy of the paging strategy can be
+         demonstrated. The pager fills a window by deciding as few entries as it can. -->
+    <bean id="decisionPoint" class="org.openehealth.ipf.tutorials.xds.DemoDecisionPoint"/>
+
+    <!-- Remembers verdicts, so that paging to the second page does not decide the first one again. Sits
+         between the pager and the decision point, so neither knows about it. -->
+    <bean id="cachingDecisionPoint" class="org.openehealth.ipf.tutorials.xds.CachingDecisionPoint">
+        <property name="delegate" ref="decisionPoint"/>
+    </bean>
+
+    <bean id="authorizedPager" class="org.openehealth.ipf.tutorials.xds.AuthorizedPager">
+        <property name="decisionPoint" ref="cachingDecisionPoint"/>
     </bean>
 
     <!-- The store that contains all the in-memory documents and their meta data -->    
