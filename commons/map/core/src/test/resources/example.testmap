@@ -1,0 +1,62 @@
+@name        = encounterType
+@keySystem   = 2.16.840.1.113883.12.4
+@valueSystem = 2.16.840.1.113883.5.4
+E = EMER
+I = IMP
+O = AMB
+---
+@name      = messageType
+ADT^A01 = PRPA_IN402001
+---
+@name      = vip
+@unmatched = provided
+Y = VIP
+---
+@name        = gender
+@keySystem   = 2.16.840.1.113883.12.1
+@valueSystem = 2.16.840.1.113883.5.5
+@unmatched   = fixed:other
+@reverse     = fixed:U
+M = male
+F = female
+A = other | narrower
+O = other
+U = unknown
+---
+@name      = addressUse
+@reversible = false
+H = home
+L = home
+---
+@name      = composite
+PRPA_IN201301UV02 = A01~ADT_A01
+---
+@name      = emptyValue
+@unmatched = fixed:FALLBACK
+   = 
+X =  | narrower
+---
+@name        = disjointness
+@keySystem   = urn:oid:1.2.3
+@valueSystem = urn:oid:4.5.6
+@unmatched   = fixed:FALLBACK
+a = b
+x = y | disjoint
+---
+@name        = sameSystems
+@keySystem   = urn:oid:1.2.3
+@valueSystem = urn:oid:4.5.6
+c = d
+---
+@name      = baseGender
+@unmatched = fixed:UNK
+M = male
+F = female
+---
+@name      = customGender
+@unmatched = delegate:baseGender
+X = non-binary
+---
+@name      = chainedGender
+@unmatched = delegate:customGender
+Z = other

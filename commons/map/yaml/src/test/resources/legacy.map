@@ -1,0 +1,29 @@
+mappings = {
+
+    'hl7v2v3-bidi-administrativeGender-administrativeGender'(['2.16.840.1.113883.5.1', '2.16.840.1.113883.12.1'],
+        'M' : 'M',
+        'F' : 'F',
+        'UN' : 'O',
+        '' : '',
+        (ELSE) : { 'O' },
+        ({'UN'}) : (ELSE)
+    )
+
+    'hl7v2fhir-patient-religion'(
+        'AGN': '1004',
+        'ATH': '1007',
+        (ELSE) : 'UNK'
+    )
+
+    'hl7v2v3-patient-maritalStatus'(
+        'D': 'D',
+        'L': 'A',
+        (ELSE) : { it }
+    )
+
+    atnaCodingSystem(
+        'DCM' : 'http://dicom.nema.org/resources/ontology/DCM',
+        (ELSE) : { (it && it.charAt(0).isDigit()) ? 'urn:oid:' + it : it },
+    )
+
+}

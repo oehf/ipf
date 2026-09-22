@@ -5,13 +5,25 @@
 http://www.springframework.org/schema/beans
 http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!--
+        The mappings themselves. They collect the CustomMappings beans of the application
+        context on their own, so no configurer and no post processor is needed.
+    -->
+    <bean id="mappings"
+          class="org.openehealth.ipf.commons.spring.map.SpringMappings"/>
+
+    <!--
+        The untyped MappingService over the very same mappings, for code that still needs one.
+        Deprecated as of IPF 6.0; inject "mappings" in new code.
+    -->
     <bean id="mappingService"
           class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService">
+        <constructor-arg ref="mappings"/>
     </bean>
 
     <bean id="mappingExtension"
           class="org.openehealth.ipf.commons.map.extend.MappingExtension">
-        <property name="mappingService" ref="mappingService" />
+        <property name="mappingService" ref="mappings" />
     </bean>
 
 </beans>

@@ -19,37 +19,43 @@ import org.openehealth.ipf.commons.core.config.Configurer;
 import org.openehealth.ipf.commons.core.config.OrderedConfigurer;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.spring.map.MappingResourceHolder;
-import org.openehealth.ipf.commons.spring.map.SpringBidiMappingService;
+import org.openehealth.ipf.commons.spring.map.MappingResourceTarget;
+import org.openehealth.ipf.commons.spring.map.SpringMappings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Collection;
 
 /**
- * {@link Configurer} used to add all {@link CustomMappings} 
+ * {@link Configurer} used to add all {@link CustomMappings}
  * bean occurrences from the spring application context
- * to the provided {@link SpringBidiMappingService}.
- * 
+ * to the provided {@link MappingResourceTarget}, normally a {@link SpringMappings}.
+ * <p>
+ * This is what lets an application layer its own mappings over the ones IPF ships, in whichever
+ * format each file is written in.
+ *
  * @author Boris Stanojevic
  *
- * @deprecated {@link SpringBidiMappingService} collects the {@link MappingResourceHolder} beans
- * of the application context itself, so this configurer -- and the
+ * @deprecated {@link SpringMappings} -- and the deprecated
+ * {@link org.openehealth.ipf.commons.spring.map.SpringBidiMappingService} where it still owns its
+ * mappings -- collects the {@link MappingResourceHolder} beans of the application context itself,
+ * so this configurer -- and the
  * {@link org.openehealth.ipf.commons.spring.core.config.SpringConfigurationPostProcessor} that
  * drives it -- are no longer needed:
  * <pre class="code">
- *     &lt;bean id="mappingService"
- *           class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService"/&gt;
+ *     &lt;bean id="mappings"
+ *           class="org.openehealth.ipf.commons.spring.map.SpringMappings"/&gt;
  * </pre>
- * Doing so also populates the mapping service before the {@code ContextRefreshedEvent} instead of
- * after it, so that mappings can already be resolved while beans are being initialized. Both
- * mechanisms may be active at the same time: {@link SpringBidiMappingService#setMappingResource}
+ * Doing so also populates the mappings before the {@code ContextRefreshedEvent} instead of after
+ * it, so that mappings can already be resolved while beans are being initialized. Both mechanisms
+ * may be active at the same time: {@link SpringMappings#setMappingResource(org.springframework.core.io.Resource, String)}
  * ignores resources it has already evaluated.
  */
 @Deprecated(since = "6.0.0", forRemoval = true)
 @SuppressWarnings("removal")
 public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigurer<MappingResourceHolder, R> {
 
-    private SpringBidiMappingService mappingService;
+    private MappingResourceTarget mappingService;
     
     private static final Logger log = LoggerFactory.getLogger(CustomMappingsConfigurer.class);
     
@@ -61,7 +67,10 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
      */
     @Override
     public Collection<MappingResourceHolder> lookup(Registry registry) {
-        return registry.beans(MappingResourceHolder.class).values();
+        return registry.beans(MappingResourceHolder.class).values().stream()
+                // a target that also declares resources would otherwise feed itself its own
+                .filter(holder -> holder != mappingService)
+                .toList();
     }
 
     /**
@@ -70,16 +79,17 @@ public class CustomMappingsConfigurer<R extends Registry> extends OrderedConfigu
     @Override
     public void configure(MappingResourceHolder configuration) {
         if (configuration.getMappingResources() != null) {
-            mappingService.setMappingResources(configuration.getMappingResources());
-            log.debug("Mapping scripts added {}", configuration);
+            mappingService.setMappingResources(configuration.getMappingResources(),
+                    configuration.getMappingFormat());
+            log.debug("Mapping resources added {}", configuration);
         }
     }
     
-    public SpringBidiMappingService getMappingService() {
+    public MappingResourceTarget getMappingService() {
         return mappingService;
     }
 
-    public void setMappingService(SpringBidiMappingService mappingService) {
+    public void setMappingService(MappingResourceTarget mappingService) {
         this.mappingService = mappingService;
     }
 

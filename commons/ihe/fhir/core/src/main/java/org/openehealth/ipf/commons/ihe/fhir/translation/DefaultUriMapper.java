@@ -17,49 +17,86 @@
 package org.openehealth.ipf.commons.ihe.fhir.translation;
 
 import org.openehealth.ipf.commons.map.MappingService;
+import org.openehealth.ipf.commons.map.Mappings;
 
 import java.util.Optional;
 
 /**
- * Default URI Mapper implementation that requires a {@link MappingService}
+ * Default URI Mapper implementation that requires {@link Mappings}
  * for URI-to-OID translation
  *
  * @author Christian Ohr
  * @since 3.1
  */
+@SuppressWarnings("removal")
 public class DefaultUriMapper extends AbstractUriMapper {
 
+    // exactly one of these is set; the untyped one only for the deprecated constructors
+    private final Mappings mappings;
     private final MappingService mappingService;
+
     private String uriToOidMappingKey;
     private String uriToNamespaceMappingKey;
 
+    public DefaultUriMapper(Mappings mappings) {
+        this.mappings = mappings;
+        this.mappingService = null;
+    }
+
+    public DefaultUriMapper(Mappings mappings, String uriToOidMappingKey, String uriToNamespaceMappingKey) {
+        this(mappings);
+        this.uriToOidMappingKey = uriToOidMappingKey;
+        this.uriToNamespaceMappingKey = uriToNamespaceMappingKey;
+    }
+
+    /**
+     * @deprecated as of 6.0, pass {@link Mappings} instead
+     */
+    @Deprecated(since = "6.0", forRemoval = true)
     public DefaultUriMapper(MappingService mappingService) {
+        this.mappings = null;
         this.mappingService = mappingService;
     }
 
+    /**
+     * @deprecated as of 6.0, pass {@link Mappings} instead
+     */
+    @Deprecated(since = "6.0", forRemoval = true)
     public DefaultUriMapper(MappingService mappingService, String uriToOidMappingKey, String uriToNamespaceMappingKey) {
-        this.mappingService = mappingService;
+        this(mappingService);
         this.uriToOidMappingKey = uriToOidMappingKey;
         this.uriToNamespaceMappingKey = uriToNamespaceMappingKey;
     }
 
     @Override
     protected Optional<String> mapUriToOid(String uri) {
-        return Optional.ofNullable((String) mappingService.get(uriToOidMappingKey, uri));
+        return map(uriToOidMappingKey, uri);
     }
 
     @Override
     protected Optional<String> mapOidToUri(String oid) {
-        return Optional.ofNullable((String) mappingService.getKey(uriToOidMappingKey, oid));
+        return mapReverse(uriToOidMappingKey, oid);
     }
 
     @Override
     protected Optional<String> mapUriToNamespace(String uri) {
-        return Optional.ofNullable((String) mappingService.get(uriToNamespaceMappingKey, uri));
+        return map(uriToNamespaceMappingKey, uri);
     }
 
     @Override
     protected Optional<String> mapNamespaceToUri(String namespace) {
-        return Optional.ofNullable((String) mappingService.getKey(uriToNamespaceMappingKey, namespace));
+        return mapReverse(uriToNamespaceMappingKey, namespace);
+    }
+
+    private Optional<String> map(String mapping, String key) {
+        return mappings != null
+                ? mappings.map(mapping, key)
+                : Optional.ofNullable((String) mappingService.get(mapping, key));
+    }
+
+    private Optional<String> mapReverse(String mapping, String value) {
+        return mappings != null
+                ? mappings.mapReverse(mapping, value)
+                : Optional.ofNullable((String) mappingService.getKey(mapping, value));
     }
 }

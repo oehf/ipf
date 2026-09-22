@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- an IPF XML mapping whose location does not end in .mapping.xml, so its format has to be named -->
+<mapping name="m9" keySystem="2.16.840.1.113883.12.9"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://openehealth.org/schema/ipf-commons-map.xsd">
+    <entry key="d9" value="c9"/>
+    <unmatched mode="fixed" value="c9-default"/>
+</mapping>

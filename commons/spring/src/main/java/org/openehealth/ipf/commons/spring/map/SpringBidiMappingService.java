@@ -32,7 +32,12 @@ import java.util.Collection;
 /**
  * BidiMappingService implementation that can be configured with Spring {@link Resource resources}.
  * <p>
- * The mapping service collects the {@link MappingResourceHolder} beans (usually
+ * A resource is dispatched to a loader by its file extension, so the mapping files an application
+ * registers may be in any format whose module is on the classpath - {@code .mapping.xml},
+ * {@code .mapping.yaml}, {@code .conceptmap.r4.json} or the legacy {@code .map} - and one list may
+ * mix them.
+ * <p>
+ * When this service owns its mappings, it collects the {@link MappingResourceHolder} beans (usually
  * {@link org.openehealth.ipf.commons.spring.map.config.CustomMappings} instances) of the
  * application context itself, so no further beans are required:
  *
@@ -45,17 +50,48 @@ import java.util.Collection;
  * {@code finishBeanFactoryInitialization} and thus before the {@code ContextRefreshedEvent}
  * that starts e.g. the Camel context. Contributions can be ordered relative to each other
  * with Spring's {@code @Order} / {@code Ordered} on the {@link MappingResourceHolder} bean.
+ * <p>
+ * A service constructed over a {@link SpringMappings} bean leaves the collecting to it, so that
+ * the mappings the two share are read exactly once.
  *
  * @since 3.1
+ * @deprecated as of 6.0, use {@link SpringMappings} and the typed
+ * {@link org.openehealth.ipf.commons.map.Mappings} API. This class remains as an adapter for
+ * applications still holding a {@link org.openehealth.ipf.commons.map.MappingService}, and is
+ * scheduled for removal in IPF 7.0.
  */
+@Deprecated(since = "6.0", forRemoval = true)
+@SuppressWarnings("removal")
 public class SpringBidiMappingService extends BidiMappingService
-        implements BeanFactoryAware, SmartInitializingSingleton {
+        implements MappingResourceTarget, BeanFactoryAware, SmartInitializingSingleton {
 
     private static final Logger log = LoggerFactory.getLogger(SpringBidiMappingService.class);
 
     private final Collection<Resource> resources = new ArrayList<>();
 
+    /**
+     * Whether this service owns the mappings it delegates to, i.e. whether nobody else collects
+     * the {@link MappingResourceHolder} beans into them.
+     */
+    private final boolean ownsMappings;
+
     private BeanFactory beanFactory;
+
+    public SpringBidiMappingService() {
+        this.ownsMappings = true;
+    }
+
+    /**
+     * Adapts mappings somebody else owns, so that an application can keep using the untyped
+     * service while the mappings themselves are configured, and read, through
+     * {@link SpringMappings}.
+     *
+     * @param mappings the mappings to delegate to
+     */
+    public SpringBidiMappingService(SpringMappings mappings) {
+        super(mappings);
+        this.ownsMappings = false;
+    }
 
     /**
      * @see BeanFactoryAware#setBeanFactory(BeanFactory)
@@ -67,11 +103,12 @@ public class SpringBidiMappingService extends BidiMappingService
 
     /**
      * Collects the mapping resources of all {@link MappingResourceHolder} beans of the
-     * application context and its ancestors, honouring their {@code @Order}.
+     * application context and its ancestors, honouring their {@code @Order}. Does nothing if the
+     * mappings belong to a {@link SpringMappings} bean, which collects them itself.
      */
     @Override
     public void afterSingletonsInstantiated() {
-        if (beanFactory == null) {
+        if (beanFactory == null || !ownsMappings) {
             return;
         }
         var holders = beanFactory.getBeanProvider(MappingResourceHolder.class).orderedStream().toList();
@@ -101,11 +138,12 @@ public class SpringBidiMappingService extends BidiMappingService
             setMappingScript(resource.getURL());
             resources.add(resource);
         } catch (IOException e) {
-            if (!isIgnoreResourceNotFound())
+            if (!getIgnoreResourceNotFound())
                 throw new IllegalArgumentException(resource.getFilename() + " could not be read", e);
         }
     }
 
+    @Override
     public void setMappingResources(Collection<? extends Resource> resources) {
         resources.forEach(this::setMappingResource);
     }

@@ -24,7 +24,7 @@ import ca.uhn.hl7v2.validation.builder.EncodingRuleBuilder
 import ca.uhn.hl7v2.validation.builder.MessageRuleBuilder
 import ca.uhn.hl7v2.validation.builder.PrimitiveRuleBuilder
 import org.openehealth.ipf.commons.core.config.ContextFacade
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.commons.map.extend.MappingExtensionHelper
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractSyntaxRule
@@ -48,35 +48,35 @@ class Hl7ExtensionModule {
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
     static Object map(Collection delegate, Object key) {
-        mappingService()?.get(key, normalizeCollection(delegate))
+        splitValue(mappings()?.map(str(key), joinKey(normalizeCollection(delegate)))?.orElse(null))
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
 	 static Object map(Collection delegate, Object key, Object defaultValue) {
-        mappingService()?.get(key, normalizeCollection(delegate), defaultValue)
+        splitValue(mappings()?.map(str(key), joinKey(normalizeCollection(delegate)), joinKey(defaultValue)))
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
     static Object mapReverse(Collection delegate, Object value) {
-        mappingService()?.getKey(value, normalizeCollection(delegate))
+        splitValue(mappings()?.mapReverse(str(value), joinKey(normalizeCollection(delegate)))?.orElse(null))
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
     static Object mapReverse(Collection delegate, Object value, Object defaultValue) {
-        mappingService()?.getKey(value, normalizeCollection(delegate), defaultValue)
+        splitValue(mappings()?.mapReverse(str(value), joinKey(normalizeCollection(delegate)), joinKey(defaultValue)))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     static Object methodMissing(Collection delegate, String name, Object args) {
-        MappingExtensionHelper.methodMissingLogic(mappingService(), normalizeCollection, name, args)
+        MappingExtensionHelper.methodMissingLogic(mappings(), normalizeCollection, name, args)
     }
 
     // ----------------------------------------------------------------
@@ -88,32 +88,32 @@ class Hl7ExtensionModule {
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
     static Object map(Type delegate, Object key) {
-        mappingService()?.get(key, delegate.encode())
+        splitValue(mappings()?.map(str(key), delegate.encode())?.orElse(null))
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
     static Object map(Type delegate, Object key, Object defaultValue) {
-        mappingService()?.get(key, delegate.encode(), defaultValue)
+        splitValue(mappings()?.map(str(key), delegate.encode(), joinKey(defaultValue)))
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
     static Object mapReverse(Type delegate, Object value) {
-        mappingService()?.getKey(value, delegate.encode())
+        splitValue(mappings()?.mapReverse(str(value), delegate.encode())?.orElse(null))
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
     static Object mapReverse(Type delegate, Object value, Object defaultValue) {
-        mappingService()?.getKey(value, delegate.encode(), defaultValue)
+        splitValue(mappings()?.mapReverse(str(value), delegate.encode(), joinKey(defaultValue)))
     }
 
     static Object methodMissing(Type delegate, String name, Object args) {
-        MappingExtensionHelper.methodMissingLogic(mappingService(), { delegate.encode() }, name, args)
+        MappingExtensionHelper.methodMissingLogic(mappings(), { delegate.encode() }, name, args)
     }
         
     // ----------------------------------------------------------------
@@ -219,8 +219,25 @@ class Hl7ExtensionModule {
     }
 
 
-    private static MappingService mappingService() {
-        ContextFacade.getBean(MappingService)
+    private static Mappings mappings() {
+        ContextFacade.getBean(Mappings)
+    }
+
+    private static String str(Object mappingName) {
+        mappingName?.toString()
+    }
+
+    /**
+     * A Collection used as a key is joined with the DSL's composite separator before lookup, and
+     * a composite value comes back as a List. That convention belongs to this DSL, not to the
+     * mapping model, which sees one string on either side.
+     */
+    private static String joinKey(Object x) {
+        MappingExtensionHelper.joinKey(x)
+    }
+
+    private static Object splitValue(Object x) {
+        MappingExtensionHelper.splitValue(x)
     }
 
     private static def normalizeCollection = { Collection c ->

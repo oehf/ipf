@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://openehealth.org/schema/ipf-commons-map.xsd">
+
+    <!--
+      ~ ATNA code system name -> FHIR code system URI.
+      ~
+      ~ Anything not listed is an OID written without its urn:oid: prefix, which the oidUri
+      ~ function adds; see AtnaMappingFunctions, registered through the MappingFunctionProvider
+      ~ service of this module.
+      -->
+    <mapping name="atnaCodingSystem">
+        <entry key="DCM" value="http://dicom.nema.org/resources/ontology/DCM"/>
+        <entry key="IHE Transactions" value="urn:ihe:event-type-code"/>
+        <entry key="IHE XDS Metadata" value="urn:oid:1.3.6.1.4.1.19376.1.2.6"/>
+        <entry key="RFC-3881" value="urn:ietf:rfc:3881"/>
+        <unmatched mode="function" ref="oidUri"/>
+    </mapping>
+
+</mappings>

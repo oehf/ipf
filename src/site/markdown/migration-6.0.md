@@ -151,7 +151,7 @@ and `CustomRouteBuilder` — are untouched.
     <bean id="postProcessor" class="...spring.core.config.SpringConfigurationPostProcessor"/>
 
     <!-- after -->
-    <bean id="mappingService" class="...spring.map.SpringBidiMappingService"/>
+    <bean id="mappings" class="...spring.map.SpringMappings"/>
     <bean class="...modules.hl7.config.CustomModelClassesRegistrar">
         <property name="customModelClassFactory" ref="customModelClassFactory"/>
     </bean>
@@ -159,7 +159,7 @@ and `CustomRouteBuilder` — are untouched.
 
 | Old | New |
 |-----|-----|
-| `CustomMappingsConfigurer` | nothing — `SpringBidiMappingService` collects the `MappingResourceHolder` beans itself |
+| `CustomMappingsConfigurer` | nothing — `SpringMappings` (and a `SpringBidiMappingService` that owns its mappings) collects the `MappingResourceHolder` beans itself |
 | `CustomModelClassFactoryConfigurer` | `org.openehealth.ipf.modules.hl7.config.CustomModelClassesRegistrar` |
 | Kotlin `CustomModelClassFactoryConfigurer` | `org.openehealth.ipf.modules.hl7.kotlin.config.CustomModelClassesRegistrar` |
 | `DynamicExtensionConfigurer` | `org.openehealth.ipf.commons.spring.core.extend.SpringDynamicExtensionRegistrar` |
@@ -209,7 +209,7 @@ matters.
   initialized (`SmartInitializingSingleton`), and for route builders when Spring starts its
   `Lifecycle` beans — no longer on `ContextRefreshedEvent`. Mapping definitions and custom HL7v2
   model classes are therefore in place before the Camel routes are built and started. Workarounds
-  for the previous window, in which a `MappingService` was still empty during bean initialization,
+  for the previous window, in which the mappings were still empty during bean initialization,
   are no longer needed.
 * Groovy DSL extensions are still registered before the route builders build their routes. This
   is now guaranteed by the Spring lifecycle rather than by bean registration order.
@@ -224,7 +224,8 @@ matters.
   contributed package definitions straight into that map, so an immutable one lets the context
   fail to start with an `UnsupportedOperationException`.
 * The `CustomMappingsConfigurer` and `SpringConfigurationPostProcessor` beans of
-  `IpfAutoConfiguration` are gone. Inject the `SpringBidiMappingService` instead.
+  `IpfAutoConfiguration` are gone. Inject the `SpringMappings` bean instead — or the
+  `SpringBidiMappingService` over it, which is deprecated but still auto-configured.
 
 Two related defects were fixed along the way. Spring Boot applications can now contribute custom
 HL7v2 model classes at all — the HL7v2 starter registers a `CustomModelClassesRegistrar`, whereas

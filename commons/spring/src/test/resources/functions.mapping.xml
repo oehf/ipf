@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping name="deviceType"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://openehealth.org/schema/ipf-commons-map.xsd">
+    <entry key="LEGACY" value="legacy-device"/>
+    <unmatched mode="function" ref="first4"/>
+</mapping>

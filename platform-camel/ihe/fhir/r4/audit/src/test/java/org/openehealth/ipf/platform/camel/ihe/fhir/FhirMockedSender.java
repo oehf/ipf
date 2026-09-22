@@ -23,7 +23,7 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.core.modules.api.ValidationException;
 import org.openehealth.ipf.commons.audit.queue.AbstractMockedAuditMessageQueue;
 import org.openehealth.ipf.commons.ihe.fhir.atna.translation.AuditRecordTranslator;
-import org.openehealth.ipf.commons.map.MappingService;
+import org.openehealth.ipf.commons.map.Mappings;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,11 +43,11 @@ public class FhirMockedSender implements AbstractMockedAuditMessageQueue {
     private final boolean needValidation;
     private final AuditRecordTranslator translator;
 
-    public FhirMockedSender(FhirContext fhirContext, MappingService mappingService, boolean needValidation) {
+    public FhirMockedSender(FhirContext fhirContext, Mappings mappings, boolean needValidation) {
         super();
         this.fhirContext = fhirContext;
         this.needValidation = needValidation;
-        this.translator = new AuditRecordTranslator(mappingService);
+        this.translator = new AuditRecordTranslator(mappings);
     }
 
     @Override

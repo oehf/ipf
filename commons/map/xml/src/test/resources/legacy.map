@@ -1,0 +1,41 @@
+mappings = {
+
+    'hl7v2v3-interactionId-eventStructure'(['2.16.840.1.113883.5.4', '2.16.840.1.113883.12.76'],
+        'PRPA_IN201301UV02': 'A01~ADT_A01',
+        'PRPA_IN201302UV02': 'A08~ADT_A01'
+    )
+
+    'hl7v2v3-bidi-administrativeGender-administrativeGender'(['2.16.840.1.113883.5.1', '2.16.840.1.113883.12.1'],
+        'M' : 'M',
+        'F' : 'F',
+        'UN' : 'O',
+        '' : '',
+        (ELSE) : { 'O' },
+        ({'UN'}) : (ELSE)
+    )
+
+    'hl7v2v3-patient-maritalStatus'(
+        'D': 'D',
+        'L': 'A',
+        (ELSE) : { it }
+    )
+
+    'hl7v2fhir-patient-maritalStatus'(
+        'O': 'UNK',
+        'T': 'UNK',
+        'U': 'UNK',
+        (ELSE) : 'UNK'
+    )
+
+    atnaCodingSystem(
+        'DCM'               : 'http://dicom.nema.org/resources/ontology/DCM',
+        'RFC-3881'          : 'urn:ietf:rfc:3881',
+        (ELSE)              : { (it && it.charAt(0).isDigit()) ? 'urn:oid:' + it : it },
+    )
+
+    'hl7v2fhir-patient-citizenship'(['1.0.3166', 'urn:iso:std:iso:3166'],
+        (ELSE): { it },
+        ({it}): (ELSE)
+    )
+
+}

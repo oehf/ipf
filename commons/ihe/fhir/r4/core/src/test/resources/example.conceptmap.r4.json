@@ -1,0 +1,31 @@
+{
+  "resourceType": "ConceptMap",
+  "id": "hl7v2fhir-patient-administrativeGender",
+  "url": "http://openehealth.org/ipf/ConceptMap/hl7v2fhir-patient-administrativeGender",
+  "name": "hl7v2fhir-patient-administrativeGender",
+  "status": "active",
+  "group": [
+    {
+      "source": "http://terminology.hl7.org/CodeSystem/v2-0001",
+      "target": "http://hl7.org/fhir/administrative-gender",
+      "element": [
+        {"code": "M", "target": [{"code": "male", "equivalence": "equal"}]},
+        {"code": "F", "target": [{"code": "female", "equivalence": "equal"}]},
+        {"code": "A", "target": [{"code": "other", "equivalence": "narrower"}]},
+        {"code": "O", "target": [{"code": "other", "equivalence": "equal"}]},
+        {"code": "U", "target": [{"code": "unknown", "equivalence": "equal"}]},
+        {"code": "X", "target": [{"equivalence": "unmatched"}]}
+      ],
+      "unmapped": {"mode": "fixed", "code": "other"},
+      "extension": [
+        {
+          "url": "http://openehealth.org/ipf/StructureDefinition/reverse-unmapped",
+          "extension": [
+            {"url": "mode", "valueCode": "fixed"},
+            {"url": "code", "valueCode": "O"}
+          ]
+        }
+      ]
+    }
+  ]
+}

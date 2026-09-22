@@ -13,6 +13,16 @@
 
 
     <dependencies>
+        <dependency>
+            <!-- this module ships mappings in the XML format -->
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-map-xml</artifactId>
+        </dependency>
+        <dependency>
+            <!-- this module ships mappings in the legacy .map format -->
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-map-groovy</artifactId>
+        </dependency>
         <!-- for validation -->
         <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>

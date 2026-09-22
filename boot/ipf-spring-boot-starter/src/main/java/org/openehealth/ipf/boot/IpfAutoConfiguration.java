@@ -30,6 +30,7 @@ import org.openehealth.ipf.commons.core.ssl.CustomTlsParameters;
 import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.openehealth.ipf.commons.spring.core.config.SpringRegistry;
 import org.openehealth.ipf.commons.spring.map.SpringBidiMappingService;
+import org.openehealth.ipf.commons.spring.map.SpringMappings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -51,6 +52,7 @@ import java.util.Arrays;
  */
 @Configuration
 @EnableConfigurationProperties(IpfConfigurationProperties.class)
+@SuppressWarnings("removal")
 public class IpfAutoConfiguration {
 
     public static final String SERVER_SSL_CONTEXT_PARAMETERS = "bootSslContextParameters";
@@ -65,14 +67,31 @@ public class IpfAutoConfiguration {
         return new SpringRegistry();
     }
 
-    // The mapping service dynamically collects the CustomMappings beans of the application
-    // context itself, so neither a CustomMappingsConfigurer nor a
-    // SpringConfigurationPostProcessor is required.
+    // The mappings dynamically collect the CustomMappings beans of the application context
+    // themselves, so neither a CustomMappingsConfigurer nor a SpringConfigurationPostProcessor
+    // is required.
 
+    /**
+     * The mappings themselves. Inject this, or {@link org.openehealth.ipf.commons.map.Mappings},
+     * in new code.
+     */
     @Bean
+    @ConditionalOnMissingBean(SpringMappings.class)
+    public SpringMappings mappings() {
+        return new SpringMappings();
+    }
+
+    /**
+     * The untyped mapping service over the very same mappings, for code that still needs a
+     * {@link org.openehealth.ipf.commons.map.MappingService}.
+     *
+     * @deprecated as of 6.0, inject {@link SpringMappings} instead
+     */
+    @Bean
+    @Deprecated(since = "6.0", forRemoval = true)
     @ConditionalOnMissingBean(SpringBidiMappingService.class)
-    public SpringBidiMappingService mappingService() {
-        return new SpringBidiMappingService();
+    public SpringBidiMappingService mappingService(SpringMappings mappings) {
+        return new SpringBidiMappingService(mappings);
     }
 
 

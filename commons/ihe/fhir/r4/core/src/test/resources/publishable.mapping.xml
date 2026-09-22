@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://openehealth.org/schema/ipf-commons-map.xsd">
+
+    <mapping name="hl7v2fhir-patient-administrativeGender"
+             keySystem="2.16.840.1.113883.12.1"
+             valueSystem="http://hl7.org/fhir/administrative-gender">
+        <entry key="M" value="male"/>
+        <entry key="F" value="female"/>
+        <entry key="A" value="other" equivalence="narrower"/>
+        <entry key="O" value="other"/>
+        <entry key="U" value="unknown"/>
+        <unmatched mode="fixed" value="other"/>
+        <reverse>
+            <unmatched mode="fixed" value="O"/>
+        </reverse>
+    </mapping>
+
+    <mapping name="hl7v2fhir-address-use" reversible="false"
+             keySystem="2.16.840.1.113883.5.290"
+             valueSystem="http://hl7.org/fhir/address-use">
+        <entry key="H" value="home"/>
+        <entry key="L" value="home"/>
+        <unmatched mode="provided"/>
+    </mapping>
+
+</mappings>

@@ -14,6 +14,12 @@
 
     <dependencies>
         <dependency>
+            <!-- the tests load legacy .map files -->
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-map-groovy</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-telemetry</artifactId>
             <optional>true</optional>

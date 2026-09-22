@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://openehealth.org/schema/ipf-commons-map.xsd">
+
+    <!-- the mapping of design note section 09, as XML -->
+    <mapping name="hl7v2v3-bidi-administrativeGender"
+             keySystem="2.16.840.1.113883.5.1"
+             valueSystem="2.16.840.1.113883.12.1">
+        <entry key="M" value="M"/>
+        <entry key="F" value="F"/>
+        <entry key="UN" value="O"/>
+        <entry key="" value=""/>
+        <unmatched mode="fixed" value="O"/>
+        <reverse>
+            <unmatched mode="fixed" value="UN"/>
+        </reverse>
+    </mapping>
+
+    <mapping name="hl7v2fhir-patient-administrativeGender"
+             keySystem="2.16.840.1.113883.12.1"
+             valueSystem="http://hl7.org/fhir/administrative-gender">
+        <entry key="M" value="male"/>
+        <entry key="F" value="female"/>
+        <entry key="A" value="other" equivalence="narrower"/>
+        <entry key="O" value="other"/>
+        <entry key="U" value="unknown"/>
+        <unmatched mode="fixed" value="other"/>
+    </mapping>
+
+    <!-- one-directional: several keys may share a value without an equivalence -->
+    <mapping name="hl7v2fhir-address-use" reversible="false"
+             keySystem="2.16.840.1.113883.5.290"
+             valueSystem="http://hl7.org/fhir/address-use">
+        <entry key="H" value="home"/>
+        <entry key="L" value="home"/>
+        <unmatched mode="fixed" value=""/>
+    </mapping>
+
+    <mapping name="hl7v2v3-patient-maritalStatus">
+        <entry key="D" value="D" keyDisplay="Divorced" valueDisplay="Divorced"/>
+        <entry key="M" value="M"/>
+        <!-- explicitly not the same concept, so looking 'X' up answers nothing -->
+        <entry key="X" value="U" equivalence="disjoint"/>
+        <unmatched mode="provided"/>
+    </mapping>
+
+    <mapping name="atnaCodingSystem">
+        <entry key="DCM" value="http://dicom.nema.org/resources/ontology/DCM"/>
+        <entry key="RFC-3881" value="urn:ietf:rfc:3881"/>
+        <unmatched mode="function" ref="oidUri"/>
+    </mapping>
+
+    <!--
+      ~ Specialises the mapping above by declaring only the code that differs. Anything else is
+      ~ answered by that mapping, in full, so its fallback is what finally decides.
+      -->
+    <mapping name="hl7v2fhir-patient-administrativeGender-custom">
+        <entry key="CUSTOM" value="other"/>
+        <unmatched mode="delegate" ref="hl7v2fhir-patient-administrativeGender"/>
+    </mapping>
+
+    <mapping name="strictMapping">
+        <entry key="a" value="b"/>
+        <unmatched mode="fail"/>
+    </mapping>
+
+</mappings>

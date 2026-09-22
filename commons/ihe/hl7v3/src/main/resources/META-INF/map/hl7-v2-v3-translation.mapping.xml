@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://openehealth.org/schema/ipf-commons-map.xsd">
+
+    <!--
+      ~ HL7 v3 interaction id -> HL7 v2 trigger event.
+      ~
+      ~ Until IPF 6.0 this was one mapping, hl7v2v3-interactionId-eventStructure, whose values
+      ~ were composite ("A01~ADT_A01") and split on the tilde by the mapping service. The model
+      ~ has no composite values, so the two halves are two mappings; only the trigger event was
+      ~ ever read.
+      -->
+    <mapping name="hl7v2v3-interactionId-triggerEvent"
+             keySystem="2.16.840.1.113883.5.4"
+             valueSystem="2.16.840.1.113883.12.76">
+        <entry key="PRPA_IN201301UV02" value="A01"/>
+        <entry key="PRPA_IN201302UV02" value="A08"/>
+        <entry key="PRPA_IN201304UV02" value="A40"/>
+    </mapping>
+
+    <!-- HL7 v3 interaction id -> HL7 v2 message structure -->
+    <mapping name="hl7v2v3-interactionId-messageStructure"
+             keySystem="2.16.840.1.113883.5.4"
+             valueSystem="2.16.840.1.113883.12.354">
+        <!-- ADT_A01 is the structure of both A01 and A08, so only one of them can be its inverse -->
+        <entry key="PRPA_IN201301UV02" value="ADT_A01" equivalence="narrower"/>
+        <entry key="PRPA_IN201302UV02" value="ADT_A01"/>
+        <entry key="PRPA_IN201304UV02" value="ADT_A39"/>
+    </mapping>
+
+    <mapping name="hl7v2v3-bidi-administrativeGender-administrativeGender"
+             keySystem="2.16.840.1.113883.5.1"
+             valueSystem="2.16.840.1.113883.12.1">
+        <entry key="M" value="M"/>
+        <entry key="F" value="F"/>
+        <entry key="UN" value="O"/>
+        <entry key="" value=""/>
+        <unmatched mode="fixed" value="O"/>
+        <reverse>
+            <unmatched mode="fixed" value="UN"/>
+        </reverse>
+    </mapping>
+
+    <!-- patient marital status v3 -> v2 -->
+    <mapping name="hl7v2v3-patient-maritalStatus">
+        <entry key="D" value="D"/>              <!-- divorced -->
+        <entry key="L" value="A"/>              <!-- legally separated -->
+        <entry key="M" value="M"/>              <!-- married -->
+        <entry key="S" value="S"/>              <!-- never married AKA single -->
+        <entry key="W" value="W"/>              <!-- widowed -->
+        <entry key="I" value="I"/>              <!-- interlocutory -->
+        <entry key="A" value="N"/>              <!-- annulled -->
+        <entry key="T" value="P"/>              <!-- domestic partner -->
+        <entry key="P" value="O"/>              <!-- polygamic -->
+        <unmatched mode="provided"/>            <!-- unknown stuff -->
+    </mapping>
+
+    <!-- values are of code system 2.16.840.1.113883.5.1100 -->
+    <mapping name="hl7v2v3-error-codes">
+        <entry key="101" value="SYN105"/>
+        <entry key="102" value="SYN102"/>
+        <entry key="103" value="SYN103"/>
+        <!-- 200 and 201 both report NS200; 201 stays its inverse, as before IPF 6.0 -->
+        <entry key="200" value="NS200" equivalence="narrower"/>
+        <entry key="201" value="NS200"/>
+        <entry key="202" value="NS202"/>
+        <entry key="203" value="NS203"/>
+        <unmatched mode="provided"/>
+    </mapping>
+
+    <mapping name="hl7v2v3_familyNameType-familyNameQualifier">
+        <entry key="B" value="BR"/>
+        <unmatched mode="fixed" value=""/>
+    </mapping>
+
+    <mapping name="hl7v2v3_nameTypeCode-nameUse">
+        <!-- A and S both mean P, M and B both mean BR; the later one stays the inverse -->
+        <entry key="A" value="P" equivalence="narrower"/>
+        <entry key="S" value="P"/>
+        <entry key="M" value="BR" equivalence="narrower"/>
+        <entry key="B" value="BR"/>
+        <entry key="L" value="L"/>
+        <entry key="T" value="I"/>
+        <unmatched mode="fixed" value="L"/>
+    </mapping>
+
+</mappings>

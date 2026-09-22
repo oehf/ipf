@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ Copyright 2026 the original author or authors.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~       http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!--
+  ~ Schema for IPF mapping files (*.mapping.xml). The schema has no target namespace, so a
+  ~ mapping file refers to it with
+  ~
+  ~     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  ~     xsi:noNamespaceSchemaLocation="http://openehealth.org/schema/ipf-commons-map.xsd"
+  ~
+  ~ which is what gives an IDE completion and inline error marking. The loader itself always
+  ~ validates against the copy shipped in this jar, never against a network location.
+  -->
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="unqualified"
+            attributeFormDefault="unqualified"
+            version="1.0">
+
+    <xsd:annotation>
+        <xsd:documentation>
+            A mapping file contains either a single mapping or a list of them.
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:element name="mappings" type="Mappings"/>
+    <xsd:element name="mapping" type="Mapping"/>
+
+    <xsd:complexType name="Mappings">
+        <xsd:sequence>
+            <xsd:element name="mapping" type="Mapping" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="Mapping">
+        <xsd:sequence>
+            <xsd:element name="entry" type="Entry" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="unmatched" type="Unmatched" minOccurs="0"/>
+            <xsd:element name="reverse" type="Reverse" minOccurs="0"/>
+        </xsd:sequence>
+        <xsd:attribute name="name" use="required">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Mapping name, unique across all mapping files loaded together unless the
+                    later declaration sets override.
+                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:simpleType>
+                <xsd:restriction base="xsd:string">
+                    <xsd:minLength value="1"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+        </xsd:attribute>
+        <xsd:attribute name="keySystem" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Formal identifier of the code system the keys belong to, usually an OID or
+                    a URI.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="valueSystem" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Formal identifier of the code system the values belong to.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="reversible" type="xsd:boolean" default="true">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Whether a reverse index is built. A mapping that is not reversible may map
+                    several keys onto the same value without declaring an equivalence.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="override" type="xsd:boolean" default="false">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Whether this declaration replaces a mapping of the same name that was
+                    loaded earlier. Without it, a duplicate name is a load-time error.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="Entry">
+        <xsd:annotation>
+            <xsd:documentation>
+                One key/value pair. Both sides are strings; the empty string is a legal code.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="key" type="xsd:string" use="required"/>
+        <xsd:attribute name="value" type="xsd:string" use="required"/>
+        <xsd:attribute name="equivalence" type="Equivalence" default="equal"/>
+        <xsd:attribute name="keyDisplay" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Human-readable name of the key in its code system. Informative: nothing is
+                    looked up by its display.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="valueDisplay" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Human-readable name of the value in its code system, for a caller that builds
+                    a coding out of a translation.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="Unmatched">
+        <xsd:annotation>
+            <xsd:documentation>
+                What the mapping answers with when the requested key has no entry. Omitting the
+                element means an unmatched key has no value.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:attribute name="mode" type="UnmatchedMode" use="required"/>
+        <xsd:attribute name="value" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>Required for mode "fixed", not allowed otherwise.</xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="ref" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Required for modes "function" and "delegate", not allowed otherwise. Names a
+                    function registered with the MappingFunctionRegistry, or the mapping to
+                    delegate to.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:complexType>
+
+    <xsd:complexType name="Reverse">
+        <xsd:annotation>
+            <xsd:documentation>
+                Fallback for the reverse direction, i.e. for a value that no entry maps onto.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:sequence>
+            <xsd:element name="unmatched" type="Unmatched"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name="Equivalence">
+        <xsd:annotation>
+            <xsd:documentation>
+                Degree of correspondence between key and value, using the vocabulary of FHIR
+                ConceptMap. Only "equal" and "equivalent" entries contribute to the reverse
+                index, so marking an entry "narrower" or "wider" is how several keys may share
+                a value in a reversible mapping.
+            </xsd:documentation>
+        </xsd:annotation>
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="equal"/>
+            <xsd:enumeration value="equivalent"/>
+            <xsd:enumeration value="wider"/>
+            <xsd:enumeration value="narrower"/>
+            <xsd:enumeration value="inexact"/>
+            <xsd:enumeration value="disjoint"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="UnmatchedMode">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="absent">
+                <xsd:annotation>
+                    <xsd:documentation>An unmatched key has no value.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="provided">
+                <xsd:annotation>
+                    <xsd:documentation>The key itself is the value.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="fixed">
+                <xsd:annotation>
+                    <xsd:documentation>The constant given by the value attribute.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="function">
+                <xsd:annotation>
+                    <xsd:documentation>The result of the function named by the ref attribute.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="delegate">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        Whatever the mapping named by the ref attribute answers, asked in full, so
+                        that mapping's own unmatched decides the outcome. It must already be loaded.
+                    </xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="fail">
+                <xsd:annotation>
+                    <xsd:documentation>An unmatched key is an error.</xsd:documentation>
+                </xsd:annotation>
+            </xsd:enumeration>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
