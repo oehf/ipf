@@ -54,7 +54,28 @@ class Iti18RouteBuilder extends RouteBuilder {
     static final def FORMAT_CODES = 'req.query.formatCodes'
     static final def ASSOC_TYPES = 'req.query.associationTypes'
     static final def PATIENT_ID = 'req.query.patientId'
-    
+
+    /**
+     * Fills a window of the result set the requestor is allowed to see, deciding as few document entries
+     * as it can. Defaulted so that the route works unconfigured; a deployment replaces the decision point
+     * behind it with one that evaluates real policy.
+     */
+    AuthorizedPager pager = new AuthorizedPager(decisionPoint: new DemoDecisionPoint())
+
+    /**
+     * Match set size at or below which {@code totalResultCount} is still reported.
+     * <p>
+     * The only honest total over an enforced result set is the size of the <em>authorized</em> set, and
+     * producing it means deciding the entire match set to answer one window -- the cost the lazy fill
+     * exists to avoid, and work thrown away if the consumer never asks for a second page. Reporting the
+     * size of the <em>match</em> set instead would be worse than saying nothing: it is not the number the
+     * consumer will page to, and the difference between it and what arrives says exactly how many
+     * documents are being withheld. So the total is reported in the one case where it is honest anyway --
+     * a match set small enough that deciding all of it is cheap regardless -- and omitted above it. An
+     * absent total is a defined answer; the consumer detects the end of the set by the short page.
+     */
+    int totalCountThreshold = 50
+
     @Override
     void configure() throws Exception {
         errorHandler(noErrorHandler())
@@ -83,8 +104,10 @@ class Iti18RouteBuilder extends RouteBuilder {
                 .when().exchange { queryType(it) == GET_RELATED_DOCUMENTS }.to('direct:getRelatedDocs')                
                 .otherwise().fail(ValidationMessage.UNKNOWN_QUERY_TYPE)
             .end()
-            // Apply the ordering and the window the consumer asked for, before anything is thrown away
-            .process { sortAndPage(it) }
+            // Apply the ordering, the policy and the window the consumer asked for -- before anything is
+            // thrown away, and before a projection to object references takes the metadata the policy
+            // reads out of the result
+            .process { sortAuthorizeAndPage(it) }
             // Convert to object references if requested
             .choice()
                 .when().body({body -> body.req.returnType == QueryReturnType.OBJECT_REF } as Function )
@@ -202,15 +225,23 @@ class Iti18RouteBuilder extends RouteBuilder {
      * lists would answer with associations whose endpoints are no longer in the response. The request
      * validator rejects such a request before it gets here; this guard keeps the rule true for a route
      * that does not validate.
+     * <p>
+     * Results are additionally enforced against the {@link AuthorizationDecisionPoint}, on every path
+     * rather than only on the paged one: whether a consumer asked for a window must not decide whether
+     * policy applies. The lazy fill of {@link AuthorizedPager} is an economy a bounded window makes
+     * available, not the enforcement itself, and a {@code Get...} query -- the second phase of a
+     * two-phase query, where the requestor names the UUIDs it already holds -- has to pass the same
+     * policy, or the second phase becomes a way around the first.
+     * <p>
+     * Documents, folders and submission sets are each enforced, because each of them is what a stored
+     * query may search for and each carries metadata a policy can read. Associations are the exception
+     * this demonstration leaves open: they are returned unfiltered even when they point at a denied
+     * object, which hands the consumer the identifier of something it may not see.
      */
-    static def sortAndPage(exchange) {
+    def sortAuthorizeAndPage(exchange) {
         def request = exchange.in.body.req
         def response = exchange.in.body.resp
-
-        if (!(request.query instanceof StoredQuery)) {
-            return
-        }
-        def sortOrder = request.query.sortOrder
+        def sortOrder = (request.query instanceof StoredQuery) ? request.query.sortOrder : null
 
         // Order first -- a window into an undefined order can repeat and skip entries. An order naming
         // document entry attributes yields no folder comparator and vice versa, so in practice only the
@@ -224,30 +255,97 @@ class Iti18RouteBuilder extends RouteBuilder {
             response.honoredSortOrder = sortOrder
         }
 
+        def requestor = requestorOf(exchange)
+
         if ((request.startIndex == null && request.maxResults == null) || !request.query.type.pageable) {
+            // No window to fill, so there is no prefix to find and nothing to stop early for: every
+            // match gets decided. This is also the path every Get... query takes.
+            RESULT_LISTS.each { list -> response."$list" = authorizeAll(requestor, response."$list") }
             return
         }
 
-        // The total is what the consumer would have received without a window, which is the point of
-        // reporting it: it can render a result count without fetching every result. Reporting it is
-        // optional, and a registry that authorizes per document against an inbound token may well omit
-        // it -- the only honest total is then the number the requester may see, and working that out
-        // means authorizing the whole match set to answer for one window. This tutorial has no
-        // authorization and the whole result in memory, so the count is free.
-        def total = response.documentEntries.size()
-        def from = request.startIndex ?: 0
+        // A pageable query searches for one kind of object -- FindDocuments for documents, FindFolders
+        // for folders, FindSubmissionSets for submission sets -- so the window applies to whichever list
+        // came back with something in it. Which one it was no longer matters once the result is empty:
+        // the rules below read the same for all three.
+        def windowed = RESULT_LISTS.find { !response."$it".isEmpty() } ?: RESULT_LISTS.first()
+        RESULT_LISTS.findAll { it != windowed }.each { list ->
+            response."$list" = authorizeAll(requestor, response."$list")
+        }
+        def matched = response."$windowed"
 
-        // A window starting past the end is refused rather than answered with an empty page, which the
-        // consumer could not tell apart from a query that simply matched nothing. Offset zero is exempt:
-        // a search with no matches is a legitimate empty answer, not a window out of range.
-        if (from > 0 && from >= total) {
+        // A start index at or below zero means "from the beginning", and a negative maxResults means
+        // unbounded -- ebRS defaults both attributes and cannot tell absent from zero on arrival.
+        def from = Math.max((request.startIndex ?: 0) as int, 0)
+        def limit = (request.maxResults == null || request.maxResults < 0) ? null : request.maxResults as Integer
+
+        if (matched.size() <= totalCountThreshold) {
+            // Small enough that deciding all of it is cheap regardless, which is the one case in which a
+            // total can be reported honestly: it is the size of the authorized set, not of the match set.
+            def authorized = authorizeAll(requestor, matched)
+
+            // A window starting past the end is refused rather than answered with an empty page, which
+            // the consumer could not tell apart from a query that simply matched nothing. Offset zero is
+            // exempt: a search with no matches -- or whose every match is denied -- is a legitimate empty
+            // answer, not a window out of range.
+            if (from > 0 && from >= authorized.size()) {
+                throw new XDSMetaDataException(ValidationMessage.START_INDEX_BEYOND_END, from)
+            }
+
+            def to = (limit != null) ? Math.min(from + limit, authorized.size()) : authorized.size()
+            response."$windowed" = new ArrayList<>(authorized.subList(from, to))
+            response.totalResultCount = authorized.size()
+            response.startIndex = from
+            return
+        }
+
+        // Above the threshold the total is omitted, and with it the only thing that could have answered
+        // a count-only request: maxResults=0 asks for a number this registry has declined to produce.
+        if (limit == 0) {
+            response."$windowed" = []
+            response.startIndex = from
+            return
+        }
+
+        def page = pager.fill(requestor, matched.iterator(), from, limit)
+
+        // The one case that costs a full scan and a full pass of enforcement, and there is nothing
+        // cheaper: the registry cannot know the size of the authorized set without producing it. It is
+        // pathological by construction -- a consumer paging in sequence reaches a short page first.
+        if (from > 0 && page.entries.isEmpty()) {
             throw new XDSMetaDataException(ValidationMessage.START_INDEX_BEYOND_END, from)
         }
 
-        response.totalResultCount = total
-        def to = (request.maxResults != null) ? Math.min(from + request.maxResults, total) : total
-        response.documentEntries = new ArrayList<>(response.documentEntries.subList(from, to))
+        log.debug('decided {} of {} matched {} to fill a window of {} at {}',
+                page.decided, matched.size(), windowed, page.entries.size(), from)
+
+        response."$windowed" = page.entries
         response.startIndex = from
+    }
+
+    /**
+     * The response lists a stored query can return a window of, in the order they are looked at.
+     * Associations are not among them: they tie other objects together, so a window over them would
+     * answer with associations whose endpoints are no longer in the response.
+     */
+    static final def RESULT_LISTS = ['documentEntries', 'folders', 'submissionSets']
+
+    /**
+     * Enforces the policy over a whole list, in blocks. Used where no window bounds the work: a query
+     * that asked for no page, and every {@code Get...} query.
+     */
+    private List authorizeAll(String requestor, List documentEntries) {
+        documentEntries.isEmpty() ? documentEntries : pager.fill(requestor, documentEntries.iterator(), 0, null).entries
+    }
+
+    /**
+     * Whoever the query arrived on behalf of. This tutorial has no security context, so everyone is the
+     * same anonymous requestor unless a header says otherwise; a registry reads the subject of the SAML
+     * assertion or JWT the transaction carries, and its entitlements are what the decision point decides
+     * against.
+     */
+    static String requestorOf(exchange) {
+        exchange.in.getHeader('requestor', 'anonymous', String.class)
     }
 
     /**

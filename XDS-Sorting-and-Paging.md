@@ -253,7 +253,9 @@ Map.of("$ourOwnAttribute", SortOrderComparators.sortableBy(
 ```
 
 `tutorials/xds` implements the whole registry side of this, including the acknowledgement, and is the
-place to look for a worked example.
+place to look for a worked example. It also serves the window against an authorized result set, which
+is what a registry that enforces per document has to do — see
+[Paging an authorized result set](XDS-Paging-And-Authorization.md).
 
 ## Errors
 
@@ -273,7 +275,8 @@ the total is not known until it has.
   produces duplicates and gaps. IPF mints no cursor: `requestId` correlates, it does not freeze. If this
   matters, keyset pagination — "the fifty after (creationTime, entryUUID)" — is stable without server
   state and composes with the total order the tiebreaker already guarantees. The correlation id and the
-  response slot list are the hooks a continuation token would ride on, so adding one later is additive.
+  response slot list are the hooks a continuation token would ride on, so adding one later is additive —
+  [Paging an authorized result set](XDS-Paging-And-Authorization.md) sketches one.
 - **XCA.** An initiating gateway forwards the slots, but responding communities will not honour them, so
   order across communities stays undefined even when each community sorts.
 - **Non-XDS sort keys.** Anything without an XDS metadata counterpart — FHIR's `_lastUpdated`, say —

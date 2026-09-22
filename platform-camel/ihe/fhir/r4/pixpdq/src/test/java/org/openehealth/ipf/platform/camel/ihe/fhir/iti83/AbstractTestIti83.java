@@ -89,6 +89,22 @@ abstract class AbstractTestIti83 extends FhirTestContainer {
                 .execute();
     }
 
+    /**
+     * Sends the query naming the patient by resource id alone: no parameters, and no {@code _format}
+     * either, so that the request URL carries no query string at all. That is the shape a client which
+     * states its encoding in the Accept header sends, and the one that leaves the transaction with
+     * nothing to take the query of the audit record from.
+     */
+    protected Parameters sendManuallyOnInstanceWithoutQuery(String resourceId) {
+        return client.operation()
+                .onInstance(new IdType("Patient", resourceId))
+                .named(Iti83Constants.PIXM_OPERATION_NAME)
+                .withNoParameters(Parameters.class)
+                .useHttpGet()
+                .returnResourceType(Parameters.class)
+                .execute();
+    }
+
     protected Parameters sendViaProducer(PixmQueryParametersIn requestData) {
         return producerTemplate.requestBody("direct:input", requestData, Parameters.class);
     }
