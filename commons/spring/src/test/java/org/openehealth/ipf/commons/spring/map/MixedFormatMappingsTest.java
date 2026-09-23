@@ -24,13 +24,11 @@ import org.springframework.core.io.Resource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.hasItems;
-import static org.hamcrest.Matchers.is;
 import static org.openehealth.ipf.commons.core.hamcrest.OptionalMatchers.hasValue;
 import static org.openehealth.ipf.commons.map.hamcrest.MappingMatchers.doesNotTranslate;
 import static org.openehealth.ipf.commons.map.hamcrest.MappingMatchers.translates;
@@ -44,7 +42,6 @@ import static org.openehealth.ipf.commons.map.hamcrest.MappingMatchers.translate
  */
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/context-mixed-mappings.xml")
-@SuppressWarnings("removal")
 public class MixedFormatMappingsTest {
 
     // The mapping each fixture contributes, named after the format it is written in rather than

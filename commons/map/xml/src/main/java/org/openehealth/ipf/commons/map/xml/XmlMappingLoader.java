@@ -24,6 +24,7 @@ import org.openehealth.ipf.commons.map.Mapping;
 import org.openehealth.ipf.commons.map.MappingException;
 import org.openehealth.ipf.commons.map.MappingFunctionRegistry;
 import org.openehealth.ipf.commons.map.MappingLoader;
+import org.openehealth.ipf.commons.map.SimpleMapping;
 import org.openehealth.ipf.commons.map.Unmatched;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -114,7 +115,7 @@ public class XmlMappingLoader implements MappingLoader {
     // ------------------------------------------------------------------ binding to model
 
     private static Mapping toMapping(MappingXml.Mapping xml, URI source, MappingFunctionRegistry functions) {
-        var builder = Mapping.builder(xml.name)
+        var builder = SimpleMapping.builder(xml.name)
                 .keySystem(xml.keySystem)
                 .valueSystem(xml.valueSystem)
                 .reversible(xml.reversible == null || xml.reversible)

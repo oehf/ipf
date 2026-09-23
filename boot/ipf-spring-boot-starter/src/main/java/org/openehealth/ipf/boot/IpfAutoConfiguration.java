@@ -28,11 +28,13 @@ import org.apache.camel.support.jsse.TrustManagersParameters;
 import org.openehealth.ipf.commons.core.config.Registry;
 import org.openehealth.ipf.commons.core.ssl.CustomTlsParameters;
 import org.openehealth.ipf.commons.core.ssl.TlsParameters;
+import org.openehealth.ipf.commons.map.Mappings;
 import org.openehealth.ipf.commons.spring.core.config.SpringRegistry;
 import org.openehealth.ipf.commons.spring.map.SpringBidiMappingService;
 import org.openehealth.ipf.commons.spring.map.SpringMappings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -76,7 +78,9 @@ public class IpfAutoConfiguration {
      * in new code.
      */
     @Bean
-    @ConditionalOnMissingBean(SpringMappings.class)
+    // Mappings, not SpringMappings: the DSLs resolve Mappings, so any application bean of that
+    // type must replace this one rather than stand next to it as a second candidate
+    @ConditionalOnMissingBean(Mappings.class)
     public SpringMappings mappings() {
         return new SpringMappings();
     }
@@ -90,6 +94,7 @@ public class IpfAutoConfiguration {
     @Bean
     @Deprecated(since = "6.0", forRemoval = true)
     @ConditionalOnMissingBean(SpringBidiMappingService.class)
+    @ConditionalOnBean(SpringMappings.class)
     public SpringBidiMappingService mappingService(SpringMappings mappings) {
         return new SpringBidiMappingService(mappings);
     }

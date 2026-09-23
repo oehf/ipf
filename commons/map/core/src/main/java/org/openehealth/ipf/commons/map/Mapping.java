@@ -15,117 +15,81 @@
  */
 package org.openehealth.ipf.commons.map;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * One named translation table, independent of the file format it was written in.
- * <p>
- * This is the single model that every {@link MappingLoader} produces and that
- * {@link Mappings} serves. It carries the entries, the identifiers of the two code systems
- * involved, and the fallback behavior for either direction.
+ * A named translation from one code system into another, as {@link Mappings} serves it and a
+ * {@link MappingLoader} produces it. A lookup by name works the same for either kind:
+ * <ul>
+ *     <li>a {@link SimpleMapping} is a translation table - entries of its own and a fallback for
+ *     either direction. Every mapping format reads into one and writes one;</li>
+ *     <li>a {@link CompositeMapping} holds no entries but the names of simple mappings, its
+ *     parts, and answers through them. Loaders create one where a source spreads a single
+ *     translation over several tables, such as the groups of a FHIR ConceptMap.</li>
+ * </ul>
+ * Both kinds answer every accessor declared here, so a caller inspecting a mapping need not know
+ * its kind in advance. What only a table has - {@link #entries()}, the fallbacks and
+ * {@link #reversible()} - a composite cannot report, since it holds nothing but the names of its
+ * parts; it throws {@link UnsupportedOperationException} for these. To inspect what a mapping of
+ * either kind declares, ask {@link Mappings#entries(String)} by name, which resolves the parts.
  *
- * @param name             mapping name, unique within a {@link Mappings} instance
- * @param keySystem        formal identifier (usually an OID or a URI) of the key code system,
- *                         may be {@code null}
- * @param valueSystem      formal identifier of the value code system, may be {@code null}
- * @param entries          the key/value pairs, in declaration order
- * @param unmatched        what to answer when a key has no entry, never {@code null}
- * @param reverseUnmatched what to answer when a value has no entry, never {@code null}
- * @param reversible       whether a reverse index is built at all. A one-directional mapping
- *                         may legally map several keys onto the same value
- * @param override         whether this declaration is meant to replace a mapping of the same name
- *                         loaded earlier. Without it, a duplicate name is a load-time error
  * @since 6.0
  */
-public record Mapping(
-        String name,
-        String keySystem,
-        String valueSystem,
-        List<Entry> entries,
-        Unmatched unmatched,
-        Unmatched reverseUnmatched,
-        boolean reversible,
-        boolean override) {
-
-    public Mapping {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("A mapping requires a name");
-        }
-        entries = entries == null ? List.of() : List.copyOf(entries);
-        unmatched = unmatched == null ? Unmatched.ABSENT : unmatched;
-        reverseUnmatched = reverseUnmatched == null ? Unmatched.ABSENT : reverseUnmatched;
-    }
-
-    public static Builder builder(String name) {
-        return new Builder(name);
-    }
+public sealed interface Mapping permits SimpleMapping, CompositeMapping {
 
     /**
-     * Mutable helper for {@link MappingLoader} implementations, which assemble a mapping
-     * incrementally while walking their source document.
+     * @return mapping name, unique within a {@link Mappings} instance
      */
-    public static final class Builder {
+    String name();
 
-        private final String name;
-        private final List<Entry> entries = new ArrayList<>();
-        private String keySystem;
-        private String valueSystem;
-        private Unmatched unmatched = Unmatched.ABSENT;
-        private Unmatched reverseUnmatched = Unmatched.ABSENT;
-        private boolean reversible = true;
-        private boolean override;
+    /**
+     * @return formal identifier (usually an OID or a URI) of the key code system, may be
+     * {@code null}
+     */
+    String keySystem();
 
-        private Builder(String name) {
-            this.name = name;
-        }
+    /**
+     * @return formal identifier of the value code system, may be {@code null}
+     */
+    String valueSystem();
 
-        public Builder keySystem(String keySystem) {
-            this.keySystem = keySystem;
-            return this;
-        }
+    /**
+     * @return whether this declaration is meant to replace a mapping of the same name loaded
+     * earlier. Without it, a duplicate name is a load-time error
+     */
+    boolean override();
 
-        public Builder valueSystem(String valueSystem) {
-            this.valueSystem = valueSystem;
-            return this;
-        }
+    /**
+     * @return the key/value pairs, in declaration order
+     * @throws UnsupportedOperationException for a {@link CompositeMapping}, whose entries are
+     *                                       those of its parts; see {@link Mappings#entries(String)}
+     */
+    List<Entry> entries();
 
-        public Builder entry(String key, String value) {
-            return entry(new Entry(key, value));
-        }
+    /**
+     * @return what to answer when a key has no entry
+     * @throws UnsupportedOperationException for a {@link CompositeMapping}, which falls back
+     *                                       through its parts
+     */
+    Unmatched unmatched();
 
-        public Builder entry(String key, String value, Equivalence equivalence) {
-            return entry(new Entry(key, value, equivalence));
-        }
+    /**
+     * @return what to answer when a value has no entry
+     * @throws UnsupportedOperationException for a {@link CompositeMapping}, which falls back
+     *                                       through its parts
+     */
+    Unmatched reverseUnmatched();
 
-        public Builder entry(Entry entry) {
-            entries.add(entry);
-            return this;
-        }
+    /**
+     * @return whether a reverse index is built at all
+     * @throws UnsupportedOperationException for a {@link CompositeMapping}, whose parts decide
+     *                                       this each for themselves
+     */
+    boolean reversible();
 
-        public Builder unmatched(Unmatched unmatched) {
-            this.unmatched = unmatched;
-            return this;
-        }
-
-        public Builder reverseUnmatched(Unmatched reverseUnmatched) {
-            this.reverseUnmatched = reverseUnmatched;
-            return this;
-        }
-
-        public Builder reversible(boolean reversible) {
-            this.reversible = reversible;
-            return this;
-        }
-
-        public Builder override(boolean override) {
-            this.override = override;
-            return this;
-        }
-
-        public Mapping build() {
-            return new Mapping(name, keySystem, valueSystem, entries, unmatched, reverseUnmatched,
-                    reversible, override);
-        }
-    }
+    /**
+     * @return the names of the mappings a {@link CompositeMapping} asks, in order; empty for a
+     * {@link SimpleMapping}
+     */
+    List<String> parts();
 }

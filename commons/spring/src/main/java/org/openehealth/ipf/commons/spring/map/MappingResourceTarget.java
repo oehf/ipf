@@ -48,15 +48,6 @@ public interface MappingResourceTarget {
      * @param format    a {@link org.openehealth.ipf.commons.map.MappingLoader#format() format id}
      *                  such as {@code xml} or {@code conceptmap-r4-json}, or {@code null} to dispatch
      *                  by file extension
-     * @throws UnsupportedOperationException if this target reads one fixed format, which is the
-     *                                       case for the deprecated {@link SpringBidiMappingService}
      */
-    default void setMappingResources(Collection<? extends Resource> resources, String format) {
-        if (format != null && !format.isBlank()) {
-            throw new UnsupportedOperationException(getClass().getSimpleName() + " reads mapping"
-                    + " resources in one fixed format and cannot be told to read '" + format
-                    + "'. Wire a SpringMappings bean instead");
-        }
-        setMappingResources(resources);
-    }
+    void setMappingResources(Collection<? extends Resource> resources, String format);
 }

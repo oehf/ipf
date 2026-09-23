@@ -49,6 +49,30 @@ scan the registered mappings, so resolve the mapping once rather than per messag
 error and raises `IllegalArgumentException`; an unknown *code* within a known mapping yields an
 empty `Optional`.
 
+Where the caller builds a coded value from the answer, `translate` returns it as a `Translation`
+together with the code system it belongs to and its display:
+
+```java
+mappings.translate("kdl-ihe-typecode|2025", "UB140101")
+// Translation[code=UNK, system=http://terminology.hl7.org/CodeSystem/v3-NullFlavor, display=Unbekannt]
+```
+
+The system is that of the mapping which actually answered — the part of a composite, the target of
+a delegating fallback, the key system for an identity fallback — so it can differ from the
+`valueSystem` of the mapping asked. `translateReverse` does the same in the other direction.
+
+`Mapping` is a sealed interface with two kinds. A `SimpleMapping` is a table: entries, and a
+fallback for either direction. A `CompositeMapping` has no entries of its own and asks other
+mappings — its `parts()` — in turn: the first part that declares the code answers, and only if
+none does, the first part whose fallback answers. Lookups by name work the same for both, and so
+does `entries(name)`, which for a composite lists the entries of its parts. The ConceptMap loader
+creates a composite for a resource with several groups; no file format declares one, and no writer
+writes one — write its parts. The parts must be simple mappings registered before it.
+
+Both kinds answer the same accessors, so code inspecting a mapping need not know its kind. What only
+a table has — `entries()`, `unmatched()`, `reverseUnmatched()`, `reversible()` — a composite cannot
+report and throws `UnsupportedOperationException` for; `parts()` of a simple mapping is empty.
+
 `MappingService`, `BidiMappingService` and `SpringBidiMappingService` are **deprecated as of 6.0
 and go away in 7.0**. They still work for existing applications and answer what `Mappings`
 answers, with `null` where it returns an empty `Optional`. The two string conventions of IPF 5.x —
@@ -81,7 +105,10 @@ wants the typed API.
   has one to put in it.
 * **Key system and value system** — formal identifiers, usually OIDs or URIs.
 * **An equivalence per entry** — `equal`, `equivalent`, `wider`, `narrower`, `inexact` or
-  `disjoint`, borrowed from FHIR ConceptMap. Only `equal` and `equivalent` entries build the
+  `disjoint`, borrowed from FHIR ConceptMap. It says how the **key** relates to the value:
+  `narrower` means the key is the narrower concept, as `A` (adoption) is narrower than `other`.
+  FHIR R4 states the same relation from the target's side, so a ConceptMap writes that entry as
+  `wider`; the ConceptMap loader and writer translate between the two. Only `equal` and `equivalent` entries build the
   reverse index, which is how several keys may share a value and the value still has exactly one
   inverse. Two invertible entries sharing a value is a load-time error.
 
@@ -188,7 +215,7 @@ write `AGN: "1004"`, not `AGN: 1004`.
     "target": "http://hl7.org/fhir/administrative-gender",
     "element": [
       {"code": "M", "target": [{"code": "male",    "equivalence": "equal"}]},
-      {"code": "A", "target": [{"code": "other",   "equivalence": "narrower"}]},
+      {"code": "A", "target": [{"code": "other",   "equivalence": "wider"}]},
       {"code": "O", "target": [{"code": "other",   "equivalence": "equal"}]},
       {"code": "U", "target": [{"code": "unknown", "equivalence": "equal"}]}
     ],
@@ -216,17 +243,41 @@ portable either:
 |---------------------------------------------|------------------|------------------------------------|----------------------------------------|
 | `.../StructureDefinition/mapping-name`      | `group`          | `valueString`                      | the name to register the mapping under |
 | `.../StructureDefinition/reversible`        | `group`          | `valueBoolean`                     | `reversible="false"`                   |
-| `.../StructureDefinition/reverse-unmapped`  | `group`          | nested `mode`, `code` / `function` | the reverse direction's fallback       |
+| `.../StructureDefinition/reverse-unmapped`  | `group`          | nested `mode`, `code` / `function` / `delegate` | the reverse direction's fallback |
 | `.../StructureDefinition/unmapped-function` | `group.unmapped` | `valueString`                      | a computed fallback                    |
+| `.../StructureDefinition/unmapped-fail`     | `group.unmapped` | `valueBoolean`                     | an unmapped code is an error           |
+| `.../StructureDefinition/override`          | `group`          | `valueBoolean`                     | `override="true"`                      |
 
-All four are prefixed `http://openehealth.org/ipf`, and `ConceptMapExtensions` defines their URLs
+All six are prefixed `http://openehealth.org/ipf`, and `ConceptMapExtensions` defines their URLs
 and shapes once for both the loader and the writer. They are plain extensions rather than a HAPI
 custom resource class because every one of them sits on a **backbone element** — `group` or
 `group.unmapped` — and typing those would mean redeclaring `ConceptMap`'s own `group` child with a
 different component type.
 
-Without `mapping-name`, a mapping is named after the resource's `name`, `id` or the last segment
-of its `url`; groups after the first get `#<index>` appended.
+Without `mapping-name`, a mapping is named after the resource's canonical rather than its `name`,
+which publishers tend to change between releases:
+
+* the base is the last segment of `url`, falling back to `name` and then `id`;
+* a `version` is appended as `|version`, as in a FHIR canonical reference; without one the name
+  has no trailing `|`;
+* a resource with a single group becomes one mapping named by the base;
+* in a resource with several groups, every group is named by the base plus `#` and the last
+  segment of its `target`, and the base names a composite of all groups in declaration order. No
+  group is privileged — FHIR gives their order no meaning — and a caller consuming a third-party
+  ConceptMap needs to know neither which groups it has nor which one holds a code. The composite
+  answers like `$translate` without a target system; `translate` says which group's system the
+  answer belongs to. A resource whose groups all carry `mapping-name` — as `ConceptMapWriter`
+  writes them — holds exactly the mappings its groups name, and no composite is added.
+
+So one resource can be loaded in several versions side by side. The KDL ConceptMap, published
+yearly under the same canonical, becomes `kdl-ihe-typecode|2024` and `kdl-ihe-typecode|2025` —
+each answering for both of its groups, `kdl-ihe-typecode|2025#IHEXDStypeCode` and
+`kdl-ihe-typecode|2025#v3-NullFlavor`, which can also be asked on their own. An `other-map`
+fallback refers to the canonical (optionally `url|version`) and resolves to the resource as a
+whole. A canonical without a version finds the only version registered — `…/kdl-ihe-typecode`
+finds `kdl-ihe-typecode|2025` if no other version is loaded — and is rejected as ambiguous when
+several are. The target is settled when the delegating mapping is registered, so loading a further
+version later does not change it.
 
 A delegating fallback is native: `unmapped.mode = other-map` with a `url`, whose last path segment
 names the mapping to delegate to — the same rule this loader uses to name a resource that carries no
@@ -243,9 +294,12 @@ loader for another version can claim `.conceptmap.r5.json` and sit on the same c
 semantic difference is the rename of `target.equivalence` to `target.relationship`, which collapses
 onto the same `Equivalence`.
 
-ConceptMap has more than the model uses (several targets per element, `relatedto`, `subsumes`,
-`specializes`); the loader folds what it can and logs or rejects the rest rather than dropping it
-silently. R4 only — R5's rename of `target.equivalence` to `target.relationship` is the only
+ConceptMap has more than the model uses, and the loader folds what it can and reports the rest
+rather than dropping it silently. `relatedto` becomes `inexact`, and `subsumes`/`specializes`
+become `narrower`/`wider`. Of several targets per element, the entry is the first equal or
+equivalent one, else the first that translates at all; disjoint targets stay disjoint entries, and
+any further translating target is left out with a warning. A target with `dependsOn` or `product`
+holds only under a condition the model cannot state, so it is left out with a warning as well. R4 only — R5's rename of `target.equivalence` to `target.relationship` is the only
 semantic difference to absorb if an R5 loader lands later.
 
 ### Legacy Groovy DSL — `.map`
@@ -366,9 +420,11 @@ are dispatched by file extension, so one list may mix formats:
 
 `SpringMappings` collects every `CustomMappings` bean of the application context itself — no
 configurer and no post processor — which is how an application layers its own mappings over the
-ones IPF ships. Collecting happens before the `ContextRefreshedEvent`, so mappings already resolve
-while beans are being initialized, and contributions can be ordered relative to each other with
-Spring's `@Order` / `Ordered` on the `CustomMappings` bean. Two ways to layer:
+ones IPF ships. Collecting happens once all singletons have been instantiated, before the
+`ContextRefreshedEvent` — so the mappings are complete when Camel builds its routes, though not yet
+inside a `@PostConstruct` method. Contributions can be ordered relative to each other with Spring's
+`@Order` / `Ordered` on the `CustomMappings` bean; IPF's own are read first, so an application's can
+override or delegate to them. Two ways to layer:
 
 ```xml
 <!-- replace it: the later mapping wins wholesale, so it must restate everything it keeps -->
@@ -388,9 +444,9 @@ intact and needs only the codes that differ, at the cost of a second name.
 `SpringMappings` rather than of a holder, so it is applied while the bean is created — before any
 `CustomMappings` bean contributes a resource that names one of them.
 
-Unlike the deprecated `SpringBidiMappingService`, `SpringMappings` holds the model's constraints: a
-duplicate mapping name is an error unless the later declaration says `override`, and a value with
-two inverses is an error. Both can be relaxed with `allowOverride` and `allowReverseCollisions` for
+`SpringMappings` holds the model's constraints — and so does the deprecated `SpringBidiMappingService`,
+which reads into one: a duplicate mapping name is an error unless the later declaration says
+`override`, and a value with two inverses is an error. Both can be relaxed with `allowOverride` and `allowReverseCollisions` for
 a source that cannot state the intent — which is what the legacy `.map` loader does for itself, so
 script files keep working under the strict defaults.
 

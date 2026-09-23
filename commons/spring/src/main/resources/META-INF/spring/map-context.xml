@@ -21,9 +21,4 @@ http://www.springframework.org/schema/beans/spring-beans.xsd">
         <constructor-arg ref="mappings"/>
     </bean>
 
-    <bean id="mappingExtension"
-          class="org.openehealth.ipf.commons.map.extend.MappingExtension">
-        <property name="mappingService" ref="mappings" />
-    </bean>
-
 </beans>

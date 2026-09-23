@@ -18,15 +18,11 @@ package org.openehealth.ipf.commons.spring.map;
 
 import lombok.NonNull;
 import org.openehealth.ipf.commons.map.BidiMappingService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.core.io.Resource;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -51,8 +47,9 @@ import java.util.Collection;
  * that starts e.g. the Camel context. Contributions can be ordered relative to each other
  * with Spring's {@code @Order} / {@code Ordered} on the {@link MappingResourceHolder} bean.
  * <p>
- * A service constructed over a {@link SpringMappings} bean leaves the collecting to it, so that
- * the mappings the two share are read exactly once.
+ * Reading resources is left to a {@link SpringMappings}: one this service creates for itself, or,
+ * with {@link #SpringBidiMappingService(SpringMappings)}, the application's bean, which then does
+ * the collecting so that the mappings the two share are read exactly once.
  *
  * @since 3.1
  * @deprecated as of 6.0, use {@link SpringMappings} and the typed
@@ -65,9 +62,7 @@ import java.util.Collection;
 public class SpringBidiMappingService extends BidiMappingService
         implements MappingResourceTarget, BeanFactoryAware, SmartInitializingSingleton {
 
-    private static final Logger log = LoggerFactory.getLogger(SpringBidiMappingService.class);
-
-    private final Collection<Resource> resources = new ArrayList<>();
+    private final SpringMappings mappings;
 
     /**
      * Whether this service owns the mappings it delegates to, i.e. whether nobody else collects
@@ -75,22 +70,27 @@ public class SpringBidiMappingService extends BidiMappingService
      */
     private final boolean ownsMappings;
 
-    private BeanFactory beanFactory;
-
     public SpringBidiMappingService() {
-        this.ownsMappings = true;
+        this(new SpringMappings(), true);
     }
 
     /**
      * Adapts mappings somebody else owns, so that an application can keep using the untyped
      * service while the mappings themselves are configured, and read, through
-     * {@link SpringMappings}.
+     * {@link SpringMappings}. The {@link SpringMappings} must be a bean of the application context,
+     * since it collects the {@link MappingResourceHolder} beans itself; one created in place and
+     * handed in here never does.
      *
      * @param mappings the mappings to delegate to
      */
     public SpringBidiMappingService(SpringMappings mappings) {
+        this(mappings, false);
+    }
+
+    private SpringBidiMappingService(SpringMappings mappings, boolean ownsMappings) {
         super(mappings);
-        this.ownsMappings = false;
+        this.mappings = mappings;
+        this.ownsMappings = ownsMappings;
     }
 
     /**
@@ -98,7 +98,9 @@ public class SpringBidiMappingService extends BidiMappingService
      */
     @Override
     public void setBeanFactory(@NonNull BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
+        if (ownsMappings) {
+            mappings.setBeanFactory(beanFactory);
+        }
     }
 
     /**
@@ -108,44 +110,42 @@ public class SpringBidiMappingService extends BidiMappingService
      */
     @Override
     public void afterSingletonsInstantiated() {
-        if (beanFactory == null || !ownsMappings) {
-            return;
+        if (ownsMappings) {
+            mappings.afterSingletonsInstantiated();
         }
-        var holders = beanFactory.getBeanProvider(MappingResourceHolder.class).orderedStream().toList();
-        log.debug("Number of mapping resource holder beans: {}", holders.size());
-        holders.forEach(holder -> setMappingResources(holder.getMappingResources()));
     }
 
     public Collection<? extends Resource> getMappingResources() {
-        return resources;
+        return mappings.getMappingResources();
     }
 
     /**
-     * Evaluates the given mapping resource, unless it has been registered before. Skipping
-     * already known resources keeps the mapping service idempotent, so that a contribution
-     * reaching it both directly and through a deprecated
-     * {@link org.openehealth.ipf.commons.spring.map.config.CustomMappingsConfigurer} is only
-     * evaluated once.
-     *
-     * @param resource mapping resource
+     * @see SpringMappings#setMappingResource(Resource)
      */
-    public synchronized void setMappingResource(Resource resource) {
-        if (resources.contains(resource)) {
-            log.debug("Mapping resource {} is already registered, skipping", resource.getFilename());
-            return;
-        }
-        try {
-            setMappingScript(resource.getURL());
-            resources.add(resource);
-        } catch (IOException e) {
-            if (!getIgnoreResourceNotFound())
-                throw new IllegalArgumentException(resource.getFilename() + " could not be read", e);
-        }
+    public void setMappingResource(Resource resource) {
+        mappings.setMappingResource(resource);
     }
 
     @Override
     public void setMappingResources(Collection<? extends Resource> resources) {
-        resources.forEach(this::setMappingResource);
+        mappings.setMappingResources(resources);
+    }
+
+    @Override
+    public void setMappingResources(Collection<? extends Resource> resources, String format) {
+        mappings.setMappingResources(resources, format);
+    }
+
+    /**
+     * Whether a resource that does not exist or cannot be read is skipped instead of failing the
+     * context. Applies to the {@link SpringMappings} this service reads into.
+     */
+    public void setIgnoreResourceNotFound(boolean ignoreResourceNotFound) {
+        mappings.setIgnoreResourceNotFound(ignoreResourceNotFound);
+    }
+
+    public boolean getIgnoreResourceNotFound() {
+        return mappings.isIgnoreResourceNotFound();
     }
 
 }

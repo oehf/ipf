@@ -68,6 +68,18 @@ public final class ConceptMapExtensions {
      */
     public static final String UNMAPPED_FUNCTION = BASE + "unmapped-function";
 
+    /**
+     * On {@code group.unmapped}, {@code valueBoolean}: an unmapped code is an error rather than
+     * answered at all, which none of ConceptMap's own modes says.
+     */
+    public static final String UNMAPPED_FAIL = BASE + "unmapped-fail";
+
+    /**
+     * On {@code group}, {@code valueBoolean}: the mapping is meant to replace one of the same name
+     * loaded earlier.
+     */
+    public static final String OVERRIDE = BASE + "override";
+
     /** Nested in {@link #REVERSE_UNMAPPED}, {@code valueCode}: {@code provided}, {@code fixed} or {@code fail}. */
     public static final String MODE = "mode";
 
@@ -97,6 +109,14 @@ public final class ConceptMapExtensions {
         return stringValue(group.getExtensionByUrl(REVERSIBLE)).map(Boolean::parseBoolean);
     }
 
+    public static boolean override(ConceptMap.ConceptMapGroupComponent group) {
+        return booleanValue(group.getExtensionByUrl(OVERRIDE));
+    }
+
+    public static boolean unmappedFail(ConceptMap.ConceptMapGroupUnmappedComponent unmapped) {
+        return booleanValue(unmapped.getExtensionByUrl(UNMAPPED_FAIL));
+    }
+
     public static Optional<Extension> reverseUnmapped(ConceptMap.ConceptMapGroupComponent group) {
         return Optional.ofNullable(group.getExtensionByUrl(REVERSE_UNMAPPED));
     }
@@ -121,6 +141,14 @@ public final class ConceptMapExtensions {
 
     public static void setReversible(ConceptMap.ConceptMapGroupComponent group, boolean reversible) {
         group.addExtension(new Extension(REVERSIBLE, new BooleanType(reversible)));
+    }
+
+    public static void setOverride(ConceptMap.ConceptMapGroupComponent group) {
+        group.addExtension(new Extension(OVERRIDE, new BooleanType(true)));
+    }
+
+    public static void setUnmappedFail(ConceptMap.ConceptMapGroupUnmappedComponent unmapped) {
+        unmapped.addExtension(new Extension(UNMAPPED_FAIL, new BooleanType(true)));
     }
 
     public static void setUnmappedFunction(ConceptMap.ConceptMapGroupUnmappedComponent unmapped, String ref) {
@@ -154,6 +182,10 @@ public final class ConceptMapExtensions {
     private static Optional<String> stringValue(Extension extension) {
         return extension == null || !extension.hasValue()
                 ? Optional.empty()
-                : Optional.ofNullable(((Element) extension.getValue()).primitiveValue());
+                : Optional.ofNullable(extension.getValue().primitiveValue());
+    }
+
+    private static boolean booleanValue(Extension extension) {
+        return extension != null && extension.getValue() instanceof BooleanType value && value.booleanValue();
     }
 }

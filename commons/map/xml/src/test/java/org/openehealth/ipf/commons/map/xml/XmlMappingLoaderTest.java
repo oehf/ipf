@@ -16,14 +16,19 @@
 package org.openehealth.ipf.commons.map.xml;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+import org.openehealth.ipf.commons.map.Entry;
 import org.openehealth.ipf.commons.map.Equivalence;
 import org.openehealth.ipf.commons.map.MappingException;
-import org.openehealth.ipf.commons.map.MappingLoaders;
 import org.openehealth.ipf.commons.map.Mappings;
+import org.openehealth.ipf.commons.map.SimpleMapping;
 import org.openehealth.ipf.commons.map.Unmatched;
 
+import java.io.IOException;
 import java.net.URI;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -217,7 +222,7 @@ public class XmlMappingLoaderTest {
     public void readsButDoesNotApplyADisjointEntry() {
         var mappings = example();
 
-        assertThat(mappings.mapping(MARITAL_STATUS) .orElseThrow().entries().get(2).equivalence(),
+        assertThat(mappings.mapping(MARITAL_STATUS).orElseThrow().entries().get(2).equivalence(),
                 is(Equivalence.DISJOINT));
         assertThat(mappings.lookup(MARITAL_STATUS, "X"), hasNoValue());
         // the mapping's own fallback still applies, as it does to any key it does not translate
@@ -252,5 +257,25 @@ public class XmlMappingLoaderTest {
         assertThat(mappings, translates(ATNA_CODING_SYSTEM, "1.2.3").to("urn:oid:1.2.3"));
         assertThat(mappings, translates(ENCOUNTER_CLASS, "I").to("IMP"));
         assertThat(mappings, translates(ENCOUNTER_CLASS, "X").to("X"));
+    }
+
+    /**
+     * Every value is an attribute, and a parser turns a literal tab, line feed or carriage return
+     * in an attribute into a space; written as character references they come back as they were.
+     * A character XML cannot represent at all is rejected rather than written unreadably.
+     */
+    @Test
+    public void whitespaceSurvivesAndIllegalCharactersAreRejected(@TempDir Path directory) throws IOException {
+        var mapping = SimpleMapping.builder("whitespace")
+                .entry(new Entry("a\tb", "c\nd", Equivalence.EQUAL, "tab\tkey", "line\r\nvalue"))
+                .build();
+
+        var target = directory.resolve("whitespace.mapping.xml");
+        Files.writeString(target, new XmlMappingWriter().toXml(List.of(mapping)));
+        assertThat(Mappings.builder().load(target.toUri()).build().mapping("whitespace").orElseThrow(), is(mapping));
+
+        var control = SimpleMapping.builder("control").entry("a\u0001", "b").build();
+        var e = assertThrows(IllegalArgumentException.class, () -> new XmlMappingWriter().toXml(List.of(control)));
+        assertThat(e.getMessage(), containsString("a character XML cannot represent"));
     }
 }

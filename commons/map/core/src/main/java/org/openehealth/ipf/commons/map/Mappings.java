@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Typed front door to a set of {@link Mapping}s, whatever format they were loaded from.
@@ -76,6 +77,10 @@ public interface Mappings {
     List<Mapping> mappingsFor(String keySystem, String valueSystem);
 
     /**
+     * Where a {@link CompositeMapping} matches together with some of its parts, the composite
+     * stands for them: it answers for all of them, so asking the whole of a ConceptMap by its
+     * source system finds the ConceptMap rather than failing on its groups.
+     *
      * @param keySystem   identifier of the key code system, or {@code null} for any
      * @param valueSystem identifier of the value code system, or {@code null} for any
      * @return the single mapping translating between the two systems, empty if there is none
@@ -85,7 +90,11 @@ public interface Mappings {
      * @see #mappingsFor(String, String)
      */
     default Optional<Mapping> mappingFor(String keySystem, String valueSystem) {
-        var found = mappingsFor(keySystem, valueSystem);
+        var matching = mappingsFor(keySystem, valueSystem);
+        var covered = matching.stream()
+                .flatMap(mapping -> mapping.parts().stream())
+                .collect(Collectors.toSet());
+        var found = matching.stream().filter(mapping -> !covered.contains(mapping.name())).toList();
         if (found.size() > 1) {
             throw new IllegalArgumentException(found.size() + " mappings translate from '"
                     + keySystem + "' to '" + valueSystem + "': "
@@ -96,7 +105,7 @@ public interface Mappings {
     }
 
     /**
-     * Looks up a key without applying the mapping's {@link Mapping#unmatched() unmatched}
+     * Looks up a key without applying the mapping's {@link SimpleMapping#unmatched() unmatched}
      * behavior.
      *
      * @param mapping mapping name
@@ -108,7 +117,7 @@ public interface Mappings {
 
     /**
      * Looks up a value without applying the mapping's
-     * {@link Mapping#reverseUnmatched() reverse unmatched} behavior.
+     * {@link SimpleMapping#reverseUnmatched() reverse unmatched} behavior.
      *
      * @param mapping mapping name
      * @param value   right side of the mapping
@@ -184,6 +193,45 @@ public interface Mappings {
     }
 
     /**
+     * Maps a key like {@link #map(String, String)}, and says which code system the answer belongs
+     * to and how it is displayed - what a caller needs to build a coded value from it.
+     * <p>
+     * The system is that of the mapping which actually answered: a
+     * {@link CompositeMapping composite} answers with the system of the part that had the
+     * answer, a {@link Unmatched.Delegate delegating} fallback with that of the mapping delegated
+     * to. An {@link Unmatched.Identity identity} fallback answers with the key itself, and so with
+     * the key system.
+     * <p>
+     * The default implementation knows none of that and answers with the mapping's value system
+     * and no display; {@link DefaultMappings} overrides it.
+     *
+     * @param mapping mapping name
+     * @param key     left side of the mapping
+     * @return the mapped value with its system and display, falling back to the mapping's
+     * unmatched behavior
+     * @throws IllegalArgumentException if the mapping name is not registered
+     */
+    default Optional<Translation> translate(String mapping, String key) {
+        return map(mapping, key)
+            .map(value -> new Translation(value, valueSystem(mapping).orElse(null), null));
+    }
+
+    /**
+     * Maps a value back like {@link #mapReverse(String, String)}, and says which code system the
+     * answer belongs to and how it is displayed.
+     *
+     * @param mapping mapping name
+     * @param value   right side of the mapping
+     * @return the key mapping to that value with its system and display, falling back to the
+     * mapping's reverse unmatched behavior
+     * @throws IllegalArgumentException if the mapping name is not registered
+     * @see #translate(String, String)
+     */
+    default Optional<Translation> translateReverse(String mapping, String value) {
+        return mapReverse(mapping, value).map(key -> new Translation(key, keySystem(mapping).orElse(null), null));
+    }
+
+    /**
      * @param mapping mapping name
      * @return formal identifier of the key code system, empty if the mapping declares none
      * @throws IllegalArgumentException if the mapping name is not registered
@@ -202,7 +250,8 @@ public interface Mappings {
      * @return the keys this mapping translates, in declaration order. A key declared only by a
      * {@link Equivalence#DISJOINT} entry is not among them, because it does not translate, and
      * neither are the keys of a mapping this one delegates to - these are the keys this mapping
-     * declares. Changes to the set do not change the mapping
+     * declares. For a {@link CompositeMapping composite} they are the keys of all its parts.
+     * Changes to the set do not change the mapping
      * @throws IllegalArgumentException if the mapping name is not registered
      */
     Set<String> keys(String mapping);
@@ -217,9 +266,30 @@ public interface Mappings {
     Collection<String> values(String mapping);
 
     /**
-     * @return the functions available to {@link Unmatched.Computed} fallbacks
+     * The entries a mapping declares, whatever its kind: those of a {@link SimpleMapping}, and for
+     * a {@link CompositeMapping} those of its parts, in part order. Unlike {@link #keys(String)},
+     * this is the declaration - {@link Equivalence#DISJOINT disjoint} entries included, and a key
+     * declared by several parts listed once per part.
+     *
+     * @param mapping mapping name
+     * @return the declared entries, in declaration order
+     * @throws IllegalArgumentException if the mapping name is not registered
      */
-    MappingFunctionRegistry functions();
+    default List<Entry> entries(String mapping) {
+        var declared = mapping(mapping)
+                .orElseThrow(() -> new IllegalArgumentException("Unknown key " + mapping));
+        if (declared instanceof CompositeMapping composite) {
+            return composite.parts().stream().flatMap(part -> entries(part).stream()).toList();
+        }
+        return declared.entries();
+    }
+
+    /**
+     * @return read access to the functions available to {@link Unmatched.Computed} fallbacks.
+     * Functions are registered while building, with {@link Builder#function}; a built instance
+     * cannot be changed through what this returns
+     */
+    MappingFunctions functions();
 
     static Builder builder() {
         return new Builder();
@@ -244,7 +314,7 @@ public interface Mappings {
          * Functions must be registered before the source that refers to them is loaded.
          */
         public Builder function(String name, Function<String, String> function) {
-            pending().functions().register(name, function);
+            pending().registerFunction(name, function);
             return this;
         }
 
@@ -254,6 +324,14 @@ public interface Mappings {
          */
         public Builder allowOverride(boolean allowOverride) {
             pending().setAllowOverride(allowOverride);
+            return this;
+        }
+
+        /**
+         * @see DefaultMappings#setAllowReverseCollisions(boolean)
+         */
+        public Builder allowReverseCollisions(boolean allowReverseCollisions) {
+            pending().setAllowReverseCollisions(allowReverseCollisions);
             return this;
         }
 
@@ -316,7 +394,7 @@ public interface Mappings {
         public Builder load(URI uri, String format) {
             try {
                 return load(uri.toURL(), format);
-            } catch (MalformedURLException e) {
+            } catch (MalformedURLException | IllegalArgumentException e) {
                 throw new MappingException(uri, "Not a readable mapping location", e);
             }
         }
@@ -352,7 +430,7 @@ public interface Mappings {
                         ? Mappings.class.getResource(path)
                         : Mappings.class.getClassLoader().getResource(path);
                 if (resource == null) {
-                    throw new MappingException(URI.create(location), "Mapping resource not found");
+                    throw new MappingException(safeUri(location), "Mapping resource not found");
                 }
                 return resource;
             }

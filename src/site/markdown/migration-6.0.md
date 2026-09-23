@@ -131,7 +131,14 @@ built on it are deprecated and will be removed in the next major release:
 
 Everything listed above keeps working in IPF 6.0, and the old and the new mechanism may be active
 at the same time without any contribution being applied twice. **Spring Boot applications need no
-changes at all**, apart from the two exceptions described at the end of this section.
+changes at all**, apart from the exceptions described at the end of this section.
+
+One thing does change for a context without Spring Boot: the Groovy and Kotlin mapping DSLs
+(`'M'.map('gender')` and the like) now resolve a bean of type `Mappings` rather than a
+`MappingService`. A context declaring only a `SpringBidiMappingService`, like the "before" below,
+starts, but every DSL call fails with `NoSuchBeanDefinitionException`. Declare a `SpringMappings`
+bean, and construct the `SpringBidiMappingService` over it if code still needs the untyped
+service — which is what the "after" below does.
 
 The contribution beans themselves — `CustomMappings`, `CustomModelClasses`, `DynamicExtension`
 and `CustomRouteBuilder` — are untouched.
@@ -152,6 +159,10 @@ and `CustomRouteBuilder` — are untouched.
 
     <!-- after -->
     <bean id="mappings" class="...spring.map.SpringMappings"/>
+    <!-- only where code still needs the untyped MappingService -->
+    <bean id="mappingService" class="...spring.map.SpringBidiMappingService">
+        <constructor-arg ref="mappings"/>
+    </bean>
     <bean class="...modules.hl7.config.CustomModelClassesRegistrar">
         <property name="customModelClassFactory" ref="customModelClassFactory"/>
     </bean>
@@ -205,12 +216,13 @@ matters.
 
 #### Behavioural changes
 
-* **Contributions are collected earlier.** Collecting now happens while the singletons are being
-  initialized (`SmartInitializingSingleton`), and for route builders when Spring starts its
+* **Contributions are collected earlier.** Collecting now happens once all singletons have been
+  instantiated (`SmartInitializingSingleton`), and for route builders when Spring starts its
   `Lifecycle` beans — no longer on `ContextRefreshedEvent`. Mapping definitions and custom HL7v2
-  model classes are therefore in place before the Camel routes are built and started. Workarounds
-  for the previous window, in which the mappings were still empty during bean initialization,
-  are no longer needed.
+  model classes are therefore in place before the Camel routes are built and started. They are
+  still not in place *during* bean initialization: a `@PostConstruct` method or
+  `afterPropertiesSet()` sees only the resources set on the mappings bean directly, not those
+  contributed through `CustomMappings`.
 * Groovy DSL extensions are still registered before the route builders build their routes. This
   is now guaranteed by the Spring lifecycle rather than by bean registration order.
 * `CustomRouteBuilderConfigurer` looks up the `CamelContext` itself if the application context
@@ -226,6 +238,12 @@ matters.
 * The `CustomMappingsConfigurer` and `SpringConfigurationPostProcessor` beans of
   `IpfAutoConfiguration` are gone. Inject the `SpringMappings` bean instead — or the
   `SpringBidiMappingService` over it, which is deprecated but still auto-configured.
+* The auto-configured `SpringMappings` backs off as soon as the application declares any bean
+  of type `Mappings`, since the mapping DSLs resolve that type and would otherwise find two. An
+  application declaring its own `SpringBidiMappingService` should construct it over the
+  `SpringMappings` bean; one that owns its mappings is not what the DSLs see.
+* IPF's own `CustomMappings` contributions are read first, so an application's `CustomMappings`
+  can override a shipped mapping or delegate to it, whatever order it declares.
 
 Two related defects were fixed along the way. Spring Boot applications can now contribute custom
 HL7v2 model classes at all — the HL7v2 starter registers a `CustomModelClassesRegistrar`, whereas
@@ -262,6 +280,14 @@ into one mapping per component, or join and split the parts in the calling code:
 
 The `.map` loader logs a warning for each mapping that uses the convention.
 
+For the same reason, the HL7 v2/v3 translators ask two new mappings instead of
+`hl7v2v3-interactionId-eventStructure`, whose values were composites like `A01~ADT_A01`:
+`hl7v2v3-interactionId-triggerEvent` (`A01`) and `hl7v2v3-interactionId-messageStructure`
+(`ADT_A01`). `map('…eventStructure')[0]` becomes `map('…triggerEvent')`. Both mappings are in
+`hl7-v2-v3-translation.mapping.xml`, and in the legacy `hl7-v2-v3-translation.map` as well, so a
+configuration still reading the latter keeps working. A copy of that file an application
+maintains itself needs the two mappings added.
+
 #### Empty values are literal
 
 An entry mapping to `''` now always yields `''` and never falls back to the mapping's `ELSE`
@@ -274,6 +300,11 @@ or `get(mapping, key, default)`. With `'N' : ''` and `(ELSE) : 'IMP'`, `'N'.map(
 This holds for `Mappings`, the Groovy and Kotlin DSLs and the deprecated `BidiMappingService`
 alike. Check mappings with empty values whose callers relied on the old result. Where an entry was
 meant to fall back to (ELSE), remove it.
+
+IPF's own HL7 v2 → v3 translation shows the change: `hl7v2v3-bidi-administrativeGender-administrativeGender`
+maps `''` to `''`, so an empty PID-8 used to fall through to the reverse fallback and produce
+`<administrativeGenderCode code="UN"/>`, and now produces no `administrativeGenderCode` element —
+which is what the entry says. Remove the entry from a copy of the mapping to get `UN` back.
 
 #### Typed mappings must be rewritten
 

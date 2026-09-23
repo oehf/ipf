@@ -1,0 +1,7 @@
+# The first mapping is fine; the second delegates to a mapping nobody registered
+@name = first
+a = b
+---
+@name      = second
+@unmatched = delegate:nowhere
+c = d

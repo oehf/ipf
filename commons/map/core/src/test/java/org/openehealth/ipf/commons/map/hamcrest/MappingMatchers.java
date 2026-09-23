@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.map.Entry;
 import org.openehealth.ipf.commons.map.Equivalence;
 import org.openehealth.ipf.commons.map.Mapping;
 import org.openehealth.ipf.commons.map.Mappings;
+import org.openehealth.ipf.commons.map.SimpleMapping;
 import org.openehealth.ipf.commons.map.Unmatched;
 
 import java.util.Optional;
@@ -189,20 +190,24 @@ public final class MappingMatchers {
     }
 
     public static Matcher<Mapping> hasUnmatched(Unmatched unmatched) {
-        return unmatched("unmatched", unmatched, Mapping::unmatched);
+        return unmatched("unmatched", unmatched, SimpleMapping::unmatched);
     }
 
     public static Matcher<Mapping> hasReverseUnmatched(Unmatched unmatched) {
-        return unmatched("reverse unmatched", unmatched, Mapping::reverseUnmatched);
+        return unmatched("reverse unmatched", unmatched, SimpleMapping::reverseUnmatched);
     }
 
     private static Matcher<Mapping> unmatched(String what, Unmatched expected,
-                                              java.util.function.Function<Mapping, Unmatched> of) {
+                                              java.util.function.Function<SimpleMapping, Unmatched> of) {
         return new TypeSafeDiagnosingMatcher<>() {
 
             @Override
             protected boolean matchesSafely(Mapping mapping, Description mismatch) {
-                var actual = of.apply(mapping);
+                if (!(mapping instanceof SimpleMapping simple)) {
+                    mismatch.appendText(mapping.name()).appendText(" is composite");
+                    return false;
+                }
+                var actual = of.apply(simple);
                 if (!expected.equals(actual)) {
                     mismatch.appendText(mapping.name()).appendText(" has ").appendText(what)
                             .appendText(" ").appendValue(actual);
@@ -227,7 +232,11 @@ public final class MappingMatchers {
 
             @Override
             protected boolean matchesSafely(Mapping mapping, Description mismatch) {
-                if (mapping.reversible() != reversible) {
+                if (!(mapping instanceof SimpleMapping simple)) {
+                    mismatch.appendText(mapping.name()).appendText(" is composite");
+                    return false;
+                }
+                if (simple.reversible() != reversible) {
                     mismatch.appendText(mapping.name()).appendText(reversible
                             ? " is not reversible" : " is reversible");
                     return false;

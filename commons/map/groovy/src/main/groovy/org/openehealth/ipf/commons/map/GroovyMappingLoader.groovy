@@ -32,7 +32,7 @@ import java.util.function.Function
  * {@link MappingFunctionRegistry} under {@code <mappingName>#unmatched} and becomes
  * {@link Unmatched.Computed}. The {@code ({'X'}) : (ELSE)} idiom &mdash; a closure used as a map
  * key to declare the fallback of the reverse direction &mdash; becomes
- * {@link Mapping#reverseUnmatched()}.
+ * {@link SimpleMapping#reverseUnmatched()}.
  * <p>
  * The DSL binds arbitrary objects, the model holds strings. A mapping whose keys, values or
  * fallback results are not strings - typically enum constants - is converted to their string
@@ -48,7 +48,7 @@ import java.util.function.Function
  * The DSL cannot state an {@link Equivalence}, and it let a later file replace a mapping of the
  * same name silently. Both are declared here rather than left to the container, so that mappings
  * read from a script satisfy the model's constraints like any other: every mapping is marked
- * {@link Mapping#override()}, and where several entries share a value all but the last are marked
+ * {@link SimpleMapping#override()}, and where several entries share a value all but the last are marked
  * {@link Equivalence#NARROWER}, which is the inverse the Groovy mapping service happened to pick.
  * <p>
  * Because the file is a script rather than data, nothing about it is checked before it runs. It
@@ -129,7 +129,7 @@ class GroovyMappingLoader implements MappingLoader {
 
     private static Mapping toMapping(String name, Map entries, MappingFunctionRegistry functions,
                                      Consumer<String> warnings) {
-        def builder = Mapping.builder(name)
+        def builder = SimpleMapping.builder(name)
         def unmatched = Unmatched.ABSENT
         def reverseUnmatched = Unmatched.ABSENT
         def declared = []
@@ -217,7 +217,7 @@ class GroovyMappingLoader implements MappingLoader {
         def reported = new AtomicBoolean()
         return { String key ->
             def result = closure.maximumNumberOfParameters == 0 ? closure.call() : closure.call(key)
-            if ((typeOf(result) || isComposite(result)) && reported.compareAndSet(false, true)) {
+            if ((typeOf(result) || isTildeComposite(result)) && reported.compareAndSet(false, true)) {
                 reportedResults.accept(result)
             }
             asString(result)
@@ -225,7 +225,7 @@ class GroovyMappingLoader implements MappingLoader {
     }
 
     private static void collectComposite(String role, Object value, Set<String> composite) {
-        if (isComposite(value)) {
+        if (isTildeComposite(value)) {
             composite << "${role} ${value.inspect()}".toString()
         }
     }
@@ -234,7 +234,7 @@ class GroovyMappingLoader implements MappingLoader {
      * @return whether a value was a composite under the DSL's former {@code ~} convention: a
      * collection of parts, or a string joining them
      */
-    private static boolean isComposite(Object value) {
+    private static boolean isTildeComposite(Object value) {
         value instanceof Collection ||
                 (value instanceof CharSequence && value.toString().contains(COMPOSITE_SEPARATOR))
     }

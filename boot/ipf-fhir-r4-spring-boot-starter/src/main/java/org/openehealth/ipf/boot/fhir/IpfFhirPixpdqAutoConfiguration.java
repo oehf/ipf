@@ -25,6 +25,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 
 
@@ -40,7 +42,13 @@ public class IpfFhirPixpdqAutoConfiguration {
         this.config = config;
     }
 
+    /**
+     * IPF's own translation mappings, read before any the application contributes: an application
+     * {@link CustomMappings} bean can then override one of them or delegate to it, whatever
+     * {@code @Order} it declares itself.
+     */
     @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     public CustomMappings translationFhirHl7v2Mappings(FhirMappingCustomizer fhirMappingCustomizer) {
         var mappings = new CustomMappings();
         mappings.addMappingResource(new ClassPathResource("META-INF/map/fhir-hl7v2-translation.mapping.xml"));

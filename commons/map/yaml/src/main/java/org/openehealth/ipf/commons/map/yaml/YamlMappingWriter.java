@@ -18,9 +18,12 @@ package org.openehealth.ipf.commons.map.yaml;
 import org.openehealth.ipf.commons.map.Equivalence;
 import org.openehealth.ipf.commons.map.Mapping;
 import org.openehealth.ipf.commons.map.MappingWriter;
+import org.openehealth.ipf.commons.map.MappingWriters;
 import org.openehealth.ipf.commons.map.Unmatched;
+import tools.jackson.dataformat.yaml.YAMLFactory;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 import tools.jackson.dataformat.yaml.YAMLWriteFeature;
+import tools.jackson.dataformat.yaml.util.StringQuotingChecker;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -28,6 +31,7 @@ import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Writes {@link Mapping}s as a {@code *.mapping.yaml} document.
@@ -40,7 +44,25 @@ import java.util.Map;
  */
 public class YamlMappingWriter implements MappingWriter {
 
-    private static final YAMLMapper MAPPER = YAMLMapper.builder()
+    /**
+     * Quotes, beyond what Jackson quotes on its own, every value the parser would otherwise read
+     * as a floating point number: an exponent like {@code 1e3}, infinity or NaN. Jackson's own
+     * check misses these, and a code like that came back as a number the loader rejects.
+     */
+    private static final class QuotingChecker extends StringQuotingChecker.Default {
+
+        private static final Pattern NOT_A_STRING = Pattern.compile(
+                "[-+]?(\\.[0-9]+|[0-9]+(\\.[0-9]*)?)([eE][-+]?[0-9]+)?|[-+]?\\.(inf|Inf|INF)|\\.(nan|NaN|NAN)");
+
+        @Override
+        public boolean needToQuoteValue(String value) {
+            return super.needToQuoteValue(value) || NOT_A_STRING.matcher(value).matches();
+        }
+    }
+
+    private static final YAMLMapper MAPPER = YAMLMapper.builder(YAMLFactory.builder()
+                    .stringQuotingChecker(new QuotingChecker())
+                    .build())
             .disable(YAMLWriteFeature.WRITE_DOC_START_MARKER)
             .enable(YAMLWriteFeature.MINIMIZE_QUOTES)
             // without this, a code like "1004" would come back as the number 1004
@@ -61,7 +83,8 @@ public class YamlMappingWriter implements MappingWriter {
     }
 
     @Override
-    public void write(List<Mapping> mappings, Writer out) {
+    public void write(List<? extends Mapping> mappings, Writer out) {
+        MappingWriters.requireKeysAndValues(mappings);
         var document = new LinkedHashMap<String, Object>();
         var declared = new LinkedHashMap<String, Object>();
         mappings.forEach(mapping -> declared.put(mapping.name(), toYaml(mapping)));
@@ -75,7 +98,7 @@ public class YamlMappingWriter implements MappingWriter {
         }
     }
 
-    public String toYaml(List<Mapping> mappings) {
+    public String toYaml(List<? extends Mapping> mappings) {
         var out = new java.io.StringWriter();
         write(mappings, out);
         return out.toString();

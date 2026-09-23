@@ -73,4 +73,19 @@ public class SpringBidiMappingServiceTest {
         mappingService.setIgnoreResourceNotFound(false);
         Assertions.assertThrows(IllegalArgumentException.class, () -> mappingService.setMappingResources(resources));
     }
+
+    /**
+     * The service used to remember the resources it had read across clearMappings(), and so
+     * skipped a resource added again afterwards.
+     */
+    @Test
+    public void testResourceCanBeReadAgainAfterClearing() {
+        var resource = new ClassPathResource("example3.map");
+        mappingService.setMappingResource(resource);
+        mappingService.clearMappings();
+        assertThat(mappingService.mappingKeys().isEmpty(), is(true));
+
+        mappingService.setMappingResource(resource);
+        assertThat(mappingService.get("messageType", "ADT^A04"), is("PRPA_IN401001"));
+    }
 }

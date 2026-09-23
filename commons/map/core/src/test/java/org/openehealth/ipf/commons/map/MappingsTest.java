@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -97,11 +96,11 @@ public class MappingsTest {
         var mappings = Mappings.builder()
                 .function("oidUri", key -> key != null && !key.isEmpty() && Character.isDigit(key.charAt(0))
                         ? "urn:oid:" + key : key)
-                .mapping(Mapping.builder("absent").entry("a", "b").build())
-                .mapping(Mapping.builder("identity").unmatched(Unmatched.IDENTITY).build())
-                .mapping(Mapping.builder("fixed").unmatched(Unmatched.fixed("UNK")).build())
-                .mapping(Mapping.builder(COMPUTED).unmatched(Unmatched.computed("oidUri")).build())
-                .mapping(Mapping.builder("failing").unmatched(Unmatched.FAIL).build())
+                .mapping(SimpleMapping.builder("absent").entry("a", "b").build())
+                .mapping(SimpleMapping.builder("identity").unmatched(Unmatched.IDENTITY).build())
+                .mapping(SimpleMapping.builder("fixed").unmatched(Unmatched.fixed("UNK")).build())
+                .mapping(SimpleMapping.builder(COMPUTED).unmatched(Unmatched.computed("oidUri")).build())
+                .mapping(SimpleMapping.builder("failing").unmatched(Unmatched.FAIL).build())
                 .build();
 
         assertThat(mappings, doesNotTranslate("absent", "x"));
@@ -188,7 +187,7 @@ public class MappingsTest {
      */
     @Test
     public void reverseCollisionIsRejected() {
-        var colliding = Mapping.builder("maritalStatus")
+        var colliding = SimpleMapping.builder("maritalStatus")
                 .entry("P", "T")
                 .entry("R", "T")
                 .build();
@@ -246,16 +245,16 @@ public class MappingsTest {
      */
     @Test
     public void aDelegateMustAlreadyBeRegistered() {
-        var absent = Mapping.builder("m").unmatched(Unmatched.delegate("nowhere")).build();
+        var absent = SimpleMapping.builder("m").unmatched(Unmatched.delegate("nowhere")).build();
         var e = assertThrows(MappingException.class, () -> Mappings.builder().mapping(absent).build());
         assertThat(e.getMessage(), containsString("delegates to 'nowhere', which is not registered"));
 
         // ... and overriding a link in an existing chain is checked again from its own end
         var builder = Mappings.builder()
                 .allowOverride(true)
-                .mapping(Mapping.builder("a").entry("k", "v").build())
-                .mapping(Mapping.builder("b").unmatched(Unmatched.delegate("a")).build());
-        var cycle = Mapping.builder("a").unmatched(Unmatched.delegate("b")).build();
+                .mapping(SimpleMapping.builder("a").entry("k", "v").build())
+                .mapping(SimpleMapping.builder("b").unmatched(Unmatched.delegate("a")).build());
+        var cycle = SimpleMapping.builder("a").unmatched(Unmatched.delegate("b")).build();
         var cyclic = assertThrows(MappingException.class, () -> builder.mapping(cycle));
         assertThat(cyclic.getMessage(), containsString("delegates in a cycle"));
     }
@@ -267,8 +266,8 @@ public class MappingsTest {
     @Test
     public void theReverseDirectionDelegatesSeparately() {
         var mappings = Mappings.builder()
-                .mapping(Mapping.builder("base").entry("M", "male").entry("F", "female").build())
-                .mapping(Mapping.builder(CUSTOM)
+                .mapping(SimpleMapping.builder("base").entry("M", "male").entry("F", "female").build())
+                .mapping(SimpleMapping.builder(CUSTOM)
                         .entry("X", "non-binary")
                         .reverseUnmatched(Unmatched.delegate("base"))
                         .build())
@@ -283,7 +282,7 @@ public class MappingsTest {
 
     @Test
     public void unknownFunctionIsRejectedAtLoadTime() {
-        var mapping = Mapping.builder("m").unmatched(Unmatched.computed("nope")).build();
+        var mapping = SimpleMapping.builder("m").unmatched(Unmatched.computed("nope")).build();
         var e = assertThrows(MappingException.class, () -> Mappings.builder().mapping(mapping).build());
         assertThat(e.getMessage(), containsString("unknown mapping function 'nope'"));
     }
@@ -455,5 +454,92 @@ public class MappingsTest {
         var builder = Mappings.builder();
         builder.build();
         assertThrows(IllegalStateException.class, () -> builder.load("classpath:/example.testmap"));
+    }
+
+    /**
+     * A source registers all or nothing. Registering its mappings one by one used to leave the
+     * ones ahead of a failing mapping behind, so that reading the source again reported them as
+     * duplicates instead of its actual problem.
+     */
+    @Test
+    public void aSourceFailingHalfwayLeavesNothingBehind() {
+        var mappings = new DefaultMappings();
+        var source = MappingsTest.class.getResource("/partial.testmap");
+
+        var first = assertThrows(MappingException.class, () -> mappings.load(source));
+        assertThat(first.getMessage(), containsString("delegates to 'nowhere'"));
+        assertThat(mappings.mappingNames(), is(empty()));
+
+        var again = assertThrows(MappingException.class, () -> mappings.load(source));
+        assertThat(again.getMessage(), containsString("delegates to 'nowhere'"));
+    }
+
+    /**
+     * A key declared twice used to answer with whichever entry came last, while its reverse
+     * lookup still answered for the first - silently.
+     */
+    @Test
+    public void aKeyDeclaredTwiceIsRejected() {
+        var mapping = SimpleMapping.builder("twice").entry("A", "1").entry("A", "2").build();
+
+        var e = assertThrows(MappingException.class, () -> Mappings.builder().mapping(mapping));
+        assertThat(e.getMessage(), containsString("declares the key 'A' twice"));
+    }
+
+    /**
+     * A key may still come with a disjoint entry next to the one it translates by, which is how a
+     * source says what a code explicitly does not mean.
+     */
+    @Test
+    public void aDisjointEntryDoesNotCountAsASecondDeclaration() {
+        var mappings = Mappings.builder().mapping(SimpleMapping.builder("both")
+                .entry("A", "1")
+                .entry("A", "2", Equivalence.DISJOINT)
+                .build()).build();
+
+        assertThat(mappings, translates("both", "A").to("1"));
+    }
+
+    /**
+     * What functions() hands out cannot change a built instance: a function replaced or removed
+     * after the mappings naming it were checked would change or break their answers.
+     */
+    @Test
+    public void theFunctionsOfABuiltInstanceCannotBeChanged() {
+        var mappings = Mappings.builder().function("first4", key -> key.substring(0, 4)).build();
+
+        assertThat(mappings.functions().contains("first4"), is(true));
+        assertThat(mappings.functions() instanceof MappingFunctionRegistry, is(false));
+    }
+
+    /**
+     * Locations that are not readable end as the mapping failure they are, naming the location,
+     * rather than as a bare exception from URI parsing.
+     */
+    @Test
+    public void unreadableLocationsAreReportedAsMappingFailures() {
+        assertThrows(MappingException.class, () -> Mappings.builder().load(URI.create("relative.testmap")));
+        var e = assertThrows(MappingException.class, () -> Mappings.builder().load("classpath:/no such.testmap"));
+        assertThat(e.getMessage(), containsString("no%20such.testmap"));
+    }
+
+    /**
+     * A FHIR other-map fallback often names a ConceptMap by its canonical alone, while the
+     * ConceptMap is registered with its version. The only version registered is the one meant;
+     * with several, naming none is ambiguous. What a mapping delegates to is settled when it is
+     * registered, so a version registered later does not move it.
+     */
+    @Test
+    public void aDelegateWithoutVersionFindsTheOnlyVersionRegistered() {
+        var base2024 = SimpleMapping.builder("base|2024").entry("A", "old").build();
+        var base2025 = SimpleMapping.builder("base|2025").entry("A", "new").build();
+        var custom = SimpleMapping.builder("custom").entry("X", "x").unmatched(Unmatched.delegate("base")).build();
+
+        var mappings = Mappings.builder().mapping(base2024).mapping(custom).mapping(base2025).build();
+        assertThat(mappings, translates("custom", "A").to("old"));
+
+        var ambiguous = Mappings.builder().mapping(base2024).mapping(base2025);
+        var e = assertThrows(MappingException.class, () -> ambiguous.mapping(custom));
+        assertThat(e.getMessage(), containsString("registered in several versions [base|2024, base|2025]"));
     }
 }

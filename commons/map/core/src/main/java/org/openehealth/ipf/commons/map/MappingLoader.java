@@ -22,7 +22,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * Turns a mapping source document into {@link Mapping} records.
+ * Turns a mapping source document into {@link Mapping}s: a {@link SimpleMapping} for every
+ * table the source declares, and, where the format spreads one translation over several tables,
+ * a {@link CompositeMapping} over them, listed after its parts.
  * <p>
  * Implementations are discovered with {@link java.util.ServiceLoader}, so a single
  * {@link Mappings} instance can hold mappings written in different formats. The format is a

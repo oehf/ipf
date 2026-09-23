@@ -18,20 +18,16 @@ package org.openehealth.ipf.commons.map.yaml;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.map.Equivalence;
 import org.openehealth.ipf.commons.map.MappingException;
-import org.openehealth.ipf.commons.map.MappingLoaders;
-import org.openehealth.ipf.commons.map.MappingWriters;
 import org.openehealth.ipf.commons.map.Mappings;
 import org.openehealth.ipf.commons.map.Unmatched;
 
 import java.net.URI;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.openehealth.ipf.commons.core.hamcrest.OptionalMatchers.hasNoValue;
 import static org.openehealth.ipf.commons.core.hamcrest.OptionalMatchers.hasValue;

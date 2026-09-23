@@ -40,6 +40,11 @@ public sealed interface Unmatched {
 
     /** A constant value. Corresponds to {@code (ELSE) : 'UNK'}. */
     record Fixed(String value) implements Unmatched {
+        public Fixed {
+            if (value == null) {
+                throw new IllegalArgumentException("A fixed fallback requires a value; for none, use ABSENT");
+            }
+        }
     }
 
     /**
@@ -69,7 +74,9 @@ public sealed interface Unmatched {
      * ConceptMap.
      * <p>
      * The named mapping must already be registered, which is what makes a cycle impossible to
-     * declare.
+     * declare. A name without a version also finds the only mapping registered as
+     * {@code name|version}, the way a versionless FHIR canonical refers to the one version at
+     * hand; with several such versions it is ambiguous and rejected.
      */
     record Delegate(String mapping) implements Unmatched {
         public Delegate {

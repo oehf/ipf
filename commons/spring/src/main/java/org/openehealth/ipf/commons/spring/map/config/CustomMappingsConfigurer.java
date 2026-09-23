@@ -47,7 +47,7 @@ import java.util.Collection;
  *           class="org.openehealth.ipf.commons.spring.map.SpringMappings"/&gt;
  * </pre>
  * Doing so also populates the mappings before the {@code ContextRefreshedEvent} instead of after
- * it, so that mappings can already be resolved while beans are being initialized. Both mechanisms
+ * it, once all singletons have been instantiated. Both mechanisms
  * may be active at the same time: {@link SpringMappings#setMappingResource(org.springframework.core.io.Resource, String)}
  * ignores resources it has already evaluated.
  */

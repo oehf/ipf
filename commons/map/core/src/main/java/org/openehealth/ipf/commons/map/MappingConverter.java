@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UncheckedIOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -87,7 +86,7 @@ public class MappingConverter {
      * @param mappings the mappings, normalized so that they can be expressed declaratively
      * @param warnings everything a human should look at before committing the result
      */
-    public record Conversion(URI source, List<Mapping> mappings, List<String> warnings) {
+    public record Conversion(URI source, List<SimpleMapping> mappings, List<String> warnings) {
     }
 
     // ------------------------------------------------------------------ API
@@ -109,7 +108,15 @@ public class MappingConverter {
      */
     public Conversion read(URL source, String sourceFormat) {
         var uri = toUri(source);
-        var functions = new MappingFunctionRegistry();
+        // Every function name is accepted: a source naming a function by reference declares it
+        // already, and converting it needs the name, not the function. The only functions this
+        // registry actually holds are the closures the Groovy loader wraps, which are probed.
+        var functions = new MappingFunctionRegistry() {
+            @Override
+            public boolean contains(String name) {
+                return name != null;
+            }
+        };
         var loader = MappingLoaders.resolve(uri, sourceFormat);
         var warnings = new ArrayList<String>();
         List<Mapping> loaded;
@@ -119,7 +126,14 @@ public class MappingConverter {
             throw new MappingException(uri, "Could not read mapping source", e);
         }
 
+        // A composite exists only to ask its parts in turn; the parts are converted, and no format
+        // can state the composite itself.
+        loaded.stream()
+                .filter(CompositeMapping.class::isInstance)
+                .forEach(composite -> warnings.add(composite.name() + ": composite of " + composite.parts()
+                        + ", which no format can express; only its parts are converted"));
         var converted = loaded.stream()
+                .filter(SimpleMapping.class::isInstance)
                 .map(mapping -> convert(mapping, functions, warnings))
                 .toList();
         if (!converted.isEmpty()) {
@@ -138,7 +152,7 @@ public class MappingConverter {
      * @param target   {@code xml} or {@code .mapping.xml} - both select the same writer
      * @throws IllegalArgumentException if no writer on the classpath produces that format
      */
-    public String render(List<Mapping> mappings, String target) {
+    public String render(List<? extends Mapping> mappings, String target) {
         var writer = MappingWriters.forTarget(target)
                 .orElseThrow(() -> new IllegalArgumentException("No mapping writer produces '"
                         + target + "'. Add the module for that format to the classpath;"
@@ -189,8 +203,8 @@ public class MappingConverter {
 
     // ------------------------------------------------------------------ conversion
 
-    private Mapping convert(Mapping mapping, MappingFunctionRegistry functions, List<String> warnings) {
-        var builder = Mapping.builder(mapping.name())
+    private SimpleMapping convert(Mapping mapping, MappingFunctionRegistry functions, List<String> warnings) {
+        var builder = SimpleMapping.builder(mapping.name())
                 .keySystem(mapping.keySystem())
                 .valueSystem(mapping.valueSystem())
                 .reversible(mapping.reversible())
@@ -199,7 +213,14 @@ public class MappingConverter {
                         keys(mapping), "unmatched"))
                 .reverseUnmatched(simplify(mapping.reverseUnmatched(), mapping, functions, warnings,
                         values(mapping), "reverse unmatched"));
-        mapping.entries().forEach(builder::entry);
+        mapping.entries().forEach(entry -> {
+            if (entry.key() == null || entry.value() == null) {
+                warnings.add(mapping.name() + ": the entry " + entry.key() + " -> " + entry.value() + " has no "
+                        + (entry.key() == null ? "key" : "value") + ", which no format can write; it is left out");
+            } else {
+                builder.entry(entry);
+            }
+        });
         warnAboutResolvedCollisions(mapping, warnings);
         return builder.build();
     }
@@ -326,11 +347,7 @@ public class MappingConverter {
     }
 
     private static URI toUri(URL url) {
-        try {
-            return url.toURI();
-        } catch (URISyntaxException e) {
-            return URI.create(url.toString().replace(" ", "%20"));
-        }
+        return DefaultMappings.toUri(url);
     }
 
     // ------------------------------------------------------------------ command line

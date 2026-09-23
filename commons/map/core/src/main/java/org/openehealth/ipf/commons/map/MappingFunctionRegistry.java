@@ -33,7 +33,7 @@ import java.util.function.Function;
  *
  * @since 6.0
  */
-public class MappingFunctionRegistry {
+public class MappingFunctionRegistry implements MappingFunctions {
 
     private final Map<String, Function<String, String>> functions = new ConcurrentHashMap<>();
 
@@ -52,10 +52,31 @@ public class MappingFunctionRegistry {
         return this;
     }
 
+    /**
+     * Registers every function of another registry, replacing any registered before under the
+     * same name.
+     *
+     * @param other the registry to copy from
+     * @return this registry
+     */
+    public MappingFunctionRegistry registerAll(MappingFunctionRegistry other) {
+        functions.putAll(other.functions);
+        return this;
+    }
+
+    /**
+     * @return a registry holding the same functions, to register into without affecting this one
+     */
+    public MappingFunctionRegistry copy() {
+        return new MappingFunctionRegistry().registerAll(this);
+    }
+
+    @Override
     public Optional<Function<String, String>> lookup(String name) {
         return name == null ? Optional.empty() : Optional.ofNullable(functions.get(name));
     }
 
+    @Override
     public boolean contains(String name) {
         return name != null && functions.containsKey(name);
     }

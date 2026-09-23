@@ -56,7 +56,7 @@ public class ConceptMapWriter implements MappingWriter {
     }
 
     @Override
-    public void write(List<Mapping> mappings, Writer out) {
+    public void write(List<? extends Mapping> mappings, Writer out) {
         if (mappings.isEmpty()) {
             throw new IllegalArgumentException("A ConceptMap needs at least one group");
         }
@@ -75,7 +75,7 @@ public class ConceptMapWriter implements MappingWriter {
         }
     }
 
-    public String toConceptMap(List<Mapping> mappings) {
+    public String toConceptMap(List<? extends Mapping> mappings) {
         var out = new java.io.StringWriter();
         write(mappings, out);
         return out.toString();
@@ -86,6 +86,9 @@ public class ConceptMapWriter implements MappingWriter {
         ConceptMapExtensions.setMappingName(group, mapping.name());
         if (!mapping.reversible()) {
             ConceptMapExtensions.setReversible(group, false);
+        }
+        if (mapping.override()) {
+            ConceptMapExtensions.setOverride(group);
         }
         if (mapping.keySystem() != null) {
             group.setSource(mapping.keySystem());
@@ -115,8 +118,9 @@ public class ConceptMapWriter implements MappingWriter {
         return switch (equivalence) {
             case EQUAL -> Enumerations.ConceptMapEquivalence.EQUAL;
             case EQUIVALENT -> Enumerations.ConceptMapEquivalence.EQUIVALENT;
-            case WIDER -> Enumerations.ConceptMapEquivalence.WIDER;
-            case NARROWER -> Enumerations.ConceptMapEquivalence.NARROWER;
+            // the model says how the key relates to the value, R4 how the target relates to the source
+            case WIDER -> Enumerations.ConceptMapEquivalence.NARROWER;
+            case NARROWER -> Enumerations.ConceptMapEquivalence.WIDER;
             case INEXACT -> Enumerations.ConceptMapEquivalence.INEXACT;
             case DISJOINT -> Enumerations.ConceptMapEquivalence.DISJOINT;
         };
@@ -136,7 +140,14 @@ public class ConceptMapWriter implements MappingWriter {
                     .setCode(fixed.value());
         } else if (unmatched instanceof Unmatched.Computed computed) {
             ConceptMapExtensions.setUnmappedFunction(group.getUnmapped(), computed.ref());
+        } else if (unmatched instanceof Unmatched.Fail) {
+            ConceptMapExtensions.setUnmappedFail(group.getUnmapped());
         } else if (unmatched instanceof Unmatched.Delegate delegate) {
+            if (delegate.mapping().contains("/")) {
+                throw new IllegalArgumentException("A ConceptMap cannot delegate mapping '" + mapping.name()
+                        + "' to '" + delegate.mapping() + "': the name of the mapping delegated to is the"
+                        + " last path segment of a url, so it cannot contain '/'");
+            }
             group.getUnmapped()
                     .setMode(ConceptMap.ConceptMapGroupUnmappedMode.OTHERMAP)
                     // not id(..): the delegate is a mapping name, and the last path segment of
@@ -144,8 +155,7 @@ public class ConceptMapWriter implements MappingWriter {
                     .setUrl(URL_BASE + delegate.mapping());
         } else {
             throw new IllegalArgumentException("A ConceptMap cannot express the unmatched behavior "
-                    + unmatched + "; only absent, provided, fixed and a function reference have a"
-                    + " representation");
+                    + unmatched);
         }
     }
 
@@ -176,9 +186,14 @@ public class ConceptMapWriter implements MappingWriter {
      */
     private static void requireCode(Mapping mapping, String code, String what) {
         if (code == null || code.isEmpty()) {
-            throw new IllegalArgumentException("A ConceptMap cannot express the empty " + what
+            throw new IllegalArgumentException("A ConceptMap cannot express the missing or empty " + what
                     + " of mapping '" + mapping.name() + "': a FHIR code is never empty. Keep this"
                     + " mapping in a format that has no such restriction");
+        }
+        if (!code.equals(code.strip())) {
+            throw new IllegalArgumentException("A ConceptMap cannot express the " + what + " '" + code
+                    + "' of mapping '" + mapping.name() + "': FHIR trims leading and trailing whitespace"
+                    + " from a code. Keep this mapping in a format that has no such restriction");
         }
     }
 

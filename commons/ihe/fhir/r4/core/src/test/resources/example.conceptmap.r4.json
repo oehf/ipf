@@ -11,7 +11,7 @@
       "element": [
         {"code": "M", "target": [{"code": "male", "equivalence": "equal"}]},
         {"code": "F", "target": [{"code": "female", "equivalence": "equal"}]},
-        {"code": "A", "target": [{"code": "other", "equivalence": "narrower"}]},
+        {"code": "A", "target": [{"code": "other", "equivalence": "wider"}]},
         {"code": "O", "target": [{"code": "other", "equivalence": "equal"}]},
         {"code": "U", "target": [{"code": "unknown", "equivalence": "equal"}]},
         {"code": "X", "target": [{"equivalence": "unmatched"}]}

@@ -117,4 +117,23 @@ public final class MappingWriters {
             throw new IllegalStateException("Could not discover mapping writers", e);
         }
     }
+
+    /**
+     * Rejects entries without a key or a value, which the model tolerates - a Groovy script may
+     * declare {@code (null) : 'x'} - but no file format can state. Writers call this before
+     * writing anything, so that a mapping file is never produced that its own loader rejects.
+     *
+     * @param mappings the mappings to be written
+     * @throws IllegalArgumentException naming the first mapping with such an entry
+     */
+    public static void requireKeysAndValues(List<? extends Mapping> mappings) {
+        for (var mapping : mappings) {
+            for (var entry : mapping.entries()) {
+                if (entry.key() == null || entry.value() == null) {
+                    throw new IllegalArgumentException("Mapping '" + mapping.name() + "' has an entry without a "
+                            + (entry.key() == null ? "key" : "value") + ", which no mapping format can write");
+                }
+            }
+        }
+    }
 }

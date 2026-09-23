@@ -16,14 +16,19 @@
 package org.openehealth.ipf.commons.ihe.fhir.support.map;
 
 import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.map.Entry;
 import org.openehealth.ipf.commons.map.Equivalence;
 import org.openehealth.ipf.commons.map.MappingException;
+import org.openehealth.ipf.commons.map.MappingFunctionRegistry;
 import org.openehealth.ipf.commons.map.MappingLoaders;
 import org.openehealth.ipf.commons.map.Mappings;
+import org.openehealth.ipf.commons.map.SimpleMapping;
 import org.openehealth.ipf.commons.map.Unmatched;
 
+import java.io.ByteArrayInputStream;
 import java.net.URI;
-import java.util.Optional;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.allOf;
@@ -48,7 +53,7 @@ public class ConceptMapLoaderTest {
 
     private static final String GENDER = "hl7v2fhir-patient-administrativeGender";
     private static final String MARITAL_STATUS = "hl7v2v3-patient-maritalStatus";
-    private static final String SECOND_GROUP = "genders#1";
+    private static final String SECOND_GROUP = "genders#address-use";
     private static final String SPECIALISING = "specialising";
 
     private static Mappings.Builder builder() {
@@ -164,7 +169,8 @@ public class ConceptMapLoaderTest {
         var mappings = builder().load("classpath:/multi-group.conceptmap.r4.xml").build();
 
         assertThat(mappings.mappingNames(),
-                containsInAnyOrder(MARITAL_STATUS, SECOND_GROUP));
+                containsInAnyOrder(MARITAL_STATUS, SECOND_GROUP, "genders"));
+        assertThat(mappings.mapping("genders").orElseThrow().parts(), contains(MARITAL_STATUS, SECOND_GROUP));
 
         var named = mappings.mapping(MARITAL_STATUS).orElseThrow();
         assertThat(named, hasUnmatched(Unmatched.computed("oidUri")));
@@ -194,7 +200,7 @@ public class ConceptMapLoaderTest {
     @Test
     public void otherMapBecomesADelegatingFallback() {
         var mappings = Mappings.builder()
-                .mapping(org.openehealth.ipf.commons.map.Mapping.builder("publishableBase")
+                .mapping(SimpleMapping.builder("publishableBase")
                         .entry("M", "male")
                         .unmatched(Unmatched.fixed("unknown"))
                         .build())
@@ -233,5 +239,36 @@ public class ConceptMapLoaderTest {
                 .build();
         assertThat(mappings, translates(GENDER, "M").to("male"));
         assertThat(mappings, translates("hl7v2v3-interactionId-triggerEvent", "PRPA_IN201301UV02").to("A01"));
+    }
+
+    /**
+     * FHIR's $translate answers with every target of an element, the model with one value. The
+     * one kept is the equivalent target, not simply the first; a disjoint target stays the
+     * disjoint entry it is. A target holding only under a condition on other elements cannot be
+     * an unconditional translation, so it is left out - and each loss is reported.
+     */
+    @Test
+    public void severalTargetsResolveToTheBestTranslation() throws Exception {
+        var json = """
+                {"resourceType": "ConceptMap", "url": "http://example.org/ConceptMap/targets", "status": "active",
+                 "group": [{"source": "urn:s", "target": "urn:t", "element": [
+                   {"code": "A", "target": [
+                     {"code": "X", "equivalence": "disjoint"},
+                     {"code": "W", "equivalence": "wider"},
+                     {"code": "Y", "equivalence": "equivalent"}]},
+                   {"code": "B", "target": [
+                     {"code": "Z", "equivalence": "equal",
+                      "dependsOn": [{"property": "gender", "value": "male"}]}]}]}]}
+                """;
+        var warnings = new ArrayList<String>();
+        var loaded = new ConceptMapJsonLoader().load(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)),
+                URI.create("targets.conceptmap.r4.json"), new MappingFunctionRegistry(), warnings::add);
+
+        assertThat(loaded.get(0).entries(), contains(
+                new Entry("A", "Y", Equivalence.EQUIVALENT),
+                new Entry("A", "X", Equivalence.DISJOINT)));
+        assertThat(warnings, contains(
+                containsString("element 'A' translates to both 'Y' and 'W'"),
+                containsString("the target 'Z' of element 'B' depends on other elements")));
     }
 }

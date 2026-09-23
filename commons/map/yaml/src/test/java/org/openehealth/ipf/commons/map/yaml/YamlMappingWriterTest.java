@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.openehealth.ipf.commons.map.MappingConverter;
 import org.openehealth.ipf.commons.map.Mappings;
+import org.openehealth.ipf.commons.map.SimpleMapping;
 import org.openehealth.ipf.commons.map.Unmatched;
 
 import java.io.IOException;
@@ -26,7 +27,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -124,5 +124,23 @@ public class YamlMappingWriterTest {
         assertThat(mappings, translates(MARITAL_STATUS, "L").to("A"));
         assertThat(mappings, translates("atnaCodingSystem", "1.2.3").to("urn:oid:1.2.3"));
         assertThat(mappings.mapping(MARITAL_STATUS).orElseThrow(), hasUnmatched(Unmatched.IDENTITY));
+    }
+
+    /**
+     * Codes that YAML would read as something other than a string - numbers in every notation,
+     * booleans, null, dates - survive being written and read back as the strings they are.
+     */
+    @Test
+    public void codesThatLookLikeOtherScalarsStayStrings(@TempDir Path directory) throws IOException {
+        var codes = List.of("1e3", "1E-3", ".inf", "-.INF", ".NaN", "1.5", "-.5", "+1", "007", "0x1F",
+                "0o17", "1_000", "true", "yes", "off", "null", "~", "2026-01-01");
+        var builder = SimpleMapping.builder("scalars").reversible(false);
+        codes.forEach(code -> builder.entry(code, code));
+        var mapping = builder.unmatched(Unmatched.fixed("1e3")).build();
+
+        var target = directory.resolve("scalars.mapping.yaml");
+        Files.writeString(target, new YamlMappingWriter().toYaml(List.of(mapping)));
+
+        assertThat(Mappings.builder().load(target.toUri()).build().mapping("scalars").orElseThrow(), is(mapping));
     }
 }

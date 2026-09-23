@@ -19,7 +19,10 @@ package org.openehealth.ipf.commons.map;
  * Degree of correspondence between the key and the value of a mapping {@link Entry}.
  * <p>
  * The vocabulary is taken from FHIR ConceptMap (R4 {@code element.target.equivalence},
- * renamed to {@code relationship} in R5). Its purpose here is to state which entries may
+ * renamed to {@code relationship} in R5), but the direction is the key's: {@link #NARROWER}
+ * means the key is the narrower concept. R4 states the relation from the target's side, so its
+ * {@code wider} and {@code subsumes} are {@link #NARROWER} here, and its {@code narrower} and
+ * {@code specializes} are {@link #WIDER}; the ConceptMap loader and writer translate. Its purpose here is to state which entries may
  * be used to build the reverse index of a {@link Mapping}: only entries that assert an
  * {@link #EQUAL} or {@link #EQUIVALENT} correspondence are invertible. A key that is
  * {@link #NARROWER} than its value does not become the canonical inverse of that value,

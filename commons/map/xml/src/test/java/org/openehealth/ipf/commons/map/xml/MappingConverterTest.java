@@ -21,13 +21,14 @@ import org.junit.jupiter.api.io.TempDir;
 import org.openehealth.ipf.commons.map.Entry;
 import org.openehealth.ipf.commons.map.Equivalence;
 import org.openehealth.ipf.commons.map.MappingConverter;
-import org.openehealth.ipf.commons.map.Mapping;
 import org.openehealth.ipf.commons.map.Mappings;
+import org.openehealth.ipf.commons.map.SimpleMapping;
 import org.openehealth.ipf.commons.map.Unmatched;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,6 +39,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.openehealth.ipf.commons.core.hamcrest.OptionalMatchers.hasValue;
 import static org.openehealth.ipf.commons.map.hamcrest.MappingMatchers.hasReverseUnmatched;
 import static org.openehealth.ipf.commons.map.hamcrest.MappingMatchers.hasUnmatched;
@@ -63,7 +65,7 @@ public class MappingConverterTest {
         xml = converter.render(result.mappings(), XmlMappingLoader.EXTENSION);
     }
 
-    private static Mapping mapping(String name) {
+    private static SimpleMapping mapping(String name) {
         return result.mappings().stream()
                 .filter(mapping -> mapping.name().equals(name))
                 .findFirst()
@@ -274,5 +276,39 @@ public class MappingConverterTest {
         var target = directory.resolve("some-mappings.mapping.xml");
         assertThat(Files.exists(target), is(true));
         assertThat(Mappings.builder().load(target.toUri()).build().map(CONVERTED, "a1"), hasValue("b1"));
+    }
+
+    /**
+     * A source naming a function by reference already says what it means declaratively, so it is
+     * converted as it is - neither rejected for a function the converter does not know, nor
+     * probed and replaced by what the function happens to answer.
+     */
+    @Test
+    public void aNamedFunctionIsConvertedAsItIs() {
+        var conversion = new MappingConverter().read(MappingConverterTest.class.getResource("/dynamic.mapping.xml"));
+
+        assertThat(conversion.mappings().get(0), hasUnmatched(Unmatched.computed("first4")));
+    }
+
+    /**
+     * A Groovy script may map a null key, which no format can write: the converter leaves the
+     * entry out and says so, and a writer handed one rejects it rather than producing a file its
+     * own loader refuses.
+     */
+    @Test
+    public void entriesWithoutKeyAreLeftOutRatherThanWrittenUnreadably(@TempDir Path directory) throws IOException {
+        var source = directory.resolve("nulls.map");
+        Files.writeString(source, "mappings = { m((null): 'x', 'a': 'b') }");
+
+        var conversion = new MappingConverter().read(source.toUri().toURL());
+
+        assertThat(conversion.mappings().get(0).entries(), contains(new Entry("a", "b")));
+        assertThat(conversion.warnings(), hasItem(allOf(startsWith("m:"), containsString("has no key"))));
+
+        var unwritable = SimpleMapping.builder("m").entry(null, "x").build();
+        var e = assertThrows(IllegalArgumentException.class,
+                () -> new XmlMappingWriter().toXml(List.of(unwritable)));
+        assertThat(e.getMessage(), containsString("an entry without a key"));
+        assertThrows(IllegalArgumentException.class, () -> Unmatched.fixed(null));
     }
 }

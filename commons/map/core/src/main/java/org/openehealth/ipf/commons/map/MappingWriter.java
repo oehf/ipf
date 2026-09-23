@@ -55,5 +55,5 @@ public interface MappingWriter {
      * @param mappings the mappings to write
      * @param out      the destination; the caller closes it
      */
-    void write(List<Mapping> mappings, Writer out);
+    void write(List<? extends Mapping> mappings, Writer out);
 }

@@ -24,13 +24,11 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -87,7 +85,7 @@ public class YamlMappingLoaderSecurityTest {
 
     /**
      * "Billion laughs" through aliases: without a limit, this expands to gigabytes before the
-     * binding ever sees it.
+     * binding ever sees it. Aliases are rejected outright, before anything is expanded.
      */
     @Test
     public void aliasExpansionIsBounded(@TempDir Path directory) throws IOException {
@@ -104,7 +102,8 @@ public class YamlMappingLoaderSecurityTest {
         var source = write(directory, "aliases.mapping.yaml", yaml.toString());
         var before = System.nanoTime();
 
-        assertThrows(MappingException.class, () -> load(source));
+        var e = assertThrows(MappingException.class, () -> load(source));
+        assertThat(e.getMessage(), containsString("aliases are not supported"));
 
         var seconds = (System.nanoTime() - before) / 1_000_000_000.0;
         assertThat(seconds, lessThan(10.0));
@@ -125,11 +124,10 @@ public class YamlMappingLoaderSecurityTest {
 
     /**
      * A recursive alias has no finite expansion, so the one thing that must not happen is an
-     * attempt to build it. The parser hands the binding the anchor's name instead - a string,
-     * which is all a mapping value can be anyway.
+     * attempt to build it. It is rejected like any other alias.
      */
     @Test
-    public void recursiveAliasesAreNotExpanded(@TempDir Path directory) throws IOException {
+    public void recursiveAliasesAreRejected(@TempDir Path directory) throws IOException {
         var source = write(directory, "recursive.mapping.yaml", """
                 mappings: &loop
                   m:
@@ -137,7 +135,26 @@ public class YamlMappingLoaderSecurityTest {
                       a: *loop
                 """);
 
-        assertThat(load(source).map("m", "a"), hasValue("loop"));
+        var e = assertThrows(MappingException.class, () -> load(source));
+        assertThat(e.getMessage(), containsString("aliases are not supported at line 4"));
+    }
+
+    /**
+     * The parser does not resolve an alias but hands over the anchor's name, so an alias used to
+     * translate a code to that name - {@code b} to {@code x} here - without any error.
+     */
+    @Test
+    public void plainAliasesAreRejectedRatherThanReadAsTheAnchorsName(@TempDir Path directory) throws IOException {
+        var source = write(directory, "alias.mapping.yaml", """
+                mappings:
+                  m:
+                    entries:
+                      a: &x male
+                      b: *x
+                """);
+
+        var e = assertThrows(MappingException.class, () -> load(source));
+        assertThat(e.getMessage(), containsString("aliases are not supported at line 5"));
     }
 
     /**
@@ -182,7 +199,7 @@ public class YamlMappingLoaderSecurityTest {
      * work the limit exists to bound - the test would pay it too.
      */
     @Test
-    public void anOversizedDocumentIsRefused(@TempDir Path directory) throws IOException {
+    public void anOversizedDocumentIsRefused(@TempDir Path directory) {
         var oversized = new StringBuilder("mappings:\n  m:\n    entries:\n");
         for (var i = 0; oversized.length() <= YamlMappingLoader.MAX_DOCUMENT_SIZE; i++) {
             oversized.append("      k").append(i).append(": some-value-that-takes-up-room\n");

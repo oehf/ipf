@@ -15,13 +15,11 @@
  */
 package org.openehealth.ipf.commons.map;
 
-import lombok.Setter;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -68,16 +66,8 @@ import java.util.function.Function;
 @SuppressWarnings("removal")
 public class BidiMappingService implements MappingService {
 
-    protected static final String KEYSYSTEM = "_%KEYSYSTEM%_";
-    protected static final String VALUESYSTEM = "_%VALUESYSTEM%_";
-    protected static final String ELSE = "_%ELSE%_";
-
     private final DefaultMappings mappings;
     private final List<URL> scripts = new ArrayList<>();
-    private final Map<String, Function<String, String>> functions = new LinkedHashMap<>();
-
-    @Setter
-    private boolean ignoreResourceNotFound = false;
 
     public BidiMappingService() {
         this(new DefaultMappings());
@@ -104,8 +94,8 @@ public class BidiMappingService implements MappingService {
     // ------------------------------------------------------------------ configuration
 
     public synchronized void setMappingScript(URL script) {
+        mappings.load(script);
         scripts.add(script);
-        load(script);
     }
 
     public synchronized void setMappingScripts(URL[] scripts) {
@@ -114,10 +104,12 @@ public class BidiMappingService implements MappingService {
         }
     }
 
+    /**
+     * Forgets every mapping; the registered functions stay.
+     */
     public synchronized void clearMappings() {
         scripts.clear();
         mappings.clear();
-        functions.forEach(mappings.functions()::register);
     }
 
     /**
@@ -144,21 +136,13 @@ public class BidiMappingService implements MappingService {
      * @see #setMappingFunctions(Map)
      */
     public synchronized void registerMappingFunction(String name, Function<String, String> function) {
-        functions.put(name, function);
-        mappings.functions().register(name, function);
+        mappings.registerFunction(name, function);
     }
 
     public List<URL> getScripts() {
         return Collections.unmodifiableList(scripts);
     }
 
-    public boolean getIgnoreResourceNotFound() {
-        return ignoreResourceNotFound;
-    }
-
-    private void load(URL script) {
-        mappings.load(script);
-    }
 
     // ------------------------------------------------------------------ MappingService
 

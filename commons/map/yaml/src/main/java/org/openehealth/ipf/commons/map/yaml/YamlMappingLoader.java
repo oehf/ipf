@@ -20,8 +20,12 @@ import org.openehealth.ipf.commons.map.Mapping;
 import org.openehealth.ipf.commons.map.MappingException;
 import org.openehealth.ipf.commons.map.MappingFunctionRegistry;
 import org.openehealth.ipf.commons.map.MappingLoader;
+import org.openehealth.ipf.commons.map.SimpleMapping;
 import org.openehealth.ipf.commons.map.Unmatched;
 import org.snakeyaml.engine.v2.api.LoadSettings;
+import org.snakeyaml.engine.v2.api.lowlevel.Parse;
+import org.snakeyaml.engine.v2.events.Event;
+import org.snakeyaml.engine.v2.exceptions.YamlEngineException;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.StreamReadFeature;
 import tools.jackson.databind.DeserializationFeature;
@@ -29,6 +33,8 @@ import tools.jackson.databind.JsonNode;
 import tools.jackson.dataformat.yaml.YAMLFactory;
 import tools.jackson.dataformat.yaml.YAMLMapper;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
@@ -88,20 +94,14 @@ public class YamlMappingLoader implements MappingLoader {
      */
     static final int MAX_DOCUMENT_SIZE = 8 * 1024 * 1024;
 
-    /**
-     * Aliases repeating an anchored <em>collection</em>, which is what a "billion laughs" document
-     * is built from. The binding has no use for them - a mapping entry is a string - so the ceiling
-     * is low enough that nothing can be amplified with them.
-     */
-    private static final int MAX_ALIASES = 16;
+    private static final LoadSettings SETTINGS = LoadSettings.builder()
+            .setLabel("mapping file")
+            .setCodePointLimit(MAX_DOCUMENT_SIZE)
+            .setAllowRecursiveKeys(false)
+            .build();
 
     private static final YAMLMapper MAPPER = YAMLMapper.builder(YAMLFactory.builder()
-                    .loadSettings(LoadSettings.builder()
-                            .setLabel("mapping file")
-                            .setCodePointLimit(MAX_DOCUMENT_SIZE)
-                            .setMaxAliasesForCollections(MAX_ALIASES)
-                            .setAllowRecursiveKeys(false)
-                            .build())
+                    .loadSettings(SETTINGS)
                     .build())
             .enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .enable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
@@ -124,11 +124,33 @@ public class YamlMappingLoader implements MappingLoader {
                 || MappingLoader.hasExtension(source, SHORT_EXTENSION);
     }
 
+    /**
+     * Rejects anchors' aliases, which Jackson does not resolve: it reads {@code *x} as the string
+     * {@code x}, so an alias would silently translate a code to the anchor's name. A mapping file
+     * has no use for them - every entry is written out - and rejecting them also rules out any
+     * document that expands through them.
+     */
+    private static void rejectAliases(byte[] content, URI source) {
+        try {
+            for (var event : new Parse(SETTINGS).parseInputStream(new ByteArrayInputStream(content))) {
+                if (event.getEventId() == Event.ID.Alias) {
+                    var line = event.getStartMark().map(mark -> " at line " + (mark.getLine() + 1)).orElse("");
+                    throw new MappingException(source, "Invalid mapping file: YAML aliases are not"
+                            + " supported" + line + "; write the value out instead of referring to an anchor");
+                }
+            }
+        } catch (YamlEngineException e) {
+            // not well-formed; reading it as a mapping file reports that with its location
+        }
+    }
+
     @Override
-    public List<Mapping> load(InputStream in, URI source, MappingFunctionRegistry functions) {
+    public List<Mapping> load(InputStream in, URI source, MappingFunctionRegistry functions) throws IOException {
+        var content = in.readAllBytes();
+        rejectAliases(content, source);
         MappingYaml.Document document;
         try {
-            document = MAPPER.readValue(in, MappingYaml.Document.class);
+            document = MAPPER.readValue(content, MappingYaml.Document.class);
         } catch (JacksonException e) {
             throw new MappingException(source, "Invalid mapping file: " + e.getOriginalMessage() + at(e), e);
         }
@@ -149,7 +171,7 @@ public class YamlMappingLoader implements MappingLoader {
         if (yaml == null) {
             throw new MappingException(source, "Mapping '" + name + "' has no body");
         }
-        var builder = Mapping.builder(name)
+        var builder = SimpleMapping.builder(name)
                 .keySystem(yaml.keySystem)
                 .valueSystem(yaml.valueSystem)
                 .reversible(yaml.reversible == null || yaml.reversible)

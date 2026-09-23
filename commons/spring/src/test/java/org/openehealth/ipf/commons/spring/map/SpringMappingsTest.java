@@ -17,13 +17,15 @@ package org.openehealth.ipf.commons.spring.map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.openehealth.ipf.commons.map.MappingException;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
@@ -137,5 +139,34 @@ public class SpringMappingsTest {
         assertThat(mappings, translates(FROM_XML, "d7").to("c7"));
         assertThat(mappings.getMappingResources().stream().map(Resource::getFilename).toList(),
                 contains("configurer7.mapping.xml"));
+    }
+
+    /**
+     * A missing file has a URL all the same and only fails once it is opened, so it has to be
+     * recognized as missing before it is read to be ignored like a missing classpath resource.
+     */
+    @Test
+    public void missingFileIsIgnoredLikeAMissingClasspathResource(@TempDir Path directory) {
+        var missing = new FileSystemResource(directory.resolve("nowhere.mapping.xml"));
+        assertThrows(IllegalArgumentException.class, () -> mappings.setMappingResource(missing));
+
+        mappings.setIgnoreResourceNotFound(true);
+        mappings.setMappingResource(missing);
+        assertThat(mappings.getMappingResources(), is(empty()));
+    }
+
+    /**
+     * Clearing forgets the mappings and the resources they came from, so the same resource can be
+     * read again - and keeps the functions, which are configuration.
+     */
+    @Test
+    public void aClearedResourceCanBeReadAgain() {
+        var resource = new ClassPathResource("configurer7.mapping.xml");
+        mappings.setMappingResource(resource);
+        mappings.clear();
+        assertThat(mappings.mappingNames(), is(empty()));
+
+        mappings.setMappingResource(resource);
+        assertThat(mappings, translates(FROM_XML, "d7").to("c7"));
     }
 }

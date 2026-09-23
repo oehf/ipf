@@ -59,9 +59,9 @@ public class TestMappingLoader implements MappingLoader {
     @Override
     public List<Mapping> load(InputStream in, URI source, MappingFunctionRegistry functions) throws IOException {
         var mappings = new ArrayList<Mapping>();
-        var builders = new ArrayList<Mapping.Builder>();
+        var builders = new ArrayList<SimpleMapping.Builder>();
         try (var reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
-            Mapping.Builder current = null;
+            SimpleMapping.Builder current = null;
             String line;
             while ((line = reader.readLine()) != null) {
                 var content = line.indexOf('#') < 0 ? line : line.substring(0, line.indexOf('#'));
@@ -80,7 +80,7 @@ public class TestMappingLoader implements MappingLoader {
                 var key = content.substring(0, equals).trim();
                 var value = content.substring(equals + 1).trim();
                 if ("@name".equals(key)) {
-                    current = Mapping.builder(value);
+                    current = SimpleMapping.builder(value);
                     builders.add(current);
                     continue;
                 }

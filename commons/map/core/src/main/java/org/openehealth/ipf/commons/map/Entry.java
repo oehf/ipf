@@ -16,12 +16,12 @@
 package org.openehealth.ipf.commons.map;
 
 /**
- * A single key/value pair of a {@link Mapping}, qualified by the {@link Equivalence} that
+ * A single key/value-pair of a {@link Mapping}, qualified by the {@link Equivalence} that
  * holds between the two, and optionally by the human-readable name of either side.
  * <p>
  * The two displays are informative: nothing looks a code up by its display, and no format
  * requires them. They exist so that a mapping read from a source that carries them - a FHIR
- * ConceptMap does, for both the source and the target code - keeps them, and so that a caller
+ * ConceptMap does, for both the source and the target code - keeps them. A caller
  * building a {@code Coding} from a translation has one to put in it.
  * <p>
  * Both key and value are {@link String}s.
