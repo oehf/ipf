@@ -19,9 +19,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.map.Mappings
 
-import static org.openehealth.ipf.commons.map.extend.MappingExtensionHelper.joinKey
 import static org.openehealth.ipf.commons.map.extend.MappingExtensionHelper.simpleMethodMissingLogic
-import static org.openehealth.ipf.commons.map.extend.MappingExtensionHelper.splitValue
 
 /**
  * The dynamic mapXxx() / mapReverseXxx() form of the DSL, where the mapping name is part of the
@@ -68,19 +66,23 @@ class MappingExtensionHelperTest {
     }
 
     /**
-     * A composite key is joined before lookup and a composite value split afterwards. That is the
-     * DSL's convention; the mapping model sees one string on either side.
+     * There is no composite convention: a value containing a tilde comes back as the string it is,
+     * and a key containing one is looked up as it is.
      */
     @Test
-    void compositeKeysAndValues() {
-        assert joinKey(['a', 'b']) == 'a~b'
-        assert joinKey('a') == 'a'
-        assert joinKey(null) == null
-        assert splitValue('c~d') == ['c', 'd']
-        assert splitValue('c') == 'c'
-        assert splitValue(null) == null
+    void compositeKeysAndValuesAreSingleStrings() {
+        assert simpleMethodMissingLogic(mappings, 'a~b', 'mapListTest', []) == 'c~d'
+        assert simpleMethodMissingLogic(mappings, 'c~d', 'mapReverseListTest', []) == 'a~b'
+        assert simpleMethodMissingLogic(mappings, 'anything', 'mapListTest2', []) == 'c~d'
+    }
 
-        assert simpleMethodMissingLogic(mappings, ['a', 'b'], 'mapListTest', []) == ['c', 'd']
-        assert simpleMethodMissingLogic(mappings, 'anything', 'mapListTest2', []) == ['c', 'd']
+    /**
+     * An entry mapping to an empty string yields the empty string, not the fallback or a default.
+     */
+    @Test
+    void emptyValuesAreReturnedAsTheyAre() {
+        assert simpleMethodMissingLogic(mappings, 'N', 'mapEmptyEntry', []) == ''
+        assert simpleMethodMissingLogic(mappings, 'N', 'mapEmptyEntry', ['DEFAULT']) == ''
+        assert simpleMethodMissingLogic(mappings, 'X', 'mapEmptyEntry', []) == 'IMP'
     }
 }

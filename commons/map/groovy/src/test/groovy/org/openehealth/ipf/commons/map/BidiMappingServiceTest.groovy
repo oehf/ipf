@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.commons.map
 
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -123,20 +124,22 @@ class BidiMappingServiceTest {
     }
 
     /**
-     * The tilde convention of the untyped MappingService is unchanged: a composite value comes
-     * back as a List, and a Collection passed as a key is joined before lookup.
+     * The tilde convention of IPF 5.x is gone: a composite value is one string, and a Collection
+     * passed as a key is rejected rather than joined.
      */
     @Test
     void testCompositeValues() {
         mappingService.setMappingScript(getClass().getResource("/example2.map"))
-        assert mappingService.get("listTest", "a~b") == ["c", "d"]
-        assert mappingService.get("listTest", ["a", "b"]) == ["c", "d"]
-        assert mappingService.get("listTest2", "anything") == ["c", "d"]
-        assert mappingService.getKey("listTest", ["c", "d"]) == ["a", "b"]
+        assert mappingService.get("listTest", "a~b") == "c~d"
+        assert mappingService.get("listTest2", "anything") == "c~d"
+        assert mappingService.getKey("listTest", "c~d") == "a~b"
+        Assertions.assertThrows(IllegalArgumentException) {
+            mappingService.get("listTest", ["a", "b"])
+        }
     }
 
     /**
-     * The typed API is the same content without the two string conventions.
+     * The typed API is the same content, answered the same way.
      */
     @Test
     void testTypedMappings() {

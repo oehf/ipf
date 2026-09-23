@@ -230,21 +230,28 @@ class HapiModelExtensionTest {
         }
     }
             
+    /**
+     * Collections are no longer joined into a composite key, so there is nothing to map them with.
+     */
     @Test
-    void testList() {
-        assert ['a','b'].map('listTest') == ['c','d'] 
-        assert ['x','y'].map('listTest', ['a','b']) == (['x','y'].map('listTest') ?: ['a','b'])
-        assert ['x','y'].map('listTest2') == ['c','d']
-        assert ['x','y'].map('listTest2', ['a','b']) == ['c','d']
+    void testListIsNotMapped() {
+        assertThrows(MissingMethodException) {
+            ['a', 'b'].map('listTest')
+        }
+    }
+
+    /**
+     * A value containing a tilde is one string rather than a List.
+     */
+    @Test
+    void testCompositeValueIsASingleString() {
         ADT_A01 msg = new ADT_A01()
         msg.initQuickstart('ADT', 'A01', 'P')
         def x = new ID(msg, 100)
-    	def y = new ID(msg, 100)
-    	x.setValue('a')
-    	y.setValue('b')
-    	assert [x,y].map('listTest') == ['c','d']    	
+        x.setValue('x')
+        assert x.map('listTest2') == 'c~d'
     }
-    
+
     @Test
     void testTypeMap() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text

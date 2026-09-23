@@ -1,0 +1,18 @@
+mappings = {
+
+    directory(
+        'SAP-ISH~HZL' : '1.2.3~HZL',
+        'SAP-ISH~PKL' : '1.2.4~PKL',
+        (ELSE)        : '1.2.3.999~UNKNOWN'
+    )
+
+    namespace(
+        'HZLN' : '1.2.3',
+        (ELSE) : { ['', ''] }
+    )
+
+    plain(
+        'a' : 'b'
+    )
+
+}

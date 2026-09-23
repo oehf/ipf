@@ -32,8 +32,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * The untyped {@link MappingService} contract as {@link BidiMappingService} still honors it, on
- * top of the typed {@link Mappings} it delegates to. The two conventions tested here - the tilde
- * separator and an empty value counting as no value - exist only in this adapter.
+ * top of the typed {@link Mappings} it delegates to. It answers what the typed API answers; the
+ * empty-value and tilde conventions of IPF 5.x are gone.
  */
 @SuppressWarnings("removal")
 public class BidiMappingServiceAdapterTest {
@@ -71,28 +71,39 @@ public class BidiMappingServiceAdapterTest {
     }
 
     /**
-     * A composite value comes back as a List, and a Collection passed as a key is joined with the
-     * separator before lookup. The model itself holds neither - it sees one string.
+     * A value containing a tilde is one string, as it is to the model, rather than a List.
      */
     @Test
-    public void tildeConvention() {
-        assertThat(mappingService.get(COMPOSITE, "PRPA_IN201301UV02"), is(List.of("A01", "ADT_A01")));
-        assertThat(mappingService.getKey(COMPOSITE, List.of("A01", "ADT_A01")),
-                is("PRPA_IN201301UV02"));
-        assertThat(mappingService.getMappings().map(COMPOSITE, "PRPA_IN201301UV02").orElseThrow(),
-                is("A01~ADT_A01"));
+    public void compositeValueIsReturnedAsItIs() {
+        assertThat(mappingService.get(COMPOSITE, "PRPA_IN201301UV02"), is("A01~ADT_A01"));
+        assertThat(mappingService.getKey(COMPOSITE, "A01~ADT_A01"), is("PRPA_IN201301UV02"));
+    }
+
+    /**
+     * IPF 5.x joined a Collection with the tilde before lookup. Rather than look up its
+     * {@code toString()} form and silently find nothing, the adapter rejects it.
+     */
+    @Test
+    public void collectionKeyIsRejected() {
+        var e = assertThrows(IllegalArgumentException.class,
+                () -> mappingService.getKey(COMPOSITE, List.of("A01", "ADT_A01")));
+        assertThat(e.getMessage(), containsString("Composite keys are no longer supported"));
+        assertThrows(IllegalArgumentException.class,
+                () -> mappingService.get(COMPOSITE, List.of("PRPA_IN201301UV02")));
     }
 
     /**
      * The Groovy implementation reached the fallback through the {@code ?:} operator, which treats
-     * an empty string as no value. Consumers depend on that, so the adapter keeps it - while the
-     * typed API returns the empty entry it actually found.
+     * an empty string as no value. An empty value is a value now: it is returned as it is, and
+     * neither the fallback nor a default applies to it.
      */
     @Test
-    public void emptyValueFallsThroughToTheFallback() {
-        assertThat(mappingService.get("emptyValue", "X"), is("FALLBACK"));
-        assertThat(mappingService.get("emptyValue", ""), is("FALLBACK"));
-        assertThat(mappingService.getMappings().map("emptyValue", "X").orElseThrow(), is(""));
+    public void emptyValueIsReturnedAsItIs() {
+        assertThat(mappingService.get("emptyValue", "X"), is(""));
+        assertThat(mappingService.get("emptyValue", ""), is(""));
+        assertThat(mappingService.get("emptyValue", "X", "DEFAULT"), is(""));
+        assertThat(mappingService.getKey("emptyValue", ""), is(""));
+        assertThat(mappingService.get("emptyValue", "unknown"), is("FALLBACK"));
     }
 
     @Test
@@ -131,13 +142,5 @@ public class BidiMappingServiceAdapterTest {
         assertThat(e.getMessage(),
                 e.getMessage(),
                 containsString("unknown mapping function 'first4'"));
-    }
-
-    @Test
-    public void separatorIsConfigurable() {
-        var service = new BidiMappingService("!");
-        assertThat(service.getSeparator(), is("!"));
-        service.setMappingScript(getClass().getResource("/example.testmap"));
-        assertThat(service.get(COMPOSITE, "PRPA_IN201301UV02"), is("A01~ADT_A01"));
     }
 }

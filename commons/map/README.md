@@ -50,9 +50,10 @@ error and raises `IllegalArgumentException`; an unknown *code* within a known ma
 empty `Optional`.
 
 `MappingService`, `BidiMappingService` and `SpringBidiMappingService` are **deprecated as of 6.0
-and go away in 7.0**. They still work unchanged for existing applications, including their two
-string conventions: a value containing `~` comes back as a `List`, and an empty value is treated as
-no value so the fallback applies to it. Neither convention exists in `Mappings`.
+and go away in 7.0**. They still work for existing applications and answer what `Mappings`
+answers, with `null` where it returns an empty `Optional`. The two string conventions of IPF 5.x —
+an empty value counting as no value, and composite `~` values — are gone; see
+[What changed in IPF 6.0](#what-changed-in-ipf-60).
 
 Migrating needs no big-bang: construct the untyped service over the mappings you already have, and
 both front doors see the same content.
@@ -271,12 +272,11 @@ mappings = {
 `'male'.mapReverse('…gender')` and the dynamic `mapAdministrativeGender()` form. They work against
 any format, not just `.map` files, and resolve `Mappings` from the registry, so a Spring context
 needs a `Mappings` bean (`SpringMappings`) rather than a `MappingService` one. The HL7v2 DSL's
-`map`/`mapReverse` on HAPI `Type`s and collections, in both `ipf-modules-hl7` and
-`ipf-modules-hl7-kotlin`, resolve it the same way.
+`map`/`mapReverse` on HAPI `Type`s, in both `ipf-modules-hl7` and `ipf-modules-hl7-kotlin`, resolve
+it the same way.
 
-The composite `~` convention survives only where the DSL genuinely has it: a `Collection` used as a
-key is joined with it, and a composite value comes back as a `List` (see `MappingExtensionHelper`).
-The model itself sees one string on either side.
+All of them return the string the mapping declares, exactly as it is: an entry mapping to `''`
+yields `''`, and a value containing `~` is one string, not a `List`.
 
 ## Selecting the format explicitly
 
@@ -449,8 +449,12 @@ converter had to make comes back as a warning naming the mapping:
 * **Reverse collisions.** Where several keys map onto one value, the Groovy service silently made
   the last one the inverse. The converter reproduces that and marks the others `narrower`, and
   warns so the canonical inverse can be chosen deliberately.
-* **Composite values.** The `~` convention has no place in the model. Such values are written
-  verbatim and flagged; the mapping wants splitting by hand.
+* **Composite values.** The `~` convention is gone. Such values are written verbatim, and the
+  `.map` loader flags each mapping using them; the mapping wants splitting by hand.
+* **Typed mappings.** A script may map objects — enum constants, numbers — where the model holds
+  strings, so only their `toString()` form is converted. Code that relied on getting the objects
+  back does not get them any more, and no format can express them, so each such mapping is flagged
+  for rewriting in Java; see [What changed in IPF 6.0](#what-changed-in-ipf-60).
 * **Comments.** A `.map` file is evaluated, not parsed, so its comments never reach the model.
   Several of them record the code system a code came from and are worth copying over.
 
@@ -476,12 +480,44 @@ one, because the DSL extensions resolve `Mappings` from the registry. Replace
 `SpringBidiMappingService` with `SpringMappings`; wrap the former over the latter if some of your
 code still needs the untyped service. Every context IPF ships does this.
 
+**Typed mappings must be rewritten.** The Groovy service held whatever objects a `.map` script
+evaluated to and returned them; the model holds strings only. A script mapping enum constants or
+numbers still loads, but as the `toString()` form of every key, value and fallback result, so
+`(AvailabilityStatus) mappingService.get(...)` now fails with a `ClassCastException`. No mapping
+format can express such a mapping; rewrite it in Java, e.g. as a `switch` over the enum. The
+`.map` loader logs a warning for each one it loads, and `MappingConverter` reports them.
+
+**Composite values are gone.** The `~` convention of IPF 5.x — a `Collection` used as a key was
+joined with `~`, and a value containing `~` came back as a `List` — no longer exists, neither in
+the Groovy and Kotlin DSLs nor in `BidiMappingService`. A value containing `~` is now returned as
+the one string it is, `map`/`mapReverse` on a `Collection` no longer exist, and
+`BidiMappingService` rejects a `Collection` key with an `IllegalArgumentException`. Split such a
+mapping into one mapping per component, or join and split the parts in the calling code:
+
+    // IPF 5.x: a List ['2.16.840.1.113883.3.37.4.1.1.2', '411']
+    [app, facility].map('device_OID')
+    // IPF 6.0
+    "${app}~${facility}".map('device_OID')?.split('~')
+
+The `.map` loader logs a warning for each mapping with composite keys, values or fallbacks, and
+`MappingConverter` reports them.
+
+**Empty values are literal.** An entry mapping to `''` now always yields `''`; it never falls back
+to the mapping's `ELSE` clause, and a default passed in applies only where there is no value at
+all. The Groovy service reached a mapping's fallback through the `?:` operator, which treats `''`
+as no value, so such an entry was never returned: with `'N' : ''` and `(ELSE) : 'IMP'`,
+`'N'.map(…)` gave `'IMP'`, and without an `ELSE` it gave `null`; likewise, an empty result — also
+an empty `ELSE` — gave way to the default passed to `map(mapping, default)` or
+`get(mapping, key, default)`. This applies everywhere: to `Mappings`, the Groovy and Kotlin DSLs,
+and the deprecated `BidiMappingService`. Check mappings with empty values whose callers relied on
+the old result; where an entry was meant to fall back, remove it.
+
 **Constructors.** `DefaultUriMapper` and `AuditRecordTranslator` take `Mappings`. Their
 `MappingService` constructors remain, deprecated.
 
 **`BidiMappingService` internals are gone**: the `map` and `reverseMap` properties and the
-`protected retrieve`/`retrieveElse`/`updateReverseMap`/`checkMappingKey` methods. `splitKey(Object)`
-is now `splitValue(String)`. Its `MappingService` behavior is unchanged.
+`protected retrieve`/`retrieveElse`/`updateReverseMap`/`checkMappingKey`/`joinKey`/`splitKey`
+methods, and the configurable separator along with its constructors.
 
 **The mappings IPF ships** are now XML — `hl7-v2-v3-translation.mapping.xml`,
 `fhir-hl7v2-translation.mapping.xml`, `atna2fhir.mapping.xml` — with the `.map` originals kept

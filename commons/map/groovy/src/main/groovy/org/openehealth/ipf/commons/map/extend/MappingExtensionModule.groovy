@@ -22,6 +22,10 @@ import org.openehealth.ipf.commons.map.Mappings
  * Extensions for mapping strings. This has been retrofitted from the deprecated {@link org.openehealth.ipf.commons.map.MappingService}
  * to {@link Mappings}, while the map and mapReverse methods return a mapped String or null, rather than
  * an {@link Optional}.
+ * <p>
+ * The result is the string the mapping declares, as it is: an entry mapping to an empty string
+ * yields the empty string rather than the mapping's fallback or a default, and a value containing
+ * {@code ~} is not split into a {@link List}.
  *
  * @DSL
  * @author Christian Ohr

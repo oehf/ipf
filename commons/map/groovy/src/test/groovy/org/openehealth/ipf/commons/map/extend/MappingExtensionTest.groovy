@@ -52,6 +52,26 @@ class MappingExtensionTest {
         assert 'X'.map('encounterType', 'WRONG') == 'WRONG'
     }
 
+    /**
+     * There is no composite convention: a value containing a tilde is one string.
+     */
+    @Test
+    void testCompositeValues() {
+        assert 'a~b'.map('listTest') == 'c~d'
+        assert 'c~d'.mapReverse('listTest') == 'a~b'
+        assert 'anything'.map('listTest2') == 'c~d'
+    }
+
+    /**
+     * An entry mapping to an empty string yields the empty string, not the fallback or a default.
+     */
+    @Test
+    void testEmptyValues() {
+        assert 'N'.map('emptyEntry') == ''
+        assert 'N'.map('emptyEntry', 'DEFAULT') == ''
+        assert 'X'.map('emptyEntry') == 'IMP'
+    }
+
     @Test
     void testUnknownKey() {
         Assertions.assertThrows(IllegalArgumentException.class, () -> {

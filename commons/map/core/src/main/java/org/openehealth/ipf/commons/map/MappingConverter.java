@@ -29,7 +29,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -55,9 +54,13 @@ import java.util.stream.Stream;
  *     <li><b>Reverse collisions.</b> Where several keys map onto one value the Groovy service
  *     silently made the last one the inverse. The converter reproduces that, marking the others
  *     {@code narrower}, and warns so that the canonical inverse can be chosen deliberately.</li>
- *     <li><b>Composite values.</b> The {@code ~} convention has no place in the model. Values
- *     containing the separator are written verbatim and flagged; such a mapping wants splitting
- *     by hand.</li>
+ *     <li><b>Composite values.</b> The {@code ~} convention of the Groovy DSL is gone. Values
+ *     containing {@code ~} are written verbatim; the loader reports each such mapping, which
+ *     wants splitting by hand.</li>
+ *     <li><b>Typed mappings.</b> A script may map objects - enum constants, numbers - where the
+ *     model holds strings, so their string form is all that is converted. The loader reports each
+ *     such mapping; it cannot be expressed in any of the formats and wants rewriting in Java,
+ *     because the calling code relied on getting the objects back.</li>
  *     <li><b>Comments.</b> A {@code .map} file is evaluated, not parsed, so its comments do not
  *     survive into the loaded model. Several of them record the HL7 table a code came from and
  *     are worth copying over by hand.</li>
@@ -76,21 +79,6 @@ public class MappingConverter {
      */
     private static final List<String> PROBES =
             List.of("", "A", "Z", "code", "0", "1", "1.2.840.10008", "UNK", "9-x");
-
-    private static final String DEFAULT_SEPARATOR = "~";
-
-    private final String separator;
-
-    public MappingConverter() {
-        this(DEFAULT_SEPARATOR);
-    }
-
-    /**
-     * @param separator the composite-value separator of the source, {@code ~} for the Groovy DSL
-     */
-    public MappingConverter(String separator) {
-        this.separator = separator;
-    }
 
     /**
      * The outcome of reading one source document.
@@ -123,14 +111,14 @@ public class MappingConverter {
         var uri = toUri(source);
         var functions = new MappingFunctionRegistry();
         var loader = MappingLoaders.resolve(uri, sourceFormat);
+        var warnings = new ArrayList<String>();
         List<Mapping> loaded;
         try (var in = source.openStream()) {
-            loaded = loader.load(in, uri, functions);
+            loaded = loader.load(in, uri, functions, warnings::add);
         } catch (IOException e) {
             throw new MappingException(uri, "Could not read mapping source", e);
         }
 
-        var warnings = new ArrayList<String>();
         var converted = loaded.stream()
                 .map(mapping -> convert(mapping, functions, warnings))
                 .toList();
@@ -213,7 +201,6 @@ public class MappingConverter {
                         values(mapping), "reverse unmatched"));
         mapping.entries().forEach(builder::entry);
         warnAboutResolvedCollisions(mapping, warnings);
-        warnComposite(mapping, warnings);
         return builder.build();
     }
 
@@ -316,23 +303,6 @@ public class MappingConverter {
                         + " inverse");
             }
         });
-    }
-
-    private void warnComposite(Mapping mapping, List<String> warnings) {
-        var composite = new LinkedHashSet<String>();
-        mapping.entries().forEach(entry -> {
-            if (entry.key() != null && entry.key().contains(separator)) {
-                composite.add("key '" + entry.key() + "'");
-            }
-            if (entry.value() != null && entry.value().contains(separator)) {
-                composite.add("value '" + entry.value() + "'");
-            }
-        });
-        if (!composite.isEmpty()) {
-            warnings.add(mapping.name() + ": " + composite + " contain the composite separator '"
-                    + separator + "', which the model does not interpret. The entries are written"
-                    + " verbatim; split the mapping into one per component instead");
-        }
     }
 
     private static List<String> keys(Mapping mapping) {

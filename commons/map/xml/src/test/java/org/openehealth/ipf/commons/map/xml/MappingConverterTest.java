@@ -208,6 +208,22 @@ public class MappingConverterTest {
         assertThat(mappings, translates(DEVICE_TYPE, "ABCDEFGH").to("ABCD"));
     }
 
+    /**
+     * A typed mapping converts to its string form, which no format can turn back into the objects
+     * the script declared, so the conversion says that the mapping needs rewriting in Java.
+     */
+    @Test
+    public void typedMappingsAreFlaggedForRewriting() {
+        var typed = new MappingConverter().read(MappingConverterTest.class.getResource("/typed.map"));
+
+        assertThat(typed.warnings(), hasItem(allOf(startsWith("timeUnit:"),
+                containsString("java.util.concurrent.TimeUnit"), containsString("Rewrite the mapping in Java"))));
+        assertThat(typed.warnings(), hasItem(allOf(startsWith("religion:"), containsString("java.lang.Integer"))));
+        assertThat(typed.warnings(), hasItem(allOf(startsWith("unitName:"),
+                containsString("fallback computes values of type java.time.temporal.ChronoUnit"))));
+        assertThat(typed.warnings().stream().anyMatch(warning -> warning.startsWith("plain:")), is(false));
+    }
+
     @Test
     public void writesAFileNextToTheSource(@TempDir Path directory) throws IOException {
         var source = directory.resolve("some-mappings.map");

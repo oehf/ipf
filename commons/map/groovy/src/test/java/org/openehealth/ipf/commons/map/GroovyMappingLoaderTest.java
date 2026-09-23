@@ -16,17 +16,20 @@
 package org.openehealth.ipf.commons.map;
 
 import org.junit.jupiter.api.Test;
-import org.openehealth.ipf.commons.map.Entry;
-import org.openehealth.ipf.commons.map.Equivalence;
 
 import java.net.URI;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.openehealth.ipf.commons.core.hamcrest.OptionalMatchers.hasNoValue;
 import static org.openehealth.ipf.commons.core.hamcrest.OptionalMatchers.hasValue;
@@ -166,5 +169,112 @@ public class GroovyMappingLoaderTest {
         assertThat(e.getMessage(),
                 e.getMessage(),
                 containsString("does not declare a 'mappings' closure"));
+    }
+
+    /**
+     * The model holds strings, so a script mapping objects loads as their string form. That is a
+     * silent change for callers of the deprecated MappingService, which used to get the objects
+     * back, so the loader names every typed mapping.
+     */
+    @Test
+    public void typedMappingsAreReported() throws Exception {
+        var warnings = new ArrayList<String>();
+        var source = GroovyMappingLoaderTest.class.getResource("/typed.map");
+        List<Mapping> loaded;
+        try (var in = source.openStream()) {
+            loaded = new GroovyMappingLoader().load(in, source.toURI(), new MappingFunctionRegistry(), warnings::add);
+        }
+
+        assertThat(loaded, hasSize(4));
+        assertThat(warnings, hasItem(allOf(startsWith("timeUnit:"),
+                containsString("keys of type java.util.concurrent.TimeUnit"),
+                containsString("values of type java.time.temporal.ChronoUnit"))));
+        assertThat(warnings, hasItem(allOf(startsWith("religion:"),
+                containsString("values of type java.lang.Integer"))));
+        assertThat(warnings.stream().anyMatch(warning -> warning.startsWith("religion:") && warning.contains("keys")),
+                is(false));
+        assertThat(warnings.stream().anyMatch(warning -> warning.startsWith("plain:")), is(false));
+    }
+
+    /**
+     * The string form is {@code toString()}, not the constant name: {@code ChronoUnit} overrides
+     * it, which is one reason a typed mapping cannot simply be converted back to its enum.
+     */
+    @Test
+    public void typedMappingsLoadAsTheirStringForm() {
+        var mappings = Mappings.builder().load("classpath:/typed.map").build();
+
+        assertThat(mappings, translates("timeUnit", "SECONDS").to("Seconds"));
+        assertThat(mappings, translates("timeUnit", "DAYS").to("Forever"));
+        assertThat(mappings, translates("religion", "EOT").to("1068"));
+    }
+
+    /**
+     * A fallback closure's result only shows when it is called, so its type is reported then, and
+     * only once.
+     */
+    @Test
+    public void typedFallbackResultsAreReportedOnce() throws Exception {
+        var warnings = new ArrayList<String>();
+        var functions = new MappingFunctionRegistry();
+        var source = GroovyMappingLoaderTest.class.getResource("/typed.map");
+        try (var in = source.openStream()) {
+            new GroovyMappingLoader().load(in, source.toURI(), functions, warnings::add);
+        }
+        warnings.clear();
+
+        var fallback = functions.lookup("unitName#unmatched").orElseThrow();
+        assertThat(fallback.apply("HOURS"), is("Hours"));
+        assertThat(fallback.apply("DAYS"), is("Days"));
+
+        assertThat(warnings, contains(allOf(startsWith("unitName:"),
+                containsString("forward fallback computes values of type java.time.temporal.ChronoUnit"))));
+    }
+
+    /**
+     * The DSL's former composite convention is gone, so a key or value containing the separator
+     * is one string. Every mapping relying on the convention is named, because its callers used to
+     * get Lists back.
+     */
+    @Test
+    public void compositeMappingsAreReported() throws Exception {
+        var warnings = new ArrayList<String>();
+        var functions = new MappingFunctionRegistry();
+        var source = GroovyMappingLoaderTest.class.getResource("/composite.map");
+        List<Mapping> loaded;
+        try (var in = source.openStream()) {
+            loaded = new GroovyMappingLoader().load(in, source.toURI(), functions, warnings::add);
+        }
+
+        assertThat(loaded, hasSize(3));
+        assertThat(loaded.get(0).entries().get(0), is(new Entry("SAP-ISH~HZL", "1.2.3~HZL")));
+        assertThat(warnings, contains(allOf(startsWith("directory:"),
+                containsString("key 'SAP-ISH~HZL'"),
+                containsString("value '1.2.3~HZL'"),
+                containsString("fallback '1.2.3.999~UNKNOWN'"),
+                containsString("split the mapping"))));
+    }
+
+    /**
+     * A fallback closure returning a List was a composite value; its result only shows when it is
+     * called, so it is reported then, and not as a typed mapping.
+     */
+    @Test
+    public void compositeFallbackResultsAreReported() throws Exception {
+        var warnings = new ArrayList<String>();
+        var functions = new MappingFunctionRegistry();
+        var source = GroovyMappingLoaderTest.class.getResource("/composite.map");
+        try (var in = source.openStream()) {
+            new GroovyMappingLoader().load(in, source.toURI(), functions, warnings::add);
+        }
+        warnings.clear();
+
+        var fallback = functions.lookup("namespace#unmatched").orElseThrow();
+        assertThat(fallback.apply("X"), is("[, ]"));
+        assertThat(fallback.apply("Y"), is("[, ]"));
+
+        assertThat(warnings, contains(allOf(startsWith("namespace:"),
+                containsString("forward fallback computes composite values such as ['', '']"),
+                containsString("split the mapping"))));
     }
 }

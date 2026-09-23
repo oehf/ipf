@@ -236,3 +236,72 @@ and the default `HapiContext` silently fell back to the plain HAPI model classes
 than the first, so the PIX variant wins for HL7 v2.5. This concerns only the general purpose
 `HapiContext` bean; the IHE transaction endpoints are unaffected, as each of them carries its own
 single-profile model class factory.
+
+### Reimplemented mapping service
+
+The mapping service has been reimplemented around a typed, `Optional`-returning `Mappings` API
+and declarative mapping formats (IPF XML, IPF YAML, FHIR ConceptMap R4). `ipf-commons-map` is now
+a parent POM; depend on `ipf-commons-map-core` plus one module per format you read.
+`MappingService`, `BidiMappingService`, `SpringBidiMappingService` and the Groovy `.map` DSL are
+deprecated and will be removed in IPF 7.0, but keep working in 6.0. See
+[`commons/map/README.md`](https://github.com/oehf/ipf/blob/master/commons/map/README.md) for the
+formats, the Spring wiring and `MappingConverter`, which converts `.map` scripts.
+
+#### Composite values are gone
+
+The `~` convention of IPF 5.x no longer exists, neither in the Groovy and Kotlin mapping DSLs nor
+in the deprecated `BidiMappingService`: a `Collection` is no longer joined into a key, and a value
+containing `~` is returned as one string rather than as a `List`. `map`/`mapReverse` on a
+`Collection` are gone, and `BidiMappingService` rejects a `Collection` key. Split such a mapping
+into one mapping per component, or join and split the parts in the calling code:
+
+    // IPF 5.x: a List
+    [app, facility].map('device_OID')
+    // IPF 6.0
+    "${app}~${facility}".map('device_OID')?.split('~')
+
+The `.map` loader logs a warning for each mapping that uses the convention.
+
+#### Empty values are literal
+
+An entry mapping to `''` now always yields `''` and never falls back to the mapping's `ELSE`
+clause; a default argument applies only where there is no value at all. In IPF 5.x such an entry
+was never returned: Groovy's `?:` treated `''` as no value, so the mapping's `ELSE` applied, or
+`null` without one. An empty result gave way to the default argument of `map(mapping, default)`
+or `get(mapping, key, default)`. With `'N' : ''` and `(ELSE) : 'IMP'`, `'N'.map(…)` used to give
+`'IMP'` and now gives `''`.
+
+This holds for `Mappings`, the Groovy and Kotlin DSLs and the deprecated `BidiMappingService`
+alike. Check mappings with empty values whose callers relied on the old result. Where an entry was
+meant to fall back to (ELSE), remove it.
+
+#### Typed mappings must be rewritten
+
+A `.map` file is a script, and the old service held whatever objects it evaluated to — enum
+constants, numbers, lists — and handed exactly those objects back. The new model holds **strings
+only**, and so does every mapping format. A `.map` script is therefore still loaded, but each key,
+value and fallback result is reduced to its `toString()` form, and the deprecated `MappingService`
+returns that string rather than the object the script declared:
+
+    // default-enumerations.map
+    documentStatus(
+        (Enumerations.DocumentReferenceStatus.CURRENT) : AvailabilityStatus.APPROVED,
+        ...
+    )
+
+    // IPF 5.x: the AvailabilityStatus constant. IPF 6.0: the String "APPROVED"
+    (AvailabilityStatus) mappingService.get("documentStatus", status)   // ClassCastException
+
+This compiles, and only fails when the lookup runs. `toString()` is not necessarily the constant
+name either (`ChronoUnit.SECONDS` becomes `"Seconds"`), so converting back with `Enum.valueOf` is
+not a general fix.
+
+Such typed mappings cannot be expressed in any of the new formats and must be rewritten in Java —
+for a table between two enums a `switch` expression is the natural replacement. Without a
+`default` branch it fails to compile when either enum grows a constant. Mappings between plain
+codes are unaffected.
+
+To find them, look for warnings. The `.map` loader logs one at startup for every mapping whose
+keys, values or constant fallbacks are not strings. For a fallback closure the first time it
+computes a non-string result. `MappingConverter` reports the same mappings among its conversion
+warnings.

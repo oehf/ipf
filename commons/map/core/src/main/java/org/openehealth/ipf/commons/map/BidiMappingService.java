@@ -15,19 +15,16 @@
  */
 package org.openehealth.ipf.commons.map;
 
-import lombok.Getter;
 import lombok.Setter;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.StringJoiner;
 import java.util.function.Function;
 
 /**
@@ -35,15 +32,24 @@ import java.util.function.Function;
  * model and the loading of mapping sources live as of IPF 6.0.
  * <p>
  * This class exists to keep the untyped, {@code null}-returning {@link MappingService} contract
- * and its two string conventions working unchanged for existing applications:
+ * working for existing applications. It answers exactly what {@link Mappings} answers, with
+ * {@code null} where that returns an empty {@link java.util.Optional}.
+ * <p>
+ * Two conventions of the Groovy implementation it replaces are gone:
  * <ul>
- *     <li>a value containing the separator (by default {@code ~}) is returned as a {@link List},
- *     and a {@link Collection} passed as a key is joined with it before lookup;</li>
- *     <li>an empty value is treated as no value, so a mapping's fallback applies to it.</li>
+ *     <li>an empty value is a value: an entry mapping to {@code ""} yields {@code ""}, rather than
+ *     the mapping's fallback, and a default passed in applies only where there is no value at
+ *     all;</li>
+ *     <li>there is no composite convention: a value containing {@code ~} is returned as the string
+ *     it is rather than as a {@link List}, and a {@link Collection} passed as a key or value is
+ *     rejected rather than joined. A mapping whose keys or values consist of several parts must
+ *     either be split into separate mappings, or the calling code joins and splits the parts
+ *     itself.</li>
  * </ul>
- * New code should use {@link Mappings} directly &mdash; it is {@link String}-typed, returns
- * {@link java.util.Optional}, and has neither convention. {@link #getMappings()} hands out the
- * instance this service delegates to.
+ * <p>
+ * New code should use {@link Mappings} directly &mdash; it is {@link String}-typed and returns
+ * {@link java.util.Optional}. {@link #getMappings()} hands out the instance this service delegates
+ * to.
  * <p>
  * Mapping sources are dispatched to a {@link MappingLoader} by file extension, so the format of
  * a mapping file is a decision per file. Reading the legacy {@code .map} script format needs
@@ -65,25 +71,16 @@ public class BidiMappingService implements MappingService {
     protected static final String KEYSYSTEM = "_%KEYSYSTEM%_";
     protected static final String VALUESYSTEM = "_%VALUESYSTEM%_";
     protected static final String ELSE = "_%ELSE%_";
-    protected static final String SEPARATOR = "~";
 
     private final DefaultMappings mappings;
     private final List<URL> scripts = new ArrayList<>();
     private final Map<String, Function<String, String>> functions = new LinkedHashMap<>();
 
-    @Getter
-    @Setter
-    private String separator;
-
     @Setter
     private boolean ignoreResourceNotFound = false;
 
     public BidiMappingService() {
-        this(SEPARATOR);
-    }
-
-    public BidiMappingService(String separator) {
-        this(separator, new DefaultMappings());
+        this(new DefaultMappings());
     }
 
     /**
@@ -94,11 +91,6 @@ public class BidiMappingService implements MappingService {
      * @param mappings the mappings to delegate to
      */
     public BidiMappingService(DefaultMappings mappings) {
-        this(SEPARATOR, mappings);
-    }
-
-    public BidiMappingService(String separator, DefaultMappings mappings) {
-        this.separator = separator;
         this.mappings = mappings;
     }
 
@@ -172,24 +164,24 @@ public class BidiMappingService implements MappingService {
 
     @Override
     public Object get(Object mappingKey, Object key) {
-        return splitValue(forward(mappingKey, key));
+        return forward(mappingKey, key);
     }
 
     @Override
     public Object get(Object mappingKey, Object key, Object defaultValue) {
-        var value = splitValue(forward(mappingKey, key));
-        return isEmpty(value) ? defaultValue : value;
+        var value = forward(mappingKey, key);
+        return value == null ? defaultValue : value;
     }
 
     @Override
     public Object getKey(Object mappingKey, Object value) {
-        return splitValue(reverse(mappingKey, value));
+        return reverse(mappingKey, value);
     }
 
     @Override
     public Object getKey(Object mappingKey, Object value, Object defaultKey) {
-        var key = splitValue(reverse(mappingKey, value));
-        return isEmpty(key) ? defaultKey : key;
+        var key = reverse(mappingKey, value);
+        return key == null ? defaultKey : key;
     }
 
     @Override
@@ -220,17 +212,11 @@ public class BidiMappingService implements MappingService {
     // ------------------------------------------------------------------ internals
 
     private String forward(Object mappingKey, Object key) {
-        var mapping = name(mappingKey);
-        var joined = joinKey(key);
-        var value = mappings.lookup(mapping, joined).orElse(null);
-        return isEmpty(value) ? mappings.unmatched(mapping, joined).orElse(null) : value;
+        return mappings.map(name(mappingKey), toString(key)).orElse(null);
     }
 
     private String reverse(Object mappingKey, Object value) {
-        var mapping = name(mappingKey);
-        var joined = joinKey(value);
-        var key = mappings.lookupReverse(mapping, joined).orElse(null);
-        return isEmpty(key) ? mappings.reverseUnmatched(mapping, joined).orElse(null) : key;
+        return mappings.mapReverse(name(mappingKey), toString(value)).orElse(null);
     }
 
     private static String name(Object mappingKey) {
@@ -239,43 +225,14 @@ public class BidiMappingService implements MappingService {
 
     /**
      * @param x a key or value
-     * @return a {@link Collection} joined with the separator, any other value as a string
+     * @return the argument as a string
+     * @throws IllegalArgumentException for a {@link Collection}, which IPF 5.x joined with {@code ~}
      */
-    protected String joinKey(Object x) {
-        if (x instanceof Collection<?> collection) {
-            var joiner = new StringJoiner(separator);
-            collection.forEach(element -> joiner.add(String.valueOf(element)));
-            return joiner.toString();
+    private static String toString(Object x) {
+        if (x instanceof Collection<?>) {
+            throw new IllegalArgumentException("Composite keys are no longer supported; join them in"
+                    + " the calling code or split the mapping into separate ones: " + x);
         }
         return x == null ? null : String.valueOf(x);
-    }
-
-    /**
-     * @param x a mapped value
-     * @return a {@link List} if the value is composite, the value itself otherwise
-     */
-    protected Object splitValue(String x) {
-        if (x == null) {
-            return null;
-        }
-        var parts = x.split(separator);
-        return parts.length == 1 ? parts[0] : new ArrayList<>(Arrays.asList(parts));
-    }
-
-    /**
-     * Reproduces Groovy truthiness for the values this service returns, which is what the
-     * {@code ?:} operators of the original implementation applied.
-     */
-    private static boolean isEmpty(Object value) {
-        if (value == null) {
-            return true;
-        }
-        if (value instanceof CharSequence sequence) {
-            return sequence.isEmpty();
-        }
-        if (value instanceof Collection<?> collection) {
-            return collection.isEmpty();
-        }
-        return false;
     }
 }

@@ -23,6 +23,10 @@ mappings = {
 		 nullTest(
 				 (null) : 'not null'
 		 )
+		 emptyEntry(
+				 'N'    : '',
+				 (ELSE) : 'IMP'
+		 )
 		 reverseElseTest(
 		         'a'	: 'b',
 		         (ELSE)	: 'c',

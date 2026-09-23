@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Turns a mapping source document into {@link Mapping} records.
@@ -77,6 +78,27 @@ public interface MappingLoader {
      * @throws MappingException if the source is not valid for this format
      */
     List<Mapping> load(InputStream in, URI source, MappingFunctionRegistry functions) throws IOException;
+
+    /**
+     * Reads all mappings contained in one source document, reporting what the model cannot hold.
+     * <p>
+     * A format that can state more than the model - the legacy Groovy DSL binds arbitrary objects
+     * where the model holds strings - reports each such loss to {@code warnings}, one message per
+     * mapping, starting with the mapping's name. {@link MappingConverter} collects them. The
+     * default implementation has nothing to report.
+     *
+     * @param in        the source content; the caller closes the stream
+     * @param source    location of the source, for diagnostics
+     * @param functions registry a loader may add functions to
+     * @param warnings  receives a human-readable message for every loss the loader has to make
+     * @return the mappings read, in declaration order
+     * @throws IOException      if the source cannot be read
+     * @throws MappingException if the source is not valid for this format
+     */
+    default List<Mapping> load(InputStream in, URI source, MappingFunctionRegistry functions,
+                               Consumer<String> warnings) throws IOException {
+        return load(in, source, functions);
+    }
 
     /**
      * @param source a source location
