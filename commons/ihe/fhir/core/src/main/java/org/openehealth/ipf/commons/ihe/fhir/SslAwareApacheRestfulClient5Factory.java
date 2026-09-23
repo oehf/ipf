@@ -24,6 +24,7 @@ import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.ssl.DefaultClientTlsStrategy;
+import org.apache.hc.client5.http.ssl.HostnameVerificationPolicy;
 import org.apache.hc.client5.http.ssl.HttpsSupport;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.ssl.SSLContexts;
@@ -144,10 +145,13 @@ public class SslAwareApacheRestfulClient5Factory extends SslAwareAbstractRestful
                 var sslContext = getSslContext() != null ?
                     getSslContext() :
                     SSLContexts.createSystemDefault();
-                var hostnameVerifier = getHostnameVerifier() != null ?
-                    getHostnameVerifier() :
-                    HttpsSupport.getDefaultHostnameVerifier();
-                var tlsStrategy = new DefaultClientTlsStrategy(sslContext, hostnameVerifier);
+                // Without an explicit policy, DefaultClientTlsStrategy uses HostnameVerificationPolicy.BOTH,
+                // i.e. JSSE verifies the hostname during the handshake and fails before a configured
+                // HostnameVerifier (e.g. NoopHostnameVerifier) is ever consulted. A configured verifier
+                // must therefore be made authoritative with HostnameVerificationPolicy.CLIENT.
+                var tlsStrategy = getHostnameVerifier() != null ?
+                    new DefaultClientTlsStrategy(sslContext, HostnameVerificationPolicy.CLIENT, getHostnameVerifier()) :
+                    new DefaultClientTlsStrategy(sslContext, HostnameVerificationPolicy.BOTH, HttpsSupport.getDefaultHostnameVerifier());
                 builder.setSSLSocketFactory(tlsStrategy);
             }
         }

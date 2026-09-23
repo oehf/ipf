@@ -24,6 +24,11 @@
     </properties>
     <body>
         <release version="6.0.0" description="IPF 6.0.0" date="">
+            <action issue="524" dev="ohr" type="fix">
+                SslAwareApacheRestfulClient5Factory ignored a configured HostnameVerifier (e.g.
+                NoopHostnameVerifier): httpclient5 then defaults to HostnameVerificationPolicy.BOTH, so
+                JSSE rejected the hostname during the TLS handshake before the verifier was consulted.
+            </action>
             <action issue="521" dev="ohr" type="update">
                 The Configurer SPI is deprecated for removal. Holders and registrars now collect
                 their own contributions from the Spring application context, so Configurer,
