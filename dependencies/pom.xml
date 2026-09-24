@@ -17,7 +17,7 @@
         <commons-compress-version>1.28.0</commons-compress-version>
         <equinox-app-version>1.3.200-v20130910-1609</equinox-app-version>
         <equinox-common-version>3.6.200-v20130402-1505</equinox-common-version>
-        <groovy-version>5.0.8</groovy-version>
+        <groovy-version>5.1.3</groovy-version>
         <hapi-version>2.6.0</hapi-version>
         <hapi-fhir-version>8.12.0</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
