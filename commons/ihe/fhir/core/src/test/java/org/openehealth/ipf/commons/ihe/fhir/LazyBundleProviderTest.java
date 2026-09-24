@@ -16,6 +16,8 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
+import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
 import io.undertow.servlet.spec.HttpServletResponseImpl;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
@@ -23,6 +25,8 @@ import org.hl7.fhir.r4.model.Patient;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.mock.web.MockHttpServletRequest;
+import org.springframework.mock.web.MockHttpServletResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +36,9 @@ import java.util.Objects;
 
 import static org.easymock.EasyMock.eq;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 /**
  *
@@ -146,6 +153,65 @@ public class LazyBundleProviderTest {
         assertEquals(20, result.size());
         assertEquals(response.subList(15, 35), result);
         EasyMock.verify(requestConsumer);
+    }
+
+    @Test
+    public void testBoundToLaterRequest() {
+        var originalResponse = new MockHttpServletResponse();
+        var originalRequest = requestDetails(new MockHttpServletRequest("GET", "/fhir/Patient"), originalResponse);
+        originalRequest.setRestOperationType(RestOperationTypeEnum.SEARCH_TYPE);
+        originalRequest.setResourceName("Patient");
+        originalRequest.setRequestPath("Patient");
+        originalRequest.setParameters(Map.of("family", new String[]{"Miller"}));
+        originalRequest.getUserData().put("original", "value");
+        var headers = new HashMap<String, Object>();
+        headers.put(Constants.FHIR_REQUEST_DETAILS, originalRequest);
+        var payload = new Object();
+        var original = new LazyBundleProvider(requestConsumer, true, payload, headers, originalResponse);
+
+        var currentServletRequest = new MockHttpServletRequest("GET", "/fhir");
+        var currentResponse = new MockHttpServletResponse();
+        var currentRequest = requestDetails(currentServletRequest, currentResponse);
+        currentRequest.setRestOperationType(RestOperationTypeEnum.GET_PAGE);
+
+        var seenRequestDetails = new ArrayList<ServletRequestDetails>();
+        EasyMock.expect(requestConsumer.handleBundleRequest(eq(payload), hasRequestSublistParameters(10, 20), EasyMock.anyObject()))
+                .andAnswer(() -> {
+                    Map<String, Object> inHeaders = EasyMock.getCurrentArgument(1);
+                    Map<String, Object> outHeaders = EasyMock.getCurrentArgument(2);
+                    seenRequestDetails.add((ServletRequestDetails) inHeaders.get(Constants.FHIR_REQUEST_DETAILS));
+                    outHeaders.put(Constants.HTTP_OUTGOING_HEADERS, Map.of("X-Test", List.of("page")));
+                    return response.subList(10, 20);
+                });
+        EasyMock.replay(requestConsumer);
+
+        var bound = original.boundTo(currentRequest);
+        assertEquals(response.subList(10, 20), bound.getResources(10, 20));
+
+        // Describes the original search, but on the servlet request and response of the current request
+        var rebound = seenRequestDetails.get(0);
+        assertNotSame(originalRequest, rebound);
+        assertSame(currentServletRequest, rebound.getServletRequest());
+        assertSame(currentResponse, rebound.getServletResponse());
+        assertEquals(RestOperationTypeEnum.SEARCH_TYPE, rebound.getRestOperationType());
+        assertEquals("Patient", rebound.getResourceName());
+        assertEquals("Patient", rebound.getRequestPath());
+        assertEquals("Miller", rebound.getParameters().get("family")[0]);
+        assertEquals("value", rebound.getUserData().get("original"));
+        assertEquals("page", currentResponse.getHeader("X-Test"));
+        assertNull(originalResponse.getHeader("X-Test"));
+
+        // The copy shares the cached results with the original, so no further consumer call is needed
+        assertEquals(response.subList(12, 18), original.getResources(12, 18));
+        assertEquals(response.subList(12, 18), original.boundTo(currentRequest).getResources(12, 18));
+        EasyMock.verify(requestConsumer);
+    }
+
+    private static ServletRequestDetails requestDetails(MockHttpServletRequest request, MockHttpServletResponse response) {
+        var requestDetails = new ServletRequestDetails();
+        requestDetails.setServletRequest(request);
+        requestDetails.setServletResponse(response);
+        return requestDetails;
     }
 
 

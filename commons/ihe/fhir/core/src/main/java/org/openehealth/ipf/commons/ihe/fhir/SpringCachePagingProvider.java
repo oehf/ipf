@@ -84,9 +84,13 @@ public class SpringCachePagingProvider implements IPagingProvider {
 
     @Override
     public IBundleProvider retrieveResultList(RequestDetails requestDetails, @NonNull String id) {
-        return distributed ?
-                deserialize(cache.get(id, List.class)) :
-                cache.get(id, IBundleProvider.class);
+        if (distributed) {
+            return deserialize(cache.get(id, List.class));
+        }
+        var bundleProvider = cache.get(id, IBundleProvider.class);
+        return bundleProvider instanceof AbstractBundleProvider abstractBundleProvider ?
+                abstractBundleProvider.boundTo(requestDetails) :
+                bundleProvider;
     }
 
 

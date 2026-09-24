@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.ihe.fhir;
 
+import ca.uhn.fhir.rest.api.server.RequestDetails;
 import com.google.common.collect.DiscreteDomain;
 import com.google.common.collect.Range;
 import com.google.common.collect.RangeSet;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_FROM_INDEX;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_SIZE_ONLY;
@@ -55,9 +57,10 @@ public class LazyBundleProvider extends AbstractBundleProvider {
     private static final Logger log = LoggerFactory.getLogger(LazyBundleProvider.class);
 
     private final boolean cacheResults;
-    private int size = -1;
-    private final transient List<IBaseResource> cachedResults = new ArrayList<>();
-    private final transient ResultRanges resultRanges = new ResultRanges();
+    // Shared with the copies returned by boundTo, so that all requests for pages benefit from the cache
+    private final AtomicInteger size;
+    private final transient List<IBaseResource> cachedResults;
+    private final transient ResultRanges resultRanges;
 
     /**
      * Initializes a lazy bundle provider
@@ -85,6 +88,26 @@ public class LazyBundleProvider extends AbstractBundleProvider {
     public LazyBundleProvider(RequestConsumer consumer, boolean cacheResults, boolean sort, Object payload, Map<String, Object> headers, HttpServletResponse httpServletResponse) {
         super(consumer, sort, payload, headers, httpServletResponse);
         this.cacheResults = cacheResults;
+        this.size = new AtomicInteger(-1);
+        this.cachedResults = new ArrayList<>();
+        this.resultRanges = new ResultRanges();
+    }
+
+    private LazyBundleProvider(LazyBundleProvider original, RequestDetails requestDetails) {
+        super(original, requestDetails);
+        this.cacheResults = original.cacheResults;
+        this.size = original.size;
+        this.cachedResults = original.cachedResults;
+        this.resultRanges = original.resultRanges;
+    }
+
+    /**
+     * Further pages are loaded by calling the consumer again, which must not see the servlet request
+     * and response of the original request anymore.
+     */
+    @Override
+    public LazyBundleProvider boundTo(RequestDetails requestDetails) {
+        return new LazyBundleProvider(this, requestDetails);
     }
 
     @Override
@@ -123,12 +146,12 @@ public class LazyBundleProvider extends AbstractBundleProvider {
 
     @Override
     public Integer size() {
-        if (!cacheResults || size < 0) {
+        if (!cacheResults || size.get() < 0) {
             var headers = getHeaders();
             headers.put(FHIR_REQUEST_SIZE_ONLY, null);
-            size = getConsumer().handleSizeRequest(getPayload(), headers);
+            size.set(getConsumer().handleSizeRequest(getPayload(), headers));
         }
-        return size;
+        return size.get();
     }
 
     private void cacheAll(int fromIndex, List<IBaseResource> resources) {

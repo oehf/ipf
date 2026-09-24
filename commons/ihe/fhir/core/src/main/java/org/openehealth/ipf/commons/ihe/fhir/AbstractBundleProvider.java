@@ -18,6 +18,8 @@ package org.openehealth.ipf.commons.ihe.fhir;
 
 import ca.uhn.fhir.model.primitive.InstantDt;
 import ca.uhn.fhir.rest.api.server.IBundleProvider;
+import ca.uhn.fhir.rest.api.server.RequestDetails;
+import ca.uhn.fhir.rest.server.servlet.ServletRequestDetails;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hl7.fhir.instance.model.api.IBaseResource;
 
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_DETAILS;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.FHIR_REQUEST_PARAMETERS;
 
 /**
@@ -48,6 +51,73 @@ public abstract class AbstractBundleProvider implements IBundleProvider {
         this.headers = headers;
         this.sort = sort;
         this.httpServletResponse = httpServletResponse;
+    }
+
+    /**
+     * Copies a bundle provider and binds the copy to a later request, typically one that asks for
+     * another page of a result that has been cached with {@link SpringCachePagingProvider}.
+     * <p>
+     * The servlet request and response of the original request are recycled by the servlet
+     * container once it has completed, so the copy writes to the response of the current request and
+     * gets {@link RequestDetails} that describe the original search, but are backed by the current
+     * servlet request.
+     *
+     * @param original       bundle provider that was created for the original request
+     * @param currentRequest the request that is being processed now
+     */
+    protected AbstractBundleProvider(AbstractBundleProvider original, RequestDetails currentRequest) {
+        this.consumer = original.consumer;
+        this.payload = original.payload;
+        this.sort = original.sort;
+        this.headers = new HashMap<>(original.headers);
+        if (currentRequest instanceof ServletRequestDetails current) {
+            this.httpServletResponse = current.getServletResponse();
+            if (original.headers.get(FHIR_REQUEST_DETAILS) instanceof RequestDetails originalRequest) {
+                this.headers.put(FHIR_REQUEST_DETAILS, rebind(originalRequest, current));
+            }
+        } else {
+            this.httpServletResponse = original.httpServletResponse;
+        }
+    }
+
+    /**
+     * Returns a bundle provider that can serve the given request. Subclasses that call the
+     * {@link RequestConsumer} again after the original request has completed must return a copy
+     * created with {@link #AbstractBundleProvider(AbstractBundleProvider, RequestDetails)}.
+     *
+     * @param requestDetails the request that is being processed now
+     * @return a bundle provider bound to the request, or this instance if it does not need to be bound
+     */
+    public AbstractBundleProvider boundTo(RequestDetails requestDetails) {
+        return this;
+    }
+
+    /**
+     * The current request of a paging call is a {@code GET_PAGE} without resource name or search
+     * parameters, so it is used only as the servlet-bound part, while everything describing the
+     * operation is taken over from the original request.
+     */
+    private static ServletRequestDetails rebind(RequestDetails original, ServletRequestDetails current) {
+        var rebound = new ServletRequestDetails(current);
+        rebound.setRestOperationType(original.getRestOperationType());
+        rebound.setResourceName(original.getResourceName());
+        rebound.setId(original.getId());
+        rebound.setOperation(original.getOperation());
+        rebound.setSecondaryOperation(original.getSecondaryOperation());
+        rebound.setCompartmentName(original.getCompartmentName());
+        rebound.setRequestType(original.getRequestType());
+        if (original.getRequestPath() != null) {
+            rebound.setRequestPath(original.getRequestPath());
+        }
+        rebound.setCompleteUrl(original.getCompleteUrl());
+        rebound.setParameters(original.getParameters());
+        rebound.setTenantId(original.getTenantId());
+        rebound.setResource(original.getResource());
+        if (original.getRequestContentsIfLoaded() != null) {
+            rebound.setRequestContents(original.getRequestContentsIfLoaded());
+        }
+        original.getUserData().forEach(rebound.getUserData()::putIfAbsent);
+        return rebound;
     }
 
     @Override
