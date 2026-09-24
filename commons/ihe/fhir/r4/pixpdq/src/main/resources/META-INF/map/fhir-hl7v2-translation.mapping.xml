@@ -3,7 +3,7 @@
   ~ Mappings between HL7v2 code systems and their FHIR counterparts. Most of them are derived
   ~ directly from the FHIR specification.
   ~
-  ~ Where several keys map onto one value, all but one are marked narrower so that the value has
+  ~ Where several keys map onto one value, all but one are marked wider so that the value has
   ~ exactly one inverse. The one left as "equal" is in every case the last of the group, which is
   ~ the inverse the Groovy mapping service happened to pick before IPF 6.0; the choice is
   ~ therefore behavior-preserving rather than considered, and worth revisiting per mapping.
@@ -18,17 +18,17 @@
         <entry key="B" value="U"/>                              <!-- unmarried -->
         <entry key="C" value="P"/>                              <!-- common law -->
         <entry key="D" value="D"/>                              <!-- divorced -->
-        <entry key="E" value="L" equivalence="narrower"/>        <!-- legally separated -->
-        <entry key="G" value="T" equivalence="narrower"/>        <!-- living together -->
+        <entry key="E" value="L" equivalence="wider"/>           <!-- legally separated -->
+        <entry key="G" value="T" equivalence="wider"/>           <!-- living together -->
         <entry key="I" value="I"/>                              <!-- interlocutory -->
         <entry key="M" value="M"/>                              <!-- married -->
         <entry key="N" value="A"/>                              <!-- anulled -->
         <entry key="L" value="L"/>                              <!-- legally separated -->
-        <entry key="O" value="UNK" equivalence="narrower"/>      <!-- other -->
-        <entry key="P" value="T" equivalence="narrower"/>        <!-- domestic partner -->
+        <entry key="O" value="UNK" equivalence="wider"/>         <!-- other -->
+        <entry key="P" value="T" equivalence="wider"/>           <!-- domestic partner -->
         <entry key="R" value="T"/>                              <!-- registered domestic partner -->
         <entry key="S" value="S"/>                              <!-- never married AKA single -->
-        <entry key="T" value="UNK" equivalence="narrower"/>      <!-- unreported -->
+        <entry key="T" value="UNK" equivalence="wider"/>         <!-- unreported -->
         <entry key="U" value="UNK"/>                            <!-- unknown -->
         <entry key="W" value="W"/>                              <!-- widowed -->
         <unmatched mode="fixed" value="UNK"/>                   <!-- unknown stuff -->
@@ -50,9 +50,9 @@
         <entry key="CHS" value="1063"/>                          <!-- Christian: Christian Science -->
         <entry key="COC" value="1064"/>                          <!-- Christian: Church of Christ -->
         <entry key="COG" value="1065"/>                          <!-- Christian: Church of God -->
-        <entry key="EOT" value="1068" equivalence="narrower"/>    <!-- Christian: Eastern Orthodox -->
+        <entry key="EOT" value="1068" equivalence="wider"/>       <!-- Christian: Eastern Orthodox -->
         <entry key="EPI" value="1069"/>                          <!-- Christian: Episcopalian -->
-        <entry key="FRQ" value="1071" equivalence="narrower"/>    <!-- Christian: Friends -->
+        <entry key="FRQ" value="1071" equivalence="wider"/>       <!-- Christian: Friends -->
         <entry key="GRE" value="1068"/>                          <!-- Christian: Greek Orthodox -->
         <entry key="JWN" value="1025"/>                          <!-- Christian: Jehovah's Witness -->
         <entry key="LUT" value="1028"/>                          <!-- Christian: Lutheran -->
@@ -120,9 +120,9 @@
     <mapping name="hl7v2fhir-address-use"
              keySystem="2.16.840.1.113883.5.290"
              valueSystem="http://hl7.org/fhir/address-use">
-        <entry key="H" value="home" equivalence="narrower"/>
+        <entry key="H" value="home" equivalence="wider"/>
         <entry key="L" value="home"/>
-        <entry key="O" value="work" equivalence="narrower"/>
+        <entry key="O" value="work" equivalence="wider"/>
         <entry key="B" value="work"/>
         <entry key="BA" value="old"/>
         <unmatched mode="fixed" value=""/>
@@ -137,7 +137,7 @@
         <entry key="N" value="nickname"/>
         <entry key="S" value="anonymous"/>
         <entry key="BAD" value="old"/>
-        <entry key="M" value="maiden" equivalence="narrower"/>
+        <entry key="M" value="maiden" equivalence="wider"/>
         <entry key="B" value="maiden"/>
         <unmatched mode="fixed" value=""/>
     </mapping>
@@ -145,8 +145,8 @@
     <mapping name="hl7v2fhir-telecom-use"
              keySystem="2.16.840.1.113883.5.201"
              valueSystem="http://hl7.org/fhir/contact-point-use">
-        <entry key="PRN" value="home" equivalence="narrower"/>
-        <entry key="ORN" value="home" equivalence="narrower"/>
+        <entry key="PRN" value="home" equivalence="wider"/>
+        <entry key="ORN" value="home" equivalence="wider"/>
         <entry key="VHN" value="home"/>
         <entry key="WPN" value="work"/>
         <entry key="PRS" value="mobile"/>
@@ -156,7 +156,7 @@
     <mapping name="hl7v2fhir-telecom-type"
              keySystem="2.16.840.1.113883.5.202"
              valueSystem="http://hl7.org/fhir/contact-point-system">
-        <entry key="PH" value="phone" equivalence="narrower"/>
+        <entry key="PH" value="phone" equivalence="wider"/>
         <entry key="FX" value="fax"/>
         <entry key="Internet" value="email"/>
         <entry key="BP" value="pager"/>
@@ -179,7 +179,7 @@
              valueSystem="http://hl7.org/fhir/administrative-gender">
         <entry key="M" value="male"/>
         <entry key="F" value="female"/>
-        <entry key="A" value="other" equivalence="narrower"/>
+        <entry key="A" value="other" equivalence="wider"/>
         <entry key="O" value="other"/>
         <entry key="U" value="unknown"/>
         <unmatched mode="fixed" value="other"/>
@@ -190,8 +190,8 @@
              valueSystem="http://hl7.org/fhir/StructureDefinition/patient-genderIdentity">
         <entry key="M" value="male"/>
         <entry key="F" value="female"/>
-        <entry key="A" value="non-binary" equivalence="narrower"/>
-        <entry key="D" value="non-binary" equivalence="narrower"/>
+        <entry key="A" value="non-binary" equivalence="wider"/>
+        <entry key="D" value="non-binary" equivalence="wider"/>
         <entry key="I" value="non-binary"/>
         <unmatched mode="fixed" value="other"/>
     </mapping>

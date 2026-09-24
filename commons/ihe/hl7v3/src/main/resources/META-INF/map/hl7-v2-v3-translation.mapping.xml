@@ -23,7 +23,7 @@
              keySystem="2.16.840.1.113883.5.4"
              valueSystem="2.16.840.1.113883.12.354">
         <!-- ADT_A01 is the structure of both A01 and A08, so only one of them can be its inverse -->
-        <entry key="PRPA_IN201301UV02" value="ADT_A01" equivalence="narrower"/>
+        <entry key="PRPA_IN201301UV02" value="ADT_A01" equivalence="wider"/>
         <entry key="PRPA_IN201302UV02" value="ADT_A01"/>
         <entry key="PRPA_IN201304UV02" value="ADT_A39"/>
     </mapping>
@@ -61,7 +61,7 @@
         <entry key="102" value="SYN102"/>
         <entry key="103" value="SYN103"/>
         <!-- 200 and 201 both report NS200; 201 stays its inverse, as before IPF 6.0 -->
-        <entry key="200" value="NS200" equivalence="narrower"/>
+        <entry key="200" value="NS200" equivalence="wider"/>
         <entry key="201" value="NS200"/>
         <entry key="202" value="NS202"/>
         <entry key="203" value="NS203"/>
@@ -75,9 +75,9 @@
 
     <mapping name="hl7v2v3_nameTypeCode-nameUse">
         <!-- A and S both mean P, M and B both mean BR; the later one stays the inverse -->
-        <entry key="A" value="P" equivalence="narrower"/>
+        <entry key="A" value="P" equivalence="wider"/>
         <entry key="S" value="P"/>
-        <entry key="M" value="BR" equivalence="narrower"/>
+        <entry key="M" value="BR" equivalence="wider"/>
         <entry key="B" value="BR"/>
         <entry key="L" value="L"/>
         <entry key="T" value="I"/>

@@ -390,11 +390,9 @@ public abstract class ConceptMapLoader implements MappingLoader {
         return switch (declared) {
             case EQUAL, NULL -> Equivalence.EQUAL;
             case EQUIVALENT -> Equivalence.EQUIVALENT;
-            // R4 states the relation from the target's side, the model from the key's: "wider" and
-            // "subsumes" say the target is the broader concept, so the key is the narrower one
-            case WIDER, SUBSUMES -> Equivalence.NARROWER;
-            // "narrower" and "specializes": the target is the narrower concept, the key the wider
-            case NARROWER, SPECIALIZES -> Equivalence.WIDER;
+            // "subsumes" and "specializes" say the same as "wider" and "narrower", more strictly
+            case WIDER, SUBSUMES -> Equivalence.WIDER;
+            case NARROWER, SPECIALIZES -> Equivalence.NARROWER;
             case RELATEDTO, INEXACT -> Equivalence.INEXACT;
             case DISJOINT -> Equivalence.DISJOINT;
             case UNMATCHED -> throw new MappingException(source, "Mapping '" + mapping + "': element '"

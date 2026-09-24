@@ -19,7 +19,7 @@ Y = VIP
 @reverse     = fixed:U
 M = male
 F = female
-A = other | narrower
+A = other | wider
 O = other
 U = unknown
 ---
@@ -34,7 +34,7 @@ PRPA_IN201301UV02 = A01~ADT_A01
 @name      = emptyValue
 @unmatched = fixed:FALLBACK
    = 
-X =  | narrower
+X =  | wider
 ---
 @name        = disjointness
 @keySystem   = urn:oid:1.2.3

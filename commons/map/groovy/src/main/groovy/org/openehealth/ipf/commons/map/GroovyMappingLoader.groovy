@@ -49,7 +49,7 @@ import java.util.function.Function
  * same name silently. Both are declared here rather than left to the container, so that mappings
  * read from a script satisfy the model's constraints like any other: every mapping is marked
  * {@link SimpleMapping#override()}, and where several entries share a value all but the last are marked
- * {@link Equivalence#NARROWER}, which is the inverse the Groovy mapping service happened to pick.
+ * {@link Equivalence#WIDER}, which is the inverse the Groovy mapping service happened to pick.
  * <p>
  * Because the file is a script rather than data, nothing about it is checked before it runs. It
  * is kept for backwards compatibility and is scheduled for removal in IPF 7.0.
@@ -191,9 +191,9 @@ class GroovyMappingLoader implements MappingLoader {
                 return entry
             }
             log.debug("Mapping '{}': key '{}' shares the value '{}' with a later entry, so it is" +
-                    " marked narrower and '{}' stays the inverse", name, entry.key(), entry.value(),
+                    " marked wider and '{}' stays the inverse", name, entry.key(), entry.value(),
                     declared[lastIndexByValue[entry.value()] as int].key())
-            new Entry(entry.key(), entry.value(), Equivalence.NARROWER)
+            new Entry(entry.key(), entry.value(), Equivalence.WIDER)
         }
     }
 

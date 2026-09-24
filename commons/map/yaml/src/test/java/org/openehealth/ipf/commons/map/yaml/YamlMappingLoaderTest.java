@@ -96,7 +96,7 @@ public class YamlMappingLoaderTest {
         var mappings = example();
         var mapping = mappings.mapping(GENDER).orElseThrow();
 
-        assertThat(mapping.entries().get(2), hasEquivalence(Equivalence.NARROWER));
+        assertThat(mapping.entries().get(2), hasEquivalence(Equivalence.WIDER));
         assertThat(mapping.entries().get(3), hasEquivalence(Equivalence.EQUAL));
         assertThat(mappings, translatesBack(GENDER, "other").to("O"));
     }

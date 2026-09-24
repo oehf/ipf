@@ -132,7 +132,7 @@ public class ConceptMapLoaderTest {
         assertThat(mapping.valueSystem(), is("http://hl7.org/fhir/administrative-gender"));
         assertThat(mappings.keys(GENDER),
                 contains("M", "F", "A", "O", "U"));
-        assertThat(mapping.entries().get(2), hasEquivalence(Equivalence.NARROWER));
+        assertThat(mapping.entries().get(2), hasEquivalence(Equivalence.WIDER));
 
         assertThat(mappings, translates(GENDER, "M").to("male"));
         assertThat(mappings, translates(GENDER, "A").to("other"));

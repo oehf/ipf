@@ -147,7 +147,7 @@ public class GroovyMappingLoaderTest {
         var mapping = mappings.mapping(MARITAL_STATUS).orElseThrow();
 
         assertThat(mapping.entries().stream().map(Entry::equivalence).toList(),
-                contains(Equivalence.NARROWER, Equivalence.NARROWER, Equivalence.EQUAL));
+                contains(Equivalence.WIDER, Equivalence.WIDER, Equivalence.EQUAL));
         assertThat(mappings, translates(MARITAL_STATUS, "O").to("UNK"));
         assertThat(mappings, translates(MARITAL_STATUS, "U").to("UNK"));
         assertThat(mappings, translatesBack(MARITAL_STATUS, "UNK").to("U"));

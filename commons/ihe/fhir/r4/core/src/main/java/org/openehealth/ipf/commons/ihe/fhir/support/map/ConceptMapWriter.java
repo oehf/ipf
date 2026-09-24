@@ -118,9 +118,8 @@ public class ConceptMapWriter implements MappingWriter {
         return switch (equivalence) {
             case EQUAL -> Enumerations.ConceptMapEquivalence.EQUAL;
             case EQUIVALENT -> Enumerations.ConceptMapEquivalence.EQUIVALENT;
-            // the model says how the key relates to the value, R4 how the target relates to the source
-            case WIDER -> Enumerations.ConceptMapEquivalence.NARROWER;
-            case NARROWER -> Enumerations.ConceptMapEquivalence.WIDER;
+            case WIDER -> Enumerations.ConceptMapEquivalence.WIDER;
+            case NARROWER -> Enumerations.ConceptMapEquivalence.NARROWER;
             case INEXACT -> Enumerations.ConceptMapEquivalence.INEXACT;
             case DISJOINT -> Enumerations.ConceptMapEquivalence.DISJOINT;
         };

@@ -162,8 +162,9 @@
     <xsd:simpleType name="Equivalence">
         <xsd:annotation>
             <xsd:documentation>
-                Degree of correspondence between key and value, using the vocabulary of FHIR
-                ConceptMap. Only "equal" and "equivalent" entries contribute to the reverse
+                Degree of correspondence between key and value, using the vocabulary and the
+                direction of FHIR R4 ConceptMap: "wider" means that the value is the wider
+                concept. Only "equal" and "equivalent" entries contribute to the reverse
                 index, so marking an entry "narrower" or "wider" is how several keys may share
                 a value in a reversible mapping.
             </xsd:documentation>

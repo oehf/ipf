@@ -36,7 +36,7 @@ import java.util.Optional;
  * assertThat(mappings, doesNotTranslate("gender", "X"));
  * assertThat(mappings, mapsBetween("gender", "2.16.840.1.113883.12.1", "2.16.840.1.113883.5.5"));
  * assertThat(mapping, hasUnmatched(Unmatched.fixed("UNK")));
- * assertThat(entry, hasEquivalence(Equivalence.NARROWER));
+ * assertThat(entry, hasEquivalence(Equivalence.WIDER));
  * </pre>
  * The mismatch is the point: a translation that fails says whether the mapping is not registered at
  * all, whether it has no entry for the key, or what it answered instead - which the same assertion

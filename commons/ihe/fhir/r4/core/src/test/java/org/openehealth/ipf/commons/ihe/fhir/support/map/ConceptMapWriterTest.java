@@ -230,14 +230,14 @@ public class ConceptMapWriterTest {
     }
 
     /**
-     * The model says how the key relates to the value, FHIR R4 how the target relates to the
-     * source: a key narrower than its value is published as "wider", and read back as narrower.
+     * The model states the relation in the direction of FHIR R4, from the target to the source:
+     * a value wider than its key is published as "wider", and read back as wider.
      */
     @Test
-    public void equivalenceIsPublishedFromTheTargetsSide(@TempDir Path directory) throws IOException {
+    public void equivalenceIsPublishedUnchanged(@TempDir Path directory) throws IOException {
         var mapping = SimpleMapping.builder("relations")
-                .entry("adoption", "other", Equivalence.NARROWER)
-                .entry("any", "adoption", Equivalence.WIDER)
+                .entry("adoption", "other", Equivalence.WIDER)
+                .entry("any", "adoption", Equivalence.NARROWER)
                 .build();
 
         var json = new ConceptMapWriter().toConceptMap(List.of(mapping));

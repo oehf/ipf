@@ -21,7 +21,7 @@
              valueSystem="http://hl7.org/fhir/administrative-gender">
         <entry key="M" value="male"/>
         <entry key="F" value="female"/>
-        <entry key="A" value="other" equivalence="narrower"/>
+        <entry key="A" value="other" equivalence="wider"/>
         <entry key="O" value="other"/>
         <entry key="U" value="unknown"/>
         <unmatched mode="fixed" value="other"/>

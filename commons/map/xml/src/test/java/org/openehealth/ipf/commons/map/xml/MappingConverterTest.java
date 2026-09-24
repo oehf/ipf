@@ -138,7 +138,7 @@ public class MappingConverterTest {
         assertThat(mapping.entries().stream()
                 .map(Entry::equivalence)
                 .toList(),
-                contains(Equivalence.NARROWER, Equivalence.NARROWER, Equivalence.EQUAL));
+                contains(Equivalence.WIDER, Equivalence.WIDER, Equivalence.EQUAL));
 
         assertThat(warningAbout(FHIR_MARITAL_STATUS).orElseThrow(), allOf(
                 containsString("[O, T, U] all map to 'UNK'"),

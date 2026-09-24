@@ -121,8 +121,8 @@ public class KdlConceptMapTest {
         var mapping = mappings.mapping(TYPE_CODES).orElseThrow();
 
         assertThat(mapping.entries(), hasSize(15));
-        // R4 "wider": the IHE type code is the broader concept, so each KDL key is the narrower one
-        assertThat(mapping.entries().stream().allMatch(entry -> entry.equivalence() == Equivalence.NARROWER),
+        // R4 "wider": the IHE type code is the broader concept
+        assertThat(mapping.entries().stream().allMatch(entry -> entry.equivalence() == Equivalence.WIDER),
                 is(true));
         assertThat(mapping.entries().stream().anyMatch(Entry::isInvertible), is(false));
         assertThat(mappings.mappingNames(), contains(TYPE_CODES, NULL_FLAVORS, WHOLE));

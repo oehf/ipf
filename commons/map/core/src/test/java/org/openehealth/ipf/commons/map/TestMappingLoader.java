@@ -36,7 +36,7 @@ import java.util.List;
  * &#64;reversible  = false
  * &#64;override    = true
  * E = EMER
- * A = other | narrower                 # the optional third field is the equivalence
+ * A = other | wider                    # the optional third field is the equivalence
  * ---                                  # separates mappings within one file
  * </pre>
  */

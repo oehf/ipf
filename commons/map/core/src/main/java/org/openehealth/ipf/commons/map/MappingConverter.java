@@ -52,7 +52,7 @@ import java.util.stream.Stream;
  *     wrongly - which is the reason the output is meant to be read before it is committed.</li>
  *     <li><b>Reverse collisions.</b> Where several keys map onto one value the Groovy service
  *     silently made the last one the inverse. The converter reproduces that, marking the others
- *     {@code narrower}, and warns so that the canonical inverse can be chosen deliberately.</li>
+ *     {@code wider}, and warns so that the canonical inverse can be chosen deliberately.</li>
  *     <li><b>Composite values.</b> The {@code ~} convention of the Groovy DSL is gone. Values
  *     containing {@code ~} are written verbatim; the loader reports each such mapping, which
  *     wants splitting by hand.</li>
@@ -319,7 +319,7 @@ public class MappingConverter {
             var inverse = inverseByValue.get(value);
             if (keys.size() > 1 && inverse != null) {
                 warnings.add(mapping.name() + ": the keys " + keys + " all map to '" + value + "'"
-                        + " and '" + inverse + "' is its inverse, the others being narrower - which is"
+                        + " and '" + inverse + "' is its inverse, the others being wider - which is"
                         + " what the Groovy service answered. Confirm that this is the intended"
                         + " inverse");
             }

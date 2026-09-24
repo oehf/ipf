@@ -18,15 +18,17 @@ package org.openehealth.ipf.commons.map;
 /**
  * Degree of correspondence between the key and the value of a mapping {@link Entry}.
  * <p>
- * The vocabulary is taken from FHIR ConceptMap (R4 {@code element.target.equivalence},
- * renamed to {@code relationship} in R5), but the direction is the key's: {@link #NARROWER}
- * means the key is the narrower concept. R4 states the relation from the target's side, so its
- * {@code wider} and {@code subsumes} are {@link #NARROWER} here, and its {@code narrower} and
- * {@code specializes} are {@link #WIDER}; the ConceptMap loader and writer translate. Its purpose here is to state which entries may
- * be used to build the reverse index of a {@link Mapping}: only entries that assert an
- * {@link #EQUAL} or {@link #EQUIVALENT} correspondence are invertible. A key that is
- * {@link #NARROWER} than its value does not become the canonical inverse of that value,
- * which is what makes reverse-direction collisions detectable instead of silent.
+ * The vocabulary and its direction are those of FHIR R4 ConceptMap
+ * ({@code element.target.equivalence}): the relation is read from the value (the target) to the
+ * key (the source). {@link #WIDER} means that the value is the wider concept, as {@code other} is
+ * wider than {@code A} (adoption). R4's {@code subsumes} and {@code specializes} fold onto
+ * {@link #WIDER} and {@link #NARROWER}.
+ * <p>
+ * Its purpose here is to state which entries may be used to build the reverse index of a
+ * {@link Mapping}: only entries that assert an {@link #EQUAL} or {@link #EQUIVALENT}
+ * correspondence are invertible. A key whose value is {@link #WIDER} does not become the
+ * canonical inverse of that value, which is what makes reverse-direction collisions detectable
+ * instead of silent.
  *
  * @since 6.0
  */
@@ -38,10 +40,10 @@ public enum Equivalence {
     /** The key and the value are different concepts with the same meaning. */
     EQUIVALENT,
 
-    /** The key is a broader concept than the value. */
+    /** The value is a wider concept than the key. */
     WIDER,
 
-    /** The key is a narrower concept than the value. */
+    /** The value is a narrower concept than the key. */
     NARROWER,
 
     /** The key and the value overlap, but neither subsumes the other. */
@@ -59,8 +61,8 @@ public enum Equivalence {
 
     /**
      * Whether an entry with this equivalence is a translation at all, i.e. whether looking up its key
-     * should answer with its value. Everything but {@link #DISJOINT} is: a key that is wider,
-     * narrower or only inexactly related to its value still translates to it, imprecisely.
+     * should answer with its value. Everything but {@link #DISJOINT} is: a value that is wider,
+     * narrower or only inexactly related to its key is still a translation of it, if an imprecise one.
      * {@link #DISJOINT} asserts the opposite - that the two are explicitly <em>not</em>
      * equivalent - so answering with its value would state the reverse of what the mapping says.
      * <p>

@@ -19,7 +19,7 @@ mappings:
     entries:
       M: male
       F: female
-      A: {value: other, equivalence: narrower}   # not invertible
+      A: {value: other, equivalence: wider}      # not invertible
       O: other
       U: unknown
     unmatched: {fixed: other}

@@ -3,7 +3,7 @@
 # Mappings between HL7v2 code systems and their FHIR counterparts. Most of them are derived
 # directly from the FHIR specification.
 #
-# Where several keys map onto one value, all but one are marked narrower so that the value has
+# Where several keys map onto one value, all but one are marked wider so that the value has
 # exactly one inverse. The one left as "equal" is in every case the last of the group, which is
 # the inverse the Groovy mapping service happened to pick before IPF 6.0; the choice is
 # therefore behavior-preserving rather than considered, and worth revisiting per mapping.
@@ -17,17 +17,17 @@ mappings:
       B: U                                        # unmarried
       C: P                                        # common law
       D: D                                        # divorced
-      E: {value: L, equivalence: narrower}        # legally separated
-      G: {value: T, equivalence: narrower}        # living together
+      E: {value: L, equivalence: wider}           # legally separated
+      G: {value: T, equivalence: wider}           # living together
       I: I                                        # interlocutory
       M: M                                        # married
       N: A                                        # anulled
       L: L                                        # legally separated
-      O: {value: UNK, equivalence: narrower}      # other
-      P: {value: T, equivalence: narrower}        # domestic partner
+      O: {value: UNK, equivalence: wider}         # other
+      P: {value: T, equivalence: wider}           # domestic partner
       R: T                                        # registered domestic partner
       S: S                                        # never married AKA single
-      T: {value: UNK, equivalence: narrower}      # unreported
+      T: {value: UNK, equivalence: wider}         # unreported
       U: UNK                                      # unknown
       W: W                                        # widowed
     unmatched: {fixed: UNK}                       # unknown stuff
@@ -50,9 +50,9 @@ mappings:
       CHS: "1063"                                     # Christian: Christian Science
       COC: "1064"                                     # Christian: Church of Christ
       COG: "1065"                                     # Christian: Church of God
-      EOT: {value: "1068", equivalence: narrower}     # Christian: Eastern Orthodox
+      EOT: {value: "1068", equivalence: wider}        # Christian: Eastern Orthodox
       EPI: "1069"                                     # Christian: Episcopalian
-      FRQ: {value: "1071", equivalence: narrower}     # Christian: Friends
+      FRQ: {value: "1071", equivalence: wider}        # Christian: Friends
       GRE: "1068"                                     # Christian: Greek Orthodox
       JWN: "1025"                                     # Christian: Jehovah's Witness
       LUT: "1028"                                     # Christian: Lutheran
@@ -116,9 +116,9 @@ mappings:
     keySystem:   "2.16.840.1.113883.5.290"
     valueSystem: http://hl7.org/fhir/address-use
     entries:
-      H:  {value: home, equivalence: narrower}
+      H:  {value: home, equivalence: wider}
       L:  home
-      O:  {value: work, equivalence: narrower}
+      O:  {value: work, equivalence: wider}
       B:  work
       BA: old
     unmatched: {fixed: ""}
@@ -133,7 +133,7 @@ mappings:
       N:    nickname
       S:    anonymous
       BAD:  old
-      M:    {value: maiden, equivalence: narrower}
+      M:    {value: maiden, equivalence: wider}
       B:    maiden
     unmatched: {fixed: ""}
 
@@ -141,8 +141,8 @@ mappings:
     keySystem:   "2.16.840.1.113883.5.201"
     valueSystem: http://hl7.org/fhir/contact-point-use
     entries:
-      PRN: {value: home, equivalence: narrower}
-      ORN: {value: home, equivalence: narrower}
+      PRN: {value: home, equivalence: wider}
+      ORN: {value: home, equivalence: wider}
       VHN: home
       WPN: work
       PRS: mobile
@@ -152,7 +152,7 @@ mappings:
     keySystem:   "2.16.840.1.113883.5.202"
     valueSystem: http://hl7.org/fhir/contact-point-system
     entries:
-      PH:       {value: phone, equivalence: narrower}
+      PH:       {value: phone, equivalence: wider}
       FX:       fax
       Internet: email
       BP:       pager
@@ -175,7 +175,7 @@ mappings:
     entries:
       M: male
       F: female
-      A: {value: other, equivalence: narrower}
+      A: {value: other, equivalence: wider}
       O: other
       U: unknown
     unmatched: {fixed: other}
@@ -186,7 +186,7 @@ mappings:
     entries:
       M: male
       F: female
-      A: {value: non-binary, equivalence: narrower}
-      D: {value: non-binary, equivalence: narrower}
+      A: {value: non-binary, equivalence: wider}
+      D: {value: non-binary, equivalence: wider}
       I: non-binary
     unmatched: {fixed: other}
