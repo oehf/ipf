@@ -142,7 +142,8 @@
                 <xsd:documentation>
                     Required for modes "function" and "delegate", not allowed otherwise. Names a
                     function registered with the MappingFunctionRegistry, or the mapping to
-                    delegate to.
+                    delegate to. An overriding mapping may name itself to delegate to the
+                    definition it replaces.
                 </xsd:documentation>
             </xsd:annotation>
         </xsd:attribute>

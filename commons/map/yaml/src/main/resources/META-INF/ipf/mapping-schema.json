@@ -155,7 +155,7 @@
           ],
           "properties": {
             "delegate": {
-              "description": "Name of another mapping, asked in full - its entries and then its own unmatched - so that mapping decides the outcome. It must already be loaded.",
+              "description": "Name of another mapping, asked in full - its entries and then its own unmatched - so that mapping decides the outcome. It must already be loaded. An overriding mapping may name itself to delegate to the definition it replaces.",
               "type": "string"
             }
           }

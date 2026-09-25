@@ -162,12 +162,18 @@ but needs the typed API.
   entries, then its own fallback. So the last mapping in the chain decides the outcome. The chain
   ends at the first mapping whose fallback answers on its own.
 
-  The `lookup()` method does not follow a delegation, because it reports what a mapping *declares*. Neither do
-  `keys()` and `values()`.
+  The `lookup()` method does not follow a delegation, because it reports what a mapping *declares*.
+  `keys()` and `values()` do follow it: they list what a mapping translates, so a specialized
+  mapping lists the keys of the mapping it delegates to after its own.
 
   The mapping you delegate to must **already be loaded**. This makes it impossible to declare a
   cycle, because a cycle would need a forward reference. It also turns a typo into an error at
   startup. Each direction delegates separately. Delegating `unmatched` has no effect on `reverse`.
+
+  An overriding mapping may delegate to the definition it replaces, by naming its own mapping.
+  This specializes a shipped mapping under the name its callers already use. The replaced
+  definition stays reachable only through this delegation. A mapping that names itself without
+  overriding one is rejected.
 
 * **`reversible="false"`.** The mapping has no reverse index at all. Several keys may then share a
   value without declaring an equivalence.
@@ -557,8 +563,8 @@ to them. There are two ways to do this:
 <!-- replace it: the later mapping wins wholesale, so it must restate everything it keeps -->
 <mapping name="hl7v2fhir-patient-genderIdentity" override="true"> ... </mapping>
 
-<!-- extend it: declare only what differs, and delegate the rest -->
-<mapping name="genderIdentity-custom">
+<!-- extend it: declare only what differs, and delegate the rest to the mapping it replaces -->
+<mapping name="hl7v2fhir-patient-genderIdentity" override="true">
     <entry key="CUSTOM" value="non-binary"/>
     <unmatched mode="delegate" ref="hl7v2fhir-patient-genderIdentity"/>
 </mapping>
@@ -566,7 +572,9 @@ to them. There are two ways to do this:
 
 `override` is the smaller change, but it is also easier to get wrong. Anything that the replaced
 mapping declared and the replacement does not declare is lost. Delegation keeps the base mapping
-unchanged and only needs the codes that differ. The cost is a second mapping name.
+unchanged and only needs the codes that differ. The delegating mapping may take the name of the
+mapping it extends, as above, so that callers need no change, or a name of its own, which keeps the
+base mapping available under its name.
 
 `mappingFunctions` is a property of `SpringMappings`, not of a `CustomMappings` bean. It is
 therefore applied when the `SpringMappings` bean is created. This happens before any

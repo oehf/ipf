@@ -225,8 +225,9 @@ public class MappingsTest {
 
         // lookup() is the declaration, so it does not follow the delegation
         assertThat(mappings.lookup(CUSTOM_GENDER, "M"), hasNoValue());
-        // nor do keys(): those are the keys this mapping declares
-        assertThat(mappings.keys(CUSTOM_GENDER), contains("X"));
+        // keys() are what the mapping translates: its own, then those of the delegate
+        assertThat(mappings.keys(CUSTOM_GENDER), contains("X", "M", "F"));
+        assertThat(mappings.values(CUSTOM_GENDER), contains("non-binary", "male", "female"));
     }
 
     @Test
@@ -237,6 +238,76 @@ public class MappingsTest {
         assertThat(mappings, translates(CHAINED_GENDER, "X").to("non-binary"));
         assertThat(mappings, translates(CHAINED_GENDER, "F").to("female"));
         assertThat(mappings, translates(CHAINED_GENDER, "anything").to("UNK"));
+        assertThat(mappings.keys(CHAINED_GENDER), contains("Z", "X", "M", "F"));
+    }
+
+    /**
+     * An overriding mapping may delegate to the definition it replaces by naming itself, so that it
+     * specializes a mapping under the name its callers already use.
+     */
+    @Test
+    public void anOverrideDelegatesToTheDefinitionItReplaces() {
+        var mappings = Mappings.builder()
+                .mapping(SimpleMapping.builder(GENDER).entry("M", "male").entry("F", "female")
+                        .unmatched(Unmatched.fixed("UNK")).build())
+                .mapping(SimpleMapping.builder(CUSTOM).unmatched(Unmatched.delegate(GENDER)).build())
+                .mapping(SimpleMapping.builder(GENDER).override(true)
+                        .entry("F", "woman").entry("X", "non-binary")
+                        .unmatched(Unmatched.delegate(GENDER))
+                        .reverseUnmatched(Unmatched.delegate(GENDER))
+                        .build())
+                .build();
+
+        assertThat(mappings, translates(GENDER, "F").to("woman"));
+        assertThat(mappings, translates(GENDER, "X").to("non-binary"));
+        assertThat(mappings, translates(GENDER, "M").to("male"));
+        assertThat(mappings, translates(GENDER, "anything").to("UNK"));
+        assertThat(mappings, translatesBack(GENDER, "woman").to("F"));
+        assertThat(mappings, translatesBack(GENDER, "male").to("M"));
+        assertThat(mappings.keys(GENDER), contains("F", "X", "M"));
+        // the replaced definition is reachable through the delegation only
+        assertThat(mappings.mappingNames(), contains(GENDER, CUSTOM));
+        // a mapping delegating to it by name sees the new definition
+        assertThat(mappings, translates(CUSTOM, "X").to("non-binary"));
+    }
+
+    @Test
+    public void overridesDelegatingToWhatTheyReplaceChain() {
+        var mappings = Mappings.builder()
+                .mapping(SimpleMapping.builder(GENDER).entry("M", "male").build())
+                .mapping(SimpleMapping.builder(GENDER).override(true).entry("F", "female")
+                        .unmatched(Unmatched.delegate(GENDER)).build())
+                .mapping(SimpleMapping.builder(GENDER).override(true).entry("X", "non-binary")
+                        .unmatched(Unmatched.delegate(GENDER)).build())
+                .build();
+
+        assertThat(mappings, translates(GENDER, "M").to("male"));
+        assertThat(mappings, translates(GENDER, "F").to("female"));
+        assertThat(mappings, translates(GENDER, "X").to("non-binary"));
+        assertThat(mappings.keys(GENDER), contains("X", "F", "M"));
+    }
+
+    @Test
+    public void onlyAnOverrideDelegatesToItself() {
+        var self = SimpleMapping.builder(GENDER).unmatched(Unmatched.delegate(GENDER)).build();
+        var e = assertThrows(MappingException.class, () -> Mappings.builder().mapping(self).build());
+        assertThat(e.getMessage(), containsString("overrides no mapping registered before"));
+    }
+
+    /**
+     * The definition an override replaces is part of the delegation graph, so a cycle through it
+     * is rejected like any other.
+     */
+    @Test
+    public void aCycleThroughAReplacedDefinitionIsRejected() {
+        var builder = Mappings.builder()
+                .allowOverride(true)
+                .mapping(SimpleMapping.builder("b").entry("k", "v").build())
+                .mapping(SimpleMapping.builder("a").unmatched(Unmatched.delegate("b")).build())
+                .mapping(SimpleMapping.builder("a").override(true).unmatched(Unmatched.delegate("a")).build());
+        var cycle = SimpleMapping.builder("b").unmatched(Unmatched.delegate("a")).build();
+        var e = assertThrows(MappingException.class, () -> builder.mapping(cycle));
+        assertThat(e.getMessage(), containsString("delegates in a cycle"));
     }
 
     /**

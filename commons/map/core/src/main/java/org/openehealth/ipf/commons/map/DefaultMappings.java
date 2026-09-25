@@ -108,16 +108,24 @@ public class DefaultMappings implements Mappings {
     /**
      * A mapping together with its two lookup indices and the source it was read from. The indices
      * hold the entries rather than just their other side, so that an answer comes with its display.
-     * A composite mapping has empty indices; it answers through its parts.
+     * A composite mapping has empty indices; it answers through its parts. {@code superseded} is the
+     * definition this one overrides, kept only where a fallback delegates to it.
      */
     private record Indexed(Mapping mapping, Map<String, Entry> forward, Map<String, Entry> reverse, URI source,
-                           Map<Direction, String> delegates) {
+                           Map<Direction, String> delegates, Indexed superseded) {
 
         /**
          * @return the mappings a lookup in this direction is handed on to
          */
         List<String> onward(Direction direction) {
             return DefaultMappings.onward(mapping, delegates, direction);
+        }
+
+        /**
+         * @return whether a lookup handed on to this name goes to the definition this one overrides
+         */
+        boolean supersedes(String name) {
+            return superseded != null && mapping.name().equals(name);
         }
     }
 
@@ -267,9 +275,10 @@ public class DefaultMappings implements Mappings {
     private Indexed index(Mapping declared, URI source, Map<String, Indexed> registered,
                           MappingFunctionRegistry functions) {
         var delegates = resolveDelegates(declared, source, registered);
-        validate(declared, source, registered, functions, delegates);
+        var superseded = superseded(declared, source, registered, delegates);
+        validate(declared, source, registered, functions, delegates, superseded);
         if (!(declared instanceof SimpleMapping mapping)) {
-            return new Indexed(declared, Map.of(), Map.of(), source, delegates);
+            return new Indexed(declared, Map.of(), Map.of(), source, delegates, null);
         }
 
         // LinkedHashMap, not Map.copyOf: a mapping may declare a null key, and declaration
@@ -300,13 +309,35 @@ public class DefaultMappings implements Mappings {
             }
         }
         return new Indexed(mapping, Collections.unmodifiableMap(forward), Collections.unmodifiableMap(reverse), source,
-                delegates);
+                delegates, superseded);
+    }
+
+    /**
+     * A mapping overriding another may delegate to the definition it replaces by naming its own
+     * mapping, and so declare only the codes that differ under the name its callers already use.
+     * That definition is kept for this mapping only; under the name, the new one is registered.
+     *
+     * @return the definition the mapping overrides if a fallback delegates to it, else null
+     */
+    private static Indexed superseded(Mapping mapping, URI source, Map<String, Indexed> registered,
+                                      Map<Direction, String> delegates) {
+        if (!delegates.containsValue(mapping.name())) {
+            return null;
+        }
+        var existing = registered.get(mapping.name());
+        if (existing == null) {
+            throw new MappingException(source, "Mapping '" + mapping.name() + "' delegates to itself, but"
+                    + " overrides no mapping registered before. Only an overriding mapping can delegate to"
+                    + " the definition it replaces");
+        }
+        return existing;
     }
 
     // ------------------------------------------------------------------ validation
 
     private static void validate(Mapping mapping, URI source, Map<String, Indexed> registered,
-                                 MappingFunctionRegistry functions, Map<Direction, String> delegates) {
+                                 MappingFunctionRegistry functions, Map<Direction, String> delegates,
+                                 Indexed superseded) {
         validateParts(mapping, source, registered);
         for (var direction : Direction.values()) {
             if (mapping instanceof SimpleMapping
@@ -318,7 +349,13 @@ public class DefaultMappings implements Mappings {
             var path = new ArrayDeque<String>();
             path.add(mapping.name());
             for (var next : onward(mapping, delegates, direction)) {
-                validateReachable(mapping, next, direction, path, source, registered);
+                if (superseded != null && next.equals(mapping.name())) {
+                    path.addLast(next);
+                    validateOnward(mapping, superseded, direction, path, source, registered);
+                    path.removeLast();
+                } else {
+                    validateReachable(mapping, next, direction, path, source, registered);
+                }
             }
         }
     }
@@ -377,10 +414,25 @@ public class DefaultMappings implements Mappings {
                     + " what keeps a chain of delegations acyclic");
         }
         path.addLast(next);
-        for (var further : target.onward(direction)) {
-            validateReachable(mapping, further, direction, path, source, registered);
-        }
+        validateOnward(mapping, target, direction, path, source, registered);
         path.removeLast();
+    }
+
+    /**
+     * Follows everything a lookup can be handed on to from a registered mapping - including the
+     * definition it overrides, which a later override elsewhere may lead back from.
+     */
+    private static void validateOnward(Mapping mapping, Indexed from, Direction direction, Deque<String> path,
+                                       URI source, Map<String, Indexed> registered) {
+        for (var further : from.onward(direction)) {
+            if (from.supersedes(further)) {
+                path.addLast(further);
+                validateOnward(mapping, from.superseded(), direction, path, source, registered);
+                path.removeLast();
+            } else {
+                validateReachable(mapping, further, direction, path, source, registered);
+            }
+        }
     }
 
     /**
@@ -511,16 +563,49 @@ public class DefaultMappings implements Mappings {
     }
 
     /**
-     * @return the forward index, for a composite merged from its parts with the first part
-     * declaring a key winning, as it does on lookup
+     * @return the entries a lookup finds before a fallback answers on its own: the mapping's own,
+     * for a composite those of its parts with the first part declaring a key winning, and then
+     * those of the mappings a fallback delegates to
      */
     private Map<String, Entry> forward(Indexed indexed) {
-        if (!(indexed.mapping() instanceof CompositeMapping composite)) {
+        if (!(indexed.mapping() instanceof CompositeMapping) && !indexed.delegates().containsKey(Direction.FORWARD)) {
             return indexed.forward();
         }
         var merged = new LinkedHashMap<String, Entry>();
-        composite.parts().forEach(part -> required(part).forward().forEach(merged::putIfAbsent));
+        collectForward(indexed, merged);
         return merged;
+    }
+
+    /**
+     * Adds what a lookup finds in this mapping to the entries found before it, which win.
+     *
+     * @return whether a code without an entry may still go unanswered, so that a lookup asks on
+     */
+    private boolean collectForward(Indexed indexed, Map<String, Entry> merged) {
+        if (!(indexed.mapping() instanceof CompositeMapping composite)) {
+            indexed.forward().forEach(merged::putIfAbsent);
+            return collectFallback(indexed, merged);
+        }
+        var parts = composite.parts().stream().map(this::required).toList();
+        parts.forEach(part -> part.forward().forEach(merged::putIfAbsent));
+        for (var part : parts) {
+            if (!collectFallback(part, merged)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @return whether a lookup asks on after this fallback: it does after an absent one, and a
+     * delegating one is followed. Any other fallback is taken to answer every code itself
+     */
+    private boolean collectFallback(Indexed indexed, Map<String, Entry> merged) {
+        var fallback = indexed.mapping().unmatched();
+        if (fallback instanceof Unmatched.Delegate) {
+            return collectForward(delegate(indexed, Direction.FORWARD), merged);
+        }
+        return fallback instanceof Unmatched.Absent;
     }
 
     /**
@@ -587,9 +672,18 @@ public class DefaultMappings implements Mappings {
         if (unmatched instanceof Unmatched.Delegate) {
             // Ask the delegate in full - its entries, then its own fallback - so the chain ends
             // wherever a fallback finally answers on its own. Registration keeps it acyclic.
-            return answer(required(indexed.delegates().get(direction)), input, direction);
+            return answer(delegate(indexed, direction), input, direction);
         }
         throw new IllegalStateException("Unsupported unmatched behavior " + unmatched);
+    }
+
+    /**
+     * @return the mapping a fallback in this direction delegates to: the definition this one
+     * overrides if it names its own mapping, else the one registered under the name
+     */
+    private Indexed delegate(Indexed indexed, Direction direction) {
+        var name = indexed.delegates().get(direction);
+        return indexed.supersedes(name) ? indexed.superseded() : required(name);
     }
 
     private static Optional<Translation> translation(String code, String system, String display) {

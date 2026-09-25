@@ -248,9 +248,10 @@ public interface Mappings {
     /**
      * @param mapping mapping name
      * @return the keys this mapping translates, in declaration order. A key declared only by a
-     * {@link Equivalence#DISJOINT} entry is not among them, because it does not translate, and
-     * neither are the keys of a mapping this one delegates to - these are the keys this mapping
-     * declares. For a {@link CompositeMapping composite} they are the keys of all its parts.
+     * {@link Equivalence#DISJOINT} entry is not among them, because it does not translate. The keys
+     * of a mapping this one delegates to follow its own, since a lookup asks that mapping for every
+     * key this one does not declare; keys that only a fallback such as identity answers are not
+     * listed. For a {@link CompositeMapping composite} they are the keys of all its parts.
      * Changes to the set do not change the mapping
      * @throws IllegalArgumentException if the mapping name is not registered
      */
