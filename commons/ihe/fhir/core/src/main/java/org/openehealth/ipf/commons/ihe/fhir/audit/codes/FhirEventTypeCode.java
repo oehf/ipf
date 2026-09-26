@@ -18,8 +18,11 @@ package org.openehealth.ipf.commons.ihe.fhir.audit.codes;
 
 import ca.uhn.fhir.rest.api.RestOperationTypeEnum;
 import lombok.Getter;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.types.EnumeratedCodedValue;
 import org.openehealth.ipf.commons.audit.types.EventType;
+
+import java.util.Map;
 
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.EHS_SYSTEM_NAME;
 import static org.openehealth.ipf.commons.ihe.fhir.audit.codes.Constants.IHE_SYSTEM_NAME;
@@ -49,6 +52,15 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     MobilePatientIdentifierCrossReferenceQuery("ITI-83", IHE_SYSTEM_NAME, "Mobile Patient Identifier Cross-reference Query",
         "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmManagerAuditEvent",
         "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmConsumerAuditEvent"),
+    // PIXm defines no Create profile for the Source, which cannot tell a create from an update
+    MobilePatientIdentityFeed("ITI-104", IHE_SYSTEM_NAME, "Patient Identity Feed FHIR",
+        Map.of(
+            EventActionCode.Create, "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmFeedCreateManagerAuditEvent",
+            EventActionCode.Update, "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmFeedUpdateManagerAuditEvent",
+            EventActionCode.Delete, "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmFeedDeleteManagerAuditEvent"),
+        Map.of(
+            EventActionCode.Update, "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmFeedUpdateSourceAuditEvent",
+            EventActionCode.Delete, "org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmFeedDeleteSourceAuditEvent")),
     SimplifiedPublish("ITI-105", IHE_SYSTEM_NAME, "Simplified Publish",
         "org.openehealth.ipf.commons.ihe.fhir.mhd.model.SimplifiedPublishRecipientAuditEvent",
         "org.openehealth.ipf.commons.ihe.fhir.mhd.model.SimplifiedPublishSourceAuditEvent"),
@@ -64,20 +76,75 @@ public enum FhirEventTypeCode implements EventType, EnumeratedCodedValue<EventTy
     @Getter
     private final EventType value;
 
-    @Getter
     private final String serverEventClassName;
-    @Getter
     private final String clientEventClassName;
 
+    // for transactions whose profile defines a different AuditEvent per action
+    private final Map<EventActionCode, String> serverEventClassNames;
+    private final Map<EventActionCode, String> clientEventClassNames;
+
     FhirEventTypeCode(String code, String codeSystemName, String displayName) {
-        this(code, codeSystemName, displayName, null, null);
+        this(code, codeSystemName, displayName, (String) null, (String) null);
     }
 
     FhirEventTypeCode(String code, String codeSystemName, String displayName,
                       String serverEventClassName, String clientEventClassName) {
+        this(code, codeSystemName, displayName, serverEventClassName, clientEventClassName, Map.of(), Map.of());
+    }
+
+    FhirEventTypeCode(String code, String codeSystemName, String displayName,
+                      Map<EventActionCode, String> serverEventClassNames,
+                      Map<EventActionCode, String> clientEventClassNames) {
+        this(code, codeSystemName, displayName, null, null, serverEventClassNames, clientEventClassNames);
+    }
+
+    FhirEventTypeCode(String code, String codeSystemName, String displayName,
+                      String serverEventClassName, String clientEventClassName,
+                      Map<EventActionCode, String> serverEventClassNames,
+                      Map<EventActionCode, String> clientEventClassNames) {
         this.value = EventType.of(code, codeSystemName, displayName);
         this.serverEventClassName = serverEventClassName;
         this.clientEventClassName = clientEventClassName;
+        this.serverEventClassNames = serverEventClassNames;
+        this.clientEventClassNames = clientEventClassNames;
+    }
+
+    /**
+     * @param action action of the audited event
+     * @return name of the AuditEvent class the server side records the event with, or null if the
+     * profile of this transaction defines none for it
+     * @since 6.0
+     */
+    public String getServerEventClassName(EventActionCode action) {
+        return serverEventClassNames.getOrDefault(action, serverEventClassName);
+    }
+
+    /**
+     * @param action action of the audited event
+     * @return name of the AuditEvent class the client side records the event with, or null if the
+     * profile of this transaction defines none for it
+     * @since 6.0
+     */
+    public String getClientEventClassName(EventActionCode action) {
+        return clientEventClassNames.getOrDefault(action, clientEventClassName);
+    }
+
+    /**
+     * @return server event class name
+     * @deprecated use @{link {@link #getServerEventClassName(EventActionCode)}}
+     */
+    @Deprecated(since = "6.0", forRemoval = true)
+    public String getServerEventClassName() {
+        return serverEventClassName;
+    }
+
+    /**
+     * @return server event class name
+     * @deprecated use @{link {@link #getClientEventClassName(EventActionCode)} (EventActionCode)}}
+     */
+    @Deprecated(since = "6.0", forRemoval = true)
+    public String getClientEventClassName() {
+        return clientEventClassName;
     }
 
     public static EventType fromRestOperationType(RestOperationTypeEnum operation) {

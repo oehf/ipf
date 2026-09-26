@@ -21,9 +21,7 @@ import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCode;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectTypeCodeRole;
-import org.openehealth.ipf.commons.audit.event.PatientRecordBuilder;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
-import org.openehealth.ipf.commons.ihe.core.atna.event.IHEAuditMessageBuilder;
 import org.openehealth.ipf.commons.ihe.core.atna.event.PatientRecordEventBuilder;
 import org.openehealth.ipf.commons.ihe.hl7v2.audit.codes.MllpEventTypeCode;
 
@@ -39,23 +37,12 @@ import static org.openehealth.ipf.commons.audit.codes.ParticipantObjectDataLifeC
  *
  * @author Christian Ohr
  */
-class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> extends IHEAuditMessageBuilder<T, PatientRecordBuilder> {
+class IHEPatientRecordChangeLinkBuilder extends PatientRecordEventBuilder<IHEPatientRecordChangeLinkBuilder> {
 
     private static final String URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE = "urn:ihe:iti:xpid:2017:patientIdentifierType";
 
     IHEPatientRecordChangeLinkBuilder(AuditContext auditContext, AuditDataset auditDataset) {
-        super(auditContext, auditDataset, new PatientRecordBuilder(auditDataset.getEventOutcomeIndicator(), EventActionCode.Update, MllpEventTypeCode.XadPidLinkChange));
-
-        // First the source, then the destination
-        if (auditDataset.isServerSide()) {
-            setRemoteParticipant(auditDataset);
-            addHumanRequestor(auditDataset);
-            setLocalParticipant(auditDataset);
-        } else {
-            setLocalParticipant(auditDataset);
-            addHumanRequestor(auditDataset);
-            setRemoteParticipant(auditDataset);
-        }
+        super(auditContext, auditDataset, EventActionCode.Update, MllpEventTypeCode.XadPidLinkChange);
     }
 
     public IHEPatientRecordChangeLinkBuilder setLocalPatientId(Iti64AuditDataset auditDataset) {
@@ -70,7 +57,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
                 // equal "1" (Origination / Creation). Otherwise, this value is not
                 // specialized.
                 auditDataset.getSubsumedLocalPatientId() == null ? null : Origination);
-        return this;
+        return self();
     }
 
     public IHEPatientRecordChangeLinkBuilder setSubsumedLocalPatientId(Iti64AuditDataset auditDataset) {
@@ -82,7 +69,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
                         getTypeValuePair(URN_IHE_ITI_XPID_2017_PATIENT_IDENTIFIER_TYPE, "subsumedPatientId")
                 ),
                 LogicalDeletion);
-        return this;
+        return self();
     }
 
     public IHEPatientRecordChangeLinkBuilder setNewPatientId(Iti64AuditDataset auditDataset) {
@@ -97,7 +84,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
                 // value shall equal "14" (Logical deletion). Otherwise, this value
                 // is not specialized.
                 Objects.equals(auditDataset.getNewPatientId(), auditDataset.getPreviousPatientId()) ? null : Origination);
-        return this;
+        return self();
     }
 
     public IHEPatientRecordChangeLinkBuilder setPreviousPatientId(Iti64AuditDataset auditDataset) {
@@ -112,7 +99,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
                 // value shall equal "14" (Logical deletion). Otherwise, this value
                 // is not specialized.
                 Objects.equals(auditDataset.getNewPatientId(), auditDataset.getPreviousPatientId()) ? null : LogicalDeletion);
-        return this;
+        return self();
     }
 
     public IHEPatientRecordChangeLinkBuilder setSubmissionSet(Iti64AuditDataset auditDataset) {
@@ -130,7 +117,7 @@ class IHEPatientRecordChangeLinkBuilder<T extends PatientRecordEventBuilder<T>> 
                     null,
                     null);
         }
-        return this;
+        return self();
     }
 
 }

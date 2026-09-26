@@ -194,9 +194,10 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
 
     /**
      * Instantiates the AuditEvent that the audited transaction's profile defines for the end of the
-     * transaction the audit source is on. Which transaction that is is taken from the first
-     * {@link FhirEventTypeCode} among the event type codes; a transaction without one, or one whose
-     * profile does not define an AuditEvent, falls back to a plain {@link AuditEvent}.
+     * transaction the audit source is on, and for the action of the event where the profile tells
+     * actions apart. Which transaction that is is taken from the first {@link FhirEventTypeCode} among
+     * the event type codes; a transaction without one, or one whose profile does not define an
+     * AuditEvent, falls back to a plain {@link AuditEvent}.
      *
      * @param eventIdentification event identification of the audit message
      * @param serverSide          whether the audit message was recorded by the server of the transaction
@@ -208,8 +209,8 @@ abstract class AbstractFhirAuditSerializationStrategy implements SerializationSt
             .findFirst()
             .map(FhirEventTypeCode.class::cast)
             .map(fetc -> serverSide ?
-                fetc.getServerEventClassName() :
-                fetc.getClientEventClassName())
+                fetc.getServerEventClassName(eventIdentification.getEventActionCode()) :
+                fetc.getClientEventClassName(eventIdentification.getEventActionCode()))
             .map(this::auditEventInstance)
             .orElseGet(AuditEvent::new);
     }

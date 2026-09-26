@@ -101,7 +101,20 @@ public abstract class PatientRecordEventBuilder<T extends PatientRecordEventBuil
     public void validate() {
         super.validate();
         var patient = getMessage().findParticipantObjectIdentifications(poi -> ParticipantObjectIdTypeCode.PatientNumber.equals(poi.getParticipantObjectIDTypeCode())).get(0);
-        if (!PATIENT_ID_PATTERN.matcher(patient.getParticipantObjectID()).matches()) {
+        validatePatientId(patient.getParticipantObjectID());
+    }
+
+    /**
+     * Checks the format of the patient ID. Per default, the patient ID is expected in HL7v2 CX format,
+     * as recorded by the HL7v2- and HL7v3-based transactions. Transactions that record patient IDs in
+     * another format override this.
+     *
+     * @param patientId patient ID
+     * @throws AuditException if the patient ID is not in the expected format
+     * @since 6.0
+     */
+    protected void validatePatientId(String patientId) {
+        if (!PATIENT_ID_PATTERN.matcher(patientId).matches()) {
             throw new AuditException("Patient ID should be in CX format " + PATIENT_ID_PATTERN.pattern());
         }
     }

@@ -24,6 +24,10 @@
     </properties>
     <body>
         <release version="6.0.0" description="IPF 6.0.0" date="">
+            <action issue="368" dev="ohr" type="add">
+                Support for PIXm Patient Identity Feed FHIR [ITI-104] (pixm-iti104) and translators
+                to/from PIX Feed V2 (ITI-8).
+            </action>
             <action issue="524" dev="ohr" type="fix">
                 SslAwareApacheRestfulClient5Factory ignored a configured HostnameVerifier (e.g.
                 NoopHostnameVerifier): httpclient5 then defaults to HostnameVerificationPolicy.BOTH, so

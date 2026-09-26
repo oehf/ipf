@@ -26,7 +26,7 @@ public class PdqmValidator extends BaseValidator {
      * profiles, rather than against a second copy of the path.
      */
     public static final String PDQM_PACKAGE_PATH = "classpath:META-INF/profiles/pdqm/v320/ihe.iti.pdqm.tgz";
-    private static final String FHIR_EXTENSION_PACKAGE_PATH = "classpath:META-INF/profiles/extensions/v520/hl7.fhir.uv.extensions.r4.tgz";
+    public static final String FHIR_EXTENSION_PACKAGE_PATH = "classpath:META-INF/profiles/extensions/v520/hl7.fhir.uv.extensions.r4.tgz";
 
     public PdqmValidator(FhirContext fhirContext) {
         super(fhirContext, PDQM_PACKAGE_PATH, FHIR_EXTENSION_PACKAGE_PATH);

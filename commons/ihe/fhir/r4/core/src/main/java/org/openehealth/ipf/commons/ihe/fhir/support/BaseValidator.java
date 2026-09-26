@@ -41,6 +41,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.INTERACTION_REQUEST_VALIDATION_PROFILES;
 import static org.openehealth.ipf.commons.ihe.fhir.Constants.INTERACTION_RESPONSE_VALIDATION_PROFILES;
@@ -223,6 +224,11 @@ public abstract class BaseValidator extends FhirTransactionValidator.Support {
 
     /**
      * Validates that a FHIR resource conforms to one of the allowed profiles.
+     * <p>
+     * Custom profiles must be declared in {@code meta.profile} of the resource to be validated against.
+     * If the allowed profiles also contain standard FHIR profiles ({@code http://hl7.org/fhir/StructureDefinition/<type>}),
+     * a resource that declares none of the allowed custom profiles is validated against the base profile
+     * of its type instead of being rejected.
      *
      * @param resource           the FHIR resource to validate
      * @param allowedProfileUris set of allowed profile URIs
@@ -233,10 +239,30 @@ public abstract class BaseValidator extends FhirTransactionValidator.Support {
             return createNoValidationOutcome();
         }
 
-        var profileUri = allowedProfileUris.iterator().next();
-        return isStandardProfile(profileUri)
-            ? validateStandardProfile(resource, profileUri)
-            : validateCustomProfile(resource, allowedProfileUris);
+        var customProfileUris = allowedProfileUris.stream()
+            .filter(uri -> !isStandardProfile(uri))
+            .collect(Collectors.toSet());
+        var standardProfileUris = allowedProfileUris.stream()
+            .filter(this::isStandardProfile)
+            .collect(Collectors.toSet());
+
+        if (standardProfileUris.isEmpty()) {
+            return validateCustomProfile(resource, customProfileUris);
+        }
+        if (customProfileUris.isEmpty() || !declaresAnyOf(resource, customProfileUris)) {
+            // Resources that do not claim a custom profile fall back to the base profile of their type
+            var baseProfileUri = STANDARD_PREFIX + resource.fhirType();
+            return validateStandardProfile(resource, standardProfileUris.contains(baseProfileUri) ?
+                baseProfileUri :
+                standardProfileUris.iterator().next());
+        }
+        return validatePayload(resource);
+    }
+
+    private static boolean declaresAnyOf(IBaseResource resource, Set<String> profileUris) {
+        return resource.getMeta().getProfile().stream()
+            .map(IPrimitiveType::getValueAsString)
+            .anyMatch(profileUris::contains);
     }
 
     /**
@@ -277,11 +303,7 @@ public abstract class BaseValidator extends FhirTransactionValidator.Support {
      * @return {@link OperationOutcome} containing validation results
      */
     private OperationOutcome validateCustomProfile(IBaseResource resource, Set<String> allowedProfileUris) {
-        var hasMatchingProfile = resource.getMeta().getProfile().stream()
-            .map(IPrimitiveType::getValueAsString)
-            .anyMatch(allowedProfileUris::contains);
-
-        return hasMatchingProfile ?
+        return declaresAnyOf(resource, allowedProfileUris) ?
             validatePayload(resource) :
             handleOperationOutcome(createErrorOutcome(
                 OperationOutcome.IssueType.REQUIRED,
