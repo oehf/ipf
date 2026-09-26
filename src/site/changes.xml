@@ -41,22 +41,15 @@
                 ipf-commons-map-core, which holds the model and the typed, Optional-returning
                 Mappings API, and one module per mapping file format: ipf-commons-map-xml,
                 ipf-commons-map-yaml, ipf-commons-map-groovy for the legacy .map scripts, and a FHIR
-                ConceptMap loader in ipf-commons-ihe-fhir-r4-core. MappingService,
-                BidiMappingService, SpringBidiMappingService, SpringBidiMappingServiceConfigurer and
-                the Groovy .map DSL are deprecated and will be removed in IPF 7.0; nothing inside IPF
-                uses them any more. Wire SpringMappings instead, and see commons/map/README.md for
-                the formats, the migration path and MappingConverter.
+                ConceptMap loader in ipf-commons-ihe-fhir-r4-core.
             </action>
             <action issue="519" dev="ohr" type="remove">
                 Support for FHIR STU3 (DSTU3) has been removed. The modules ipf-commons-ihe-fhir-stu3-*,
-                ipf-platform-camel-ihe-fhir-stu3-* and ipf-fhir-stu3-spring-boot-starter no longer exist;
-                use their FHIR R4 counterparts instead. The default FhirContext of the Camel FHIR data
-                formats is now R4 instead of DSTU3.
+                ipf-platform-camel-ihe-fhir-stu3-* and ipf-fhir-stu3-spring-boot-starter no longer exist.
             </action>
             <action issue="518" dev="ohr" type="update">
                 MHD updated to version 4.2.4. The entryUUID and the uniqueId Identifier are now differentiated
-                by Identifier.type instead of Identifier.use (CP-ITI-1328-01). Canonical references that pin a version,
-                e.g. .../Encounter|4.0.1, are resolved again during profile validation. MHD marker interfaces have been removed.
+                by Identifier.type instead of Identifier.use (CP-ITI-1328-01).
                 The Target Communities Option (CP-ITI-1326-02) is supported with the homeCommunityId extension on the
                 DocumentReference and List model classes and the targetCommunityIdList search parameter of [ITI-66] and [ITI-67].
             </action>
@@ -71,24 +64,6 @@
             </action>
             <action issue="476" dev="ohr" type="add">
                 Support Apache Camel telemetry for the IHE components. Removed MessageTracer in favor of Apache Camel telemetry
-            </action>
-            <action dev="ohr" type="fix">
-                Spring Boot applications using the ATNA starter (and thus any transaction family starter) no longer
-                fail to start when spring-boot-actuator is absent from the classpath
-            </action>
-            <action dev="ohr" type="fix">
-                ipf.xds.caching now also picks up the CacheManager contributed by Spring Boot's cache
-                auto-configuration, not only a user-declared one
-            </action>
-            <action dev="ohr" type="update">
-                XmlYielder moved from ipf-commons-xml to ipf-commons-ihe-hl7v3 (package
-                org.openehealth.ipf.commons.ihe.hl7v3), its only user. ipf-commons-xml no longer
-                requires Groovy; modules relying on its transitive groovy-xml dependency must now
-                declare it themselves
-            </action>
-            <action dev="ohr" type="fix">
-                The mhd-iti68-bin endpoint scheme is resolvable again: its Camel component descriptor named
-                the Iti68BinaryComponent in the wrong package, so routes using the scheme failed to start
             </action>
         </release>
         <release version="5.3.0" description="IPF 5.3.0" date="17 Aug 2026">
