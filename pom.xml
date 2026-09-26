@@ -411,6 +411,7 @@
                             boot/ipf-hpd-spring-boot-starter/generated-stubs:
                             boot/ipf-spring-boot-starter/generated-stubs:
                             boot/ipf-svs-spring-boot-starter/generated-stubs:
+                            boot/ipf-ws-spring-boot-starter/generated-stubs:
                             boot/ipf-xacml20-spring-boot-starter/generated-stubs:
                             boot/ipf-xds-spring-boot-starter/generated-stubs:
                             commons/audit/generated-stubs:
@@ -418,9 +419,9 @@
                             commons/ihe/core/generated-stubs:
                             commons/ihe/ech/generated-stubs:
                             commons/ihe/fhir/core/generated-stubs:
-                            commons/ihe/fhir/r4/core/generated-stubs:
                             commons/ihe/fhir/r4/audit/generated-stubs:
                             commons/ihe/fhir/r4/chppqm/generated-stubs:
+                            commons/ihe/fhir/r4/core/generated-stubs:
                             commons/ihe/fhir/r4/mhd/generated-stubs:
                             commons/ihe/fhir/r4/pixpdq/generated-stubs:
                             commons/ihe/fhir/r4/qedm/generated-stubs:
@@ -431,10 +432,12 @@
                             commons/ihe/hpd/generated-stubs:
                             commons/ihe/svs/generated-stubs:
                             commons/ihe/ws/generated-stubs:
-                            commons/ihe/xacml20/impl/generated-stubs:
-                            commons/ihe/xacml20/model/generated-stubs:
+                            commons/ihe/xacml20/generated-stubs:
                             commons/ihe/xds/generated-stubs:
-                            commons/map/generated-stubs:
+                            commons/map/core/generated-stubs:
+                            commons/map/groovy/generated-stubs:
+                            commons/map/xml/generated-stubs:
+                            commons/map/yaml/generated-stubs:
                             commons/spring/generated-stubs:
                             commons/xml/generated-stubs:
                             modules/cda/core/generated-stubs:
@@ -442,11 +445,11 @@
                             modules/hl7/generated-stubs:
                             platform-camel/cda/generated-stubs:
                             platform-camel/core/generated-stubs:
-                            platform-camel/ech/generated-stubs:
                             platform-camel/hl7/generated-stubs:
                             platform-camel/ihe/atna/generated-stubs:
                             platform-camel/ihe/continua/generated-stubs:
                             platform-camel/ihe/core/generated-stubs:
+                            platform-camel/ihe/ech/generated-stubs:
                             platform-camel/ihe/fhir/core/generated-stubs:
                             platform-camel/ihe/fhir/r4/audit/generated-stubs:
                             platform-camel/ihe/fhir/r4/chppqm/generated-stubs:
@@ -456,6 +459,7 @@
                             platform-camel/ihe/hl7v2/generated-stubs:
                             platform-camel/ihe/hl7v2ws/generated-stubs:
                             platform-camel/ihe/hl7v3/generated-stubs:
+                            platform-camel/ihe/hl7v3model/generated-stubs:
                             platform-camel/ihe/hpd/generated-stubs:
                             platform-camel/ihe/mllp/generated-stubs:
                             platform-camel/ihe/svs/generated-stubs:
