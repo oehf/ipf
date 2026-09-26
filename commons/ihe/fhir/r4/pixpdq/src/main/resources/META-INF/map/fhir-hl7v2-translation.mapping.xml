@@ -196,4 +196,115 @@
         <unmatched mode="fixed" value="other"/>
     </mapping>
 
+    <!--
+      ~ FHIR to HL7v2 mappings, used for translating PIXm Patient Identity Feed [ITI-104] into PIX Feed
+      ~ [ITI-8]. They are separate from the HL7v2 to FHIR mappings above, whose inverses are chosen for
+      ~ backwards compatibility rather than for being the most suitable HL7v2 code.
+      -->
+
+
+    <mapping name="fhir2hl7v2-name-use"
+             keySystem="http://hl7.org/fhir/name-use"
+             valueSystem="2.16.840.1.113883.12.200">
+        <entry key="usual" value="D"/>
+        <entry key="official" value="L"/>
+        <entry key="temp" value="TEMP"/>
+        <entry key="nickname" value="N"/>
+        <entry key="anonymous" value="S"/>
+        <entry key="old" value="BAD"/>
+        <entry key="maiden" value="M"/>
+        <unmatched mode="fixed" value=""/>
+    </mapping>
+
+    <mapping name="fhir2hl7v2-address-use"
+             keySystem="http://hl7.org/fhir/address-use"
+             valueSystem="2.16.840.1.113883.12.190">
+        <entry key="home" value="H"/>
+        <entry key="work" value="O"/>
+        <entry key="temp" value="C"/>
+        <entry key="old" value="BA"/>
+        <unmatched mode="fixed" value=""/>
+    </mapping>
+
+    <mapping name="fhir2hl7v2-telecom-use"
+             keySystem="http://hl7.org/fhir/contact-point-use"
+             valueSystem="2.16.840.1.113883.12.201">
+        <entry key="home" value="PRN"/>
+        <entry key="work" value="WPN"/>
+        <entry key="mobile" value="PRS"/>
+        <unmatched mode="fixed" value=""/>
+    </mapping>
+
+    <mapping name="fhir2hl7v2-telecom-type"
+             keySystem="http://hl7.org/fhir/contact-point-system"
+             valueSystem="2.16.840.1.113883.12.202">
+        <entry key="phone" value="PH"/>
+        <entry key="fax" value="FX"/>
+        <entry key="email" value="Internet"/>
+        <entry key="pager" value="BP"/>
+        <unmatched mode="fixed" value=""/>
+    </mapping>
+
+    <mapping name="fhir2hl7v2-patient-religion"
+             keySystem="http://hl7.org/fhir/v3/ReligiousAffiliation"
+             valueSystem="2.16.840.1.113883.12.6">
+        <entry key="1004" value="AGN"/>                   <!-- Agnostic -->
+        <entry key="1007" value="ATH"/>                   <!-- Atheist -->
+        <entry key="1008" value="BAH"/>                   <!-- Baha'i -->
+        <entry key="1059" value="BUD"/>                   <!-- Buddhist -->
+        <entry key="1029" value="BMA"/>                   <!-- Buddhist: Mahayana -->
+        <entry key="1051" value="BTH"/>                   <!-- Buddhist: Theravada -->
+        <entry key="1005" value="ANG"/>                   <!-- Christian: Anglican -->
+        <entry key="1061" value="AOG"/>                   <!-- Christian: Assembly of God -->
+        <entry key="1009" value="BAP"/>                   <!-- Christian: Baptist -->
+        <entry key="1041" value="CAT"/>                   <!-- Christian: Roman Catholic -->
+        <entry key="1063" value="CHS"/>                   <!-- Christian: Christian Science -->
+        <entry key="1064" value="COC"/>                   <!-- Christian: Church of Christ -->
+        <entry key="1065" value="COG"/>                   <!-- Christian: Church of God -->
+        <entry key="1068" value="EOT"/>                   <!-- Christian: Eastern Orthodox -->
+        <entry key="1069" value="EPI"/>                   <!-- Christian: Episcopalian -->
+        <entry key="1071" value="FRQ"/>                   <!-- Christian: Friends -->
+        <entry key="1025" value="JWN"/>                   <!-- Christian: Jehovah's Witness -->
+        <entry key="1028" value="LUT"/>                   <!-- Christian: Lutheran -->
+        <entry key="1073" value="MET"/>                   <!-- Christian: Methodist -->
+        <entry key="1027" value="MOM"/>                   <!-- Christian: Latter-day Saints -->
+        <entry key="1075" value="NAZ"/>                   <!-- Christian: Church of the Nazarene -->
+        <entry key="1013" value="COT"/>                   <!-- Christian: Other -->
+        <entry key="1038" value="PEN"/>                   <!-- Christian: Pentecostal -->
+        <entry key="1076" value="PRE"/>                   <!-- Christian: Presbyterian -->
+        <entry key="1077" value="PRO"/>                   <!-- Christian: Protestant -->
+        <entry key="1079" value="REC"/>                   <!-- Christian: Reformed Church -->
+        <entry key="1080" value="SAA"/>                   <!-- Christian: Salvation Army -->
+        <entry key="1001" value="SEV"/>                   <!-- Christian: Seventh Day Adventist -->
+        <entry key="1052" value="UNU"/>                   <!-- Christian: Unitarian Universalist -->
+        <entry key="1014" value="CNF"/>                   <!-- Confucian -->
+        <entry key="1020" value="HIN"/>                   <!-- Hindu -->
+        <entry key="1024" value="JAI"/>                   <!-- Jain -->
+        <entry key="1026" value="JEW"/>                   <!-- Jewish -->
+        <entry key="1023" value="MOS"/>                   <!-- Muslim -->
+        <entry key="1049" value="MSU"/>                   <!-- Muslim: Sunni -->
+        <entry key="1045" value="MSH"/>                   <!-- Muslim: Shiite -->
+        <entry key="1074" value="NAM"/>                   <!-- Native American -->
+        <entry key="1046" value="SHN"/>                   <!-- Shintoist -->
+        <entry key="1047" value="SIK"/>                   <!-- Sikh -->
+        <unmatched mode="fixed" value=""/>                <!-- not translated, including UNK -->
+    </mapping>
+
+    <mapping name="fhir2hl7v2-patient-maritalStatus"
+             keySystem="http://hl7.org/fhir/v3/MaritalStatus"
+             valueSystem="2.16.840.1.113883.12.2">
+        <entry key="N" value="A"/>                        <!-- separated -->
+        <entry key="U" value="B"/>                        <!-- unmarried -->
+        <entry key="P" value="C"/>                        <!-- common law -->
+        <entry key="D" value="D"/>                        <!-- divorced -->
+        <entry key="L" value="E"/>                        <!-- legally separated -->
+        <entry key="T" value="G"/>                        <!-- living together -->
+        <entry key="I" value="I"/>                        <!-- interlocutory -->
+        <entry key="M" value="M"/>                        <!-- married -->
+        <entry key="A" value="N"/>                        <!-- annulled -->
+        <entry key="S" value="S"/>                        <!-- never married -->
+        <entry key="W" value="W"/>                        <!-- widowed -->
+        <unmatched mode="fixed" value="U"/>               <!-- unknown -->
+    </mapping>
+
 </mappings>

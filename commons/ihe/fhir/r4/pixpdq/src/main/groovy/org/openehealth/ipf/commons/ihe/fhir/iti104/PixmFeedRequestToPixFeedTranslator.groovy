@@ -59,6 +59,9 @@ import static java.util.Objects.requireNonNull
  * The other identifiers of the Patient belong to the subsumed patient, and would otherwise be
  * cross-referenced with the surviving patient.
  * <p>
+ * Coded values are translated with the {@code fhir2hl7v2-*} mappings of
+ * {@code META-INF/map/fhir-hl7v2-translation.mapping.xml}, which must be available in the mapping service.
+ * <p>
  * The event type of the resulting message is also put into the parameters as
  * {@link #PIX_FEED_EVENT_TYPE}, so that {@link PixFeedResponseToPixmFeedResponseTranslator} can tell
  * whether the patient has been created.
@@ -195,7 +198,6 @@ class PixmFeedRequestToPixFeedTranslator implements FhirTranslator<Message> {
             pid[7][1] = patient.birthDateElement.valueAsString.replace('-', '')
         }
         if (patient.hasGender()) {
-            // TODO #520: will probably be replaced by the new mapping service
             pid[8] = patient.gender.toCode().map('hl7v2fhir-patient-gender')
         }
         patient.address.eachWithIndex { Address address, int i -> populateAddress(pid[11](i), address) }
@@ -209,7 +211,6 @@ class PixmFeedRequestToPixFeedTranslator implements FhirTranslator<Message> {
             pid[15][1] = language.language.codingFirstRep.code
         }
         if (patient.maritalStatus?.codingFirstRep?.code) {
-            // TODO #520: will probably be replaced by the new mapping service
             pid[16][1] = patient.maritalStatus.codingFirstRep.code.map('fhir2hl7v2-patient-maritalStatus')
         }
 
@@ -217,7 +218,6 @@ class PixmFeedRequestToPixFeedTranslator implements FhirTranslator<Message> {
         // Both are the inverse of PdqResponseToPdqmResponseTranslator.
         String religion = religionCode(patient)
         if (religion) {
-            // TODO #520: will probably be replaced by the new mapping service
             String mapped = religion.map('fhir2hl7v2-patient-religion')
             if (mapped) {
                 pid[17][1] = mapped
@@ -237,7 +237,6 @@ class PixmFeedRequestToPixFeedTranslator implements FhirTranslator<Message> {
         // Citizenship, inverse to PdqResponseToPdqmResponseTranslator. A code of the null flavor UNK
         // is taken over as it is, just like the other way round.
         citizenshipCodes(patient).eachWithIndex { String code, int i ->
-            // TODO #520: will probably be replaced by the new mapping service
             pid[26](i)[1] = code.mapReverse('hl7v2fhir-patient-citizenship')
         }
         if (patient.deceased instanceof DateTimeType) {
@@ -256,8 +255,6 @@ class PixmFeedRequestToPixFeedTranslator implements FhirTranslator<Message> {
             throw Utils.unknownIdentifierDomain(identifier.system)
         }
     }
-
-    // TODO #520: the mappings used below will probably be replaced by the new mapping service
 
     protected static void populateName(xpn, HumanName name) {
         xpn[1][1] = name.family ?: ''

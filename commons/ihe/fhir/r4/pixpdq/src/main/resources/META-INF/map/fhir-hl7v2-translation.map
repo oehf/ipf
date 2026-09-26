@@ -29,7 +29,8 @@
  *
  * Note that most of these mappings are derived directly from the FHIR specification
  *
- * TODO #520: these mappings will probably be replaced by the new mapping service (feature/mapping)
+ * Since IPF 6.0, IPF itself loads the equivalent fhir-hl7v2-translation.mapping.xml (or .mapping.yaml).
+ * This file is kept for backwards compatibility and must be kept in sync with them.
  */
 
 
@@ -217,8 +218,6 @@ mappings = {
 
     // FHIR to HL7v2 mappings, used for translating PIXm Patient Identity Feed [ITI-104] into PIX Feed [ITI-8].
     // The HL7v2 to FHIR mappings above are ambiguous in reverse direction, therefore these are separate.
-    //
-    // TODO #520: all mappings in this file will probably be replaced by the new mapping service (feature/mapping)
 
     'fhir2hl7v2-name-use'(['http://hl7.org/fhir/name-use', '2.16.840.1.113883.12.200'],
         'usual'     : 'D',

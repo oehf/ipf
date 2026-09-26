@@ -190,3 +190,111 @@ mappings:
       D: {value: non-binary, equivalence: wider}
       I: non-binary
     unmatched: {fixed: other}
+
+  # FHIR to HL7v2 mappings, used for translating PIXm Patient Identity Feed [ITI-104] into PIX Feed
+  # [ITI-8]. They are separate from the HL7v2 to FHIR mappings above, whose inverses are chosen for
+  # backwards compatibility rather than for being the most suitable HL7v2 code.
+
+  fhir2hl7v2-name-use:
+    keySystem:   http://hl7.org/fhir/name-use
+    valueSystem: "2.16.840.1.113883.12.200"
+    entries:
+      usual: D
+      official: L
+      temp: TEMP
+      nickname: "N"
+      anonymous: S
+      old: BAD
+      maiden: M
+    unmatched: {fixed: ""}
+
+  fhir2hl7v2-address-use:
+    keySystem:   http://hl7.org/fhir/address-use
+    valueSystem: "2.16.840.1.113883.12.190"
+    entries:
+      home: H
+      work: O
+      temp: C
+      old: BA
+    unmatched: {fixed: ""}
+
+  fhir2hl7v2-telecom-use:
+    keySystem:   http://hl7.org/fhir/contact-point-use
+    valueSystem: "2.16.840.1.113883.12.201"
+    entries:
+      home: PRN
+      work: WPN
+      mobile: PRS
+    unmatched: {fixed: ""}
+
+  fhir2hl7v2-telecom-type:
+    keySystem:   http://hl7.org/fhir/contact-point-system
+    valueSystem: "2.16.840.1.113883.12.202"
+    entries:
+      phone: PH
+      fax: FX
+      email: Internet
+      pager: BP
+    unmatched: {fixed: ""}
+
+  fhir2hl7v2-patient-religion:
+    keySystem:   http://hl7.org/fhir/v3/ReligiousAffiliation
+    valueSystem: "2.16.840.1.113883.12.6"
+    entries:
+      "1004": AGN                                 # Agnostic
+      "1007": ATH                                 # Atheist
+      "1008": BAH                                 # Baha'i
+      "1059": BUD                                 # Buddhist
+      "1029": BMA                                 # Buddhist: Mahayana
+      "1051": BTH                                 # Buddhist: Theravada
+      "1005": ANG                                 # Christian: Anglican
+      "1061": AOG                                 # Christian: Assembly of God
+      "1009": BAP                                 # Christian: Baptist
+      "1041": CAT                                 # Christian: Roman Catholic
+      "1063": CHS                                 # Christian: Christian Science
+      "1064": COC                                 # Christian: Church of Christ
+      "1065": COG                                 # Christian: Church of God
+      "1068": EOT                                 # Christian: Eastern Orthodox
+      "1069": EPI                                 # Christian: Episcopalian
+      "1071": FRQ                                 # Christian: Friends
+      "1025": JWN                                 # Christian: Jehovah's Witness
+      "1028": LUT                                 # Christian: Lutheran
+      "1073": MET                                 # Christian: Methodist
+      "1027": MOM                                 # Christian: Latter-day Saints
+      "1075": NAZ                                 # Christian: Church of the Nazarene
+      "1013": COT                                 # Christian: Other
+      "1038": PEN                                 # Christian: Pentecostal
+      "1076": PRE                                 # Christian: Presbyterian
+      "1077": PRO                                 # Christian: Protestant
+      "1079": REC                                 # Christian: Reformed Church
+      "1080": SAA                                 # Christian: Salvation Army
+      "1001": SEV                                 # Christian: Seventh Day Adventist
+      "1052": UNU                                 # Christian: Unitarian Universalist
+      "1014": CNF                                 # Confucian
+      "1020": HIN                                 # Hindu
+      "1024": JAI                                 # Jain
+      "1026": JEW                                 # Jewish
+      "1023": MOS                                 # Muslim
+      "1049": MSU                                 # Muslim: Sunni
+      "1045": MSH                                 # Muslim: Shiite
+      "1074": NAM                                 # Native American
+      "1046": SHN                                 # Shintoist
+      "1047": SIK                                 # Sikh
+    unmatched: {fixed: ""}                        # not translated, including UNK
+
+  fhir2hl7v2-patient-maritalStatus:
+    keySystem:   http://hl7.org/fhir/v3/MaritalStatus
+    valueSystem: "2.16.840.1.113883.12.2"
+    entries:
+      N: A                                      # separated
+      U: B                                        # unmarried
+      P: C                                        # common law
+      D: D                                        # divorced
+      L: E                                        # legally separated
+      T: G                                        # living together
+      I: I                                        # interlocutory
+      M: M                                        # married
+      A: N                                        # annulled
+      S: S                                        # never married
+      W: W                                        # widowed
+    unmatched: {fixed: U}                         # unknown

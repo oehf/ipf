@@ -42,9 +42,8 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
-import org.openehealth.ipf.commons.map.BidiMappingService
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 import static org.junit.jupiter.api.Assertions.assertFalse
@@ -68,16 +67,34 @@ class PixmFeedRequestToPixFeedTranslatorTest {
 
     @BeforeEach
     void setup() {
-        MappingService mappingService = new BidiMappingService()
-        mappingService.setMappingScripts([getClass().getResource('/mapping.map'),
-                                          getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map')] as URL[])
-        mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
+        Mappings mappings = Mappings.builder()
+            .load(getClass().getResource('/mapping.map'))
+            .load(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.mapping.xml'))
+            .build()
+        mapper = new DefaultUriMapper(mappings, 'uriToOid', 'uriToNamespace')
         translator = new PixmFeedRequestToPixFeedTranslator(mapper)
 
         Registry registry = EasyMock.createMock(Registry)
         ContextFacade.setRegistry(registry)
-        EasyMock.expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        EasyMock.expect(registry.bean(Mappings)).andReturn(mappings).anyTimes()
         EasyMock.replay(registry)
+    }
+
+    /**
+     * The FHIR to HL7v2 mappings are the same in the XML and in the YAML variant of the mapping file
+     */
+    @Test
+    void testXmlAndYamlMappingsAreEquivalent() {
+        Mappings xml = Mappings.builder().load(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.mapping.xml')).build()
+        Mappings yaml = Mappings.builder().load(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.mapping.yaml')).build()
+        def names = xml.mappingNames().findAll { it.startsWith('fhir2hl7v2-') }
+        assertEquals(6, names.size())
+        names.each { name ->
+            def x = xml.mapping(name).orElseThrow()
+            def y = yaml.mapping(name).orElseThrow()
+            assertEquals(x.entries(), y.entries(), name)
+            assertEquals(x.unmatched(), y.unmatched(), name)
+        }
     }
 
     @Test
