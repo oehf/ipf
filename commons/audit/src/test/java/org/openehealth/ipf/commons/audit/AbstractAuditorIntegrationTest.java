@@ -85,6 +85,8 @@ abstract class AbstractAuditorIntegrationTest {
 
     @AfterEach
     public void tearDown() {
+        // release connections and event loops, so that they do not load subsequent tests
+        auditContext.getAuditTransmissionProtocol().shutdown();
         System.setProperties(p);
     }
 

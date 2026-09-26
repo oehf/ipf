@@ -33,6 +33,10 @@ import java.util.function.Consumer;
  * due to incomplete syslog frames, the map is populated with the raw content and the
  * exception that has been thrown by the parser.
  * <p>
+ * Messages that cannot be parsed at all, and exceptions thrown by the consumer, are passed to the error
+ * consumer; they do not affect the handling of other messages. Messages are handled concurrently, so the
+ * consumer must be thread-safe and must not rely on the order in which messages were sent.
+ * <p>
  * One example for a consumer is {@link org.openehealth.ipf.commons.audit.server.support.SyslogEventCollector}
  * that is practical for tests. With this respect, note that SyslogServer is {@link Closeable}, so it can easily
  * be started and stopped by using a try-with-resources statement.
@@ -94,9 +98,29 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
     }
 
     /**
-     * Asynchronously consumes syslog records. This trick is described at
-     * https://levelup.gitconnected.com/reactive-asynchronous-programming-in-java-using-reactor-core-part-2-e9c6caeb8833.
-     * It generates a Mono from a potentially blocking call and subscribes using a scheduler.
+     * Handles a message received from the channel: a parsed syslog message is passed to the consumer,
+     * anything else (e.g. a {@link io.netty.handler.codec.DecoderException} for a message that could not
+     * be parsed) to the error consumer.
+     *
+     * @param message received message
+     * @return completion of the handling, never failing
+     * @since 6.0
+     */
+    @SuppressWarnings("unchecked")
+    protected Mono<Object> handleMessage(Object message) {
+        if (message instanceof Map<?, ?> map) {
+            return handleMap((Map<String, Object>) map);
+        }
+        return handleError(message instanceof Throwable throwable ?
+                throwable :
+                new IllegalStateException("Unexpected message type " + (message != null ? message.getClass() : null)));
+    }
+
+    /**
+     * Asynchronously consumes syslog records. This trick is described
+     * <a href="https://levelup.gitconnected.com/reactive-asynchronous-programming-in-java-using-reactor-core-part-2-e9c6caeb8833">here</a>.
+     * It generates a Mono from a potentially blocking call and subscribes using a scheduler. An exception
+     * thrown by the consumer is passed to the error consumer.
      *
      * @param map syslog map
      * @return nothing
@@ -104,7 +128,17 @@ public abstract class SyslogServer<T extends DisposableChannel> implements Close
     protected Mono<Object> handleMap(Map<String, Object> map) {
         return Mono
                 .fromRunnable(() -> consumer.accept(map))
-                .subscribeOn(Schedulers.boundedElastic());
+                .subscribeOn(Schedulers.boundedElastic())
+                .onErrorResume(this::handleError);
+    }
+
+    /**
+     * @param throwable error that occurred while receiving or handling a message
+     * @return completion of passing the error to the error consumer
+     * @since 6.0
+     */
+    protected Mono<Object> handleError(Throwable throwable) {
+        return Mono.fromRunnable(() -> errorConsumer.accept(throwable));
     }
 
     @Override

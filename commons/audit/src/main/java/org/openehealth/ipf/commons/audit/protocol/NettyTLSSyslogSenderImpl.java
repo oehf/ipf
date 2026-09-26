@@ -17,18 +17,21 @@
 package org.openehealth.ipf.commons.audit.protocol;
 
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.MultiThreadIoEventLoopGroup;
+import io.netty.channel.nio.NioIoHandler;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.handler.ssl.SslContext;
+import io.netty.handler.ssl.SslHandler;
+import lombok.Getter;
 import org.openehealth.ipf.commons.audit.AuditException;
 import org.openehealth.ipf.commons.audit.NettyUtils;
 import org.openehealth.ipf.commons.core.ssl.TlsParameters;
@@ -70,7 +73,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
     }
 
     /**
-     * Sets the connect timeout
+     * Sets the timeout for establishing the connection, including the TLS handshake. Defaults to 5 seconds.
      *
      * @param value    time value
      * @param timeUnit time unit
@@ -90,8 +93,9 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
     }
 
     /**
-     * Set the number of working threads. This corresponds with the number of connections
-     * being opened. Defaults to 1.
+     * Set the number of worker threads of the event loop. As there is only one connection per Audit
+     * Record Repository, which is always served by one thread, more threads only make a difference when
+     * auditing to several repositories. Defaults to 1.
      *
      * @param workerThreads number of worker threads.
      */
@@ -105,20 +109,18 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
     public static final class NettyDestination implements NioTLSSyslogSenderImpl.Destination<ChannelFuture> {
         private final long connectTimeout;
         private final long sendTimeout;
+        @Getter
         private final Bootstrap bootstrap;
         private final EventLoopGroup workerGroup;
+        // only ever holds a connection that has completed the TLS handshake
         private ChannelFuture channelFuture;
         private final String host;
         private final int port;
 
-        public Bootstrap getBootstrap() {
-            return bootstrap;
-        }
-
         NettyDestination(TlsParameters tlsParameters, String host, int port, int workerThreads,
                          long connectTimeout, long sendTimeout, boolean withLogging) {
 
-            this.workerGroup = new NioEventLoopGroup(workerThreads);
+            this.workerGroup = new MultiThreadIoEventLoopGroup(workerThreads, NioIoHandler.newFactory());
             this.connectTimeout = connectTimeout;
             this.sendTimeout = sendTimeout;
             this.host = host;
@@ -131,44 +133,77 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
                     .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int) connectTimeout)
                     .option(ChannelOption.SO_KEEPALIVE, true)
                     .remoteAddress(host, port)
-                    .handler(new InitializerHandler(tlsParameters, host, port, withLogging));
+                    .handler(new InitializerHandler(NettyUtils.initSslContext(tlsParameters, false), host, port, withLogging));
         }
 
         @Override
         public void shutdown() {
             if (workerGroup != null) {
                 log.info("TLS Channel to Audit Repository at {}:{} is closed", host, port);
-                workerGroup.shutdownGracefully();
+                workerGroup.shutdownGracefully(0, 10, TimeUnit.SECONDS).awaitUninterruptibly(10, TimeUnit.SECONDS);
             }
         }
 
+        /**
+         * Returns the connection to the Audit Record Repository, and establishes it if there is none or
+         * the previous one has been closed. A connection is only handed out once it is fully established,
+         * i.e. including the TLS handshake. Synchronized, so that concurrent senders neither open several
+         * connections nor see one that is still being set up.
+         *
+         * @return the future of the established connection
+         * @throws AuditException if the connection cannot be established
+         */
         @Override
-        public ChannelFuture getHandle() {
+        public synchronized ChannelFuture getHandle() {
             if (channelFuture == null || !channelFuture.channel().isActive()) {
-                try {
-                    channelFuture = bootstrap.connect();
-                    if (channelFuture == null || !channelFuture.await(connectTimeout)) {
-                        throw new AuditException("Could not establish TLS connection to " + host + ":" + port);
-                    }
-                } catch (InterruptedException e) {
-                    throw new AuditException("Interrupted while establishing TLS connection to " + host + ":" + port, e);
+                if (channelFuture != null) {
+                    channelFuture.channel().close();
                 }
+                channelFuture = connect();
             }
             return channelFuture;
         }
 
+        /**
+         * Connects and waits for the TLS handshake to complete, both within the connect timeout.
+         */
+        private ChannelFuture connect() {
+            var deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(connectTimeout);
+            var future = bootstrap.connect();
+            try {
+                if (!future.await(remainingMillis(deadline))) {
+                    future.channel().close();
+                    throw new AuditException("Timed out while establishing TLS connection to " + host + ":" + port);
+                }
+                if (!future.isSuccess()) {
+                    throw new AuditException("Could not establish TLS connection to " + host + ":" + port, future.cause());
+                }
+                var handshake = future.channel().pipeline().get(SslHandler.class).handshakeFuture();
+                if (!handshake.await(remainingMillis(deadline))) {
+                    future.channel().close();
+                    throw new AuditException("Timed out during TLS handshake with " + host + ":" + port);
+                }
+                if (!handshake.isSuccess()) {
+                    future.channel().close();
+                    throw new AuditException("TLS handshake with " + host + ":" + port + " failed", handshake.cause());
+                }
+                return future;
+            } catch (InterruptedException e) {
+                future.channel().close();
+                Thread.currentThread().interrupt();
+                throw new AuditException("Interrupted while establishing TLS connection to " + host + ":" + port, e);
+            }
+        }
+
+        private static long remainingMillis(long deadline) {
+            return Math.max(0, TimeUnit.NANOSECONDS.toMillis(deadline - System.nanoTime()));
+        }
+
         @Override
         public void write(byte[] bytes) {
-            // The write operation is asynchronous.
             var channel = getHandle().channel();
             log.trace("Writing {} bytes using session: {}", bytes.length, channel);
-            try {
-                if (!channel.writeAndFlush(Unpooled.wrappedBuffer(bytes)).await(sendTimeout)) {
-                    throw new AuditException("Could not send audit message to " + host + ":" + port);
-                }
-            } catch (InterruptedException e) {
-                throw new AuditException("Interrupted during sending audit message to " + host + ":" + port, e);
-            }
+            NettyUtils.writeAndAwait(channel, bytes, sendTimeout, host, port);
         }
 
         /**
@@ -192,7 +227,7 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
 
             @Override
             public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
-                log.info("Exception on receiving message for context {}", ctx, cause);
+                log.info("Exception on TLS channel to Audit Repository at {}:{}, closing it", host, port, cause);
                 if (ctx != null) {
                     ctx.close();
                 }
@@ -203,13 +238,13 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
          * Handler called upon setup
          */
         private static class InitializerHandler extends ChannelInitializer<SocketChannel> {
-            private final TlsParameters tlsParameters;
+            private final SslContext sslContext;
             private final String host;
             private final int port;
             private final boolean withLogging;
 
-            public InitializerHandler(TlsParameters tlsParameters, String host, int port, boolean withLogging) {
-                this.tlsParameters = tlsParameters;
+            public InitializerHandler(SslContext sslContext, String host, int port, boolean withLogging) {
+                this.sslContext = sslContext;
                 this.host = host;
                 this.port = port;
                 this.withLogging = withLogging;
@@ -218,7 +253,6 @@ public class NettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<ChannelFutu
             @Override
             protected void initChannel(SocketChannel channel) {
                 var pipeline = channel.pipeline();
-                var sslContext = NettyUtils.initSslContext(tlsParameters, false);
                 pipeline.addLast(sslContext.newHandler(channel.alloc(), host, port));
                 pipeline.addLast(new InboundHandler(host, port));
                 if (withLogging) {

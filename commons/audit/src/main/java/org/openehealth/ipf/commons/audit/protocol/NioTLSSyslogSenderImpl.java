@@ -16,6 +16,7 @@
 
 package org.openehealth.ipf.commons.audit.protocol;
 
+import lombok.Setter;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.audit.AuditMetadataProvider;
 import org.openehealth.ipf.commons.core.ssl.TlsParameters;
@@ -36,6 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl.Destination<H>> extends RFC5425Protocol implements AuditTransmissionProtocol {
 
     private static final Logger log = LoggerFactory.getLogger(NioTLSSyslogSenderImpl.class);
+    @Setter
     private boolean loggingEnabled = false;
     private final TlsParameters tlsParameters;
 
@@ -44,10 +46,6 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
     public NioTLSSyslogSenderImpl(TlsParameters tlsParameters) {
         super();
         this.tlsParameters = tlsParameters;
-    }
-
-    public void setLoggingEnabled(boolean loggingEnabled) {
-        this.loggingEnabled = loggingEnabled;
     }
 
     /**
@@ -77,7 +75,8 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
     }
 
     private D getDestination(String host, int port) {
-        return destinations.computeIfAbsent(host + port, s ->
+        // the separator keeps e.g. arr1:6514 and arr16:514 apart
+        return destinations.computeIfAbsent(host + ":" + port, s ->
                 customizeDestination(makeDestination(tlsParameters, host, port, loggingEnabled)));
     }
 
@@ -85,7 +84,13 @@ public abstract class NioTLSSyslogSenderImpl<H, D extends NioTLSSyslogSenderImpl
 
     @Override
     public void shutdown() {
-        destinations.values().forEach(Destination::shutdown);
+        // remove the destinations, so that a later send establishes new ones instead of using closed ones
+        destinations.keySet().forEach(key -> {
+            var destination = destinations.remove(key);
+            if (destination != null) {
+                destination.shutdown();
+            }
+        });
     }
 
     /**

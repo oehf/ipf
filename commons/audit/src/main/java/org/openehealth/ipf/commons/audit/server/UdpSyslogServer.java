@@ -19,10 +19,11 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.FixedRecvByteBufAllocator;
 import io.netty.channel.socket.DatagramPacket;
 import io.netty.handler.logging.LogLevel;
+import org.openehealth.ipf.commons.audit.NettyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 import reactor.netty.Connection;
-import reactor.netty.internal.util.Metrics;
 import reactor.netty.udp.UdpServer;
 
 import java.time.Duration;
@@ -48,12 +49,11 @@ public class UdpSyslogServer extends SyslogServer<Connection> {
     public UdpSyslogServer doStart(String host, int port) {
         channel = UdpServer.create()
                 .option(ChannelOption.SO_REUSEADDR, true)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int)Duration.ofSeconds(timeoutSeconds).toMillis())
-                .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
+                .option(ChannelOption.RECVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
                 .host(host)
                 .port(port)
                 .wiretap(getClass().getName(), LogLevel.TRACE)
-                .metrics(Metrics.isMicrometerAvailable())
+                .metrics(NettyUtils.isMicrometerAvailable())
 
                 // This does not work!
                 //.doOnBound(connection -> connection
@@ -67,14 +67,21 @@ public class UdpSyslogServer extends SyslogServer<Connection> {
                     log.info("UDP Syslog Server unbound from {}", disposableServer.channel().localAddress()))
                 .handle((udpInbound, udpOutbound) -> udpInbound
                         .receiveObject()
-                        // Because the handlers don't seem to step in, we handle it here
-                        .map(o -> ((DatagramPacket) o))
-                        .map(Rfc5424Decoder::decodeDatagram)
-                        .flatMap(this::handleMap)
+                        // Because the handlers don't seem to step in, we decode here. A datagram that cannot
+                        // be decoded must not terminate the stream, as it serves all datagrams of the server.
+                        .flatMap(this::decodeAndHandle)
                         .doOnError(errorConsumer)
                         .then())
                 .bindNow(Duration.ofSeconds(timeoutSeconds));
         return this;
+    }
+
+    private Mono<Object> decodeAndHandle(Object datagram) {
+        try {
+            return handleMap(Rfc5424Decoder.decodeDatagram((DatagramPacket) datagram));
+        } catch (RuntimeException e) {
+            return handleError(e);
+        }
     }
 
 
