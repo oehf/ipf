@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.audit.server;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.DatagramPacket;
+import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.MessageToMessageDecoder;
 import org.openehealth.ipf.commons.audit.server.support.SyslogParser;
 import org.slf4j.Logger;
@@ -51,9 +52,18 @@ public class Rfc5424Decoder extends MessageToMessageDecoder<ByteBuf> {
         return decode(datagramPacket.sender(), datagramPacket.content());
     }
 
+    /**
+     * Decodes a syslog frame into a map. A frame that cannot be parsed is passed on as
+     * {@link DecoderException} instead of being thrown, because a single malformed message shall not
+     * terminate the connection and thus all messages that follow on it.
+     */
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf msg, List<Object> out) {
-        out.add(decode(ctx.channel().remoteAddress(), msg));
+        try {
+            out.add(decode(ctx.channel().remoteAddress(), msg));
+        } catch (RuntimeException e) {
+            out.add(new DecoderException("Could not decode RFC 5424 syslog message", e));
+        }
     }
 
     private static Map<String, Object> decode(SocketAddress socketAddress, ByteBuf msg) {

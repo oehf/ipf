@@ -30,7 +30,7 @@ import ca.uhn.hl7v2.validation.builder.PrimitiveRuleBuilder
 import ca.uhn.hl7v2.validation.impl.SimpleValidationExceptionHandler
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.modules.api.ValidationException
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.modules.hl7.kotlin.validation.model.LambdaEncodingRule
 import org.openehealth.ipf.modules.hl7.kotlin.validation.model.LambdaMessageRule
 import org.openehealth.ipf.modules.hl7.kotlin.validation.model.LambdaPrimitiveTypeRule
@@ -139,10 +139,10 @@ operator fun Type.component9(): Type = get(9)
 operator fun Type.component10(): Type = get(10)
 
 
-fun Type.map(key: Any?): Any? = mappingService().get(key, encode())
-fun Type.map(key: Any?, defaultValue: Any?): Any? = mappingService().get(key, encode(), defaultValue)
-fun Type.mapReverse(key: Any?): Any? = mappingService().getKey(key, encode())
-fun Type.mapReverse(key: Any?, defaultValue: Any?): Any? = mappingService().getKey(key, encode(), defaultValue)
+fun Type.map(mapping: String): String? = mappings().map(mapping, encode()).orElse(null)
+fun Type.map(mapping: String, defaultValue: String?): String? = mappings().map(mapping, encode(), defaultValue)
+fun Type.mapReverse(mapping: String): String? = mappings().mapReverse(mapping, encode()).orElse(null)
+fun Type.mapReverse(mapping: String, defaultValue: String?): String? = mappings().mapReverse(mapping, encode(), defaultValue)
 
 
 // Extension functions/properties for ExtraComponent ------------------------------------------
@@ -485,7 +485,7 @@ private fun <T> useStructureName(): T = throw Hl7DslException("Use structure nam
 
 private fun componentIndex(idx: Int) = if (idx < 1) throw Hl7DslException("component index must be in range 1..n") else idx - 1
 
-private fun mappingService(): MappingService = ContextFacade.getBean(MappingService::class.java)
+private fun mappings(): Mappings = ContextFacade.getBean(Mappings::class.java)
 
 // Get a string value out of types or any object
 

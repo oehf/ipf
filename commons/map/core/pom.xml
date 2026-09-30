@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>ipf-commons-map-core</artifactId>
+    <name>ipf-commons-map-core</name>
+    <description>Model, API and loader SPI of the IPF Mapping Service</description>
+
+    <parent>
+        <groupId>org.openehealth.ipf.commons</groupId>
+        <artifactId>ipf-commons-map</artifactId>
+        <version>6.0-SNAPSHOT</version>
+    </parent>
+
+    <!--
+        No dependencies beyond slf4j-api, which the root POM adds to every module. The model and
+        the lookup API are plain Java; every file format lives in a module of its own behind the
+        MappingLoader SPI.
+    -->
+    <dependencies>
+        <!-- Optional matchers, which MappingMatchers builds on and this module's own tests use -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-core</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!--
+                    Publishes MappingMatchers, and the TestMappingLoader behind it, for every
+                    module that reads mappings in a format of its own.
+                -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -33,8 +33,7 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
-import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.modules.hl7.parser.GroovyCustomModelClassFactory
 
 import static org.easymock.EasyMock.*
@@ -50,13 +49,14 @@ class HapiModelExtensionTest {
 
     @BeforeAll
     static void setUp() {
-        BidiMappingService mappingService = new BidiMappingService()
-        mappingService.setMappingScript(HapiModelExtensionTest.class.getResource("/example2.map"))
+        Mappings mappingService = Mappings.builder()
+                .load(HapiModelExtensionTest.class.getResource("/example2.map"))
+                .build()
         ModelClassFactory mcf = new CustomModelClassFactory()
         HapiContext context = new DefaultHapiContext(mcf)
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)
-        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        expect(registry.bean(Mappings)).andReturn(mappingService).anyTimes()
         expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
         expect(registry.bean(HapiContext)).andReturn(context).anyTimes()
         replay(registry)
@@ -230,21 +230,28 @@ class HapiModelExtensionTest {
         }
     }
             
+    /**
+     * Collections are no longer joined into a composite key, so there is nothing to map them with.
+     */
     @Test
-    void testList() {
-        assert ['a','b'].map('listTest') == ['c','d'] 
-        assert ['x','y'].map('listTest', ['a','b']) == (['x','y'].map('listTest') ?: ['a','b'])
-        assert ['x','y'].map('listTest2') == ['c','d']
-        assert ['x','y'].map('listTest2', ['a','b']) == ['c','d']
+    void testListIsNotMapped() {
+        assertThrows(MissingMethodException) {
+            ['a', 'b'].map('listTest')
+        }
+    }
+
+    /**
+     * A value containing a tilde is one string rather than a List.
+     */
+    @Test
+    void testCompositeValueIsASingleString() {
         ADT_A01 msg = new ADT_A01()
         msg.initQuickstart('ADT', 'A01', 'P')
         def x = new ID(msg, 100)
-    	def y = new ID(msg, 100)
-    	x.setValue('a')
-    	y.setValue('b')
-    	assert [x,y].map('listTest') == ['c','d']    	
+        x.setValue('x')
+        assert x.map('listTest2') == 'c~d'
     }
-    
+
     @Test
     void testTypeMap() {
         String msgText = this.class.classLoader.getResource('msg-01.hl7')?.text

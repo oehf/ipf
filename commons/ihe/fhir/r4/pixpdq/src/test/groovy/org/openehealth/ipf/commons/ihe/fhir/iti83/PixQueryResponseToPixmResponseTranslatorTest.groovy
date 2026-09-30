@@ -29,12 +29,14 @@ import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.CustomModelClassUtils
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.HapiContextFactory
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.RSP_K23
-import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.gazelle.validation.profile.pixpdq.PixPdqTransactions
 
 import java.nio.charset.Charset
-import static org.junit.jupiter.api.Assertions.assertEquals
+
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.Matchers.hasSize
+import static org.hamcrest.Matchers.is
 
 /**
  *
@@ -46,12 +48,13 @@ class PixQueryResponseToPixmResponseTranslatorTest {
             PixPdqTransactions.ITI9)
 
     private PixQueryResponseToPixmResponseTranslator translator
-    MappingService mappingService
+    Mappings mappingService
 
     @BeforeEach
     void setup() {
-        mappingService = new BidiMappingService()
-        mappingService.setMappingScript(getClass().getClassLoader().getResource('mapping.map'))
+        mappingService = Mappings.builder()
+                .load(getClass().getClassLoader().getResource('mapping.map'))
+                .build()
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PixQueryResponseToPixmResponseTranslator(mapper)
     }
@@ -60,11 +63,11 @@ class PixQueryResponseToPixmResponseTranslatorTest {
     void testTranslateRegularResponse() {
         RSP_K23 message = loadMessage('ok-1_Response')
         Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
-        assertEquals(1, parameters.parameter.size())
+        assertThat(parameters.parameter, hasSize(1))
         Parameters.ParametersParameterComponent parameter = parameters.parameter[0]
         Identifier identifier = (Identifier) parameter.getValue()
-        assertEquals('78912', identifier.value)
-        assertEquals('http://org.openehealth/ipf/commons/ihe/fhir/1', identifier.system)
+        assertThat(identifier.value, is('78912'))
+        assertThat(identifier.system, is('http://org.openehealth/ipf/commons/ihe/fhir/1'))
         // System.out.println(FhirContext.forR4().newXmlParser().setPrettyPrint(true).encodeResourceToString(parameters))
     }
 
@@ -72,18 +75,18 @@ class PixQueryResponseToPixmResponseTranslatorTest {
     void testTranslateRegularResponseUnknownOid() {
         RSP_K23 message = loadMessage('ok-2_Response')
         Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
-        assertEquals(1, parameters.parameter.size())
+        assertThat(parameters.parameter, hasSize(1))
         Parameters.ParametersParameterComponent parameter = parameters.parameter[0]
         Identifier identifier = (Identifier) parameter.getValue()
-        assertEquals('78912', identifier.value)
-        assertEquals('urn:oid:1.2.3.4.5', identifier.system)
+        assertThat(identifier.value, is('78912'))
+        assertThat(identifier.system, is('urn:oid:1.2.3.4.5'))
     }
 
     @Test
     void testTranslateEmptyResponse() {
         RSP_K23 message = loadMessage('nf-1_Response')
         Parameters parameters = translator.translateToFhir(message, new HashMap<String, Object>())
-        assertEquals(0, parameters.parameter.size())
+        assertThat(parameters.parameter, hasSize(0))
     }
 
     @Test

@@ -1,0 +1,4 @@
+# A mapping whose fallback derives the value from the key rather than listing it
+@name      = deviceType
+@unmatched = function:first4
+LEGACY = legacy-device

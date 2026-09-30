@@ -11,8 +11,7 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
        Extension mechanism. Each of these beans collects its own contributions from the
        application context, so no post processor is needed:
 
-       - the SpringBidiMappingService declared in base-context.xml picks up the
-         CustomMappings beans
+       - the SpringMappings declared in base-context.xml picks up the CustomMappings beans
        - the registrar below picks up the DynamicExtension beans
        - the configurer below picks up the CustomRouteBuilder beans
   -->

@@ -1,0 +1,8 @@
+mappings = {
+
+    deviceType(
+        'LEGACY' : 'legacy-device',
+        (ELSE)   : { it.length() > 4 ? it.substring(0, 4) : it }
+    )
+
+}

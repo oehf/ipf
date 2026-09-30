@@ -23,7 +23,6 @@ import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.netty.DisposableChannel;
-import reactor.netty.internal.util.Metrics;
 import reactor.netty.tcp.TcpServer;
 
 import java.time.Duration;
@@ -40,6 +39,7 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
 
     private static final Logger log = LoggerFactory.getLogger(TlsSyslogServer.class);
     protected final TlsParameters tlsParameters;
+    private int maxFrameLength = Rfc5425Decoder.DEFAULT_MAX_FRAME_LENGTH;
 
     public TlsSyslogServer(Consumer<? super Map<String, Object>> consumer,
                            Consumer<Throwable> errorConsumer) {
@@ -53,6 +53,21 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
         this.tlsParameters = tlsParameters;
     }
 
+    /**
+     * Sets the maximum length of a syslog frame. A client sending a longer frame is disconnected.
+     * Defaults to {@link Rfc5425Decoder#DEFAULT_MAX_FRAME_LENGTH}. Applies to connections that are
+     * established after the change.
+     *
+     * @param maxFrameLength maximum frame length in bytes
+     * @since 6.0
+     */
+    public void setMaxFrameLength(int maxFrameLength) {
+        if (maxFrameLength <= 0) {
+            throw new IllegalArgumentException("maxFrameLength must be positive, but was " + maxFrameLength);
+        }
+        this.maxFrameLength = maxFrameLength;
+    }
+
     @Override
     public TlsSyslogServer doStart(String host, int port) {
         var sslContext = NettyUtils.initSslContext(tlsParameters, true);
@@ -60,10 +75,9 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
                 .host(host)
                 .port(port)
                 .option(ChannelOption.SO_REUSEADDR, true)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int)Duration.ofSeconds(timeoutSeconds).toMillis())
-                .option(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
+                .option(ChannelOption.RECVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(65535))
                 .wiretap(getClass().getName(), LogLevel.TRACE)
-                .metrics(Metrics.isMicrometerAvailable())
+                .metrics(NettyUtils.isMicrometerAvailable())
                 .secure(spec -> spec.sslContext(sslContext))
                 .doOnBind(serverBootstrap ->
                     log.info("TLS Syslog Server is about to be started"))
@@ -72,14 +86,13 @@ public class TlsSyslogServer extends SyslogServer<DisposableChannel> {
                 .doOnUnbound(disposableServer ->
                     log.info("TLS Syslog Server unbound from {}", disposableServer.address()))
                 .doOnConnection(connection -> {
-                    log.debug("Received connection from {}", connection.channel().localAddress());
+                    log.debug("Received connection from {}", connection.channel().remoteAddress());
                     connection
-                            .addHandlerLast(new Rfc5425Decoder())   // extract frame
+                            .addHandlerLast(new Rfc5425Decoder(maxFrameLength))   // extract frame
                             .addHandlerLast(new Rfc5424Decoder());  // parse frame, fast enough for receiver thread
                 })
                 .handle((nettyInbound, nettyOutbound) -> nettyInbound.receiveObject()
-                        .cast(Map.class)
-                        .flatMap(this::handleMap)
+                        .flatMap(this::handleMessage)
                         .doOnError(errorConsumer)
                         .then())
                 .bindNow(Duration.ofSeconds(timeoutSeconds));

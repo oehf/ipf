@@ -23,12 +23,12 @@ import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.openehealth.ipf.commons.core.config.ContextFacade
 import org.openehealth.ipf.commons.core.config.Registry
-import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.platform.camel.ihe.hl7v3.HL7v3StandardTestContainer
 
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.Matchers.containsString
 import static org.easymock.EasyMock.*
-import static org.junit.jupiter.api.Assertions.assertTrue
 
 class Testiti47CamelOnly extends HL7v3StandardTestContainer {
 
@@ -37,12 +37,13 @@ class Testiti47CamelOnly extends HL7v3StandardTestContainer {
 
     @BeforeAll
     static void setUpClass() {
-        BidiMappingService mappingService = new BidiMappingService()
-        mappingService.setMappingScript(Testiti47CamelOnly.class.getResource("/example2.map"))
+        Mappings mappingService = Mappings.builder()
+                .load(Testiti47CamelOnly.class.getResource("/example2.map"))
+                .build()
         ModelClassFactory mcf = new DefaultModelClassFactory()
         Registry registry = createMock(Registry)
         ContextFacade.setRegistry(registry)
-        expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        expect(registry.bean(Mappings)).andReturn(mappingService).anyTimes()
         expect(registry.bean(ModelClassFactory)).andReturn(mcf).anyTimes()
         replay(registry)
 
@@ -57,7 +58,7 @@ class Testiti47CamelOnly extends HL7v3StandardTestContainer {
         String endpointUri = "pdqv3-iti47://localhost:" + getPort() + "/iti47Service"
         Exchange responseExchange = (Exchange) send(endpointUri, getRequestMessage())
         String response = responseExchange.getMessage().getBody(String.class)
-        assertTrue(response.contains("<typeCode code=\"AA\"/>"))
+        assertThat(response, containsString("<typeCode code=\"AA\"/>"))
     }
 
 

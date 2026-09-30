@@ -18,3 +18,4 @@
 org.openehealth.ipf.platform.camel.ihe.fhir.iti119.PdqmIti119SpanDecorator
 org.openehealth.ipf.platform.camel.ihe.fhir.iti78.PdqmIti78SpanDecorator
 org.openehealth.ipf.platform.camel.ihe.fhir.iti83.PixmIti83SpanDecorator
+org.openehealth.ipf.platform.camel.ihe.fhir.iti104.PixmIti104SpanDecorator

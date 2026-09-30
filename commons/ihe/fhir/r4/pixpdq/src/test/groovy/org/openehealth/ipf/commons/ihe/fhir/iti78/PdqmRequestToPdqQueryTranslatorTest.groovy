@@ -28,30 +28,32 @@ import org.openehealth.ipf.commons.ihe.fhir.Constants
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pdq.v25.message.QBP_Q21
-import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 
-import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.Matchers.is
+
 /**
  *
  */
 class PdqmRequestToPdqQueryTranslatorTest {
 
     private PdqmRequestToPdqQueryTranslator translator
-    MappingService mappingService
+    Mappings mappingService
 
     @BeforeEach
     void setup() {
-        mappingService = new BidiMappingService()
-        mappingService.setMappingScripts( [ getClass().getResource('/mapping.map'),
-                                           getClass().getResource('/META-INF/map/fhir-hl7v2-translation.map') ] as URL[])
+        mappingService = Mappings.builder()
+                .load(getClass().getResource('/mapping.map'))
+                .load(getClass().getResource('/META-INF/map/fhir-hl7v2-translation.mapping.xml'))
+                .build()
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PdqmRequestToPdqQueryTranslator(mapper)
         translator.pdqSupplierResourceIdentifierUri = 'urn:oid:1.3.5.7'
 
         Registry registry = EasyMock.createMock(Registry)
         ContextFacade.setRegistry(registry)
-        EasyMock.expect(registry.bean(MappingService)).andReturn(mappingService).anyTimes()
+        EasyMock.expect(registry.bean(Mappings)).andReturn(mappingService).anyTimes()
         EasyMock.replay(registry)
     }
 
@@ -85,7 +87,8 @@ class PdqmRequestToPdqQueryTranslatorTest {
         assert (translatedString.contains('@PID.8^M'))
         assert (translatedString.contains('@PID.11.1^Address'))
         assert (translatedString.contains('@PID.13.1^Telecom'))
-        assertEquals(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString, translated.QPD[8][4][2].value)
+        assertThat(translated.QPD[8][4][2].value,
+                is(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString))
 
     }
 

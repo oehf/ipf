@@ -1,0 +1,9 @@
+mappings = {
+
+    maritalStatus(
+        'O': 'UNK',
+        'T': 'UNK',
+        'U': 'UNK'
+    )
+
+}

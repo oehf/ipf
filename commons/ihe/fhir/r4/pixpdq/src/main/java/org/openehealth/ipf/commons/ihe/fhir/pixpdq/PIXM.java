@@ -21,6 +21,7 @@ import org.openehealth.ipf.commons.ihe.core.IntegrationProfile;
 import org.openehealth.ipf.commons.ihe.core.InteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
+import org.openehealth.ipf.commons.ihe.fhir.iti104.Iti104TransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.iti83.Iti83TransactionConfiguration;
 
 import java.util.Arrays;
@@ -35,7 +36,8 @@ public class PIXM implements IntegrationProfile {
     @AllArgsConstructor
     public enum Interactions implements FhirInteractionId {
 
-        ITI_83(ITI_83_CONFIG);
+        ITI_83(ITI_83_CONFIG),
+        ITI_104(ITI_104_CONFIG);
 
         @Getter
         private final FhirTransactionConfiguration fhirTransactionConfiguration;
@@ -47,4 +49,5 @@ public class PIXM implements IntegrationProfile {
     }
 
     private static final Iti83TransactionConfiguration ITI_83_CONFIG = new Iti83TransactionConfiguration();
+    private static final Iti104TransactionConfiguration ITI_104_CONFIG = new Iti104TransactionConfiguration();
 }

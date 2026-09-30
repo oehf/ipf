@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.commons.audit.protocol;
 
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.logging.LogLevel;
 import org.openehealth.ipf.commons.audit.AuditException;
@@ -25,7 +24,6 @@ import org.openehealth.ipf.commons.core.ssl.TlsParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import reactor.netty.Connection;
-import reactor.netty.internal.util.Metrics;
 import reactor.netty.resources.LoopResources;
 import reactor.netty.tcp.TcpClient;
 
@@ -59,11 +57,11 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
 
     @Override
     protected ReactorNettyDestination makeDestination(TlsParameters tlsParameters, String host, int port, boolean logging) {
-        return new ReactorNettyDestination(tlsParameters, host, port, workerThreads, connectTimeoutMillis, sendTimeoutMillis);
+        return new ReactorNettyDestination(tlsParameters, host, port, workerThreads, connectTimeoutMillis, sendTimeoutMillis, logging);
     }
 
     /**
-     * Sets the connect timeout
+     * Sets the timeout for establishing the connection, including the TLS handshake. Defaults to 5 seconds.
      *
      * @param value    time value
      * @param timeUnit time unit
@@ -83,8 +81,9 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
     }
 
     /**
-     * Set the number of working threads. This corresponds with the number of connections
-     * being opened. Defaults to 1.
+     * Set the number of worker threads of the event loop. As there is only one connection per Audit
+     * Record Repository, which is always served by one thread, more threads only make a difference when
+     * auditing to several repositories. Defaults to 1.
      *
      * @param workerThreads number of worker threads.
      */
@@ -96,51 +95,68 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
      * Destination abstraction for Netty
      */
     public static final class ReactorNettyDestination implements NioTLSSyslogSenderImpl.Destination<Connection> {
+        private final long connectTimeoutMillis;
         private final long sendTimeoutMillis;
+        private final LoopResources loop;
         private final TcpClient tcpClient;
+        // only ever holds an established connection
         private Connection connection;
         private final String host;
         private final int port;
 
         ReactorNettyDestination(TlsParameters tlsParameters, String host, int port, int workerThreads,
-                                long connectTimeoutMillis, long sendTimeoutMIllis) {
+                                long connectTimeoutMillis, long sendTimeoutMillis, boolean withLogging) {
 
-            this.sendTimeoutMillis = sendTimeoutMIllis;
+            this.connectTimeoutMillis = connectTimeoutMillis;
+            this.sendTimeoutMillis = sendTimeoutMillis;
             this.host = host;
             this.port = port;
 
             // Configure the client.
-            var loop = LoopResources.create("event-loop", 1, workerThreads, true);
+            this.loop = LoopResources.create("event-loop", 1, workerThreads, true);
             var sslContext = NettyUtils.initSslContext(tlsParameters, false);
-            this.tcpClient = TcpClient.create()
+            var client = TcpClient.create()
                     .host(host)
                     .port(port)
                     .runOn(loop)
                     .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, (int) connectTimeoutMillis)
                     .option(ChannelOption.SO_KEEPALIVE, true)
-                    .wiretap(getClass().getName(), LogLevel.TRACE)
-                    .metrics(Metrics.isMicrometerAvailable())
+                    .metrics(NettyUtils.isMicrometerAvailable())
                     .secure(spec -> spec.sslContext(sslContext))
                     .doOnConnect(config -> log.info("TLS Syslog Client is about to be started"))
                     .doOnConnected(connection -> log.info("TLS Syslog Client connected to {}", connection.address()))
                     .doOnDisconnected(connection -> log.info("TLS Syslog Client disconnected from {}", connection.address()));
+            this.tcpClient = withLogging ? client.wiretap(getClass().getName(), LogLevel.DEBUG) : client;
 
         }
 
         @Override
-        public void shutdown() {
+        public synchronized void shutdown() {
             if (connection != null) {
                 connection.disposeNow(Duration.ofSeconds(10));
             }
+            loop.disposeLater(Duration.ZERO, Duration.ofSeconds(10)).block(Duration.ofSeconds(10));
         }
 
+        /**
+         * Returns the connection to the Audit Record Repository, and establishes it if there is none or
+         * the previous one has been closed. {@link TcpClient#connectNow(Duration)} only returns an
+         * established connection, including the TLS handshake, within the connect timeout. Synchronized,
+         * so that concurrent senders neither open several connections nor see one that is still being set up.
+         *
+         * @return the established connection
+         * @throws AuditException if the connection cannot be established
+         */
         @Override
-        public Connection getHandle() {
+        public synchronized Connection getHandle() {
             if (connection == null || !connection.channel().isActive()) {
+                if (connection != null) {
+                    connection.dispose();
+                }
                 try {
-                    connection = tcpClient.connectNow(Duration.ofSeconds(10));
+                    connection = tcpClient.connectNow(Duration.ofMillis(connectTimeoutMillis));
                 } catch (Exception e) {
-                    throw new AuditException("Interrupted while establishing TLS connection to " + host + ":" + port, e);
+                    throw new AuditException("Could not establish TLS connection to " + host + ":" + port, e);
                 }
             }
             return connection;
@@ -148,16 +164,9 @@ public class ReactorNettyTLSSyslogSenderImpl extends NioTLSSyslogSenderImpl<Conn
 
         @Override
         public void write(byte[] bytes) {
-            // The write operation is asynchronous.
             var channel = getHandle().channel();
             log.trace("Writing {} bytes using session: {}", bytes.length, channel);
-            try {
-                if (!channel.writeAndFlush(Unpooled.wrappedBuffer(bytes)).await(sendTimeoutMillis)) {
-                    throw new AuditException("Could not send audit message to " + host + ":" + port);
-                }
-            } catch (InterruptedException e) {
-                throw new AuditException("Interrupted during sending audit message to " + host + ":" + port, e);
-            }
+            NettyUtils.writeAndAwait(channel, bytes, sendTimeoutMillis, host, port);
         }
 
     }

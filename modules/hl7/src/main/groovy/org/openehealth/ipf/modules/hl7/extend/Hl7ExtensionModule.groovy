@@ -24,7 +24,7 @@ import ca.uhn.hl7v2.validation.builder.EncodingRuleBuilder
 import ca.uhn.hl7v2.validation.builder.MessageRuleBuilder
 import ca.uhn.hl7v2.validation.builder.PrimitiveRuleBuilder
 import org.openehealth.ipf.commons.core.config.ContextFacade
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 import org.openehealth.ipf.commons.map.extend.MappingExtensionHelper
 import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.openehealth.ipf.modules.hl7.validation.model.AbstractSyntaxRule
@@ -40,46 +40,6 @@ import org.openehealth.ipf.modules.hl7.validation.model.ClosurePrimitiveTypeRule
 class Hl7ExtensionModule {
 
     // ----------------------------------------------------------------
-    //  Extensions to Collection for mapping values
-    //  (depend on mapping service)
-    // ----------------------------------------------------------------
-
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
-    static Object map(Collection delegate, Object key) {
-        mappingService()?.get(key, normalizeCollection(delegate))
-    }
-
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
-	 static Object map(Collection delegate, Object key, Object defaultValue) {
-        mappingService()?.get(key, normalizeCollection(delegate), defaultValue)
-    }
-
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
-    static Object mapReverse(Collection delegate, Object value) {
-        mappingService()?.getKey(value, normalizeCollection(delegate))
-    }
-
-	/**
-	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-	 */
-    static Object mapReverse(Collection delegate, Object value, Object defaultValue) {
-        mappingService()?.getKey(value, normalizeCollection(delegate), defaultValue)
-    }
-
-    /**
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
-     */
-    static Object methodMissing(Collection delegate, String name, Object args) {
-        MappingExtensionHelper.methodMissingLogic(mappingService(), normalizeCollection, name, args)
-    }
-
-    // ----------------------------------------------------------------
     //  Extensions to HAPI Types
     //  (depend on mapping service)
     // ----------------------------------------------------------------
@@ -87,33 +47,33 @@ class Hl7ExtensionModule {
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    static Object map(Type delegate, Object key) {
-        mappingService()?.get(key, delegate.encode())
+    static String map(Type delegate, String mapping) {
+        mappings()?.map(mapping, delegate.encode())?.orElse(null)
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    static Object map(Type delegate, Object key, Object defaultValue) {
-        mappingService()?.get(key, delegate.encode(), defaultValue)
+    static String map(Type delegate, String mapping, String defaultValue) {
+        mappings()?.map(mapping, delegate.encode(), defaultValue)
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    static Object mapReverse(Type delegate, Object value) {
-        mappingService()?.getKey(value, delegate.encode())
+    static String mapReverse(Type delegate, String mapping) {
+        mappings()?.mapReverse(mapping, delegate.encode())?.orElse(null)
     }
 
 	/**
 	 * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
 	 */
-    static Object mapReverse(Type delegate, Object value, Object defaultValue) {
-        mappingService()?.getKey(value, delegate.encode(), defaultValue)
+    static String mapReverse(Type delegate, String mapping, String defaultValue) {
+        mappings()?.mapReverse(mapping, delegate.encode(), defaultValue)
     }
 
     static Object methodMissing(Type delegate, String name, Object args) {
-        MappingExtensionHelper.methodMissingLogic(mappingService(), { delegate.encode() }, name, args)
+        MappingExtensionHelper.methodMissingLogic(mappings(), { delegate.encode() }, name, args)
     }
         
     // ----------------------------------------------------------------
@@ -219,12 +179,8 @@ class Hl7ExtensionModule {
     }
 
 
-    private static MappingService mappingService() {
-        ContextFacade.getBean(MappingService)
-    }
-
-    private static def normalizeCollection = { Collection c ->
-        c.collect { it instanceof Type ? it.encode() : it.toString() }
+    private static Mappings mappings() {
+        ContextFacade.getBean(Mappings)
     }
 
 }

@@ -26,10 +26,10 @@ import org.openehealth.ipf.commons.ihe.fhir.pixpdq.model.PixmQueryParametersIn
 import org.openehealth.ipf.commons.ihe.fhir.translation.DefaultUriMapper
 import org.openehealth.ipf.commons.ihe.fhir.translation.UriMapper
 import org.openehealth.ipf.commons.ihe.hl7v2.definitions.pix.v25.message.QBP_Q21
-import org.openehealth.ipf.commons.map.BidiMappingService
-import org.openehealth.ipf.commons.map.MappingService
+import org.openehealth.ipf.commons.map.Mappings
 
-import static org.junit.jupiter.api.Assertions.assertEquals
+import static org.hamcrest.MatcherAssert.assertThat
+import static org.hamcrest.Matchers.is
 
 /**
  * Tests for PixmRequestToPixQueryTranslator
@@ -37,12 +37,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals
 class PixmRequestToPixQueryTranslatorTest {
 
     private PixmRequestToPixQueryTranslator translator
-    MappingService mappingService
+    Mappings mappingService
 
     @BeforeEach
     void setup() {
-        mappingService = new BidiMappingService()
-        mappingService.setMappingScript(getClass().getResource('/mapping.map'))
+        mappingService = Mappings.builder()
+                .load(getClass().getResource('/mapping.map'))
+                .build()
         UriMapper mapper = new DefaultUriMapper(mappingService, 'uriToOid', 'uriToNamespace')
         translator = new PixmRequestToPixQueryTranslator(mapper)
         translator.pixSupplierResourceIdentifierUri = 'http://org.openehealth/ipf/commons/ihe/fhir/1'
@@ -60,9 +61,11 @@ class PixmRequestToPixQueryTranslatorTest {
         
         QBP_Q21 translated = translator.translateFhir(params, null)
 
-        assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
-        assertEquals(URN.create(systemIdentifier.system).namespaceSpecificString, translated.QPD[3][4][2].value)
-        assertEquals(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString, translated.QPD[4][4][2].value)
+        assertThat(translated.QPD[3][1].value, is(systemIdentifier.value))
+        assertThat(translated.QPD[3][4][2].value,
+                is(URN.create(systemIdentifier.system).namespaceSpecificString))
+        assertThat(translated.QPD[4][4][2].value,
+                is(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString))
     }
 
     @Test
@@ -77,9 +80,11 @@ class PixmRequestToPixQueryTranslatorTest {
         
         QBP_Q21 translated = translator.translateFhir(params, null)
 
-        assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
-        assertEquals(mappingService.get('uriToOid', systemIdentifier.system), translated.QPD[3][4][2].value)
-        assertEquals(mappingService.get('uriToOid', 'http://org.openehealth/ipf/commons/ihe/fhir/2'), translated.QPD[4][4][2].value)
+        assertThat(translated.QPD[3][1].value, is(systemIdentifier.value))
+        assertThat(translated.QPD[3][4][2].value,
+                is(mappingService.map('uriToOid', systemIdentifier.system).orElse(null)))
+        assertThat(translated.QPD[4][4][2].value,
+                is(mappingService.map('uriToOid', 'http://org.openehealth/ipf/commons/ihe/fhir/2').orElse(null)))
     }
 
     @Test
@@ -94,10 +99,13 @@ class PixmRequestToPixQueryTranslatorTest {
         
         QBP_Q21 translated = translator.translateFhir(params, null)
 
-        assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
-        assertEquals(URN.create(systemIdentifier.system).namespaceSpecificString, translated.QPD[3][4][2].value)
-        assertEquals(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString, translated.QPD[4](0)[4][2].value)
-        assertEquals(URN.create('urn:oid:1.2.3.4.5.7').namespaceSpecificString, translated.QPD[4](1)[4][2].value)
+        assertThat(translated.QPD[3][1].value, is(systemIdentifier.value))
+        assertThat(translated.QPD[3][4][2].value,
+                is(URN.create(systemIdentifier.system).namespaceSpecificString))
+        assertThat(translated.QPD[4](0)[4][2].value,
+                is(URN.create('urn:oid:1.2.3.4.5.6').namespaceSpecificString))
+        assertThat(translated.QPD[4](1)[4][2].value,
+                is(URN.create('urn:oid:1.2.3.4.5.7').namespaceSpecificString))
     }
 
     @Test
@@ -111,9 +119,11 @@ class PixmRequestToPixQueryTranslatorTest {
         
         QBP_Q21 translated = translator.translateFhir(params, null)
 
-        assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
-        assertEquals(mappingService.get('uriToOid', translator.pixSupplierResourceIdentifierUri), translated.QPD[3][4][2].value)
-        assertEquals(mappingService.get('uriToOid', 'http://org.openehealth/ipf/commons/ihe/fhir/2'), translated.QPD[4][4][2].value)
+        assertThat(translated.QPD[3][1].value, is(systemIdentifier.value))
+        assertThat(translated.QPD[3][4][2].value,
+                is(mappingService.map('uriToOid', translator.pixSupplierResourceIdentifierUri).orElse(null)))
+        assertThat(translated.QPD[4][4][2].value,
+                is(mappingService.map('uriToOid', 'http://org.openehealth/ipf/commons/ihe/fhir/2').orElse(null)))
     }
 
     @Test
@@ -127,8 +137,9 @@ class PixmRequestToPixQueryTranslatorTest {
         
         QBP_Q21 translated = translator.translateFhir(params, null)
 
-        assertEquals(systemIdentifier.value, translated.QPD[3][1].value)
-        assertEquals(URN.create(systemIdentifier.system).namespaceSpecificString, translated.QPD[3][4][2].value)
+        assertThat(translated.QPD[3][1].value, is(systemIdentifier.value))
+        assertThat(translated.QPD[3][4][2].value,
+                is(URN.create(systemIdentifier.system).namespaceSpecificString))
         // QPD[4] should not be populated when no target systems are specified
     }
 

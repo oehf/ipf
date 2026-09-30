@@ -54,10 +54,10 @@ http://openehealth.org/schema/ipf-commons-core.xsd">
         <property name="charset" value="iso-8859-1"/>
     </bean>
 
-    <bean id="mappingService" class="org.openehealth.ipf.commons.spring.map.SpringBidiMappingService">
+    <bean id="mappings" class="org.openehealth.ipf.commons.spring.map.SpringMappings">
         <property name="mappingResources">
             <list>
-                 <value>classpath:META-INF/map/hl7-v2-v3-translation.map</value>
+                 <value>classpath:META-INF/map/hl7-v2-v3-translation.mapping.xml</value>
             </list>
         </property>
     </bean>

@@ -1,48 +1,22 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>ipf-commons-map</artifactId>
     <name>ipf-commons-map</name>
-    <description>Generic IPF Mapping Service</description>
-
+    <packaging>pom</packaging>
+    <description>IPF Mapping Service: model, API and one module per mapping file format</description>
 
     <parent>
         <groupId>org.openehealth.ipf.commons</groupId>
         <artifactId>ipf-commons</artifactId>
         <version>6.0-SNAPSHOT</version>
     </parent>
-    
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-core</artifactId>
-        </dependency>
 
-        <!-- dependencies for test -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-test</artifactId>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-test-junit5</artifactId>
-            <scope>test</scope>
-        </dependency>		
-        <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-        </dependency> 		        
-    </dependencies>
+    <modules>
+        <module>core</module>
+        <module>groovy</module>
+        <module>yaml</module>
+        <module>xml</module>
+    </modules>
 
 </project>

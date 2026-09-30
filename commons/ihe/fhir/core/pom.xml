@@ -66,7 +66,7 @@
         </dependency>
         <dependency>
             <groupId>org.openehealth.ipf.commons</groupId>
-            <artifactId>ipf-commons-map</artifactId>
+            <artifactId>ipf-commons-map-core</artifactId>
         </dependency>
         <dependency>
             <groupId>com.nimbusds</groupId>

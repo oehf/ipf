@@ -26,7 +26,10 @@ import java.util.Collections;
 
 /**
  * This class should be used to define the custom mappings
- * in the spring context definition.
+ * in the spring context definition. The resources may be in any mapping format whose loader is on
+ * the classpath, and one list may mix them. Where their names do not identify a format - locations
+ * without a file extension, resources fetched from a terminology server - set
+ * {@code mappingFormat} to name the format all of them are in.
  *
  * <pre class="code">
  *    &lt;!-- either as a list of mapping definitions --&gt;
@@ -34,18 +37,18 @@ import java.util.Collections;
  *        class="org.openehealth.ipf.commons.map.config.CustomMappings"&gt;
  *        &lt;property name="mappingResources"&gt;
  *            &lt;list&gt;
- *                &lt;value&gt;classpath:configurer1.map&lt;/value&gt;
- *                &lt;value&gt;classpath:configurer2.map&lt;/value&gt;
+ *                &lt;value&gt;classpath:gender.mapping.xml&lt;/value&gt;
+ *                &lt;value&gt;classpath:encounter.mapping.yaml&lt;/value&gt;
  *            &lt;/list&gt;
  *        &lt;/property&gt;
  *    &lt;/bean&gt;*
  *    &lt;!-- or as a single mapping definition --&gt;
  *    &lt;bean id="customMappingSingle"
  *        class="org.openehealth.ipf.commons.map.config.CustomMappings"&gt;
- *        &lt;property name="mappingResource" value="classpath:configurer3.map" /&gt;
+ *        &lt;property name="mappingResource" value="classpath:vip.map" /&gt;
  *    &lt;/bean&gt;</pre>
  *
- * @see org.openehealth.ipf.commons.spring.map.SpringBidiMappingService
+ * @see org.openehealth.ipf.commons.spring.map.SpringMappings
  * @author Christian Ohr
  * @author Boris Stanojevic
  *
@@ -55,6 +58,8 @@ public class CustomMappings implements MappingResourceHolder {
     private static final Logger log = LoggerFactory.getLogger(CustomMappings.class);
 
     private Collection<Resource> mappingResources = new ArrayList<>();
+
+    private String mappingFormat;
 
     @Override
     public Collection<? extends Resource> getMappingResources() {
@@ -66,7 +71,7 @@ public class CustomMappings implements MappingResourceHolder {
         if (mappingResource.exists() && mappingResource.isReadable()) {
             mappingResources.add(mappingResource);
         } else {
-            log.warn("Could not read mapping script {}", mappingResource.getFilename());
+            log.warn("Could not read mapping resource {}", mappingResource.getFilename());
         }
     }
 
@@ -79,6 +84,23 @@ public class CustomMappings implements MappingResourceHolder {
     @Override
     public void setMappingResource(Resource mappingResource) {
         setMappingResources(Collections.singleton(mappingResource));
+    }
+
+    @Override
+    public String getMappingFormat() {
+        return mappingFormat;
+    }
+
+    /**
+     * Names the format every resource of this bean is read in, rather than leaving it to their
+     * file extensions.
+     *
+     * @param mappingFormat a {@link org.openehealth.ipf.commons.map.MappingLoader#format() format
+     *                      id} such as {@code xml} or {@code conceptmap-r4-json}, or {@code null} to
+     *                      dispatch by file extension
+     */
+    public void setMappingFormat(String mappingFormat) {
+        this.mappingFormat = mappingFormat;
     }
 
 }

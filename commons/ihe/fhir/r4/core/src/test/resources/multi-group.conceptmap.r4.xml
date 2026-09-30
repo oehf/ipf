@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConceptMap xmlns="http://hl7.org/fhir">
+    <id value="genders"/>
+    <name value="genders"/>
+    <status value="active"/>
+    <group>
+        <extension url="http://openehealth.org/ipf/StructureDefinition/mapping-name">
+            <valueString value="hl7v2v3-patient-maritalStatus"/>
+        </extension>
+        <element>
+            <code value="D"/>
+            <target>
+                <code value="D"/>
+                <equivalence value="equal"/>
+            </target>
+        </element>
+        <unmapped>
+            <extension url="http://openehealth.org/ipf/StructureDefinition/unmapped-function">
+                <valueString value="oidUri"/>
+            </extension>
+            <mode value="provided"/>
+        </unmapped>
+    </group>
+    <group>
+        <extension url="http://openehealth.org/ipf/StructureDefinition/reversible">
+            <valueBoolean value="false"/>
+        </extension>
+        <source value="urn:oid:2.16.840.1.113883.5.290"/>
+        <target value="http://hl7.org/fhir/address-use"/>
+        <element>
+            <code value="H"/>
+            <target>
+                <code value="home"/>
+                <equivalence value="equal"/>
+            </target>
+        </element>
+        <element>
+            <code value="L"/>
+            <target>
+                <code value="home"/>
+                <equivalence value="equal"/>
+            </target>
+        </element>
+        <unmapped>
+            <mode value="provided"/>
+        </unmapped>
+    </group>
+</ConceptMap>

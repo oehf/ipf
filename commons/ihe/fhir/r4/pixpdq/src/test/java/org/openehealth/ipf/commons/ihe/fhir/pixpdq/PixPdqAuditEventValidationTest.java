@@ -16,11 +16,16 @@
 package org.openehealth.ipf.commons.ihe.fhir.pixpdq;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.rest.api.MethodOutcome;
 import org.hl7.fhir.r4.model.AuditEvent;
+import org.hl7.fhir.r4.model.IdType;
+import org.hl7.fhir.r4.model.Identifier;
 import org.hl7.fhir.r4.model.Patient;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.audit.AuditContext;
+import org.openehealth.ipf.commons.audit.AuditException;
+import org.openehealth.ipf.commons.audit.codes.EventActionCode;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
 import org.openehealth.ipf.commons.audit.codes.EventOutcomeIndicator;
 import org.openehealth.ipf.commons.audit.codes.ParticipantObjectIdTypeCode;
@@ -28,6 +33,10 @@ import org.openehealth.ipf.commons.audit.model.AuditMessage;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditDataset;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategySupport;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirQueryAuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.audit.codes.FhirEventTypeCode;
+import org.openehealth.ipf.commons.ihe.fhir.audit.events.BalpPatientRecordBuilder;
+import org.openehealth.ipf.commons.ihe.fhir.iti104.Iti104AuditDataset;
+import org.openehealth.ipf.commons.ihe.fhir.iti104.Iti104AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119ClientAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti119.Iti119ServerAuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.iti78.Iti78ClientAuditStrategy;
@@ -39,7 +48,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -65,6 +76,10 @@ public class PixPdqAuditEventValidationTest {
      */
     private static final String PATIENT_ID = "urn:oid:1.2.3.4|0815";
 
+    private static final Identifier PATIENT_IDENTIFIER = new Identifier()
+        .setSystem("urn:oid:1.2.3.4")
+        .setValue("0815");
+
     private static final FhirContext FHIR_CONTEXT = FhirContext.forR4Cached();
 
     private static BalpAuditEventValidator validator;
@@ -85,6 +100,65 @@ public class PixPdqAuditEventValidationTest {
     @Test
     public void testIti83Consumer() {
         validator.assertConformant(iti83(false));
+    }
+
+    // ------------------------------------------------------------------------------- PIXm [ITI-104]
+
+    @Test
+    public void testIti104ManagerCreate() {
+        assertConformantWithProfile(iti104(true, true, true), PixmProfile.PIXM_FEED_CREATE_MANAGER_AUDIT_PROFILE);
+    }
+
+    @Test
+    public void testIti104ManagerUpdate() {
+        assertConformantWithProfile(iti104(true, true, false), PixmProfile.PIXM_FEED_UPDATE_MANAGER_AUDIT_PROFILE);
+    }
+
+    @Test
+    public void testIti104ManagerDelete() {
+        assertConformantWithProfile(iti104(true, false, false), PixmProfile.PIXM_FEED_DELETE_MANAGER_AUDIT_PROFILE);
+    }
+
+    /**
+     * The Source cannot tell a create from an update, so even when the Manager reports a create the
+     * Source records an update.
+     */
+    @Test
+    public void testIti104SourceUpdate() {
+        assertConformantWithProfile(iti104(false, true, true), PixmProfile.PIXM_FEED_UPDATE_SOURCE_AUDIT_PROFILE);
+    }
+
+    @Test
+    public void testIti104SourceDelete() {
+        assertConformantWithProfile(iti104(false, false, false), PixmProfile.PIXM_FEED_DELETE_SOURCE_AUDIT_PROFILE);
+    }
+
+    /**
+     * A conditional delete may leave the logical id of the removed resource unknown; the data entity
+     * then identifies it by the patient identifier.
+     */
+    @Test
+    public void testIti104ManagerDeleteWithoutResourceId() {
+        var strategy = new Iti104AuditStrategy(true);
+        var auditDataset = iti104AuditDataset(true);
+        strategy.enrichAuditDatasetFromRequest(auditDataset, PATIENT_IDENTIFIER, Map.of());
+        strategy.enrichAuditDatasetFromResponse(auditDataset, new MethodOutcome(), auditContext());
+        assertConformantWithProfile(message(strategy, auditDataset), PixmProfile.PIXM_FEED_DELETE_MANAGER_AUDIT_PROFILE);
+    }
+
+    /**
+     * The DICOM Patient Record rules apply to ITI-104 as to the HL7v2 feeds, except that the patient
+     * is identified by a FHIR token rather than a CX.
+     */
+    @Test
+    public void testIti104PatientRecordRules() {
+        assertDoesNotThrow(() -> patientRecordBuilder(PATIENT_ID).validate());
+        assertThrows(AuditException.class, () -> patientRecordBuilder("0815").validate());
+    }
+
+    private BalpPatientRecordBuilder patientRecordBuilder(String patientId) {
+        return new BalpPatientRecordBuilder(auditContext(), iti104AuditDataset(true), EventActionCode.Update,
+            FhirEventTypeCode.MobilePatientIdentityFeed, patientId);
     }
 
     // -------------------------------------------------------------------------------- PDQm [ITI-78]
@@ -165,6 +239,12 @@ public class PixPdqAuditEventValidationTest {
 
     // ------------------------------------------------------------------------------------ assertions
 
+    private void assertConformantWithProfile(AuditMessage auditMessage, String profile) {
+        var auditEvent = validator.toAuditEvent(auditMessage);
+        assertEquals(List.of(profile), BalpAuditEventValidator.claimedProfiles(auditEvent));
+        validator.assertConformant(auditMessage);
+    }
+
     private void assertConformantWithoutPatient(AuditMessage auditMessage, String profile) {
         var auditEvent = validator.toAuditEvent(auditMessage);
 
@@ -196,6 +276,43 @@ public class PixPdqAuditEventValidationTest {
         var auditDataset = queryAuditDataset(serverSide, patientId);
         auditDataset.setQueryString("$match");
         return message(serverSide ? new Iti119ServerAuditStrategy() : new Iti119ClientAuditStrategy(), auditDataset);
+    }
+
+    /**
+     * Runs the ITI-104 audit strategy as an endpoint would: the request, then the response.
+     *
+     * @param serverSide whether the Manager (true) or the Source (false) audits
+     * @param update     conditional update (true) or conditional delete (false)
+     * @param created    whether the Manager reports that the update created the patient
+     */
+    private AuditMessage iti104(boolean serverSide, boolean update, boolean created) {
+        var strategy = new Iti104AuditStrategy(serverSide);
+        var auditDataset = iti104AuditDataset(serverSide);
+        Object request = PATIENT_IDENTIFIER;
+        if (update) {
+            var patient = new Patient();
+            patient.addIdentifier(PATIENT_IDENTIFIER);
+            patient.addName().setFamily("Test").addGiven("John");
+            request = patient;
+        }
+        strategy.enrichAuditDatasetFromRequest(auditDataset, request, Map.of());
+        var methodOutcome = new MethodOutcome(new IdType("Patient", "a2"));
+        if (created) {
+            methodOutcome.setCreated(true);
+        }
+        strategy.enrichAuditDatasetFromResponse(auditDataset, methodOutcome, auditContext());
+        return message(strategy, auditDataset);
+    }
+
+    private Iti104AuditDataset iti104AuditDataset(boolean serverSide) {
+        var auditDataset = new Iti104AuditDataset(serverSide);
+        auditDataset.setEventOutcomeIndicator(EventOutcomeIndicator.Success);
+        auditDataset.setSourceUserId(CLIENT_URI);
+        auditDataset.setDestinationUserId(SERVER_URI);
+        auditDataset.setRemoteAddress(serverSide ? CLIENT_IP : SERVER_URI);
+        auditDataset.setLocalAddress(serverSide ? SERVER_URI : CLIENT_IP);
+        auditDataset.setRequestId("6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd", ParticipantObjectIdTypeCode.XRequestId);
+        return auditDataset;
     }
 
     private FhirQueryAuditDataset queryAuditDataset(boolean serverSide, String patientId) {

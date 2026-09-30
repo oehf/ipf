@@ -13,6 +13,12 @@
     <description>Spring Boot support for FHIR components</description>
 
 	<dependencies>
+		<dependency>
+			<!-- the tests load legacy .map files -->
+			<groupId>org.openehealth.ipf.commons</groupId>
+			<artifactId>ipf-commons-map-groovy</artifactId>
+			<scope>test</scope>
+		</dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>

@@ -27,7 +27,16 @@ public class PixmValidator extends BaseValidator {
      */
     public static final String PIXM_PACKAGE_PATH = "classpath:META-INF/profiles/pixm/v310/ihe.iti.pixm.tgz";
 
+    /**
+     * The PIXm Patient profile is derived from the PDQm Patient profile, so the PDQm package and the
+     * FHIR extensions it uses are loaded as well.
+     *
+     * @param fhirContext FHIR context
+     */
     public PixmValidator(FhirContext fhirContext) {
-        super(fhirContext, PIXM_PACKAGE_PATH);
+        super(fhirContext,
+            PIXM_PACKAGE_PATH,
+            PdqmValidator.PDQM_PACKAGE_PATH,
+            PdqmValidator.FHIR_EXTENSION_PACKAGE_PATH);
     }
 }

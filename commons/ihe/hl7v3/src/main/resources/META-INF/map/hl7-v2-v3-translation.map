@@ -36,6 +36,20 @@ mappings = {
         'PRPA_IN201304UV02': 'A40~ADT_A39'
     )
 
+    // IPF 6.0 no longer splits composite values, so the translators ask these two instead of
+    // hl7v2v3-interactionId-eventStructure, which is kept for applications still referring to it
+    'hl7v2v3-interactionId-triggerEvent'(['2.16.840.1.113883.5.4', '2.16.840.1.113883.12.76'],
+        'PRPA_IN201301UV02': 'A01',
+        'PRPA_IN201302UV02': 'A08',
+        'PRPA_IN201304UV02': 'A40'
+    )
+
+    'hl7v2v3-interactionId-messageStructure'(['2.16.840.1.113883.5.4', '2.16.840.1.113883.12.354'],
+        'PRPA_IN201301UV02': 'ADT_A01',
+        'PRPA_IN201302UV02': 'ADT_A01',
+        'PRPA_IN201304UV02': 'ADT_A39'
+    )
+
     'hl7v2v3-bidi-administrativeGender-administrativeGender'(['2.16.840.1.113883.5.1', '2.16.840.1.113883.12.1'],
 		'M' : 'M',
  		'F' : 'F',

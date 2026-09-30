@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping name="typo" keysystem="2.16.840.1.113883.12.4">
+    <entry key="E" value="EMER"/>
+</mapping>

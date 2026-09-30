@@ -1,0 +1,9 @@
+
+mappings = {
+		 
+		 messageType(
+				'ADT^A04' : 'PRPA_IN401001'
+		)
+		
+}
+

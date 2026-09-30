@@ -1,0 +1,236 @@
+{
+  "resourceType": "ConceptMap",
+  "id": "kdl-ihe-typecode",
+  "url": "http://dvmd.de/fhir/ConceptMap/kdl-ihe-typecode",
+  "version": "2025",
+  "name": "ConceptMapKdlIheTypecode",
+  "title": "ConceptMap zur Übersetzung von KDL-Codes in IHE-XDS DocumentEntry.typeCodes - Kontext: Archivierung, inkl. eVV",
+  "status": "active",
+  "experimental": false,
+  "date": "2025-01-01",
+  "publisher": "Der Fachverband für Dokumentation und Informationsmanagement in der Medizin (DVMD)",
+  "copyright": "2025 DVMD e.V.",
+  "group": [
+    {
+      "source": "http://dvmd.de/fhir/CodeSystem/kdl",
+      "target": "http://ihe-d.de/CodeSystems/IHEXDStypeCode",
+      "element": [
+        {
+          "code": "AD010101",
+          "display": "Ärztliche Stellungnahme",
+          "target": [
+            {
+              "code": "BERI",
+              "display": "Arztberichte",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AD010102",
+          "display": "Durchgangsarztbericht",
+          "target": [
+            {
+              "code": "BERI",
+              "display": "Arztberichte",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AD010103",
+          "display": "Entlassungsbericht intern",
+          "target": [
+            {
+              "code": "BERI",
+              "display": "Arztberichte",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AU190105",
+          "display": "ISAR Screening",
+          "target": [
+            {
+              "code": "FUNK",
+              "display": "Ergebnisse Funktionsdiagnostik",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "DG060101",
+          "display": "Anforderung Funktionsdiagnostik",
+          "target": [
+            {
+              "code": "FUNK",
+              "display": "Ergebnisse Funktionsdiagnostik",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "DG060102",
+          "display": "Audiometriebefund",
+          "target": [
+            {
+              "code": "FUNK",
+              "display": "Ergebnisse Funktionsdiagnostik",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AD010109",
+          "display": "Ärztlicher Befundbericht",
+          "target": [
+            {
+              "code": "BEFU",
+              "display": "Ergebnisse Diagnostik",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AD020201",
+          "display": "Anatomische Skizze",
+          "target": [
+            {
+              "code": "BEFU",
+              "display": "Ergebnisse Diagnostik",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AD020202",
+          "display": "Befundbogen",
+          "target": [
+            {
+              "code": "BEFU",
+              "display": "Ergebnisse Diagnostik",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "ED110103",
+          "display": "Medikationsplan elektronisch (eMP)",
+          "target": [
+            {
+              "code": "MEDI",
+              "display": "Medikamentöse Therapien",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "ED110108",
+          "display": "eRezept",
+          "target": [
+            {
+              "code": "MEDI",
+              "display": "Medikamentöse Therapien",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "TH130101",
+          "display": "Anforderung Medikation",
+          "target": [
+            {
+              "code": "MEDI",
+              "display": "Medikamentöse Therapien",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AD020107",
+          "display": "Aufenthaltsbescheinigung",
+          "target": [
+            {
+              "code": "SCHR",
+              "display": "Schriftwechsel (administrativ)",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AD020108",
+          "display": "Geburtsanzeige",
+          "target": [
+            {
+              "code": "SCHR",
+              "display": "Schriftwechsel (administrativ)",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "AD020199",
+          "display": "Sonstige Bescheinigung",
+          "target": [
+            {
+              "code": "SCHR",
+              "display": "Schriftwechsel (administrativ)",
+              "equivalence": "wider"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "http://dvmd.de/fhir/CodeSystem/kdl",
+      "target": "http://terminology.hl7.org/CodeSystem/v3-NullFlavor",
+      "element": [
+        {
+          "code": "UB140101",
+          "display": "Behördliche Genehmigung",
+          "target": [
+            {
+              "code": "UNK",
+              "display": "Unbekannt",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "UB140102",
+          "display": "Dokumentation vorhandender Infrastruktur",
+          "target": [
+            {
+              "code": "UNK",
+              "display": "Unbekannt",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "UB140199",
+          "display": "Sonstiger Nachweis Infrastruktur",
+          "target": [
+            {
+              "code": "UNK",
+              "display": "Unbekannt",
+              "equivalence": "wider"
+            }
+          ]
+        },
+        {
+          "code": "UB140201",
+          "display": "Berufserlaubnis",
+          "target": [
+            {
+              "code": "UNK",
+              "display": "Unbekannt",
+              "equivalence": "wider"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

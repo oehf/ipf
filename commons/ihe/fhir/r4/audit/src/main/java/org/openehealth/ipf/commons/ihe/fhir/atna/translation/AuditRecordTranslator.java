@@ -36,6 +36,7 @@ import org.openehealth.ipf.commons.audit.model.ParticipantObjectIdentificationTy
 import org.openehealth.ipf.commons.audit.types.CodedValueType;
 import org.openehealth.ipf.commons.ihe.fhir.translation.ToFhirTranslator;
 import org.openehealth.ipf.commons.map.MappingService;
+import org.openehealth.ipf.commons.map.Mappings;
 
 import java.util.Date;
 import java.util.List;
@@ -53,12 +54,31 @@ import java.util.Map;
  * @author Dmytro Rud
  * @since 3.6
  */
+@SuppressWarnings("removal")
 public class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
 
+    // exactly one of these is set; the untyped one only for the deprecated constructor
+    private final Mappings mappings;
     private final MappingService mappingService;
 
+    public AuditRecordTranslator(Mappings mappings) {
+        this.mappings = mappings;
+        this.mappingService = null;
+    }
+
+    /**
+     * @deprecated as of 6.0, pass {@link Mappings} instead
+     */
+    @Deprecated(since = "6.0", forRemoval = true)
     public AuditRecordTranslator(MappingService mappingService) {
+        this.mappings = null;
         this.mappingService = mappingService;
+    }
+
+    private String codingSystem(String codeSystemName) {
+        return mappings != null
+                ? mappings.map("atnaCodingSystem", codeSystemName).orElse(null)
+                : (String) mappingService.get("atnaCodingSystem", codeSystemName);
     }
 
     public AuditEvent translate(AuditMessage atna) {
@@ -450,7 +470,7 @@ public class AuditRecordTranslator implements ToFhirTranslator<AuditMessage> {
             return null;
         }
         return new Coding()
-            .setSystem((String)mappingService.get("atnaCodingSystem", codedValue.getCodeSystemName()))
+            .setSystem(codingSystem(codedValue.getCodeSystemName()))
             .setCode(codedValue.getCode())
             .setDisplay(codedValue.getOriginalText());
     }

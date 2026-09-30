@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping name="m7" keySystem="2.16.840.1.113883.12.7"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="http://openehealth.org/schema/ipf-commons-map.xsd">
+    <entry key="d7" value="c7"/>
+    <unmatched mode="fixed" value="c7-default"/>
+</mapping>

@@ -3,7 +3,7 @@ package org.openehealth.ipf.boot.fhir;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.openehealth.ipf.commons.core.config.ContextFacade;
-import org.openehealth.ipf.commons.map.MappingService;
+import org.openehealth.ipf.commons.map.Mappings;
 import org.openehealth.ipf.commons.spring.map.config.CustomMappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -44,7 +44,9 @@ public class FhirApplicationTest {
         assertThat(properties.getMappings(), not(empty()));
         assertThat(translationFhirHl7v2Mappings.getMappingResources(), hasSize(2));
 
-        var mappingService = ContextFacade.getBean(MappingService.class);
-        assertThat(mappingService.get("hl7v2fhir-patient-genderIdentity", "CUSTOM"), equalTo("non-binary"));
+        // the customer's .map file layers over the mapping this starter ships as XML
+        var mappings = ContextFacade.getBean(Mappings.class);
+        assertThat(mappings.map("hl7v2fhir-patient-genderIdentity", "CUSTOM").orElse(null),
+                equalTo("non-binary"));
     }
 }

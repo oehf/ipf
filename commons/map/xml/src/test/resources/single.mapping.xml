@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapping name="encounterType"
+         keySystem="2.16.840.1.113883.12.4"
+         valueSystem="2.16.840.1.113883.5.4">
+    <entry key="E" value="EMER"/>
+    <entry key="I" value="IMP"/>
+    <entry key="O" value="AMB"/>
+</mapping>

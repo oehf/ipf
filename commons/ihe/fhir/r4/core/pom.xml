@@ -14,6 +14,29 @@
 
     <dependencies>
         <dependency>
+            <!-- the tests read the XML mapping format alongside ConceptMap -->
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-map-xml</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- the tests read the mapping shipped by ipf-commons-ihe-hl7v3 -->
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-ihe-hl7v3</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- the tests load legacy .map files -->
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-map-groovy</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <!-- the ConceptMap mapping loader binds to the mapping model -->
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-map-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>ca.uhn.hapi.fhir</groupId>
             <artifactId>hapi-fhir-structures-r4</artifactId>
         </dependency>
@@ -32,6 +55,21 @@
         <dependency>
             <groupId>net.java.quickcheck</groupId>
             <artifactId>quickcheck</artifactId>
+        </dependency>
+        <!-- shared Hamcrest matchers for Optionals and for the mapping model -->
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-core</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openehealth.ipf.commons</groupId>
+            <artifactId>ipf-commons-map-core</artifactId>
+            <version>${project.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

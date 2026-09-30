@@ -75,7 +75,7 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
         var defaultTls = setupDefaultTlsParameter();
         auditContext.setTlsParameters(defaultTls);
         auditContext.setAuditRepositoryTransport(transport());
-        var count = 10;
+        var count = 100;
         var consumer = SyslogEventCollector.newInstance().withExpectation(count);
 
         try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, defaultTls)
@@ -84,6 +84,8 @@ abstract class AbstractTLSAuditorIntegrationTest extends AbstractAuditorIntegrat
             assertTrue(consumer.await(5, TimeUnit.SECONDS));
         }
 
+        // expect the messages sent to the restarted server, over a new connection
+        consumer.reset();
         try (var ignored = new TlsSyslogServer(consumer, Throwable::printStackTrace, defaultTls)
                 .start("localhost", port)) {
             IntStream.range(0, count).forEach(i -> sendAudit());

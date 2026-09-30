@@ -1,0 +1,5 @@
+mappings:
+  hl7v2v3-patient-maritalStatus:
+    override: true
+    entries:
+      D: DIVORCED

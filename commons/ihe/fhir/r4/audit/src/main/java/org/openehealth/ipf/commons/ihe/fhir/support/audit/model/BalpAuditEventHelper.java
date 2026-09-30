@@ -76,6 +76,7 @@ public abstract class BalpAuditEventHelper {
 
     /** How HL7v2 and XDS name a patient: {@code value^^^&assigningAuthorityOid&ISO}. */
     private static final Pattern CX = Pattern.compile("^([^^]+)\\^{3}&([^&]+)&ISO$");
+    private static final Pattern CONDITIONAL_REFERENCE = Pattern.compile("^[A-Z][A-Za-z]+\\?.+$");
 
     /**
      * @param auditMessage audit message to search
@@ -95,9 +96,11 @@ public abstract class BalpAuditEventHelper {
      * PIXm makes the point explicit by requiring {@code entity.what.identifier}; a display string would
      * leave a reader to parse the identifier back out of prose.
      * <p>
-     * Four shapes occur:
+     * Five shapes occur:
      * <ul>
      *     <li>a FHIR token, {@code system|value}, which is what the FHIR transactions record</li>
+     *     <li>a conditional reference such as {@code Patient?identifier=system|value}, which is all a
+     *     conditional update or delete may know of the resource it acted on</li>
      *     <li>a CX, {@code value^^^&oid&ISO}, which is what HL7v2 and XDS record</li>
      *     <li>a literal reference such as {@code Patient/a2}</li>
      *     <li>a bare id such as a document OID or a SubmissionSet UUID, which has no system to go with
@@ -116,6 +119,9 @@ public abstract class BalpAuditEventHelper {
             return new Reference().setIdentifier(new Identifier()
                 .setSystem("urn:oid:" + cx.group(2))
                 .setValue(cx.group(1)));
+        }
+        if (CONDITIONAL_REFERENCE.matcher(participantObjectId).matches()) {
+            return new Reference(participantObjectId);
         }
         var separator = participantObjectId.indexOf('|');
         if (separator >= 0) {

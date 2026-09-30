@@ -1,0 +1,27 @@
+import java.time.temporal.ChronoUnit
+import java.util.concurrent.TimeUnit
+
+mappings = {
+
+    timeUnit(
+        (TimeUnit.SECONDS) : ChronoUnit.SECONDS,
+        (TimeUnit.MINUTES) : ChronoUnit.MINUTES,
+        (ELSE)             : ChronoUnit.FOREVER
+    )
+
+    religion(
+        EOT : 1068,
+        FRQ : 1071
+    )
+
+    unitName(
+        'sec'  : 'SECONDS',
+        (ELSE) : { key -> ChronoUnit.values().find { it.name() == key } ?: ChronoUnit.FOREVER }
+    )
+
+    plain(
+        'a'    : 'b',
+        (ELSE) : { it }
+    )
+
+}
