@@ -60,7 +60,7 @@ undefined sequence can repeat or skip entries even against a registry whose cont
 
 ### On the wire
 
-The order travels in one extra query slot, by default `$ipfSortOrder`, one value per key in precedence
+The order travels in one extra query slot, by default `$XDSSortOrder`, one value per key in precedence
 order, with a leading `-` marking a descending one. The values use IPF's ordinary coded-list encoding, so
 a registry reading them with standard slot tooling gets a list of names rather than anything
 IPF-specific.
@@ -68,7 +68,7 @@ IPF-specific.
 The slot name is part of the agreement with the registry and can be changed once at startup:
 
 ```java
-SortOrder.setSlotName("$ipfSortOrder");   // default is SortOrder.DEFAULT_SLOT_NAME
+SortOrder.setSlotName("$XDSSortOrder");   // default is SortOrder.DEFAULT_SLOT_NAME
 ```
 
 It is deliberately global rather than per query: which slot carries the order is a property of the
@@ -91,14 +91,14 @@ can be answered at all is up to the registry — see `totalResultCount` below, w
 because counting can be the expensive part.
 
 `requestId` is pure correlation — the registry echoes it in the response so a sequence of paged requests
-is recognisable in logs and audit records. It is **not** a cursor: no server-side state is implied, and
-IPF mints no snapshot handle.
+is recognizable in logs and audit records. It is **not** a cursor: no server-side state is implied, and
+IPF maintains no snapshot handle.
 
 ### Window bounds
 
 **A start index at or below zero means "from the beginning".** ebRS defaults the attribute to 0 and its
 getter reports that default, so absent, zero and negative are indistinguishable on arrival and are all
-read the same way. `maxResults` is still honoured, so `startIndex=-5, maxResults=50` yields the first
+read the same way. `maxResults` is still honored, so `startIndex=-5, maxResults=50` yields the first
 fifty. Negative `maxResults` likewise means unbounded, which is ebRS's own spelling of it.
 
 **A start index past the end is rejected**, with `ValidationMessage.START_INDEX_BEYOND_END`. Answering
@@ -135,13 +135,13 @@ document creation time is well defined.
 
 `QueryResponse` carries three additions, **all of them optional**:
 
-| field | meaning |
-|---|---|
+| field              | meaning                                                     |
+|--------------------|-------------------------------------------------------------|
 | `totalResultCount` | size of the whole result set this response is a window into |
-| `startIndex` | index of the first result in this response |
-| `honoredSortOrder` | the order the registry says it actually applied |
+| `startIndex`       | index of the first result in this response                  |
+| `honoredSortOrder` | the order the registry says it actually applied             |
 
-`totalResultCount` is the one piece that costs nothing to *standardise* — ebRS 3.0 defines the attribute
+`totalResultCount` is the one piece that costs nothing to *standardize* — ebRS 3.0 defines the attribute
 already, so a registry may report a total with no bilateral agreement at all — and it maps directly onto
 FHIR `Bundle.total`. But it can cost a great deal to *produce*, which is why nothing requires it.
 
@@ -156,7 +156,7 @@ An absent total therefore stays absent rather than becoming zero: "I did not cou
 are different answers, and a consumer must not render the first as the second.
 
 Omitting it does not stop a registry from rejecting a start index past the end — it knows the size of its
-own result set whether or not it chooses to publish it. A consumer that has no total detects the end the
+own result set whether it chooses to publish it. A consumer that has no total detects the end the
 usual way, by receiving a page shorter than the `maxResults` it asked for. Only a result set that is an
 exact multiple of the page size leaves no short page, and there the out-of-range error is the stop
 signal.
@@ -174,7 +174,7 @@ A Find Documents query asking for the newest documents first, the second page of
                          id="urn:uuid:6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd">
     <query:ResponseOption returnType="ObjectRef" returnComposedObjects="true"/>
     <AdhocQuery id="urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d">
-        <Slot name="$ipfSortOrder">
+        <Slot name="$XDSSortOrder">
             <ValueList>
                 <Value>('-$XDSDocumentEntryCreationTime')</Value>
                 <Value>('$XDSDocumentEntryAuthorPerson')</Value>
@@ -195,14 +195,14 @@ A Find Documents query asking for the newest documents first, the second page of
 </query:AdhocQueryRequest>
 ```
 
-The registry answers with the window, the total, and what it honoured (result objects omitted):
+The registry answers with the window, the total, and what it honored (result objects omitted):
 
 ```xml
 <query:AdhocQueryResponse startIndex="100" totalResultCount="4711"
                           status="urn:oasis:names:tc:ebxml-regrep:ResponseStatusType:Success"
                           requestId="urn:uuid:6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd">
     <rs:ResponseSlotList>
-        <Slot name="$ipfSortOrder">
+        <Slot name="$XDSSortOrder">
             <ValueList>
                 <Value>('-$XDSDocumentEntryCreationTime')</Value>
                 <Value>('$XDSDocumentEntryAuthorPerson')</Value>
@@ -217,7 +217,7 @@ The registry answers with the window, the total, and what it honoured (result ob
 ```
 
 A registry that does not implement the extension returns the whole, unordered result set with no
-`ResponseSlotList` — a valid ITI-18 answer, and one the consumer can recognise as unordered.
+`ResponseSlotList` — a valid ITI-18 answer, and one the consumer can recognize as unordered.
 
 ## Applying an order (registry side)
 
@@ -259,11 +259,11 @@ is what a registry that enforces per document has to do — see
 
 ## Errors
 
-| condition | reported as | detected by |
-|---|---|---|
-| window on a `Get…` query | `QUERY_TYPE_NOT_PAGEABLE` | request validator |
-| sort slot holding something that names no attribute | `INVALID_SORT_ORDER` | request transformer |
-| start index past the end of the result set | `START_INDEX_BEYOND_END` | the registry |
+| condition                                           | reported as               | detected by         |
+|-----------------------------------------------------|---------------------------|---------------------|
+| window on a `Get…` query                            | `QUERY_TYPE_NOT_PAGEABLE` | request validator   |
+| sort slot holding something that names no attribute | `INVALID_SORT_ORDER`      | request transformer |
+| start index past the end of the result set          | `START_INDEX_BEYOND_END`  | the registry        |
 
 All three are ordinary `XDSMetaDataException`s, so the transaction turns them into a RegistryError rather
 than an unhandled fault. The first two are caught before a query runs; the last one cannot be, because
@@ -276,7 +276,7 @@ the total is not known until it has.
   matters, keyset pagination — "the fifty after (creationTime, entryUUID)" — is stable without server
   state and composes with the total order the tiebreaker already guarantees. The correlation id and the
   response slot list are the hooks a continuation token would ride on, so adding one later is additive —
-  [Paging an authorized result set](XDS-Paging-And-Authorization.md) sketches one.
+  [Paging an authorized result set](XDS-Paging-And-Authorization.md) discusses why it is deferred.
 - **XCA.** An initiating gateway forwards the slots, but responding communities will not honour them, so
   order across communities stays undefined even when each community sorts.
 - **Non-XDS sort keys.** Anything without an XDS metadata counterpart — FHIR's `_lastUpdated`, say —

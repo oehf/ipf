@@ -206,7 +206,7 @@ class Iti18RouteBuilder extends RouteBuilder {
 
     /**
      * Serves the ordering and paging extension of ITI-18: the requested order arrives in the
-     * {@code $ipfSortOrder} slot of the stored query, the requested window in the ebRS pagination
+     * {@code $XDSSortOrder} slot of the stored query, the requested window in the ebRS pagination
      * attributes of the AdhocQueryRequest.
      * <p>
      * Neither is defined by ITI-18, so a registry is free to ignore them -- which is precisely why this

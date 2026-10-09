@@ -36,7 +36,7 @@ import java.util.List;
  * slot, by default named {@value #DEFAULT_SLOT_NAME}, holding the keys in order of precedence with a
  * leading {@code -} marking a descending one:
  * <pre>
- * &lt;rim:Slot name="$ipfSortOrder"&gt;
+ * &lt;rim:Slot name="$XDSSortOrder"&gt;
  *   &lt;rim:ValueList&gt;
  *     &lt;rim:Value&gt;('-$XDSDocumentEntryCreationTime','$XDSDocumentEntryAuthorPerson')&lt;/rim:Value&gt;
  *   &lt;/rim:ValueList&gt;
@@ -67,7 +67,7 @@ public class SortOrder implements Serializable {
      * Name of the query slot the sort order travels in. Namespaced to IPF because it is an extension
      * rather than an IHE-defined parameter, and a future IHE parameter must not collide with it.
      */
-    public static final String DEFAULT_SLOT_NAME = "$ipfSortOrder";
+    public static final String DEFAULT_SLOT_NAME = "$XDSSortOrder";
 
     private static volatile String slotName = DEFAULT_SLOT_NAME;
 
