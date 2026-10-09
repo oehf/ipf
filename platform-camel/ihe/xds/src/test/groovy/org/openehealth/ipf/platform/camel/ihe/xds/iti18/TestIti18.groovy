@@ -112,7 +112,7 @@ class TestIti18 extends XdsStandardTestContainer {
 
     /**
      * ITI-18 has no ordering or paging of its own, so both travel as the bilaterally agreed extension:
-     * the order as the $ipfSortOrder slot, the window as the ebRS pagination attributes. This checks
+     * the order as the $XDSSortOrder slot, the window as the ebRS pagination attributes. This checks
      * that they survive the actual web service round trip rather than only the in-memory transformation,
      * and that the registry can report back what it honored.
      */
