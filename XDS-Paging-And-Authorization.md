@@ -12,7 +12,7 @@ decision is expensive — a call out of process, a policy set to evaluate, possi
 fetch — and it dominates the cost of the whole transaction. Everything below is about making as few of
 those calls as possible.
 
-The quantity to minimise is precise: **decisions taken for documents that do not end up in the
+The quantity to minimize is precise: **decisions taken for documents that do not end up in the
 response.** A decision that yields a document in the answer is work the consumer asked for. A decision
 that yields a denial, or that yields a permit for a document outside the requested window, is work thrown
 away.
@@ -46,8 +46,8 @@ survives. Correct, trivially, and it is the design the extension exists to avoid
 return twenty, and it takes them again for the next page. The wasted fraction is the entire match set
 minus one page.
 
-**Enforce everything once, then cache the whole set.** A materialised per-requestor result cached across
-pages. It amortises, but it still pays the full match set up front to answer the first window, which is
+**Enforce everything once, then cache the whole set.** A materialized per-requestor result cached across
+pages. It amortizes, but it still pays the full match set up front to answer the first window, which is
 usually the only window anyone asks for, and it needs invalidation against both metadata and policy
 changes. The up-front cost is exactly what the consumer was trying not to pay.
 
@@ -75,13 +75,13 @@ while (collected.size() < maxResults && cursor.hasNext()) {
 ```
 
 Three properties matter. The loop never decides an entry beyond the one that filled the window, except
-for the tail of the block it was in. It never materialises the match set. And it fills the page whenever
+for the tail of the block it was in. It never materializes the match set. And it fills the page whenever
 the data can, so a short page keeps its meaning.
 
 ### The ordered stream
 
 The requested `SortOrder` becomes the `ORDER BY`, key by key, with the entry UUID last —
-`withStableTiebreaker()` is the consumer's side of that agreement, and a registry that receives an order
+`withStableTiebreaker()` is the consumer's side of that agreement. A registry that receives an order
 without a unique final key should append one itself, because it is the registry's page boundaries that
 become undefined otherwise.
 
@@ -135,9 +135,8 @@ WHERE creation_time < :t
 ```
 
 And "cursor" here means a position, not a database cursor: no open transaction, no server-side handle, just
-a tuple of values. That is what lets the same tuple travel in a resume token (§2) and be picked up by a
-different node — and equally what stops it from being a snapshot, since it says where to continue and
-nothing about whether the rows behind it have changed.
+a tuple of values carried from one block to the next within a request. That is also what stops it from
+being a snapshot: it says where to continue and nothing about whether the rows behind it have changed.
 
 ## Three sources of waste, and what removes each
 
@@ -157,7 +156,7 @@ a residue that genuinely needs evaluation:
   the whole query, not one per document. Evaluate them before touching the document table, and answer an
   opt-out with an empty result set rather than with four thousand denials. For the multi-patient queries
   this is one decision per patient, and denied patients drop out of the `WHERE` clause.
-- **Structural rules** — confidentiality code against clearance, author organisation against the
+- **Structural rules** — confidentiality code against clearance, author organization against the
   requestor's own, validity windows, explicit per-document blocks — are joins and `IN` lists. Every
   document they exclude is a document that never enters the stream and never counts as anything.
 - **The residue** — delegation, break-glass, anything context-dependent — goes to the decision point.
@@ -171,148 +170,31 @@ This is the largest lever available. Pushing the policy into the query does not 
 it makes most of it unnecessary, by raising `p` toward 1 and shrinking the scanned band toward the page
 itself.
 
-### 2. The prefix — do not re-decide it on every page
+### 2. The prefix — decide it once, if you can
 
 `startIndex = 100` means "the hundred-and-first document this requestor may see", and there is no way to
 find it except to decide the hundred before it. Over a sequence of pages that is quadratic: page *k*
 re-decides everything pages 0…*k*−1 already decided.
 
-Two ways out, in order of preference.
+The remedy is a **decision cache**. Key it on requestor, entry UUID and a policy epoch that any consent
+change bumps; keep it for about the lifetime of a paging sequence, not longer. The prefix still gets
+*scanned* on every page, but decided only once across the sequence, which is the part that costs. Cache
+permits as conservatively as denials — a stale permit is a disclosure, a stale denial is only an
+annoyance — so the epoch has to be driven by consent updates rather than by a timer alone.
 
-**Resume instead of skip.** The registry puts the sort tuple of the last returned entry into the response
-slot list, the consumer echoes it on the next request, and the registry resumes the stream there. Page
-cost stops depending on page depth, and neither side holds state between calls: everything the next
-request needs travels with it, so any node of a cluster can serve it. This is the keyset pagination the
-extension's *Known limits* names, and it composes with the total order the tiebreaker already guarantees.
-What it costs is an extension of the bilateral agreement — one slot in each direction, spelled out
-below — not a session, a cursor or a snapshot.
+Because it remembers decisions rather than positions, the cache serves every access pattern ITI-18
+allows — forward, backward, a jump, a `maxResults` that changes between pages — and asks nothing of the
+consumer beyond the `startIndex` the transaction already has.
 
-**A decision cache, for consumers that only speak `startIndex`.** Key it on requestor, entry UUID and a
-policy epoch that any consent change bumps; keep it for the lifetime of the paging sequence, not longer.
-The prefix still gets *scanned* on every page, but decided only once across the sequence, which is the
-part that costs. Cache permits as conservatively as denials — a stale permit is a disclosure, a stale
-denial is only an annoyance — so the epoch has to be driven by consent updates rather than by a timer
-alone.
+Where the cache lives is the registry's business: in memory on a single node; in a distributed cache, a
+table beside the document entries or behind sticky routing in a cluster. None of it shows on the wire.
+Nor does the cache have to exist, or hit. A miss — an evicted entry, a different node, a bumped epoch —
+costs the decisions for the prefix in front of the requested window once more, and nothing worse: the
+answer stays correct, and only the price of that page rises to the no-cache row of the table below.
 
-#### The resume token on the wire
-
-One slot carries it in both directions, `$ipfResumeToken` by the same convention that names `$ipfSortOrder`.
-Nothing else in the message format changes, and a registry that does not implement it ignores a slot it
-does not know, exactly as ITI-18 requires.
-
-**Page one** asks as it always did — no token exists yet:
-
-```xml
-<query:AdhocQueryRequest maxResults="50" id="urn:uuid:6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd">
-    <query:ResponseOption returnType="LeafClass" returnComposedObjects="true"/>
-    <AdhocQuery id="urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d">
-        <Slot name="$ipfSortOrder">
-            <ValueList>
-                <Value>('-$XDSDocumentEntryCreationTime')</Value>
-                <Value>('$XDSDocumentEntryEntryUUID')</Value>
-            </ValueList>
-        </Slot>
-        <Slot name="$XDSDocumentEntryPatientId">
-            <ValueList><Value>'p1^^^&amp;1.2.3.4&amp;ISO'</Value></ValueList>
-        </Slot>
-        <Slot name="$XDSDocumentEntryStatus">
-            <ValueList><Value>('urn:oasis:names:tc:ebxml-regrep:StatusType:Approved')</Value></ValueList>
-        </Slot>
-    </AdhocQuery>
-</query:AdhocQueryRequest>
-```
-
-The answer carries the position the consumer has reached, next to the order the registry honoured. No
-`startIndex`, because it was zero; no `totalResultCount`, because this registry does not count an
-authorized set:
-
-```xml
-<query:AdhocQueryResponse status="…:Success"
-                          requestId="urn:uuid:6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd">
-    <rs:ResponseSlotList>
-        <Slot name="$ipfSortOrder">
-            <ValueList>
-                <Value>('-$XDSDocumentEntryCreationTime')</Value>
-                <Value>('$XDSDocumentEntryEntryUUID')</Value>
-            </ValueList>
-        </Slot>
-        <Slot name="$ipfResumeToken">
-            <ValueList><Value>'v1.eyJxIjoiOWYyYyIsImsiOlsiMjAyNi0wMy0xMVQwOToxNDowMFoi…'</Value></ValueList>
-        </Slot>
-    </rs:ResponseSlotList>
-    <RegistryObjectList><!-- fifty ExtrinsicObjects --></RegistryObjectList>
-</query:AdhocQueryResponse>
-```
-
-**Page two** echoes the token and says nothing about a start index — the token *is* the position:
-
-```xml
-<query:AdhocQueryRequest maxResults="50" id="urn:uuid:6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd">
-    <query:ResponseOption returnType="LeafClass" returnComposedObjects="true"/>
-    <AdhocQuery id="urn:uuid:14d4debf-8f97-4251-9a74-a90016b0af0d">
-        <Slot name="$ipfResumeToken">
-            <ValueList><Value>'v1.eyJxIjoiOWYyYyIsImsiOlsiMjAyNi0wMy0xMVQwOToxNDowMFoi…'</Value></ValueList>
-        </Slot>
-        <!-- the sort order and every query parameter repeated verbatim -->
-    </AdhocQuery>
-</query:AdhocQueryRequest>
-```
-
-```xml
-<query:AdhocQueryResponse startIndex="50" status="…:Success"
-                          requestId="urn:uuid:6f8d1a5c-6f7e-4d0c-9a56-3a2f9c1e77bd">
-    <rs:ResponseSlotList>
-        <Slot name="$ipfSortOrder">…</Slot>
-        <Slot name="$ipfResumeToken">
-            <ValueList><Value>'v1.eyJxIjoiOWYyYyIsImsiOlsiMjAyNi0wMi0xOFQxNzowMjowMFoi…'</Value></ValueList>
-        </Slot>
-    </rs:ResponseSlotList>
-    <RegistryObjectList><!-- fifty more --></RegistryObjectList>
-</query:AdhocQueryResponse>
-```
-
-`startIndex="50"` is the running count of authorized entries the token carried, so the registry can still
-echo an honest index into the authorized set without having skipped — or decided — a single entry of the
-prefix.
-
-**The last page** is short and carries no token. The two say the same thing, and a consumer that
-understands neither still reads the short page correctly:
-
-```xml
-<query:AdhocQueryResponse startIndex="100" status="…:Success" requestId="urn:uuid:6f8d…">
-    <rs:ResponseSlotList>
-        <Slot name="$ipfSortOrder">…</Slot>
-    </rs:ResponseSlotList>
-    <RegistryObjectList><!-- seventeen --></RegistryObjectList>
-</query:AdhocQueryResponse>
-```
-
-The token is opaque to the consumer and authenticated by the registry — it is the registry's own state,
-parked on the consumer for the duration:
-
-```json
-{ "v": 1,
-  "q":  "9f2c…",                                     // hash of AdhocQuery id, all slots and returnType
-  "r":  "3ab8…",                                     // hash of the requestor's identity and claims
-  "k":  ["2026-02-18T17:02:00Z", "urn:uuid:b7…"],    // sort tuple of the last entry returned
-  "n":  100,                                         // authorized entries emitted so far
-  "e":  "epoch-2026-02-18T09:00Z",                   // policy epoch
-  "iat": 1771417320 }
-```
-
-Five rules come with it:
-
-- **A token and a `startIndex` are mutually exclusive.** A request carrying both is rejected: the token is
-  the position, and a start index beside it is a second answer to one question.
-- **`q` and `r` have to match**, or the registry answers with a RegistryError. A mismatch is either a stale
-  sequence or an attempt to walk another requestor's entitlements, and the registry cannot tell which. The
-  consumer's recovery is to start again at offset zero.
-- **A stale `e`** is a judgement call: reject and restart, or resume and let the newer decisions apply from
-  here on. The position of this note — the newer decision is the correct one — argues for resuming.
-- **The token freezes nothing.** It is robust to submissions outside the window; an entry whose sort
-  attributes change mid-sequence can still cross a page boundary. No snapshot is implied, and no server
-  state exists to hold one.
-- **`maxResults` may change between pages.** The token says where, not how many.
+What the cache does not save is the scan. With only `startIndex` to go on, every page reads the match set
+from its beginning, about (*k*+1)·*m* / *p* rows for page *k*. Next to decisions that is cheap; where it
+is not, see *Resume tokens* under Known limits.
 
 ### 3. Overshoot — size the block, and keep what you paid for
 
@@ -342,17 +224,17 @@ for, here it is a decision.
 
 Page size *m*, pass rate *p*, page index *k*, match set *M*:
 
-| strategy | decisions for page *k* | wasted |
-|---|---|---|
-| enforce everything, then slice | \|M\| | \|M\| − *m* |
-| lazy fill, `startIndex` paging, no cache | (*k*+1)·*m* / *p* | (*k*+1)·*m* / *p* − *m* |
-| lazy fill, `startIndex` paging, decision cache | *m* / *p* amortised | *m*·(1−*p*) / *p* amortised |
-| lazy fill, resume token | *m* / *p* | *m*·(1−*p*) / *p* |
-| lazy fill, resume token, policy pushed into SQL | → *m* | → 0 |
+| strategy                                          | decisions for page *k* | wasted                      |
+|---------------------------------------------------|------------------------|-----------------------------|
+| enforce everything, then slice                    | \|M\|                  | \|M\| − *m*                 |
+| lazy fill, no cache                               | (*k*+1)·*m* / *p*      | (*k*+1)·*m* / *p* − *m*     |
+| lazy fill, decision cache                         | *m* / *p* amortized    | *m*·(1−*p*) / *p* amortized |
+| lazy fill, decision cache, policy pushed into SQL | → *m* amortized        | → 0                         |
 
 Concretely, against the extension's own example — four thousand seven hundred matches, fifty per page,
 four fifths of them permitted — the first page costs about sixty-three decisions instead of four thousand
-seven hundred, and the tenth page costs sixty-three again instead of six hundred and twenty-five.
+seven hundred, and with the cache warm the tenth page costs sixty-three again instead of six hundred and
+twenty-five.
 
 ## What the response says
 
@@ -368,7 +250,7 @@ A registry that wants to report a total anyway can do it honestly in one case: w
 enough that deciding all of it is cheap regardless. Make that a threshold, report the total below it and
 nothing above it, and never report a partial one.
 
-**`startIndex`: echo what was honoured**, as an index into the authorized set — which is what the loop
+**`startIndex`: echo what was honored**, as an index into the authorized set — which is what the loop
 above counts.
 
 **`honoredSortOrder`: only the keys actually applied.** A key naming an attribute with no column is
@@ -405,6 +287,14 @@ UUID in it was decided moments ago.
 - **Policy changes mid-sequence.** A consent revoked between page three and page four legitimately changes
   the authorized set under the consumer's feet. The policy epoch keeps the cache honest; it does not make
   the sequence coherent, and it should not — the newer decision is the correct one.
+- **Resume tokens.** Instead of remembering decisions, a registry could hand the consumer its position:
+  the sort tuple of the last entry returned and the running count of authorized entries, in an
+  authenticated `$ipfResumeToken` response slot that the consumer echoes on the next request. The next page
+  would then neither scan nor decide the prefix, and no server state would be needed. It is not specified
+  here because it saves no decisions over the cache, only helps forward paging (going back needs tokens
+  the consumer kept, or a reverse seek), and adds a slot in each direction to the bilateral agreement,
+  plus rules binding it to the query, the requestor and the policy epoch. The ordered stream already
+  resumes from a tuple, so it can be added later without breaking anything.
 - **Estimating `p` for a mixed match set.** A single pass rate assumes denials are spread evenly through
   the order. When they cluster — a run of restricted documents from one encounter, adjacent because the
   sort is by creation time — the block estimate undershoots and the loop takes extra round trips. The
@@ -424,4 +314,4 @@ UUID in it was decided moments ago.
   `totalResultCount`, and `START_INDEX_BEYOND_END` falling out of an exhausted stream.
   `CachingDecisionPoint` is the decision cache of §2, as a decorator, with a constant requestor standing in
   for the one a real registry reads from a token. What has no counterpart there, and stays described only:
-  the SQL half (keyset chunks, `ORDER BY … NULLS LAST`, materialised sort columns) and resume tokens
+  the SQL half (keyset chunks, `ORDER BY … NULLS LAST`, materialised sort columns).
