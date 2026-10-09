@@ -28,6 +28,9 @@
                 Support for PIXm Patient Identity Feed FHIR [ITI-104] (pixm-iti104) and translators
                 to/from PIX Feed V2 (ITI-8).
             </action>
+            <action issue="526" dev="ohr" type="update">
+                Treat URI schemes and URN namespace identifiers as case-insensitive (RFC 3986, RFC 8141).
+            </action>
             <action issue="524" dev="ohr" type="fix">
                 SslAwareApacheRestfulClient5Factory ignored a configured HostnameVerifier (e.g.
                 NoopHostnameVerifier): httpclient5 then defaults to HostnameVerificationPolicy.BOTH, so

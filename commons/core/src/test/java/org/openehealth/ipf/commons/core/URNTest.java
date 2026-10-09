@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.UUID;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -78,5 +80,23 @@ public class URNTest {
     public void testFromOid() throws GSSException, URISyntaxException {
         var oid = "2.999.2.3.2.43.54";
         assertEquals(new URN(new Oid(oid)), URN.create("urn:oid:" + oid));
+    }
+
+    @Test
+    void uppercaseSchemeIsAccepted() throws URISyntaxException {
+        var text = "URN:oid:1.2.3.4";
+        assertThat(URN.isURN(text), is(true));
+        var urn = URN.create(text);
+        assertThat(urn.isNamespace(URN.OID), is(true));
+        assertThat(urn.getNamespaceSpecificString(), is("1.2.3.4"));
+        assertThat(urn.toString(), is(text));
+    }
+
+    @Test
+    void uppercaseSchemeEqualsLowercaseScheme() throws URISyntaxException {
+        var upper = URN.create("URN:OID:1.2.3.4");
+        var lower = URN.create("urn:oid:1.2.3.4");
+        assertThat(upper, is(lower));
+        assertThat(upper.hashCode(), is(lower.hashCode()));
     }
 }

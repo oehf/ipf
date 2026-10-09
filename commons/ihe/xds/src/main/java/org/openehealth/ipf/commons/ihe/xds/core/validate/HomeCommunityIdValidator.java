@@ -43,7 +43,7 @@ public class HomeCommunityIdValidator implements ValueValidator {
                     HOME_COMMUNITY_ID_MUST_BE_SPECIFIED);
         }
         if (homeCommunityId != null) {
-            metaDataAssert(homeCommunityId.startsWith("urn:oid:"), INVALID_OID, homeCommunityId);
+            metaDataAssert(homeCommunityId.regionMatches(true, 0, "urn:oid:", 0, 8), INVALID_OID, homeCommunityId);
             new OIDValidator().validate(homeCommunityId.substring(8));
         }
     }

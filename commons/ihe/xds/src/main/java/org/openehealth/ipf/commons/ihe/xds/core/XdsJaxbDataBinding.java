@@ -62,7 +62,11 @@ public class XdsJaxbDataBinding extends JAXBDataBinding {
 
 
     public static boolean isExtraMetadataSlotName(String name) {
-        return ((name != null) && name.startsWith("urn:") && (!name.startsWith("urn:ihe:")));
+        if (name == null) {
+            return false;
+        }
+        var lowerCaseName = name.toLowerCase(Locale.ROOT);
+        return lowerCaseName.startsWith("urn:") && !lowerCaseName.startsWith("urn:ihe:");
     }
 
 

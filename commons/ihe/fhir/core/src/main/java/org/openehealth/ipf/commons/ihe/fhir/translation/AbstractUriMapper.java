@@ -20,7 +20,6 @@ import org.openehealth.ipf.commons.core.URN;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -104,7 +103,7 @@ public abstract class AbstractUriMapper implements UriMapper {
     private Optional<String> translateURN(String uri, String nid) {
         if (URN.isURN(uri)) {
             var urn = urn(uri);
-            if (Objects.equals(urn.getNamespaceId(), nid)) {
+            if (urn.isNamespace(nid)) {
                 return Optional.of(urn.getNamespaceSpecificString());
             }
         }

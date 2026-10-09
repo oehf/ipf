@@ -44,6 +44,12 @@ public class DefaultUriMapperTest {
     }
 
     @Test
+    void testTranslateUppercaseOidUrn() {
+        var oid = "1.2.3.4.5.6.7.8.9";
+        assertThat(uriMapper.uriToOid("URN:OID:" + oid).orElse(null), is(oid));
+    }
+
+    @Test
     public void testTranslateUriToOid() {
         var uri = "http://org.openehealth/ipf/commons/ihe/fhir/1";
         assertThat(uriMapper.uriToOid(uri).orElse(null), is("1.2.3.4"));

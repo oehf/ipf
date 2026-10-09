@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -104,7 +105,8 @@ public class QueryPatientResourceResponseMessage extends Bundle {
         entry.setResource(patient);
         // Use the patient's ID for the fullUrl if it's already a proper URL/URN
         String patientId = patient.getId();
-        if (patientId.startsWith("http://") || patientId.startsWith("https://") || patientId.startsWith("urn:")) {
+        var lowerCasePatientId = patientId.toLowerCase(Locale.ROOT);
+        if (lowerCasePatientId.startsWith("http://") || lowerCasePatientId.startsWith("https://") || lowerCasePatientId.startsWith("urn:")) {
             entry.setFullUrl(patientId);
         } else {
             // Otherwise create a URN from it

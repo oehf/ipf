@@ -85,7 +85,7 @@ public class Pharm5AuditStrategy extends FhirAuditStrategy<FhirQueryAuditDataset
         final var dataset = super.enrichAuditDatasetFromRequest(auditDataset, request, parameters);
 
         final BiConsumer<String, String> addPatientId = (value, system) -> {
-            system = (system.startsWith("urn:oid:")) ?
+            system = (system.regionMatches(true, 0, "urn:oid:", 0, 8)) ?
                     system.substring(8) :
                     system;
             dataset.getPatientIds().add(String.format("%s^^^&%s&ISO", value, system));

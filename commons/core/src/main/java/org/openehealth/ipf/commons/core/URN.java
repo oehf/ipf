@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * URN representation as defined in RFC 2141, but limited to its uses in healthcare domain,
  * specifically for encoding UUIDs and OIDs.
  * <p>
- * Note that in URNs the namespace identifier is case-insensitive
+ * Note that in URNs the scheme and the namespace identifier are case-insensitive
  */
 public final class URN implements Comparable<URN>, Serializable {
 
@@ -44,7 +44,7 @@ public final class URN implements Comparable<URN>, Serializable {
     public static final String PIN = "pin";
     private static final String PREFIX = "urn";
     private static final String SEP = ":";
-    private static final Pattern REGEX = Pattern.compile("^urn:[A-Za-z0-9][A-Za-z0-9-]{0,31}:[A-Za-z0-9()+,\\-.:=@;$_!*'%/?#]+$");
+    private static final Pattern REGEX = Pattern.compile("^(?i:urn):[A-Za-z0-9][A-Za-z0-9-]{0,31}:[A-Za-z0-9()+,\\-.:=@;$_!*'%/?#]+$");
 
     private final URI uri;
 
