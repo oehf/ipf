@@ -89,7 +89,7 @@ class TestRepositoryAndRegistry extends StandardTestContainer {
 
     /**
      * ITI-18 defines no ordering, so the registry of this tutorial serves it as the bilaterally agreed
-     * extension: the order arrives in the $ipfSortOrder slot, and the registry reports back which order
+     * extension: the order arrives in the $XDSSortOrder slot, and the registry reports back which order
      * it applied -- without that a consumer could not tell an applied order from an ignored one.
      */
     @Test
