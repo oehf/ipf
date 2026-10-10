@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test
 class CompositeTest {
 
     val context = DefaultHapiContext()
-    val msg: ADT_A01 = loadHl7(context, "/msg-01.hl7")
+    val msg: ADT_A01 = loadHl7(context, "/msg-01.hl7")!!
     private val composite = msg["NK1"](0)[4]
 
 

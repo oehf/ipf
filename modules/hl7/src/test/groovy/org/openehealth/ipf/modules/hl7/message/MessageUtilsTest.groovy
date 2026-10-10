@@ -216,4 +216,30 @@ public class MessageUtilsTest {
         Message msg = parser.parse(msgText)
         assert 'XYZ' == MessageUtils.triggerEvent(msg)
     }
+
+    @Test
+    void testLoad() {
+        assert MessageUtils.load(context, 'msg-01.hl7').version == '2.2'
+        assert MessageUtils.load(context, 'msg-01.hl7', 'UTF-8').version == '2.2'
+    }
+
+    @Test
+    void testResponseCopiesCompleteHeaderFields() {
+        Message origMsg = parser.parse(
+                'MSH|^~\\&|APP^1.2.3^ISO|FAC^4.5.6^ISO|RAPP^7.8^ISO|RFAC^9.10^ISO|20050915174948||ADT^A01|4711|D^A|2.5\r' +
+                'EVN|A01|20050915\r')
+        Message respMsg = MessageUtils.response(origMsg, 'ACK', null)
+        assert respMsg.MSH[3].encode() == 'RAPP^7.8^ISO'
+        assert respMsg.MSH[4].encode() == 'RFAC^9.10^ISO'
+        assert respMsg.MSH[5].encode() == 'APP^1.2.3^ISO'
+        assert respMsg.MSH[6].encode() == 'FAC^4.5.6^ISO'
+        assert respMsg.MSH[11].encode() == 'D^A'
+        assert respMsg.MSA[2].value == '4711'
+    }
+
+    @Test
+    void testMakeMessageProcessingMode() {
+        assert MessageUtils.makeMessage(context, 'ADT', 'A01', '2.5').MSH[11].encode() == 'P^T'
+        assert MessageUtils.makeMessage(context, 'ADT', 'A01', '2.2').MSH[11].encode() == 'P'
+    }
 }

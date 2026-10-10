@@ -111,15 +111,16 @@ fun newComposite(name: String, message: Message): Composite {
 
 
 /**
- * Loads a HL7 message from a classpath resource and parses it into a message
+ * Loads a HL7 message from a classpath resource and parses it into a message. The resource is resolved
+ * from the classloader root; a leading slash is ignored.
  *
  * @param context HAPI context
  * @param resource resource name
  * @param charset charset, defaults to UTF8
- * @return typed message
+ * @return typed message, or null if the resource does not exist or is empty
  */
-fun <T: Message> loadHl7(context: HapiContext, resource: String, charset: Charset = Charsets.UTF_8): T =
-    makeHl7(context, Hl7DslException::class.java.getResource(resource).readText(charset))
+fun <T: Message> loadHl7(context: HapiContext, resource: String, charset: Charset = Charsets.UTF_8): T? =
+    makeHl7(context, Hl7DslException::class.java.classLoader.getResource(resource.removePrefix("/"))?.readText(charset))
 
 /**
  * Loads a HL7 message from a InputStream and parses it into a message
@@ -127,9 +128,9 @@ fun <T: Message> loadHl7(context: HapiContext, resource: String, charset: Charse
  * @param context HAPI context
  * @param stream input stream
  * @param charset charset, defaults to UTF8
- * @return typed message
+ * @return typed message, or null if the stream is empty
  */
-fun <T: Message> loadHl7(context: HapiContext, stream: InputStream, charset: Charset = Charsets.UTF_8): T =
+fun <T: Message> loadHl7(context: HapiContext, stream: InputStream, charset: Charset = Charsets.UTF_8): T? =
     makeHl7(context, stream.bufferedReader(charset).use { it.readText() })
 
 /**
@@ -137,9 +138,11 @@ fun <T: Message> loadHl7(context: HapiContext, stream: InputStream, charset: Cha
  *
  * @param context HAPI context
  * @param txt HL7 message string
- * @return typed message
+ * @return typed message, or null if the string is null or empty
  */
-fun <T: Message> makeHl7(context: HapiContext, txt: String): T = context.genericParser.parse(txt) as T
+@Suppress("UNCHECKED_CAST")
+fun <T: Message> makeHl7(context: HapiContext, txt: String?): T? =
+    if (txt.isNullOrEmpty()) null else context.genericParser.parse(txt) as T
 
 /**
  * Iterate over a [group] and do something with every structure and its location string

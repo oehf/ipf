@@ -19,6 +19,8 @@ import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.v24.segment.OBX
 import org.junit.jupiter.api.BeforeEach
+import ca.uhn.hl7v2.DefaultHapiContext
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.*
@@ -158,4 +160,74 @@ class TypeTest {
         }
     }
 
+    @Test
+    void testPrimitiveSubscript() {
+        def msg1 = load('dsl/msg-01.hl7')
+        assert msg1.MSH[9][1][1].value == 'ADT'
+        assert msg1.MSH[9][1][2] instanceof Null
+        assert msg1.MSH[9][1][2].value == null
+        assert msg1.MSH[9][1][2][3].value == null
+        assert msg1.MSH[9][1][2].getValueOr('x') == 'x'
+        assert !msg1.MSH[9][1][2]
+        assertThrows(HL7DslException) { msg1.MSH[9][1][0] }
+        assertThrows(HL7DslException) { msg1.MSH[9][1][2] = 'x' }
+    }
+
+    @Test
+    void testPrimitiveFromCompositeAndRepeatable() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        def source = MessageUtils.make(new DefaultHapiContext(),
+                'MSH|^~\\&|A|B|C|D|20050915174948||ADT^A01|1|P|2.5\r' +
+                'PID|1||156154||Nachname^Vorname||19920426|F|||Irgendwo 25&Irgendwo&25^^Foo^^11111^DE~Street 2^^Bar\r')
+        adt.PID[19] = source.PID[5]
+        assert adt.PID[19].value == 'Nachname'
+        adt.PID[19] = source.PID[7]
+        assert adt.PID[19].value == '19920426'
+    }
+
+    @Test
+    void testCopyRepeatableComposite() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        def source = MessageUtils.make(new DefaultHapiContext(),
+                'MSH|^~\\&|A|B|C|D|20050915174948||ADT^A01|1|P|2.5\r' +
+                'PID|1||156154||Nachname^Vorname||19920426|F|||Irgendwo 25&Irgendwo&25^^Foo^^11111^DE~Street 2^^Bar\r')
+        adt.PID[11] = source.PID[11]
+        assert adt.PID[11].encodeRepetitions() == 'Irgendwo 25&Irgendwo&25^^Foo^^11111^DE'
+    }
+
+    @Test
+    void testVariesFromString() {
+        def oru = MessageUtils.makeMessage(new DefaultHapiContext(), 'ORU', 'R01', '2.5')
+        def obx = oru.PATIENT_RESULT.ORDER_OBSERVATION.OBSERVATION.OBX
+        obx[5] = 'abc'
+        assert obx[5].value == 'abc'
+    }
+
+    @Test
+    void testCompositeFromVaries() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        def obx = adt.OBX
+        obx.setObx5Type('CE')
+        obx[5][1] = 'T57000'
+        obx[5][2] = 'GALLBLADDER'
+        adt.PID[10] = obx[5]
+        assert adt.PID[10].encodeRepetitions() == 'T57000^GALLBLADDER'
+    }
+
+    @Test
+    void testExtraComponents() {
+        def m = MessageUtils.make(new DefaultHapiContext(),
+                'MSH|^~\\&|A|B|C|D|20050915174948||ADT^A01|1|P|2.5\rEVN|A01|20050915^X^Y^Z\r')
+        def extra = m.EVN[2].extraComponents
+        assert extra.value == 'Y'
+        assert extra[1].value == 'Y'
+        assert extra[2].value == 'Z'
+    }
+
+    @Test
+    void testUnknownMethodOnType() {
+        // must not be mistaken for a mapping call that requires a Mappings bean
+        def e = assertThrows(MissingMethodException) { obx1[3].noSuchMethod() }
+        assert e.method == 'noSuchMethod'
+    }
 }

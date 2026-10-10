@@ -39,8 +39,8 @@ abstract class AbstractMessage(factory: ModelClassFactory = DefaultModelClassFac
 
     protected enum class Cardinality(val required: Boolean, val repeating: Boolean) {
         REQUIRED(true, false),
-        OPTIONAL(true, true),
-        REQUIRED_REPEATING(false, false),
+        OPTIONAL(false, false),
+        REQUIRED_REPEATING(true, true),
         OPTIONAL_REPEATING(false, true)
     }
 }

@@ -27,9 +27,14 @@ import ca.uhn.hl7v2.model.*
  * @since 3.5
  */
 internal class RepeatableStructure(
-        val elements: Array<out Structure>,
         private val group: Group,
         private val name: String) : Structure, Iterable<Structure> {
+
+    /**
+     * The current repetitions of the structure. Read from the group on each access, so that
+     * repetitions added in the meantime are taken into account.
+     */
+    val elements: Array<out Structure> get() = group.getAll(name)
 
     override fun iterator(): Iterator<Structure> = elements.iterator()
 
@@ -52,5 +57,11 @@ internal class RepeatableStructure(
 
     fun count(): Int = elements.size
 
-    fun elementAt(rep: Int): Structure = if (elements.size <= rep) group.nrp(name) else elements[rep]
+    /**
+     * Returns repetition [rep], adding repetitions up to [rep] if they do not exist yet
+     */
+    fun elementAt(rep: Int): Structure {
+        while (count() <= rep) group.nrp(name)
+        return elements[rep]
+    }
 }

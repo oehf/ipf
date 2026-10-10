@@ -22,6 +22,9 @@ import ca.uhn.hl7v2.model.v24.message.ORU_R01
 import ca.uhn.hl7v2.model.v24.segment.OBX
 import ca.uhn.hl7v2.parser.EncodingCharacters
 import org.junit.jupiter.api.BeforeEach
+import ca.uhn.hl7v2.DefaultHapiContext
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
+import static org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 
 import static org.openehealth.ipf.modules.hl7.dsl.TestUtils.load
@@ -200,5 +203,51 @@ class SegmentTest {
 
         String obxString = msg.parser.doEncode(obx, new EncodingCharacters('|' as char, '^~\\&'))
         assert obxString == 'OBX||CE|||T57000^GALLBLADDER^SNM'
+    }
+
+    @Test
+    void testRepeatedFieldAccessDoesNotAddRepetitions() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        def pid3 = adt.PID[3]
+        pid3(0)[1] = 'a'
+        pid3(0)[1] = 'b'
+        assert adt.PID.count(3) == 1
+        assert adt.PID.encode() == 'PID|||b'
+    }
+
+    @Test
+    void testFieldAccessBeyondLastRepetition() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        adt.PID[3](2)[1] = 'c'
+        assert adt.PID.count(3) == 3
+        assert adt.PID.encode() == 'PID|||~~c'
+    }
+
+    @Test
+    void testRepetitionOnNonRepeatableField() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        adt.PID[7] = '19800101'
+        assert adt.PID[7](0).value == '19800101'
+        assert adt.PID[7]().length == 1
+        assertThrows(HL7DslException) { adt.PID[7](1) }
+    }
+
+    @Test
+    void testRepetitionOnNonRepeatableSegment() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        assert adt.PID(0).is(adt.PID)
+        assert adt.PID().length == 1
+        assertThrows(HL7DslException) { adt.PID(1) }
+        def pid = adt.PID
+        assert pid(0).is(adt.PID)
+        assertThrows(HL7DslException) { pid(1) }
+    }
+
+    @Test
+    void testRepetitionOnSpecificRepetition() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        def nk1 = adt.NK1(2)
+        assert nk1(0).is(nk1)
+        assertThrows(HL7DslException) { nk1(1) }
     }
 }

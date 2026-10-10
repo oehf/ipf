@@ -72,7 +72,16 @@ class Hl7ExtensionModule {
         mappings()?.mapReverse(mapping, delegate.encode(), defaultValue)
     }
 
+    /**
+     * Supports the dynamic mapping methods mapXxx() and mapReverseXxx(). Any other unknown method
+     * raises a {@link MissingMethodException}.
+     *
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
+     */
     static Object methodMissing(Type delegate, String name, Object args) {
+        if (!name.startsWith('map')) {
+            throw new MissingMethodException(name, delegate.class, args as Object[])
+        }
         MappingExtensionHelper.methodMissingLogic(mappings(), { delegate.encode() }, name, args)
     }
         
@@ -175,7 +184,7 @@ class Hl7ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/Extensions+to+HAPI
      */
     static EncodingRuleBuilder checkIf(EncodingRuleBuilder delegate, Closure closure) {
-        delegate.test(delegate, new ClosureEncodingRule(closure))
+        delegate.test(new ClosureEncodingRule(closure))
     }
 
 

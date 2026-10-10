@@ -32,7 +32,7 @@ import kotlin.test.assertTrue
 class GroupTest {
 
     val context = DefaultHapiContext()
-    val message: Message = loadHl7(context, "/msg-02.hl7")
+    val message: Message = loadHl7(context, "/msg-02.hl7")!!
 
     @Test
     fun testInvokeMethod() {
@@ -224,4 +224,34 @@ class GroupTest {
 
     private fun observation(message: Message): Structure = message["PATIENT_RESULT"](0)["ORDER_OBSERVATION"](1)["OBSERVATION"](1)
 
+    @Test
+    fun testRepetitionOnMessageTypedReceiver() {
+        // Group.get(String) is a HAPI member function and takes precedence over the extension function
+        val adt = newMessage(context, "ADT", "A01", "2.5")
+        adt["NK1"][1] = "1"
+        adt["NK1"](1)[1] = "2"
+        assertEquals(2, adt.count("NK1"))
+        assertEquals(2, adt["NK1"]().size)
+        assertEquals("2", adt["NK1"](1)[1].value)
+        assertEquals("2", adt["NK1", 1][1].value)
+    }
+
+    @Test
+    fun testRepeatedAccessDoesNotAddRepetitions() {
+        val adt = newMessage(context, "ADT", "A01", "2.5")
+        val nk1 = (adt as Structure)["NK1"]
+        nk1(1)[2] = "a"
+        nk1(1)[2] = "b"
+        assertEquals(2, adt.count("NK1"))
+        assertEquals("b", nk1(1)[2].value)
+    }
+
+    @Test
+    fun testAccessBeyondLastRepetition() {
+        val adt = newMessage(context, "ADT", "A01", "2.5")
+        adt["NK1"](3)[1] = "4"
+        assertEquals(4, adt.count("NK1"))
+        assertEquals("4", adt["NK1", 3][1].value)
+        assertTrue(adt["NK1", 1].empty)
+    }
 }

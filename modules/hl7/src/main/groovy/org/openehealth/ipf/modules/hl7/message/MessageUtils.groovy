@@ -181,28 +181,22 @@ class MessageUtils {
         String v = msg.version
         Message out = makeMessage(msg.parser.hapiContext, eventType, triggerEvent, v)
 
-        //populate outbound MSH using data from inbound message ...
+        // populate outbound MSH using data from inbound message ...
         Segment mshIn = msg.MSH
         Segment mshOut = out.MSH
 
-        // get MSH data from incoming message ...
-        String fieldSep = Terser.get(mshIn, 1, 0, 1, 1)
-        String encChars = Terser.get(mshIn, 2, 0, 1, 1)
-        String procID = Terser.get(mshIn, 11, 0, 1, 1)
-
-        // populate outbound MSH using data from inbound message ...
-        Terser.set(mshOut, 1, 0, 1, 1, fieldSep)
-        Terser.set(mshOut, 2, 0, 1, 1, encChars)
-        Terser.set(mshOut, 11, 0, 1, 1, procID)
+        mshOut[1] = mshIn[1]
+        mshOut[2] = mshIn[2]
+        mshOut[11] = mshIn[11]
 
         // revert sender and receiver
-        Terser.set(mshOut, 3, 0, 1, 1, Terser.get(mshIn, 5, 0, 1, 1))
-        Terser.set(mshOut, 4, 0, 1, 1, Terser.get(mshIn, 6, 0, 1, 1))
-        Terser.set(mshOut, 5, 0, 1, 1, Terser.get(mshIn, 3, 0, 1, 1))
-        Terser.set(mshOut, 6, 0, 1, 1, Terser.get(mshIn, 4, 0, 1, 1))
+        mshOut[3] = mshIn[5]
+        mshOut[4] = mshIn[6]
+        mshOut[5] = mshIn[3]
+        mshOut[6] = mshIn[4]
 
         if ('MSA' in out.names) {
-            Terser.set(out.MSA, 2, 0, 1, 1, Terser.get(msg.MSH, 10, 0, 1, 1))
+            out.MSA[2] = mshIn[10]
         }
         out
     }
@@ -257,7 +251,9 @@ class MessageUtils {
         AbstractMessage msg = ReflectionUtil.instantiateMessage(c, factory)
         msg.setParser(context.getGenericParser())
         msg.initQuickstart(eventType, triggerEvent, 'P')
-        Terser.set(msg.MSH, 11, 0, 2, 1, 'T')
+        if (atLeastVersion(version, '2.3')) {
+            Terser.set(msg.MSH, 11, 0, 2, 1, 'T')
+        }
         msg
     }
 
@@ -345,11 +341,11 @@ class MessageUtils {
     // Some stuff rescued from MessageAdapters, creating HL7 messages from resources/streams
 
     static Message load(HapiContext context, String resource) {
-        make(context, getClass().classLoader.getResource(resource)?.text)
+        make(context, MessageUtils.classLoader.getResource(resource)?.text)
     }
 
     static Message load(HapiContext context, String resource, String charset) {
-        make(context, getClass().classLoader.getResource(resource)?.getText(charset))
+        make(context, MessageUtils.classLoader.getResource(resource)?.getText(charset))
     }
 
     static Message make(HapiContext context, InputStream stream) {

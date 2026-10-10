@@ -15,6 +15,7 @@
  */
 package org.openehealth.ipf.modules.hl7.dsl
 
+import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Segment
 import ca.uhn.hl7v2.model.Structure
 import ca.uhn.hl7v2.model.Visitable
@@ -30,19 +31,41 @@ import org.codehaus.groovy.runtime.InvokerHelper
 class Repeatable extends Closure implements Iterable<Visitable> {
 
     Structure structure
-    def elements
     def index
 
-    Repeatable(owner, elements, structure, index) {
+    /**
+     * @param owner closure owner
+     * @param structure segment containing the repeatable field or group containing the repeatable structure
+     * @param index field index (if structure is a segment) or structure name (if structure is a group)
+     */
+    Repeatable(owner, Structure structure, index) {
         super(owner)
-        this.elements = elements
         this.structure = structure
         this.index = index
     }
 
+    /**
+     * @deprecated the repetitions are now always read from the structure, use
+     * {@link #Repeatable(java.lang.Object, ca.uhn.hl7v2.model.Structure, java.lang.Object)}
+     */
+    @Deprecated
+    Repeatable(owner, elements, Structure structure, index) {
+        this(owner, structure, index)
+    }
+
+    /**
+     * @return the current repetitions. These are read from the structure on each access, so that
+     * repetitions added in the meantime are taken into account.
+     */
+    Visitable[] currentElements() {
+        structure instanceof Segment ?
+                ((Segment) structure).getField((int) index) :
+                ((Group) structure).getAll((String) index)
+    }
+
     @Override
     Iterator<Visitable> iterator() {
-        return elements.iterator()
+        return currentElements().iterator()
     }
 
     /**
@@ -69,7 +92,7 @@ class Repeatable extends Closure implements Iterable<Visitable> {
     /**
      * Returns the index'th element of the first repetition
      * @param index index
-     * @return ndex'th element of the first repetition
+     * @return index'th element of the first repetition
      */
     def getAt(int index) {
         elementAt(0)[index]
@@ -97,34 +120,39 @@ class Repeatable extends Closure implements Iterable<Visitable> {
      * @return encoded repetition
      */
     String encodeRepetitions() {
-        elements.collect { it.encode() }.join(getSeparator(structure))
+        currentElements().collect { it.encode() }.join(getSeparator(structure))
     }
 
     protected Object doCall(Object argument) {
         if (argument != null) {
             return elementAt((int) argument)
         } else {
-            return elements
+            return currentElements()
         }
     }
 
+    /**
+     * Returns the repetition with the given index, adding repetitions up to this index
+     * if they do not exist yet
+     *
+     * @param argument repetition index, starting with 0
+     * @return the repetition
+     */
     def elementAt(int argument) {
-        def element
-        if (elements.size() <= argument) {
-            element = structure.nrp(index)
-        } else {
-            element = elements[argument]
+        while (size() <= argument) {
+            structure.nrp(index)
         }
-        element
+        currentElements()[argument]
     }
 
     int size() {
-        elements.size()
+        currentElements().length
     }
 
     boolean isEmpty() {
         boolean result = true
-        for (int index = 0; index < elements.size(); index++) {
+        def elements = currentElements()
+        for (int index = 0; index < elements.length; index++) {
             def element = elements[index]
             if (element != null && !element.isEmpty()) {
                 result = false
@@ -139,7 +167,7 @@ class Repeatable extends Closure implements Iterable<Visitable> {
     }
 
     String getPath() {
-        elementAt(index).path
+        elementAt(0).path
     }
 
     private static String getSeparator(Structure s) {

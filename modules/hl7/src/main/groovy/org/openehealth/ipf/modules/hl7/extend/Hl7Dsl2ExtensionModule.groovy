@@ -34,6 +34,10 @@ import org.openehealth.ipf.modules.hl7.message.Visitors
  */
 class Hl7Dsl2ExtensionModule {
 
+    // Owner of the Repeatable closures. Groovy dispatches unknown method calls on a closure to its owner
+    // before falling back to Repeatable#methodMissing, so the owner must not offer any DSL methods.
+    private static final Object REPEATABLE_OWNER = new Object()
+
 
     // ==========================================================================
     // Visitable metaclass extensions
@@ -67,11 +71,13 @@ class Hl7Dsl2ExtensionModule {
     // ==========================================================================
 
     /**
-     * Explicitly disallow calls on Type instances
+     * Repetition access on a non-repeatable field: field(0) returns the field itself, field()
+     * returns an array containing only the field. Other repetitions are not allowed.
+     *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static def call(Type delegate, args) {
-        throw new HL7DslException("The type ${delegate.class.simpleName} is not repeatable for this field")
+        nonRepeatable(delegate, args)
     }
 
     // ==========================================================================
@@ -100,13 +106,12 @@ class Hl7Dsl2ExtensionModule {
      * as the first component. Primitive types have no components, but it makes sense to return the
      * primitive when the provided index is 1, so that T[1] returns the same.
      *
-     * @return the primitive value if idx is 1, otherwise a {@link Null} object
+     * @return the primitive if idx is 1, otherwise a {@link Null} object
+     * @throws HL7DslException if idx is smaller than 1
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    static String getAt(Primitive delegate, int index) {
-        return (index == 1) ?
-                delegate :
-                new Null(delegate.message)
+    static Type getAt(Primitive delegate, int index) {
+        componentIndex(index) == 0 ? delegate : new Null(delegate.message)
     }
 
     /**
@@ -151,21 +156,21 @@ class Hl7Dsl2ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static def getAt(ExtraComponents delegate, int idx) {
-        delegate.getComponent(idx)
+        delegate.getComponent(componentIndex(idx))
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static String getValue(ExtraComponents delegate) {
-        delegate.getComponent(1).getValue()
+        delegate.numComponents() > 0 ? delegate.getComponent(0).getValue() : null
     }
 
     /**
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static String getValue2(ExtraComponents delegate) {
-        delegate.getComponent(1).getValue2()
+        delegate.numComponents() > 0 ? delegate.getComponent(0).getValue2() : null
     }
 
     /**
@@ -239,7 +244,19 @@ class Hl7Dsl2ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static void from(Composite delegate, Object value) {
-        delegate[1].from(value.toString())
+        delegate[1].from(stringValue(value))
+    }
+
+    /**
+     * Copies the content of the Varies on the target composite
+     *
+     * @param delegate target composite
+     * @param source varies
+     *
+     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
+     */
+    static void from(Composite delegate, Varies value) {
+        from(delegate, value.data)
     }
 
     /**
@@ -322,7 +339,7 @@ class Hl7Dsl2ExtensionModule {
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
-    static void from(Varies delegate, Type newValue) {
+    static void from(Varies delegate, Object newValue) {
         delegate.data.from(newValue)
     }
 
@@ -330,14 +347,10 @@ class Hl7Dsl2ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static def getAt(Varies delegate, int idx) {
-        if (delegate.data instanceof Composite) {
+        if (delegate.data instanceof Composite || delegate.data instanceof Primitive) {
             return delegate.data[idx]
         }
-        //First element of the sublevel is identical with this primitive element
-        if (delegate.data instanceof Primitive) {
-            return idx == 1 ? delegate.data : new Null()
-        }
-        return new Null(delegate.message)
+        throw new HL7DslException("Unknown field type ${delegate.data.class.simpleName}")
     }
 
     /**
@@ -359,13 +372,6 @@ class Hl7Dsl2ExtensionModule {
      */
     static boolean isNullValue(Varies delegate) {
         delegate.data.isNullValue()
-    }
-
-    /**
-     * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
-     */
-    static String toString(Varies delegate) {
-        delegate.data.value
     }
 
     // ==========================================================================
@@ -434,7 +440,7 @@ class Hl7Dsl2ExtensionModule {
                 result = field[0]
             }
         } else {
-            result = selector(field, delegate, idx)
+            result = selector(delegate, idx)
         }
         return result
     }
@@ -474,15 +480,17 @@ class Hl7Dsl2ExtensionModule {
     }
 
     /**
-     * Non-repeatable segments are not suitable for obtaining repetitions except if
-     * @param delegate
-     * @param args
+     * Repetition access on a segment. If the segment is the first repetition of a repeatable segment,
+     * the requested repetition is returned. Otherwise, segment(0) returns the segment itself and
+     * segment() returns an array containing only the segment.
+     *
+     * @param delegate segment
+     * @param args repetition index or nothing
      *
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static Object call(Segment delegate, args) {
-        getStructure(delegate.parent, delegate.name, args)
-        // throw new HL7DslException("The segment ${delegate.class.simpleName} is not repeatable in this group or message")
+        callStructure(delegate, args)
     }
 
     /**
@@ -618,17 +626,65 @@ class Hl7Dsl2ExtensionModule {
     }
 
     private static def getStructure(Group delegate, String name, args) {
-        MetaProperty metaProperty = delegate.metaClass.getMetaProperty("${name}All")
-        if (metaProperty) {
-            Repeatable r = selector(metaProperty.getProperty(delegate), delegate, name)
-            if (args?.size() == 1 && args[0] instanceof Integer) {
-                return r.elementAt(args[0])
-            } else {
-                return r
-            }
-        } else {
-            throw new HL7DslException("Unknown method ${name} with parameters ${args} on class ${delegate.class}")
+        if (!(name in delegate.names)) {
+            throw new HL7DslException("Unknown method ${name} with parameters ${args} on class ${delegate.class}. " +
+                    "Valid structure names are ${delegate.names.join(', ')}")
         }
+        if (!delegate.isRepeating(name)) {
+            return nonRepeatable(delegate.get(name), args)
+        }
+        Repeatable r = selector(delegate, name)
+        def arguments = arguments(args)
+        if (arguments.size() == 1 && arguments[0] instanceof Integer) {
+            return r.elementAt(arguments[0])
+        } else {
+            return r
+        }
+    }
+
+    /**
+     * Repetition access on a structure. Only the first repetition of a repeatable structure (as returned
+     * by HAPI's getters) gives access to the other repetitions, consistent with the Kotlin DSL.
+     */
+    private static def callStructure(Structure delegate, args) {
+        Group parent = delegate.parent
+        if (parent != null && !parent.is(delegate)) {
+            String[] names = parent.names
+            // The structure name usually is the name within the parent group, except e.g. for
+            // duplicate segments in a group (NTE, NTE2, ...), so fall back to looking it up
+            String name = (delegate.name in names && isFirstRepetitionIn(delegate, parent, delegate.name)) ?
+                    delegate.name :
+                    names.find { isFirstRepetitionIn(delegate, parent, it) }
+            if (name != null && parent.isRepeating(name)) {
+                return getStructure(parent, name, args)
+            }
+        }
+        nonRepeatable(delegate, args)
+    }
+
+    private static boolean isFirstRepetitionIn(Structure structure, Group group, String name) {
+        Structure[] all = group.getAll(name)
+        all.length > 0 && all[0].is(structure)
+    }
+
+    /**
+     * Repetition access on a non-repeatable field or structure: (0) returns the element itself,
+     * () returns an array containing only the element.
+     */
+    private static def nonRepeatable(Visitable delegate, args) {
+        def arguments = arguments(args)
+        if (arguments.isEmpty() || arguments == [null]) {
+            return delegate instanceof Type ? [delegate] as Type[] : [delegate] as Structure[]
+        }
+        if (arguments.size() == 1 && arguments[0] == 0) {
+            return delegate
+        }
+        throw new HL7DslException("Type ${delegate.class.simpleName} is not repeatable")
+    }
+
+    // args is an array or list when called via methodMissing or getAt, but a single object when called via call()
+    private static List arguments(args) {
+        (args instanceof Object[] || args instanceof Collection) ? args as List : [args]
     }
 
     /**
@@ -667,7 +723,7 @@ class Hl7Dsl2ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static void from(Group delegate, value) {
-        throw new UnsupportedOperationException('group copying not implemented yet')
+        throw new HL7DslException('Unsupported operation, cannot set a group')
     }
 
     /**
@@ -683,7 +739,7 @@ class Hl7Dsl2ExtensionModule {
      * @DSLDoc http://repo.openehealth.org/confluence/display/ipf2/HL7+DSL
      */
     static def call(Group delegate, args) {
-        getStructure(delegate.parent, delegate.name, args)
+        callStructure(delegate, args)
     }
 
     //==========================================================================
@@ -716,8 +772,8 @@ class Hl7Dsl2ExtensionModule {
 
     // Helpers
 
-    private static selector(elements, adapter, index) {
-        new Repeatable(getClass(), elements, adapter, index)
+    private static selector(Structure structure, index) {
+        new Repeatable(REPEATABLE_OWNER, structure, index)
     }
 
     private static componentIndex(int index) {
@@ -743,8 +799,12 @@ class Hl7Dsl2ExtensionModule {
 
     private static String stringValue(def object) {
         switch (object) {
+            case null: return null
             case Primitive: return object.value
-            case Varies: return object.value
+            case Varies: return stringValue(object.data)
+            case Composite: return stringValue(object[1])
+            case Repeatable: return object.size() > 0 ? stringValue(object(0)) : null
+            case ExtraComponents: return getValue(object)
             default: return object.toString()
         }
     }

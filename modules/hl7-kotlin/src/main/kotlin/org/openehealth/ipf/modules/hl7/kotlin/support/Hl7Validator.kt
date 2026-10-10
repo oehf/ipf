@@ -27,11 +27,11 @@ import org.openehealth.ipf.commons.core.modules.api.Validator
  * @author Christian Ohr
  * @since 3.5
  */
-class Hl7Validator<R> : Validator<Message, ValidationContext> {
+class Hl7Validator : Validator<Message, ValidationContext> {
 
     override fun validate(message: Message?, profile: ValidationContext?) {
         try {
-            DefaultValidator<R>(profile).validate(message)
+            DefaultValidator<Any?>(profile).validate(message)
         } catch (e: HL7Exception) {
             throw ValidationException(e)
         }

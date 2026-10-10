@@ -73,25 +73,31 @@ fun Type.valueOr(v: String?): String? = getValueOr(v)
  *
  * @param source value for the type
  */
-fun Type.from(source: Any?): Unit =
-        when (this) {
-            is Primitive -> value = stringValue(source)
-            is Composite -> if (source is Composite) DeepCopy.copy(source, this) else get(1).from(stringValue(source))
-            is Variable -> data.from(source)
-            is RepeatableField -> elementAt(0).from(source)
-            else -> unknownType()
-        }
+fun Type.from(source: Any?) {
+    val unwrapped = unwrap(source)
+    when (this) {
+        is Null -> throw Hl7DslException("Cannot assign a value to Null")
+        is Primitive -> value = stringValue(unwrapped)
+        is Composite -> if (unwrapped is Composite) DeepCopy.copy(unwrapped, this) else get(1).from(unwrapped)
+        is Variable -> data.from(unwrapped)
+        is RepeatableField -> elementAt(0).from(unwrapped)
+        else -> unknownType()
+    }
+}
 
 /**
- * Returns the component [idx] of the given type. If applied on [Primitive], the idx must be 1. If applied
- * on a repeatable field, the component [idx] of its first repetition is returned.
+ * Returns the component [idx] of the given type. If applied on a [Primitive], the primitive itself is
+ * returned for idx 1, and a [Null] object for idx > 1. This keeps expressions valid for HL7 versions
+ * where a primitive field has become a composite in later versions. If applied on a repeatable field,
+ * the component [idx] of its first repetition is returned.
  * @param idx component index, starting with 1
  * @return component [idx]
- * @throws Hl7DslException if a component with index > 1 shall be retrieved from a [Primitive]
+ * @throws Hl7DslException if idx < 1
  */
 operator fun Type.get(idx: Int): Type =
         when (this) {
-            is Primitive -> if (idx == 1) this else throw Hl7DslException("Index out of bounds for primitive")
+            is Primitive -> if (componentIndex(idx) == 0) this else Null(message)
+            is Null -> this
             is Variable -> data[idx]
             is Composite -> getComponent(componentIndex(idx))
             is RepeatableField -> elementAt(0)[idx]
@@ -154,7 +160,13 @@ val ExtraComponents.value: String? get() = stringValue(this)
 val ExtraComponents.value2: String? get() = if (nullValue) "" else value
 val ExtraComponents.nullValue: Boolean get() = stringValue(this) == "\"\""
 
-operator fun ExtraComponents.get(idx: Int): Variable = getComponent(idx)
+/**
+ * Returns the extra component [idx]
+ *
+ * @param idx extra component index, starting with 1
+ * @return extra component [idx]
+ */
+operator fun ExtraComponents.get(idx: Int): Variable = getComponent(componentIndex(idx))
 
 
 // Extension functions/properties for Structure -----------------------------------------------
@@ -175,7 +187,7 @@ operator fun Structure.get(idx: Int): Type =
                 if (getMaxCardinality(idx) == 1) {
                     if (field.isEmpty()) getField(idx, 0) else field[0]
                 } else {
-                    RepeatableField(getField(idx), this, idx)
+                    RepeatableField(this, idx)
                 }
             }
             is RepeatableStructure -> elementAt(0)[idx]
@@ -204,7 +216,7 @@ operator fun Structure.get(idx: Int, rep: Int): Type = get(idx)(rep)
 operator fun Structure.get(name: String): Structure =
         when (this) {
             is Segment -> useFieldNumber()
-            is Group -> if (isRepeating(name)) RepeatableStructure(getAll(name), this, name) else get(name)
+            is Group -> if (isRepeating(name)) RepeatableStructure(this, name) else get(name)
             is RepeatableStructure -> elementAt(0)[name]
             else -> unknownType()
         }
@@ -227,7 +239,7 @@ operator fun Structure.get(name: String, rep: Int): Structure = get(name)(rep)
  * @throws Hl7DslException if applied on a non-repeatable structure with [rep] > 0
  */
 operator fun Structure.invoke(rep: Int): Structure =
-        (this as? RepeatableStructure)?.elementAt(rep) ?: if (rep > 0) notRepeatable() else this
+        (this as? RepeatableStructure ?: asRepeatable())?.elementAt(rep) ?: if (rep > 0) notRepeatable() else this
 
 /**
  * Returns all repetitions of a structure as array. If the structure is not repeatable, an array with one
@@ -236,20 +248,24 @@ operator fun Structure.invoke(rep: Int): Structure =
  * @return array of structures
  */
 operator fun Structure.invoke(): Array<out Structure> =
-        (this as? RepeatableStructure)?.elements ?: arrayOf(this)
+        (this as? RepeatableStructure ?: asRepeatable())?.elements ?: arrayOf(this)
 
 /**
- * Sets a segment to the specified [source] segment.
+ * Sets a segment to the specified [source] segment. If [source] is a repeatable segment,
+ * its first repetition is used.
  *
- * @param source value for the type
- * @throws Hl7DslException if applied on a [Group]
+ * @param source source segment
+ * @throws Hl7DslException if applied on a [Group] or if [source] is not a segment
  */
-fun Structure.from(source: Segment): Unit =
-        when (this) {
-            is Segment -> DeepCopy.copy(source, this)
-            is RepeatableStructure -> elementAt(0).from(source)
-            else -> throw Hl7DslException("Unsupported operation, cannot set a group")
-        }
+fun Structure.from(source: Structure) {
+    val sourceSegment = (source as? RepeatableStructure)?.elementAt(0) ?: source
+    when (this) {
+        is Segment -> DeepCopy.copy(sourceSegment as? Segment
+                ?: throw Hl7DslException("Cannot set a segment from ${source::class.simpleName}"), this)
+        is RepeatableStructure -> elementAt(0).from(sourceSegment)
+        else -> throw Hl7DslException("Unsupported operation, cannot set a group")
+    }
+}
 
 /**
  * Sets the field [idx] to value [v]. If applied
@@ -277,7 +293,7 @@ operator fun Structure.set(idx: Int, rep: Int, v: Any?) = get(idx, rep).from(v)
  * @param name structure name
  * @param segment segment of a matching class
  */
-operator fun Structure.set(name: String, segment: Segment) = get(name).from(segment)
+operator fun Structure.set(name: String, segment: Structure) = get(name).from(segment)
 
 /**
  * Sets the repetition [rep] of the segment with name [name] from the provided [segment].
@@ -286,7 +302,7 @@ operator fun Structure.set(name: String, segment: Segment) = get(name).from(segm
  * @param rep repetition
  * @param segment segment of a matching class
  */
-operator fun Structure.set(name: String, rep: Int, segment: Segment) = get(name, rep).from(segment)
+operator fun Structure.set(name: String, rep: Int, segment: Structure) = get(name, rep).from(segment)
 
 // Counting
 
@@ -360,13 +376,13 @@ val Structure.path: String? get() = message.findIndexOf { it === this }
  * Sets the [Varies] field OBX-5 to represent the provided [type]
  */
 fun Structure.setObx5Type(type: String, desiredRepetitionsCount: Int = 1) {
-    val className = this::class.qualifiedName
-    if (className != null && !className.endsWith(".OBX")) throw Hl7DslException("only OBX segments can be served by this method")
-    for (i in 0 until desiredRepetitionsCount - count(5)) {
-        nrp(5)
+    val obx = (this as? RepeatableStructure)?.elementAt(0) ?: this
+    if (obx !is Segment || !obx::class.java.name.endsWith(".OBX")) throw Hl7DslException("only OBX segments can be served by this method")
+    for (i in 0 until desiredRepetitionsCount - obx.count(5)) {
+        obx.nrp(5)
     }
-    this[2] = type
-    FixFieldDataType.fixOBX5(this as Segment, message.parser.factory, message.parser.parserConfiguration)
+    obx[2] = type
+    FixFieldDataType.fixOBX5(obx, message.parser.factory, message.parser.parserConfiguration)
 }
 
 
@@ -475,6 +491,34 @@ fun EncodingRuleBuilder.checkIf(check: (String) -> Array<ca.uhn.hl7v2.validation
 fun PrimitiveRuleBuilder.checkIf(check: (String?) -> Array<ca.uhn.hl7v2.validation.ValidationException>): PrimitiveRuleBuilder = test(LambdaPrimitiveTypeRule(check))
 
 
+/**
+ * A structure obtained by HAPI's [Group.get] member function (which takes precedence over
+ * the [Structure.get] extension function if the receiver is statically typed as [Group] or [Message])
+ * is not wrapped into a [RepeatableStructure], even if it is repeatable. As [Group.get] returns the
+ * first repetition, this function wraps the structure if it is the first repetition of a repeatable
+ * structure within its parent group.
+ */
+private fun Structure.asRepeatable(): RepeatableStructure? {
+    val group = parent?.takeIf { it !== this } ?: return null
+    val names = group.names
+    // The structure name usually is the name within the parent group, except e.g. for
+    // duplicate segments in a group (NTE, NTE2, ...), so fall back to looking it up
+    val nameInGroup = name.takeIf { it in names && isFirstRepetitionIn(group, it) }
+            ?: names.firstOrNull { isFirstRepetitionIn(group, it) }
+            ?: return null
+    return if (group.isRepeating(nameInGroup)) RepeatableStructure(group, nameInGroup) else null
+}
+
+private fun Structure.isFirstRepetitionIn(group: Group, name: String): Boolean =
+        group.getAll(name).firstOrNull() === this
+
+private fun unwrap(source: Any?): Any? =
+        when (source) {
+            is RepeatableField -> source.elements.firstOrNull()
+            is Variable -> unwrap(source.data)
+            else -> source
+        }
+
 // Exceptions due to invalid access
 
 private fun <T> Structure.unknownType(): T = throw Hl7DslException("Unknown structure type ${this::class.simpleName}")
@@ -491,11 +535,11 @@ private fun mappings(): Mappings = ContextFacade.getBean(Mappings::class.java)
 
 private fun stringValue(o: Any?): String? =
         when (o) {
-            null -> null
+            null, is Null -> null
             is Primitive -> o.value
             is Variable -> stringValue(o.data)
             is Composite -> stringValue(o[1])
             is RepeatableField -> stringValue(o(0))
-            is ExtraComponents -> stringValue(o.getComponent(1))
+            is ExtraComponents -> if (o.numComponents() > 0) stringValue(o.getComponent(0)) else null
             else -> o.toString()
         }

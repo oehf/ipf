@@ -25,7 +25,9 @@ import ca.uhn.hl7v2.model.MessageVisitor
 /**
  * 
  * Null helps to handle non-existing repeatable elements transparently
- * without throwing an Exception. 
+ * without throwing an Exception. It is returned when accessing a component index &gt; 1
+ * of a primitive, so that expressions remain valid for HL7 versions where a primitive field
+ * has become a composite in later versions.
  * 
  * @author Christian Ohr
  *
@@ -44,6 +46,14 @@ class Null extends AbstractType {
 		null
 	}
 
+    static String getValue2() {
+        null
+    }
+
+    static boolean isNullValue() {
+        false
+    }
+
     static String getValueOr(String defaultValue) {
         defaultValue
     }
@@ -54,6 +64,18 @@ class Null extends AbstractType {
 
     String toString() {
         null
+    }
+
+    @Override
+    String encode() {
+        ''
+    }
+
+    /**
+     * @throws HL7DslException always, as Null cannot hold a value
+     */
+    void from(Object value) {
+        throw new HL7DslException('Cannot assign a value to Null')
     }
 
     static void setValue(String value) throws DataTypeException {

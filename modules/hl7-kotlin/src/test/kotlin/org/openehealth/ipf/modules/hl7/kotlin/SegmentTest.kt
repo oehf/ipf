@@ -21,6 +21,7 @@ import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.model.Primitive
 import ca.uhn.hl7v2.model.Segment
+import ca.uhn.hl7v2.model.Structure
 import ca.uhn.hl7v2.model.v22.message.ADT_A01
 import ca.uhn.hl7v2.model.v22.segment.NK1
 import ca.uhn.hl7v2.parser.EncodingCharacters
@@ -33,9 +34,9 @@ import org.junit.jupiter.api.Test
 class SegmentTest {
 
     val context = DefaultHapiContext()
-    private val msg1: ADT_A01 = loadHl7(context, "/msg-01.hl7")
-    private val msg2: Message = loadHl7(context, "/msg-02.hl7")
-    private val msg3: Message = loadHl7(context, "/msg-03.hl7")
+    private val msg1: ADT_A01 = loadHl7(context, "/msg-01.hl7")!!
+    private val msg2: Message = loadHl7(context, "/msg-02.hl7")!!
+    private val msg3: Message = loadHl7(context, "/msg-03.hl7")!!
     private val nk1 = msg1.nK1!!
     val msh = msg1.msh!!
     private val evn = msg3["EVN"] as Segment
@@ -209,4 +210,51 @@ class SegmentTest {
         assertTrue(nk1 is NK1)
     }
 
+    @Test
+    fun testRepeatedFieldAccessDoesNotAddRepetitions() {
+        val adt = newMessage(context, "ADT", "A01", "2.5")
+        val pid3 = adt["PID"][3]
+        pid3(0)[1] = "a"
+        pid3(0)[1] = "b"
+        assertEquals(1, adt["PID"].count(3))
+        assertEquals("PID|||b", (adt["PID"] as Segment).encode())
+    }
+
+    @Test
+    fun testFieldAccessBeyondLastRepetition() {
+        val adt = newMessage(context, "ADT", "A01", "2.5")
+        adt["PID"][3](2)[1] = "c"
+        assertEquals(3, adt["PID"].count(3))
+        assertEquals("PID|||~~c", (adt["PID"] as Segment).encode())
+    }
+
+    @Test
+    fun testSetObx5TypeOnRepeatingObx() {
+        val adt = newMessage(context, "ADT", "A01", "2.5")
+        val obx = (adt as Structure)["OBX"]
+        obx.setObx5Type("CE", 2)
+        assertEquals("CE", obx[2].value)
+        assertEquals(2, obx.count(5))
+        assertTrue(obx[5](0) is ca.uhn.hl7v2.model.Varies)
+        assertEquals("CE", ((obx[5](0) as ca.uhn.hl7v2.model.Varies).data as Composite).name)
+    }
+
+    @Test
+    fun testAssignSegmentFromStructure() {
+        val target = newMessage(context, "MDM", "T01", "2.5")
+        target["EVN"] = msg3["EVN"]
+        assertEquals((msg3["EVN"] as Segment).encode(), (target["EVN"] as Segment).encode())
+
+        // repeatable source: first repetition is copied
+        val adt = newMessage(context, "ADT", "A01", "2.5")
+        adt["NK1"](0)[2] = "first"
+        adt["NK1"](1)[2] = "second"
+        val other = newMessage(context, "ADT", "A01", "2.5")
+        other["NK1"] = (adt as Structure)["NK1"]
+        assertEquals("first", other["NK1"][2].value)
+
+        // groups cannot be used as source for a segment
+        val oru = newMessage(context, "ORU", "R01", "2.5")
+        assertThrows(Hl7DslException::class.java) { target["EVN"] = oru["PATIENT_RESULT"] }
+    }
 }

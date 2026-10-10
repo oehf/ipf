@@ -27,9 +27,14 @@ import ca.uhn.hl7v2.model.*
  * @since 3.5
  */
 internal class RepeatableField (
-        val elements: Array<out Type>,
         private val segment: Segment,
-        private val field: Int) : Type, Iterable<Type> {
+        private val fieldIndex: Int) : Type, Iterable<Type> {
+
+    /**
+     * The current repetitions of the field. Read from the segment on each access, so that
+     * repetitions added in the meantime are taken into account.
+     */
+    val elements: Array<out Type> get() = segment.getField(fieldIndex)
 
     override fun iterator(): Iterator<Type> = elements.iterator()
 
@@ -61,7 +66,13 @@ internal class RepeatableField (
     override fun getExtraComponents(): ExtraComponents = elementAt(0).extraComponents
 
 
-    fun elementAt(rep: Int): Type = if (elements.size <= rep) segment.nrp(field) else elements[rep]
+    /**
+     * Returns repetition [rep], adding repetitions up to [rep] if they do not exist yet
+     */
+    fun elementAt(rep: Int): Type {
+        while (count() <= rep) segment.nrp(fieldIndex)
+        return elements[rep]
+    }
 
     fun count(): Int = elements.size
 

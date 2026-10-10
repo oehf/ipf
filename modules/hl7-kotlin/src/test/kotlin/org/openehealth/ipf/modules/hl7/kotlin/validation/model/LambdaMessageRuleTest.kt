@@ -31,7 +31,7 @@ import kotlin.test.assertEquals
 class LambdaMessageRuleTest {
 
     val context = DefaultHapiContext()
-    val msg: Message = loadHl7(context, "/msg-01.hl7")
+    val msg: Message = loadHl7(context, "/msg-01.hl7")!!
 
     @Test
     fun testLambda() {

@@ -19,6 +19,7 @@ package org.openehealth.ipf.modules.hl7.kotlin
 import ca.uhn.hl7v2.DefaultHapiContext
 import ca.uhn.hl7v2.model.Message
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 
 /**
@@ -27,11 +28,11 @@ import org.junit.jupiter.api.Test
 class MessageTest {
 
     val context = DefaultHapiContext()
-    private val msg1: Message = loadHl7(context, "/msg-01.hl7")
-    private val msg2: Message = loadHl7(context, "/msg-04.hl7")
-    private val msg3: Message = loadHl7(context, "/msg-03.hl7")
-    private val msg4: Message = loadHl7(context, "/msg-08.hl7")
-    private val msg5: Message = loadHl7(context, "/msg-05.hl7")
+    private val msg1: Message = loadHl7(context, "/msg-01.hl7")!!
+    private val msg2: Message = loadHl7(context, "/msg-04.hl7")!!
+    private val msg3: Message = loadHl7(context, "/msg-03.hl7")!!
+    private val msg4: Message = loadHl7(context, "/msg-08.hl7")!!
+    private val msg5: Message = loadHl7(context, "/msg-05.hl7")!!
 
     @Test
     fun testCopy() {
@@ -113,4 +114,17 @@ class MessageTest {
         assertEquals("XYZ", msg2.triggerEvent)
     }
 
+    @Test
+    fun testLoadFromClassLoaderRoot() {
+        assertEquals("2.2", loadHl7<Message>(context, "msg-01.hl7")!!.version)
+        assertEquals("2.2", loadHl7<Message>(context, "/msg-01.hl7")!!.version)
+        assertNull(loadHl7<Message>(context, "does-not-exist.hl7"))
+    }
+
+    @Test
+    fun testEmptyContent() {
+        assertNull(makeHl7<Message>(context, ""))
+        assertNull(makeHl7<Message>(context, null))
+        assertNull(loadHl7<Message>(context, "".byteInputStream()))
+    }
 }

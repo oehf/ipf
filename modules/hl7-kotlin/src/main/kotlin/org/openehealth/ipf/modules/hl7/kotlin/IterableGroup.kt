@@ -16,7 +16,6 @@
 
 package org.openehealth.ipf.modules.hl7.kotlin
 
-import ca.uhn.hl7v2.model.AbstractGroup
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Structure
 import ca.uhn.hl7v2.util.ReadOnlyMessageIterator
@@ -28,7 +27,7 @@ import ca.uhn.hl7v2.util.ReadOnlyMessageIterator
  * @author Christian Ohr
  * @since 3.5
  */
-class IterableGroup(private val g: Group) : Iterable<Structure>, AbstractGroup(g.message, g.message.parser.factory) {
+class IterableGroup(private val g: Group) : Iterable<Structure> {
 
     override fun iterator(): Iterator<Structure> =
             ReadOnlyMessageIterator.createPopulatedStructureIterator(g, Structure::class.java)

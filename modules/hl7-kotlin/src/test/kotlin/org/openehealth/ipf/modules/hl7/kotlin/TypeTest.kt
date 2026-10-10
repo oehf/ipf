@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test
 class TypeTest {
 
     val context = DefaultHapiContext()
-    val msg: Message = loadHl7(context, "/msg-02.hl7")
+    val msg: Message = loadHl7(context, "/msg-02.hl7")!!
     private val obx1 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"]["OBSERVATION"]["OBX"]
     private val obx2 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"](1)["OBSERVATION"]["OBX"]
     private val obx3 = msg["PATIENT_RESULT"]["ORDER_OBSERVATION"](1)["OBSERVATION"](1)["OBX"]
@@ -97,5 +97,51 @@ class TypeTest {
         for (field in fields) {
             assertTrue(data[field].empty, "$simpleName[$field] must be empty, but isEmpty() returns false")
         }
+    }
+
+    @Test
+    fun testCopyRepeatableComposite() {
+        val source: Message = makeHl7(context,
+                "MSH|^~\\&|A|B|C|D|20050915174948||ADT^A01|1|P|2.5\r" +
+                "PID|1||156154||Nachname^Vorname||19920426|F|||Irgendwo 25&Irgendwo&25^^Foo^^11111^DE~Street 2^^Bar\r")!!
+        val target = newMessage(context, "ADT", "A01", "2.5")
+        target["PID"][11] = source["PID"][11]
+        assertEquals("Irgendwo 25&Irgendwo&25^^Foo^^11111^DE", target["PID"][11].encode())
+    }
+
+    @Test
+    fun testCopyVariesComposite() {
+        val target = newMessage(context, "ADT", "A01", "2.5")
+        val obx = (target as Structure)["OBX"]
+        obx.setObx5Type("CE")
+        obx[5][1] = "T57000"
+        obx[5][2] = "GALLBLADDER"
+        val pid = target["PID"]
+        pid[10] = obx[5]
+        assertEquals("T57000^GALLBLADDER", pid[10].encode())
+    }
+
+    @Test
+    fun testExtraComponents() {
+        val m: Message = makeHl7(context, "MSH|^~\\&|A|B|C|D|20050915174948||ADT^A01|1|P|2.5\rEVN|A01|20050915^X^Y^Z\r")!!
+        val extra = m["EVN"][2].extraComponents
+        assertEquals("Y", extra.value)
+        assertEquals("Y", extra[1].value)
+        assertEquals("Z", extra[2].value)
+    }
+
+    @Test
+    fun testPrimitiveSubscript() {
+        val m: Message = loadHl7(context, "/msg-01.hl7")!!
+        val messageType = m["MSH"][9][1]
+        assertSame(messageType, messageType[1])
+        val missing = messageType[2]
+        assertTrue(missing is Null)
+        assertNull(missing.value)
+        assertNull(missing[3].value)
+        assertEquals("x", missing.getValueOr("x"))
+        assertTrue(missing.empty)
+        assertThrows(Hl7DslException::class.java) { messageType[0] }
+        assertThrows(Hl7DslException::class.java) { messageType[2] = "x" }
     }
 }

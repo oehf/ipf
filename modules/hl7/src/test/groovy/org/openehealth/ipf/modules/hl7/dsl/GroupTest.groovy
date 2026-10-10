@@ -18,6 +18,8 @@ package org.openehealth.ipf.modules.hl7.dsl
 import ca.uhn.hl7v2.model.Group
 import ca.uhn.hl7v2.model.Segment
 import org.junit.jupiter.api.BeforeEach
+import ca.uhn.hl7v2.DefaultHapiContext
+import org.openehealth.ipf.modules.hl7.message.MessageUtils
 import org.junit.jupiter.api.Test
 import static org.junit.jupiter.api.Assertions.*
 
@@ -230,5 +232,59 @@ class GroupTest {
     private Group observation(message) {
         message.PATIENT_RESULT(0).ORDER_OBSERVATION(1).OBSERVATION(1)		
     }
-    
+
+    @Test
+    void testRepeatedAccessDoesNotAddRepetitions() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        def nk1 = adt.NK1()
+        nk1(1)[2] = 'a'
+        nk1(1)[2] = 'b'
+        assert adt.count('NK1') == 2
+        assert nk1(1)[2].value == 'b'
+        assert nk1.size() == 2
+    }
+
+    @Test
+    void testCallOnSegmentVariable() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        def nk1 = adt.NK1
+        nk1(1)[2] = 'a'
+        assert adt.count('NK1') == 2
+        assert adt.NK1(1)[2].value == 'a'
+    }
+
+    @Test
+    void testAccessBeyondLastRepetition() {
+        def adt = MessageUtils.makeMessage(new DefaultHapiContext(), 'ADT', 'A01', '2.5')
+        adt.NK1(3)[2] = 'd'
+        assert adt.count('NK1') == 4
+        assert adt.NK1(3)[2].value == 'd'
+        assert !adt.NK1(1)
+    }
+
+    @Test
+    void testRepeatablePath() {
+        assert message.PATIENT_RESULT.ORDER_OBSERVATION.getPath() == 'PATIENT_RESULT(0).ORDER_OBSERVATION(0)'
+    }
+
+    @Test
+    void testRepetitionOnNonRepeatableGroup() {
+        def oml = MessageUtils.makeMessage(new DefaultHapiContext(), 'ORU', 'R01', '2.5')
+        def patient = oml.PATIENT_RESULT.PATIENT
+        assert oml.PATIENT_RESULT.PATIENT(0).is(patient)
+        assertThrows(HL7DslException) { oml.PATIENT_RESULT.PATIENT(1) }
+        assert patient(0).is(patient)
+    }
+
+    @Test
+    void testGroupAssignmentNotSupported() {
+        def oru = MessageUtils.makeMessage(new DefaultHapiContext(), 'ORU', 'R01', '2.5')
+        assertThrows(HL7DslException) { oru.PATIENT_RESULT.PATIENT.from(oru.PATIENT_RESULT.PATIENT) }
+    }
+
+    @Test
+    void testUnknownStructureListsValidNames() {
+        def e = assertThrows(HL7DslException) { message.XYZ(0) }
+        assert e.message.contains('PATIENT_RESULT')
+    }
 }

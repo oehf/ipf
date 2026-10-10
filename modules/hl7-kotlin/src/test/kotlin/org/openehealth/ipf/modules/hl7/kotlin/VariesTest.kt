@@ -27,8 +27,8 @@ import org.junit.jupiter.api.Test
 class VariesTest {
 
     val context = DefaultHapiContext()
-    private val msg1: Message = loadHl7(context, "/msg-05.hl7")
-    private val msg2: Message = loadHl7(context, "/msg-02.hl7")
+    private val msg1: Message = loadHl7(context, "/msg-05.hl7")!!
+    private val msg2: Message = loadHl7(context, "/msg-02.hl7")!!
 
     @Test
     fun testVariesUsage() {
@@ -45,8 +45,8 @@ class VariesTest {
         val x = v(0)[1].value
         assertEquals("100", x)
 
-        // Index out of bounds on accessing further (non-existing) subelements
-        // assertEquals("", v(0)[2].getValueOr(""))
+        // No exception on accessing further (non-existing) subelements
+        assertEquals("", v(0)[2].getValueOr(""))
 
         //Test a field explicitly defined as Varies: PDQ-3
         //-----------------------------------
@@ -60,8 +60,8 @@ class VariesTest {
         assertEquals("123456", msg1["QPD"][3][1].value)
         assertEquals("123456", msg1["QPD"][3][1][1].value)
 
-        // Index out of bounds on accessing further (non-existing) subelements
-        // assertNull(msg1["QPD"][3][1][2].value)
+        // No exception on accessing further (non-existing) subelements
+        assertNull(msg1["QPD"][3][1][2].value)
 
         //Access empty Varies component
         assertNull(msg1["QPD"][3][2].value)
@@ -77,9 +77,9 @@ class VariesTest {
         assertEquals("HIMSS2006", msg1["QPD"][4](0)[4].value)
         assertEquals("HIMSS2006", msg1["QPD"][4](0)[4][1].value)
 
-        // Index out of bounds on accessing further (non-existing) subelements
-        // assertNull(msg1["QPD"][4](0)[4][2].value)
-        // assertNull(msg1["QPD"][4](3)[4].value)
+        // No exception on accessing further (non-existing) subelements
+        assertNull(msg1["QPD"][4](0)[4][2].value)
+        assertNull(msg1["QPD"][4](3)[4].value)
         assertNull(msg1["QPD"][4](3)[1].value)
 
 
