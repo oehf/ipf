@@ -21,7 +21,7 @@
         <hapi-version>2.6.0</hapi-version>
         <hapi-fhir-version>8.12.1</hapi-fhir-version>
         <herasaf-version>3.0.2</herasaf-version>
-        <ipf-gazelle-version>3.4.0</ipf-gazelle-version>
+        <ipf-gazelle-version>3.5.0</ipf-gazelle-version>
         <!-- keep in sync with Spring Boot's managed httpclient5.version -->
         <httpclient5-version>5.6.4</httpclient5-version>
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
