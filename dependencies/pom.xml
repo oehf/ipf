@@ -27,7 +27,7 @@
         <ipf-oht-mdht-version>1.2.0.201212201425</ipf-oht-mdht-version>
         <!-- keep in sync with Spring Boot's managed jackson-bom.version; 3.2.x rejects the
              type-id/bean-property name collision used by the XDS metadata model -->
-        <jackson-version>3.1.5</jackson-version>
+        <jackson-version>3.1.7</jackson-version>
         <jaxb-version>4.0.9</jaxb-version>
         <jakarta-wsapi-version>4.0.3</jakarta-wsapi-version>
         <jdom-version>2.0.6.1</jdom-version>
