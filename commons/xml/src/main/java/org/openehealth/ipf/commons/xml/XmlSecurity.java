@@ -48,9 +48,10 @@ public class XmlSecurity {
 
     /**
      * Protocols still allowed when compiling schemas: enough to follow {@code xs:import} and
-     * {@code xs:include} to a sibling file or to a resource inside a jar, but not over the network.
+     * {@code xs:include} to a sibling file or to a resource inside a jar/fat jar (a jar in a jar), but not
+     * over the network.
      */
-    private static final String LOCAL_ACCESS_ONLY = "file,jar";
+    private static final String LOCAL_ACCESS_ONLY = "file,jar,nested";
 
     /**
      * Hardens schema compilation. Schemas are trusted classpath resources, so this is defense in
