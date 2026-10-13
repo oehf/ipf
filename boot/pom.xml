@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.openehealth.ipf</groupId>
         <artifactId>ipf</artifactId>
-        <version>6.0.0</version>
+        <version>6.1-SNAPSHOT</version>
     </parent>
 
     <groupId>org.openehealth.ipf.boot</groupId>
