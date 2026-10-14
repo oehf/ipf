@@ -35,10 +35,11 @@ import java.util.Map;
  * parsed message: leaving the encoding to HAPI is what escapes values containing delimiters, and
  * marshalling afterwards puts the segment on the wire as part of the message.
  * <p>
- * Does nothing at all unless a trace context was collected, which only happens when
- * {@code camel-telemetry} is active. The interceptor itself does not depend on it: the context reaches
- * it as a plain map in an exchange property, so it can be part of the default producer chain without
- * making telemetry a hard requirement.
+ * Only part of the producer chain if the endpoint opts in with {@code propagateTraceContext=true}:
+ * the segment is nonstandard, and receivers other than IPF may reject it. Even then it does nothing
+ * unless a trace context was collected, which only happens when {@code camel-telemetry} is active.
+ * The interceptor itself does not depend on it: the context reaches it as a plain map in an exchange
+ * property, so telemetry does not become a hard requirement.
  *
  * @author Christian Ohr
  * @since 6.0

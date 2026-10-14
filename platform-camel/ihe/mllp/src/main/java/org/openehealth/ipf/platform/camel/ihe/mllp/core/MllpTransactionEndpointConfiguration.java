@@ -37,6 +37,7 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
     @Getter private final InteractiveContinuationStorage interactiveContinuationStorage;
     @Getter private final boolean autoCancel;
     @Getter private final boolean copyOriginalMessage;
+    @Getter private final boolean propagateTraceContext;
 
     protected MllpTransactionEndpointConfiguration(MllpComponent<MllpTransactionEndpointConfiguration> component, Map<String, Object> parameters) {
         super(component, parameters);
@@ -64,6 +65,8 @@ public class MllpTransactionEndpointConfiguration extends MllpEndpointConfigurat
                         InteractiveContinuationStorage.class);
 
         autoCancel = component.getAndRemoveParameter(parameters, "autoCancel", boolean.class, false);
+        propagateTraceContext = component.getAndRemoveParameter(
+                parameters, "propagateTraceContext", boolean.class, false);
     }
 
 }

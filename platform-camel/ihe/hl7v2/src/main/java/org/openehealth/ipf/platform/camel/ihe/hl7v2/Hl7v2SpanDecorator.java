@@ -43,7 +43,8 @@ import java.util.Set;
  *     without parsing.</li>
  * <li>Writing cannot happen here, because at that moment the outgoing message does not exist yet. The
  *     context is therefore handed to {@link ProducerTraceContextInterceptor} through an exchange
- *     property, and that interceptor writes it into the message it has by then.</li>
+ *     property, and that interceptor writes it into the message it has by then, provided the
+ *     endpoint opted in with {@code propagateTraceContext=true}.</li>
  * </ul>
  * Details of the message itself are added once it has been parsed, see {@link #afterTracingEvent}.
  *

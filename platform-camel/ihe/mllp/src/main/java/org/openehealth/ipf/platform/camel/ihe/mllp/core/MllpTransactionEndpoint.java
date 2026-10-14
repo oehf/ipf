@@ -108,7 +108,9 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
                 : new ProducerMarshalInterceptor(getCharsetName()));
         // the chain is ordered innermost first, so this runs directly before marshalling, while the
         // message is still parsed and HAPI can do the encoding
-        initialChain.add(new ProducerTraceContextInterceptor());
+        if (isPropagateTraceContext()) {
+            initialChain.add(new ProducerTraceContextInterceptor());
+        }
         initialChain.add(new ProducerResponseAcceptanceInterceptor());
         if (isAudit()) {
             initialChain.add(new ProducerAuditInterceptor<AuditDatasetType>(getAuditContext()));
@@ -208,6 +210,15 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     @ManagedAttribute(description = "Auto Cancel Enabled")
     public boolean isAutoCancel() {
         return getConfig().isAutoCancel();
+    }
+
+    /**
+     * Returns <code>true</code> if the producer writes the trace context into a nonstandard
+     * segment of the outgoing message.
+     */
+    @ManagedAttribute(description = "Propagate Trace Context Enabled")
+    public boolean isPropagateTraceContext() {
+        return getConfig().isPropagateTraceContext();
     }
 
     @ManagedAttribute(description = "Interactive Continuation Storage Cache Type")

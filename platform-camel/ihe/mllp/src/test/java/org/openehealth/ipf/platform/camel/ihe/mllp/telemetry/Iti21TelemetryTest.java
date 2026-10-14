@@ -25,6 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -67,13 +70,18 @@ public class Iti21TelemetryTest {
         tracer.clear();
     }
 
+    private static final String REQUEST = "MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|"
+            + "20261231235959||QBP^Q22|123456|P|2.5\r"
+            + "QPD|IHE PDQ Query|Q0001|@PID.5.1^SMITH\r"
+            + "RCP|I\r";
+
     private void sendQuery() {
-        var request = "MSH|^~\\&|MESA_PD_CONSUMER|MESA_DEPARTMENT|MESA_PD_SUPPLIER|PIM|"
-                + "20261231235959||QBP^Q22|123456|P|2.5\r"
-                + "QPD|IHE PDQ Query|Q0001|@PID.5.1^SMITH\r"
-                + "RCP|I\r";
+        sendQuery("?audit=false&propagateTraceContext=true");
+    }
+
+    private void sendQuery(String endpointOptions) {
         producerTemplate.requestBody(
-                "pdq-iti21://localhost:" + Iti21TelemetryRouteBuilder.PORT + "?audit=false", request);
+                "pdq-iti21://localhost:" + Iti21TelemetryRouteBuilder.PORT + endpointOptions, REQUEST);
     }
 
     @Test
@@ -113,5 +121,13 @@ public class Iti21TelemetryTest {
         assertFalse(Iti21TelemetryRouteBuilder.receivedMessage.split("[\\r\\n]+").length > 5,
                 "unexpectedly many segments, the trace context may have been added more than once:\n"
                         + Iti21TelemetryRouteBuilder.receivedMessage);
+    }
+
+    /** The segment is nonstandard, so it must only be written if the endpoint opts in. */
+    @Test
+    void testNoTraceContextSegmentUnlessOptedIn() {
+        sendQuery("?audit=false");
+        assertThat(Iti21TelemetryRouteBuilder.receivedMessage,
+                not(containsString(Hl7v2TraceContext.SEGMENT_NAME + "|")));
     }
 }

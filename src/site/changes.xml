@@ -23,6 +23,15 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
+        <release version="" description="" date="">
+            <action issue="529" dev="ohr" type="fix">
+                HL7v2 trace context propagation (nonstandard ZTR segment) on MLLP producers is now again opt-in
+                via the endpoint parameter propagateTraceContext.
+            </action>
+            <action issue="528" dev="qligier" type="fix">
+                Reading XML with nested jar access was not possible anymore. Thanks to qligier for providing a PR.
+            </action>
+        </release>
         <release version="6.0.0" description="IPF 6.0.0" date="">
             <action issue="527" dev="ohr" type="update">
                 A number of issues in the HL7v2 DSLs have been fixed, or behavior has been aligned
