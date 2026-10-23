@@ -18,16 +18,22 @@ package org.openehealth.ipf.commons.map.yaml;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.map.Equivalence;
 import org.openehealth.ipf.commons.map.MappingException;
+import org.openehealth.ipf.commons.map.MappingFunctionRegistry;
 import org.openehealth.ipf.commons.map.Mappings;
 import org.openehealth.ipf.commons.map.Unmatched;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.openehealth.ipf.commons.core.hamcrest.OptionalMatchers.hasNoValue;
 import static org.openehealth.ipf.commons.core.hamcrest.OptionalMatchers.hasValue;
@@ -107,6 +113,14 @@ public class YamlMappingLoaderTest {
         assertThat(mappings.lookup(BIDI_GENDER, ""), hasValue(""));
         assertThat(mappings.lookupReverse(BIDI_GENDER, ""), hasValue(""));
         assertThat(mappings, translates(ADDRESS_USE, "X").to(""));
+    }
+
+    @Test
+    void readsFileWithoutMappings() throws IOException {
+        var in = new ByteArrayInputStream("mappings: {}\n".getBytes(StandardCharsets.UTF_8));
+        var mappings = new YamlMappingLoader().load(in, URI.create("test:empty.mapping.yaml"),
+                new MappingFunctionRegistry());
+        assertThat(mappings, is(empty()));
     }
 
     @Test

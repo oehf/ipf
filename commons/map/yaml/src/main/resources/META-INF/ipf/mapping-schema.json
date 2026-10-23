@@ -12,7 +12,6 @@
     "mappings": {
       "description": "The mappings in this file, by name. A name must be unique across all mapping files loaded together unless the later declaration sets override.",
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": {
         "$ref": "#/$defs/mapping"
       }

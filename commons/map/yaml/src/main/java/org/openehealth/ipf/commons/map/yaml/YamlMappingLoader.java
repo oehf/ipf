@@ -154,7 +154,7 @@ public class YamlMappingLoader implements MappingLoader {
         } catch (JacksonException e) {
             throw new MappingException(source, "Invalid mapping file: " + e.getOriginalMessage() + at(e), e);
         }
-        if (document == null || document.mappings == null || document.mappings.isEmpty()) {
+        if (document == null || document.mappings == null) {
             throw new MappingException(source, "Mapping file declares no mappings");
         }
 

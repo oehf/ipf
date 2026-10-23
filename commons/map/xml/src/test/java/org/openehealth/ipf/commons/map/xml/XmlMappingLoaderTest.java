@@ -20,12 +20,15 @@ import org.junit.jupiter.api.io.TempDir;
 import org.openehealth.ipf.commons.map.Entry;
 import org.openehealth.ipf.commons.map.Equivalence;
 import org.openehealth.ipf.commons.map.MappingException;
+import org.openehealth.ipf.commons.map.MappingFunctionRegistry;
 import org.openehealth.ipf.commons.map.Mappings;
 import org.openehealth.ipf.commons.map.SimpleMapping;
 import org.openehealth.ipf.commons.map.Unmatched;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -33,6 +36,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -98,6 +102,14 @@ public class XmlMappingLoaderTest {
         var mappings = example();
         assertThat(mappings.lookup(BIDI_GENDER, ""), hasValue(""));
         assertThat(mappings.lookupReverse(BIDI_GENDER, ""), hasValue(""));
+    }
+
+    @Test
+    void readsFileWithoutMappings() {
+        var in = new ByteArrayInputStream("<mappings/>".getBytes(StandardCharsets.UTF_8));
+        var mappings = new XmlMappingLoader().load(in, URI.create("test:empty.mapping.xml"),
+                new MappingFunctionRegistry());
+        assertThat(mappings, is(empty()));
     }
 
     /**

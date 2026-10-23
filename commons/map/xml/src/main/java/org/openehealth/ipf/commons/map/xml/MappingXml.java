@@ -50,7 +50,7 @@ final class MappingXml {
     @XmlType(name = "Mappings")
     static class Mappings {
 
-        @XmlElement(name = "mapping", required = true)
+        @XmlElement(name = "mapping")
         List<Mapping> mappings = new ArrayList<>();
     }
 

@@ -41,7 +41,7 @@
 
     <xsd:complexType name="Mappings">
         <xsd:sequence>
-            <xsd:element name="mapping" type="Mapping" maxOccurs="unbounded"/>
+            <xsd:element name="mapping" type="Mapping" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
