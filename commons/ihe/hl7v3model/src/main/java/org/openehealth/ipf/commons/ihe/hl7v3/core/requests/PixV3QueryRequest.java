@@ -16,10 +16,10 @@
 package org.openehealth.ipf.commons.ihe.hl7v3.core.requests;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import net.ihe.gazelle.hl7v3.datatypes.II;
-import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
 
-import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,7 +30,9 @@ import java.util.Set;
  * @since 4.1
  */
 @Data
-public class PixV3QueryRequest {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class PixV3QueryRequest extends Hl7v3QueryRequest {
 
     /**
      * The patient identifier known to the PIX Consumer. It shall be provided.
@@ -41,36 +43,4 @@ public class PixV3QueryRequest {
      * The identifiers for the Patient Identity Domain's assigning authority. It may be empty but is never {@code null}.
      */
     private final Set<String> dataSourceOids = new HashSet<>();
-
-    /**
-     * Unique identifier for the message. It shall be provided.
-     */
-    private II messageId;
-
-    /**
-     * Unique identifier for the query. It shall be provided.
-     */
-    private II queryId;
-
-    /**
-     * The Patient Registry Query placer. It shall be provided.
-     */
-    private Device sender;
-
-    /**
-     * The Patient Registry Query fulfiller. It shall be provided.
-     */
-    private Device receiver;
-
-    /**
-     * The query creation time. It shall be provided.
-     */
-    private ZonedDateTime creationTime;
-
-    /**
-     * Empty constructor.
-     */
-    public PixV3QueryRequest() {
-        this.setCreationTime(ZonedDateTime.now());
-    }
 }

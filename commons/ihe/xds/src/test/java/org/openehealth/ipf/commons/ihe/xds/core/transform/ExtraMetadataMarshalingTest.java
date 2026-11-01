@@ -60,7 +60,7 @@ public class ExtraMetadataMarshalingTest {
         original.setExtraMetadata(extraMetaData);
 
         var context = JAXBContext.newInstance(DocumentEntry.class);
-        var s = XmlUtils.renderJaxb(context, original, true);
+        var s = XmlUtils.marshal(context, original, true);
 
         var result = (DocumentEntry) context.createUnmarshaller().unmarshal(new StringReader(s));
 
@@ -87,12 +87,12 @@ public class ExtraMetadataMarshalingTest {
 
         RegisterDocumentSetTransformer transformer = new RegisterDocumentSetTransformer(new EbXMLFactory30());
         var originalEbxml = transformer.toEbXML(originalSimplified).getInternal();
-        var originalEbxmlRendered = XmlUtils.renderJaxb(jaxbContext, originalEbxml, true);
-        var originalSimplifiedRendered = XmlUtils.renderJaxb(jaxbContext, originalSimplified, true);
+        var originalEbxmlRendered = XmlUtils.marshal(jaxbContext, originalEbxml, true);
+        var originalSimplifiedRendered = XmlUtils.marshal(jaxbContext, originalSimplified, true);
 
         var resultEbxml = (SubmitObjectsRequest) jaxbContext.createUnmarshaller().unmarshal(new StringReader(originalEbxmlRendered));
         var resultSimplified = transformer.fromEbXML(new EbXMLSubmitObjectsRequest30(resultEbxml));
-        var resultSimplifiedRendered = XmlUtils.renderJaxb(jaxbContext, resultSimplified, true);
+        var resultSimplifiedRendered = XmlUtils.marshal(jaxbContext, resultSimplified, true);
 
         assertEquals(2, resultSimplified.getSubmissionSet().getExtraClassifications().size());
         assertEquals(2, resultSimplified.getDocumentEntries().get(0).getExtraClassifications().size());

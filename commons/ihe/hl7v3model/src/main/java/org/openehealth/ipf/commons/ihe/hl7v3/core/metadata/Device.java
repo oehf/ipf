@@ -64,4 +64,12 @@ public class Device {
      * The application software name.
      */
     private SC softwareName;
+
+    /**
+     * The IDs of the organization the device acts on behalf of ({@code asAgent/representedOrganization/id}). XCPD
+     * (ITI-55) uses this to carry the homeCommunityId of the sender. It may be empty but is never {@code null}.
+     *
+     * @since 6.1
+     */
+    private final List<II> representedOrganizationIds = new ArrayList<>();
 }

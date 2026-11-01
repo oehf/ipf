@@ -15,9 +15,7 @@
  */
 package org.openehealth.ipf.commons.ihe.hl7v3.core.transform.requests;
 
-import ca.uhn.hl7v2.model.DataTypeException;
 import net.ihe.gazelle.hl7v3.datatypes.*;
-import net.ihe.gazelle.hl7v3.mccimt000100UV01.MCCIMT000100UV01Device;
 import net.ihe.gazelle.hl7v3.mccimt000100UV01.MCCIMT000100UV01Receiver;
 import net.ihe.gazelle.hl7v3.mccimt000100UV01.MCCIMT000100UV01Sender;
 import net.ihe.gazelle.hl7v3.prpain201309UV02.PRPAIN201309UV02QUQIMT021001UV01ControlActProcess;
@@ -27,12 +25,11 @@ import net.ihe.gazelle.hl7v3.prpamt201307UV02.PRPAMT201307UV02ParameterList;
 import net.ihe.gazelle.hl7v3.prpamt201307UV02.PRPAMT201307UV02PatientIdentifier;
 import net.ihe.gazelle.hl7v3.prpamt201307UV02.PRPAMT201307UV02QueryByParameter;
 import net.ihe.gazelle.hl7v3.voc.*;
-import org.openehealth.ipf.commons.ihe.core.HL7DTM;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.metadata.Device;
+import org.openehealth.ipf.commons.ihe.hl7v3.core.transform.Hl7v3TransformerUtils;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Transformer between objects {@link PixV3QueryRequest} and {@link PRPAIN201309UV02Type}.
@@ -75,8 +72,7 @@ public class PixV3QueryRequestTransformer {
         controlActProcess.setQueryByParameter(queryByParameter);
 
         // Fill query with given data
-        query.setCreationTime(new TS());
-        query.getCreationTime().setValue(HL7DTM.toSimpleString(simpleQuery.getCreationTime()));
+        query.setCreationTime(Hl7v3TransformerUtils.toTs(simpleQuery.getCreationTime()));
         query.setId(simpleQuery.getMessageId());
         query.setReceiver(List.of(this.toReceiver(simpleQuery.getReceiver())));
         query.setSender(this.toSender(simpleQuery.getSender()));
@@ -115,16 +111,7 @@ public class PixV3QueryRequestTransformer {
         if (!query.getReceiver().isEmpty()) {
             simpleQuery.setReceiver(this.fromReceiver(query.getReceiver().get(0)));
         }
-        simpleQuery.setCreationTime(Optional.ofNullable(query.getCreationTime())
-                .map(TS::getValue)
-                .map(value -> {
-                    try {
-                        return HL7DTM.toZonedDateTime(value);
-                    } catch (final DataTypeException e) {
-                        return null;
-                    }
-                })
-                .orElse(null));
+        simpleQuery.setCreationTime(Hl7v3TransformerUtils.fromTs(query.getCreationTime()));
 
         if (query.getControlActProcess() == null) {
             return simpleQuery;
@@ -157,78 +144,18 @@ public class PixV3QueryRequestTransformer {
     }
 
     private MCCIMT000100UV01Receiver toReceiver(final Device simpleDevice) {
-        if (simpleDevice == null) {
-            return null;
-        }
-        final var receiver = new MCCIMT000100UV01Receiver();
-        receiver.setTypeCode(CommunicationFunctionType.RCV);
-        receiver.setTelecom(simpleDevice.getTelecom());
-        final var device = new MCCIMT000100UV01Device();
-        device.setClassCode(EntityClassDevice.DEV);
-        device.setDeterminerCode(EntityDeterminer.INSTANCE);
-        device.getId().addAll(simpleDevice.getIds());
-        device.getName().addAll(simpleDevice.getNames());
-        device.setDesc(simpleDevice.getDesc());
-        device.getTelecom().addAll(simpleDevice.getDeviceTelecom());
-        device.setManufacturerModelName(simpleDevice.getManufacturerModelName());
-        device.setSoftwareName(simpleDevice.getSoftwareName());
-        receiver.setDevice(device);
-        return receiver;
+        return Hl7v3TransformerUtils.toMcciMt000100Receiver(simpleDevice);
     }
 
     private MCCIMT000100UV01Sender toSender(final Device simpleDevice) {
-        if (simpleDevice == null) {
-            return null;
-        }
-        final var sender = new MCCIMT000100UV01Sender();
-        sender.setTypeCode(CommunicationFunctionType.SND);
-        sender.setTelecom(simpleDevice.getTelecom());
-        final var device = new MCCIMT000100UV01Device();
-        device.setClassCode(EntityClassDevice.DEV);
-        device.setDeterminerCode(EntityDeterminer.INSTANCE);
-        device.getId().addAll(simpleDevice.getIds());
-        device.getName().addAll(simpleDevice.getNames());
-        device.setDesc(simpleDevice.getDesc());
-        device.getTelecom().addAll(simpleDevice.getDeviceTelecom());
-        device.setManufacturerModelName(simpleDevice.getManufacturerModelName());
-        device.setSoftwareName(simpleDevice.getSoftwareName());
-        sender.setDevice(device);
-        return sender;
+        return Hl7v3TransformerUtils.toMcciMt000100Sender(simpleDevice);
     }
 
     public Device fromReceiver(final MCCIMT000100UV01Receiver receiver) {
-        if (receiver == null) {
-            return null;
-        }
-        final var simpleDevice = new Device();
-        simpleDevice.setTelecom(receiver.getTelecom());
-        final var device = receiver.getDevice();
-        if (device != null) {
-            simpleDevice.getIds().addAll(device.getId());
-            simpleDevice.getNames().addAll(device.getName());
-            simpleDevice.setDesc(device.getDesc());
-            simpleDevice.getDeviceTelecom().addAll(device.getTelecom());
-            simpleDevice.setManufacturerModelName(device.getManufacturerModelName());
-            simpleDevice.setSoftwareName(device.getSoftwareName());
-        }
-        return simpleDevice;
+        return Hl7v3TransformerUtils.fromMcciMt000100Receiver(receiver);
     }
 
     public Device fromSender(final MCCIMT000100UV01Sender sender) {
-        if (sender == null) {
-            return null;
-        }
-        final var simpleDevice = new Device();
-        simpleDevice.setTelecom(sender.getTelecom());
-        final var device = sender.getDevice();
-        if (device != null) {
-            simpleDevice.getIds().addAll(device.getId());
-            simpleDevice.getNames().addAll(device.getName());
-            simpleDevice.setDesc(device.getDesc());
-            simpleDevice.getDeviceTelecom().addAll(device.getTelecom());
-            simpleDevice.setManufacturerModelName(device.getManufacturerModelName());
-            simpleDevice.setSoftwareName(device.getSoftwareName());
-        }
-        return simpleDevice;
+        return Hl7v3TransformerUtils.fromMcciMt000100Sender(sender);
     }
 }

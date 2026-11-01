@@ -28,7 +28,7 @@ public class DomToByteArrayConverter implements Converter<Document, byte[]> {
     @Override
     public byte[] convert(@NonNull Document document) {
         try {
-            return XmlUtils.serialize(document);
+            return XmlUtils.marshal(document);
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }

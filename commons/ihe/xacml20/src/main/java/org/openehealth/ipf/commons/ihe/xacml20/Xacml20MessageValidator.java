@@ -55,7 +55,7 @@ public class Xacml20MessageValidator {
     }
 
     public static void validateChPpq1Request(Object request) {
-        String s = XmlUtils.renderJaxb(Xacml20Utils.JAXB_CONTEXT, request, false);
+        String s = XmlUtils.marshal(Xacml20Utils.JAXB_CONTEXT, request, false);
         COMBINED_XML_VALIDATOR.validate(s, new ChPpq1RequestValidationProfile());
     }
 

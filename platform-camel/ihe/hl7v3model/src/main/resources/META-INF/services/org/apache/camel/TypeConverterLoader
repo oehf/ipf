@@ -1,2 +1,5 @@
 org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.Iti45ConvertersLoader
 org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.JaxbHl7v3ConvertersLoader
+org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.Iti47ConvertersLoader
+org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.Iti55ConvertersLoader
+org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters.Iti44ConvertersLoader

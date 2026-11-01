@@ -61,6 +61,18 @@ class SvsConvertersTest {
     }
 
     @Test
+    public void testUnmarshalRejectsDoctype() {
+        var xml = """
+            <!DOCTYPE RetrieveValueSetRequest [<!ENTITY id "1.2.840.10008.6.1.308">]>
+            <RetrieveValueSetRequest xmlns="urn:ihe:iti:svs:2008">
+                <ValueSet id="&id;"/>
+            </RetrieveValueSetRequest>
+            """;
+        var exception = assertThrows(JAXBException.class, () -> SvsConverters.xmlToSvsQuery(xml));
+        assertTrue(String.valueOf(exception.getLinkedException()).contains("DOCTYPE"));
+    }
+
+    @Test
     public void testMarshalUnmarshalResponse() throws JAXBException {
         var valueSet = new ValueSetResponse("1.2.3", "Value Set", "3");
         var conceptList = new ConceptList("en");

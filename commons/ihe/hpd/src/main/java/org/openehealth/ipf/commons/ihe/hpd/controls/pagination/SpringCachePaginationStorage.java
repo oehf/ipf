@@ -73,7 +73,7 @@ public class SpringCachePaginationStorage implements PaginationStorage {
 
         if (needSerialization) {
             var container = new Container(entries);
-            var value = XmlUtils.renderJaxb(JAXB_CONTEXT, container, false);
+            var value = XmlUtils.marshal(JAXB_CONTEXT, container, false);
             cache.put(new String(cookie), value);
         } else {
             cache.put(new String(cookie), entries);

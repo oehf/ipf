@@ -153,7 +153,7 @@ public class TimestampTest {
         var jaxbContext = JAXBContext.newInstance(QueryRegistry.class);
         jaxbContext.createMarshaller().marshal(query, element);
 
-        var s = new String(XmlUtils.serialize(element.getFirstChild()));
+        var s = new String(XmlUtils.marshal(element.getFirstChild()));
         assertTrue(s.contains("<xds:from dateTime=\"1980-01-01T00:00:00Z\"/>"));
         assertTrue(s.contains("<xds:to dateTime=\"1981-01-01T00:00:00Z\" precision=\"YEAR\"/>"));
 

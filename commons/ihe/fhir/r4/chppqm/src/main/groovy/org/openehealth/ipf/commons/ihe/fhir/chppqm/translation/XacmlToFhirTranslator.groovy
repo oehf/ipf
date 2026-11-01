@@ -56,7 +56,7 @@ class XacmlToFhirTranslator {
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat('yyyy-MM-dd')
 
     static Consent toConsent(PolicySetType policySet) {
-        String xacmlString = XmlUtils.renderJaxb(Xacml20Utils.JAXB_CONTEXT, policySet, false)
+        String xacmlString = XmlUtils.marshal(Xacml20Utils.JAXB_CONTEXT, policySet, false)
         GPathResult xacml = new XmlSlurper(false, true).parseText(xacmlString)
 
         String id = xacml.@PolicySetId.text().trim()

@@ -23,7 +23,17 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="" description="" date="">
+        <release version="6.1.0" description="IPF 6.1.0" date="">
+            <action issue="530" dev="ohr" type="add">
+                Added simplified models, transformers and Camel type converters for Patient Identity Feed HL7v3 (ITI-44),
+                PIX Update Notification HL7v3 (ITI-46), PDQv3 (ITI-47) and XCPD (ITI-55), analogous to the existing
+                ones for PIXv3 Query (ITI-45).
+            </action>
+            <action issue="530" dev="ohr" type="update">
+                Following #516, the JAXB-based Camel type converters for HL7v3 and SVS models now reject XML
+                containing a DOCTYPE declaration. XmlUtils.renderJaxb() and XmlUtils.serialize() are deprecated
+                in favor of XmlUtils.marshal().
+            </action>
             <action issue="529" dev="ohr" type="fix">
                 HL7v2 trace context propagation (nonstandard ZTR segment) on MLLP producers is now again opt-in
                 via the endpoint parameter propagateTraceContext.
@@ -32,7 +42,7 @@
                 Reading XML with nested jar access was not possible anymore. Thanks to qligier for providing a PR.
             </action>
         </release>
-        <release version="6.0.0" description="IPF 6.0.0" date="">
+        <release version="6.0.0" description="IPF 6.0.0" date="13 Oct 2026">
             <action issue="527" dev="ohr" type="update">
                 A number of issues in the HL7v2 DSLs have been fixed, or behavior has been aligned
                 between Groovy and Kotlin implementations. See migration notes for details.
