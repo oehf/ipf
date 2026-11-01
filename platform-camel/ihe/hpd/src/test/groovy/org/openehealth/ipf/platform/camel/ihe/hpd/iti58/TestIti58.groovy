@@ -215,7 +215,7 @@ class TestIti58 extends StandardTestContainer {
 
         assert map['11'] instanceof LDAPResult
 
-        log.debug("BatchResponse:\n{}", XmlUtils.renderJaxb(HpdValidator.JAXB_CONTEXT, batchResponse, true))
+        log.debug("BatchResponse:\n{}", XmlUtils.marshal(HpdValidator.JAXB_CONTEXT, batchResponse, true))
     }
 
     BatchResponse sendIt(String endpoint, BatchRequest request) {

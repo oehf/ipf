@@ -17,7 +17,6 @@ package org.openehealth.ipf.platform.camel.ihe.hl7v3.core.converters;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
-import jakarta.xml.bind.Marshaller;
 import net.ihe.gazelle.hl7v3.mcciin000002UV01.MCCIIN000002UV01Type;
 import net.ihe.gazelle.hl7v3.prpain201301UV02.PRPAIN201301UV02Type;
 import net.ihe.gazelle.hl7v3.prpain201302UV02.PRPAIN201302UV02Type;
@@ -29,10 +28,8 @@ import net.ihe.gazelle.hl7v3.prpain201310UV02.PRPAIN201310UV02Type;
 import net.ihe.gazelle.hl7v3.quqiin000003UV01.QUQIIN000003UV01CancelType;
 import net.ihe.gazelle.hl7v3.quqiin000003UV01.QUQIIN000003UV01Type;
 import org.apache.camel.Converter;
+import org.openehealth.ipf.commons.xml.XmlUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Camel type converters between XML and Gazelle JAXB model classes.
@@ -162,19 +159,26 @@ public class JaxbHl7v3Converters {
         return toXml(request);
     }
 
-    private static String toXml(Object pojo) throws JAXBException {
-        final var marshaller = JAXB_CONTEXT.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
-        marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF8");
-        final var stringWriter = new StringWriter();
-        marshaller.marshal(pojo, stringWriter);
-        return stringWriter.toString();
+    /**
+     * Unmarshals any of the HL7v3 messages known to this class, returning the respective Gazelle model object.
+     * This is not registered as type converter.
+     *
+     * @param xml the XML message
+     * @return the unmarshalled message, e.g. a {@link PRPAIN201301UV02Type}
+     * @throws JAXBException if the message cannot be unmarshalled
+     * @since 6.1
+     */
+    public static Object xmlToMessage(final String xml) throws JAXBException {
+        return fromXml(xml);
     }
 
+    private static String toXml(Object pojo) {
+        return XmlUtils.marshal(JAXB_CONTEXT, pojo, true);
+    }
+
+    @SuppressWarnings("unchecked")
     private static <T> T fromXml(String xml) throws JAXBException {
-        final var unmarshaller = JAXB_CONTEXT.createUnmarshaller();
-        return (T) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+        return (T) XmlUtils.unmarshal(JAXB_CONTEXT, xml);
     }
 
 }

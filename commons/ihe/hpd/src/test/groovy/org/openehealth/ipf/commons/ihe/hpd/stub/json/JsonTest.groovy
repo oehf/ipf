@@ -209,7 +209,7 @@ class JsonTest {
                 ),
             ],
         )
-        def xml1 = XmlUtils.renderJaxb(HpdValidator.JAXB_CONTEXT, batchRequest1, false)
+        def xml1 = XmlUtils.marshal(HpdValidator.JAXB_CONTEXT, batchRequest1, false)
         log.debug('XML 1:\n{}', xml1)
 
         def batchRequestIntermediary1 = SearchBatchRequestIntermediary.fromBatchRequest(batchRequest1)
@@ -218,7 +218,7 @@ class JsonTest {
 
         def batchRequestIntermediary2 = mapper.readValue(json1, SearchBatchRequestIntermediary.class)
         def batchRequest2 = batchRequestIntermediary2.toBatchRequest()
-        def xml2 = XmlUtils.renderJaxb(HpdValidator.JAXB_CONTEXT, batchRequest2, false)
+        def xml2 = XmlUtils.marshal(HpdValidator.JAXB_CONTEXT, batchRequest2, false)
         log.debug('XML 2:\n{}', xml2)
 
         assert xml1 == xml2

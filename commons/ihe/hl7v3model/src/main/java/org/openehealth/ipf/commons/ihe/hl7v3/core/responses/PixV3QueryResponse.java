@@ -23,7 +23,6 @@ import net.ihe.gazelle.hl7v3.mccimt000300UV01.MCCIMT000300UV01AcknowledgementDet
 import net.ihe.gazelle.hl7v3.prpamt201304UV02.PRPAMT201304UV02OtherIDs;
 import org.openehealth.ipf.commons.ihe.hl7v3.core.requests.PixV3QueryRequest;
 
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,8 +36,9 @@ import java.util.Objects;
  * @since 4.1
  */
 @EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Data
-public class PixV3QueryResponse extends PixV3QueryRequest {
+public class PixV3QueryResponse extends PixV3QueryRequest implements Hl7v3QueryResponse {
 
     /**
      * The acknowledgement type code, either "AA" (Application Accept) or "AE" (Application Error). It shall be
@@ -100,7 +100,7 @@ public class PixV3QueryResponse extends PixV3QueryRequest {
      * Empty constructor. By default, it sets the response code to "Application Error".
      */
     public PixV3QueryResponse() {
-        this.setCreationTime(ZonedDateTime.now());
+        super();
         this.setApplicationError();
     }
 
@@ -121,29 +121,5 @@ public class PixV3QueryResponse extends PixV3QueryRequest {
         response.setTargetMessageId(query.getMessageId());
         response.setQueryId(query.getQueryId());
         return response;
-    }
-
-    /**
-     * Sets the response code to "Data Found". The patient data will be included in the response.
-     */
-    public void setDataFound() {
-        this.acknowledgementTypeCode = "AA";
-        this.queryResponseCode = "OK";
-    }
-
-    /**
-     * Sets the response code to "No Data Found". No patient data will be included in the response.
-     */
-    public void setNoDataFound() {
-        this.acknowledgementTypeCode = "AA";
-        this.queryResponseCode = "NF";
-    }
-
-    /**
-     * Sets the response code to "Application Error". No patient data will be included in the response.
-     */
-    public void setApplicationError() {
-        this.acknowledgementTypeCode = "AE";
-        this.queryResponseCode = "AE";
     }
 }

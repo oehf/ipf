@@ -49,13 +49,12 @@ public class SvsConverters {
 
     @Converter
     public static RetrieveValueSetRequest xmlToSvsQuery(final String xml) throws JAXBException {
-        var unmarshaller = JAXB_CONTEXT_SVS_REQUEST.createUnmarshaller();
-        return (RetrieveValueSetRequest) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+        return XmlUtils.unmarshal(JAXB_CONTEXT_SVS_REQUEST, xml, RetrieveValueSetRequest.class);
     }
 
     @Converter
     public static String svsQueryToXml(final RetrieveValueSetRequest query) {
-        return XmlUtils.renderJaxb(JAXB_CONTEXT_SVS_REQUEST, query, true);
+        return XmlUtils.marshal(JAXB_CONTEXT_SVS_REQUEST, query, true);
     }
 
     @Converter
@@ -65,12 +64,11 @@ public class SvsConverters {
 
     @Converter
     public static RetrieveValueSetResponse xmlToSvsResponse(final String xml) throws JAXBException {
-        var unmarshaller = JAXB_CONTEXT_SVS_RESPONSE.createUnmarshaller();
-        return (RetrieveValueSetResponse) unmarshaller.unmarshal(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
+        return XmlUtils.unmarshal(JAXB_CONTEXT_SVS_RESPONSE, xml, RetrieveValueSetResponse.class);
     }
 
     @Converter
     public static String svsResponseToXml(final RetrieveValueSetResponse response) {
-        return XmlUtils.renderJaxb(JAXB_CONTEXT_SVS_RESPONSE, response, true);
+        return XmlUtils.marshal(JAXB_CONTEXT_SVS_RESPONSE, response, true);
     }
 }

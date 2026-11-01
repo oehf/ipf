@@ -98,7 +98,7 @@ public class AssertionUnmarshallingTest {
             assertEquals("urn:oid:1.3.6.1.4.1.21367.2017.2.6.19", attr.getAttributeValue().get(0).getStringValue());
         }
 
-        String rendered = XmlUtils.renderJaxb(Xacml20Utils.JAXB_CONTEXT, SAML20_OBJECT_FACTORY.createAssertion(assertion), true);
+        String rendered = XmlUtils.marshal(Xacml20Utils.JAXB_CONTEXT, SAML20_OBJECT_FACTORY.createAssertion(assertion), true);
         assertEquals(2, StringUtils.countMatches(rendered, "xsi:type=\"hl7:CE\""));
     }
 
