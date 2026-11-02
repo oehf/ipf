@@ -45,11 +45,12 @@ public abstract class AbstractPlainProvider extends FhirProvider {
 
     private static final Logger log = LoggerFactory.getLogger(AbstractPlainProvider.class);
 
-    private RequestConsumer consumer;
+    private volatile RequestConsumer consumer;
 
     @Override
     protected FhirContext getFhirContext() {
-        return consumer != null ? consumer.getFhirContext() : null;
+        var c = consumer;
+        return c != null ? c.getFhirContext() : null;
     }
 
     @Override
@@ -59,16 +60,16 @@ public abstract class AbstractPlainProvider extends FhirProvider {
     }
 
     @Override
-    public void setConsumer(RequestConsumer consumer) {
+    public synchronized void setConsumer(RequestConsumer consumer) {
         if (this.consumer != null) {
-            throw new IllegalStateException("This provider is already used by a different consumer: " + consumer);
+            throw new IllegalStateException("This provider is already used by a different consumer: " + this.consumer);
         }
         this.consumer = consumer;
         log.info("Connected consumer {} to provider {}", consumer, this);
     }
 
     @Override
-    public void unsetConsumer(RequestConsumer consumer) {
+    public synchronized void unsetConsumer(RequestConsumer consumer) {
         if (this.consumer == consumer) {
             this.consumer = null;
             log.info("Disconnected consumer {} from provider {}", consumer, this);

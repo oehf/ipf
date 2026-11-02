@@ -65,6 +65,13 @@ public class FhirEndpointConfiguration extends AuditableEndpointConfiguration {
     @UriParam
     private final List<? extends FhirProvider> resourceProvider;
 
+    /**
+     * Registry that connects the consumer with the FHIR servlet. If not set, the registry of the {@link IpfFhirServlet}
+     * bean with the configured {@link #servletName} is used, or the registry shared by name otherwise.
+     */
+    @UriParam
+    private final FhirRegistry fhirRegistry;
+
     // Producer only
 
     @UriParam
@@ -110,6 +117,8 @@ public class FhirEndpointConfiguration extends AuditableEndpointConfiguration {
         this.servletName = component.getAndRemoveParameter(parameters, "servletName", String.class, IpfFhirServlet.DEFAULT_SERVLET_NAME);
         this.resourceProvider = getAndRemoveOrResolveReferenceParameters(component,
                 parameters, "resourceProvider", FhirProvider.class);
+        this.fhirRegistry = component.getAndRemoveOrResolveReferenceParameter(
+                parameters, "fhirRegistry", FhirRegistry.class);
         this.clientRequestFactory = component.getAndRemoveOrResolveReferenceParameter(
                 parameters, "clientRequestFactory", ClientRequestFactory.class);
         this.hapiClientInterceptorFactories = component.resolveAndRemoveReferenceListParameter(

@@ -41,6 +41,23 @@ public interface FhirRegistry {
     void unregister(Object resourceProvider);
 
     /**
+     * Returns the resource provider instance to be used for the servlet(s) of this registry. All endpoints
+     * that resolve a provider of the same class get the same instance, so that e.g. a {@link SharedFhirProvider}
+     * is shared between endpoints of the same servlet, but not between different servlets.
+     * <p>
+     * The default implementation returns the candidate itself.
+     * </p>
+     *
+     * @param candidate new resource provider instance, used if this registry does not yet know an
+     *                  instance of the same class
+     * @return the resource provider instance to be connected and registered
+     * @since 6.1
+     */
+    default FhirProvider resolveProvider(FhirProvider candidate) {
+        return candidate;
+    }
+
+    /**
      * Registers the FHIR servlet, usually during its init phase.
      *
      * @param servlet FHIR servlet

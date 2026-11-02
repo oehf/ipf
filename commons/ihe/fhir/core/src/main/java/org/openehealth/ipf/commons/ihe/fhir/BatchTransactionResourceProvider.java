@@ -33,14 +33,24 @@ import jakarta.servlet.http.HttpServletResponse;
 public class BatchTransactionResourceProvider extends SharedFhirProvider {
 
     /**
-     * Singleton instance of this resource provider
+     * JVM-wide instance of this resource provider
      */
     private static final BatchTransactionResourceProvider INSTANCE = new BatchTransactionResourceProvider();
 
-    // Enforce to use singleton instance
-    protected BatchTransactionResourceProvider() {
+    /**
+     * Creates a new instance. Note that all FHIR endpoints connected to the same {@link FhirRegistry}
+     * nevertheless share one instance, see {@link FhirRegistry#resolveProvider(FhirProvider)}.
+     */
+    public BatchTransactionResourceProvider() {
     }
 
+    /**
+     * @return JVM-wide instance of this resource provider
+     * @deprecated sharing one instance across all FHIR servlets of a JVM mixes up their consumers.
+     * Use {@link #BatchTransactionResourceProvider()} in a resource provider factory, see
+     * {@link FhirTransactionConfiguration#createResourceProviders()}.
+     */
+    @Deprecated(since = "6.1")
     public static BatchTransactionResourceProvider getInstance() {
         return INSTANCE;
     }

@@ -19,6 +19,8 @@ import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 
+import java.util.List;
+
 /**
  * Static configuration for CMPD PHARM-5 transaction components
  *
@@ -34,7 +36,7 @@ public class Pharm5TransactionConfiguration extends FhirTransactionConfiguration
                 new Pharm5AuditStrategy(false),
                 new Pharm5AuditStrategy(true),
                 FhirVersionEnum.R4,
-                new Pharm5ResourceProvider(), // Consumer side. accept registrations
+                () -> List.of(new Pharm5ResourceProvider()), // Consumer side. accept registrations
                 new Pharm5ClientRequestFactory(),
                 FhirTransactionValidator.NO_VALIDATION);
         setSupportsLazyLoading(false);

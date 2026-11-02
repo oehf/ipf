@@ -22,7 +22,6 @@ import org.apache.camel.CamelContext;
 import org.apache.camel.Endpoint;
 import org.apache.camel.support.DefaultComponent;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
-import org.openehealth.ipf.commons.ihe.fhir.DefaultFhirRegistry;
 import org.openehealth.ipf.commons.ihe.fhir.FhirInteractionId;
 import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
@@ -60,20 +59,22 @@ public abstract class FhirComponent<AuditDatasetType extends FhirAuditDataset>
      *
      * @param consumer         the consumer
      * @param resourceProvider the resource provider
+     * @deprecated not called anymore, see {@link FhirProvider#connect(org.openehealth.ipf.commons.ihe.fhir.RequestConsumer, org.openehealth.ipf.commons.ihe.fhir.FhirRegistry)}
      */
+    @Deprecated(since = "6.1")
     public void connect(FhirConsumer<AuditDatasetType> consumer, FhirProvider resourceProvider) {
-        var name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
-        DefaultFhirRegistry.getFhirRegistry(name).register(resourceProvider);
+        consumer.getEndpoint().getFhirRegistry().register(resourceProvider);
     }
 
     /**
      * Disconnects the URL specified on the endpoint from the specified processor.
      *
      * @param consumer the consumer
+     * @deprecated not called anymore, see {@link FhirProvider#disconnect(org.openehealth.ipf.commons.ihe.fhir.RequestConsumer, org.openehealth.ipf.commons.ihe.fhir.FhirRegistry)}
      */
+    @Deprecated(since = "6.1")
     public void disconnect(FhirConsumer<AuditDatasetType> consumer, FhirProvider resourceProvider) {
-        var name = consumer.getEndpoint().getInterceptableConfiguration().getServletName();
-        DefaultFhirRegistry.getFhirRegistry(name).unregister(resourceProvider);
+        consumer.getEndpoint().getFhirRegistry().unregister(resourceProvider);
     }
 
     /**

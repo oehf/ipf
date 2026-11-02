@@ -19,6 +19,8 @@ import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionValidator;
 
+import java.util.List;
+
 /**
  * Standard Configuration for Iti81Component
  *
@@ -34,7 +36,7 @@ public class Iti81TransactionConfiguration extends FhirTransactionConfiguration 
                 new Iti81ClientAuditStrategy(),
                 new Iti81ServerAuditStrategy(),
                 FhirVersionEnum.R4,
-                new Iti81ResourceProvider(),       // Consumer side. accept audit searches
+                () -> List.of(new Iti81ResourceProvider()),       // Consumer side. accept audit searches
                 new Iti81ClientRequestFactory(),
                 FhirTransactionValidator.NO_VALIDATION);
     }

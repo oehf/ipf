@@ -61,6 +61,38 @@ public abstract class FhirProvider implements Serializable {
 
 
     /**
+     * Connects the consumer to this provider and registers this provider at the registry. Both happen
+     * atomically, because whether the provider is (de)registered depends on the number of its consumers,
+     * see {@link #requiresRegistration()}.
+     *
+     * @param consumer request consumer
+     * @param registry FHIR registry
+     * @since 6.1
+     */
+    public final synchronized void connect(RequestConsumer consumer, FhirRegistry registry) {
+        setConsumer(consumer);
+        try {
+            registry.register(this);
+        } catch (RuntimeException e) {
+            unsetConsumer(consumer);
+            throw e;
+        }
+    }
+
+    /**
+     * Disconnects the consumer from this provider and unregisters this provider from the registry, atomically.
+     *
+     * @param consumer request consumer
+     * @param registry FHIR registry
+     * @see #connect(RequestConsumer, FhirRegistry)
+     * @since 6.1
+     */
+    public final synchronized void disconnect(RequestConsumer consumer, FhirRegistry registry) {
+        unsetConsumer(consumer);
+        registry.unregister(this);
+    }
+
+    /**
      * @return true if this provider must be registered at the {@link FhirRegistry}
      * @see FhirRegistry#register(Object)
      */

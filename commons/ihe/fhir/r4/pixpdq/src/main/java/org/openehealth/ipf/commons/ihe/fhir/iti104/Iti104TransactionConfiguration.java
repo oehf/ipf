@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmValidator;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,7 +46,7 @@ public class Iti104TransactionConfiguration extends FhirTransactionConfiguration
             new Iti104AuditStrategy(false),
             new Iti104AuditStrategy(true),
             FhirVersionEnum.R4,
-            new Iti104ResourceProvider(),       // Consumer side. accept conditional update and delete
+            () -> List.of(new Iti104ResourceProvider()),       // Consumer side. accept conditional update and delete
             new Iti104ClientRequestFactory(),
             PixmValidator::new);
         setRequestValidationProfiles(Set.of(

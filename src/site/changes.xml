@@ -31,6 +31,10 @@
             <action issue="528" dev="qligier" type="fix">
                 Reading XML with nested jar access was not possible anymore. Thanks to qligier for providing a PR.
             </action>
+            <action issue="531" dev="ohr" type="fix">
+                FHIR: default resource providers are instantiated per FHIR servlet instead of JVM-wide, (dis)connecting
+                consumers is thread-safe, and FhirRegistry can be injected (IpfFhirServlet, endpoint parameter fhirRegistry).
+            </action>
         </release>
         <release version="6.0.0" description="IPF 6.0.0" date="">
             <action issue="527" dev="ohr" type="update">

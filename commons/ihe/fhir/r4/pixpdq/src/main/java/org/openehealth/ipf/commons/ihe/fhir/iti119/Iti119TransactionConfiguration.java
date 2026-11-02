@@ -20,6 +20,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmProfile;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PdqmValidator;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -38,7 +39,7 @@ public class Iti119TransactionConfiguration extends FhirTransactionConfiguration
                 new Iti119ClientAuditStrategy(),
                 new Iti119ServerAuditStrategy(),
                 FhirVersionEnum.R4,
-                new Iti119ResourceProvider(),                    // Consumer side. Accept patient match requests
+                () -> List.of(new Iti119ResourceProvider()),                    // Consumer side. Accept patient match requests
                 new Iti119ClientRequestFactory(),
                 PdqmValidator::new);
         setRequestValidationProfiles(Set.of(

@@ -70,7 +70,7 @@ public class MHD implements IntegrationProfile {
                     optionsProvider.getAuditStrategy(false),
                     optionsProvider.getAuditStrategy(true),
                     FhirVersionEnum.R4,
-                    FhirTransactionOptions.concatProviders(options),
+                    () -> FhirTransactionOptions.concatProviders(options),
                     new Iti66ClientRequestFactory(),
                     FhirTransactionValidator.NO_VALIDATION);
         }
@@ -92,7 +92,7 @@ public class MHD implements IntegrationProfile {
                     optionsProvider.getAuditStrategy(false),
                     optionsProvider.getAuditStrategy(true),
                     FhirVersionEnum.R4,
-                    FhirTransactionOptions.concatProviders(options),
+                    () -> FhirTransactionOptions.concatProviders(options),
                     new Iti67ClientRequestFactory(),
                     FhirTransactionValidator.NO_VALIDATION);
         }

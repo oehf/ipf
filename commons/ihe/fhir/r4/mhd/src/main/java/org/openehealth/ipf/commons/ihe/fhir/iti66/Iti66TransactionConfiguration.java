@@ -19,7 +19,7 @@ import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI66_FIND_DOCUMENT_LISTS_RESPONSE_BUNDLE_PROFILE;
@@ -39,7 +39,7 @@ public class Iti66TransactionConfiguration extends FhirTransactionConfiguration 
                 new Iti66AuditStrategy(false),
                 new Iti66AuditStrategy(true),
                 FhirVersionEnum.R4,
-                Arrays.asList(new Iti66ListResourceProvider(), new Iti66DocumentManifestResourceProvider()),
+                () -> List.of(new Iti66ListResourceProvider(), new Iti66DocumentManifestResourceProvider()),
                 new Iti66ClientRequestFactory(),
                 MhdValidator::new);
         setSupportsLazyLoading(true);

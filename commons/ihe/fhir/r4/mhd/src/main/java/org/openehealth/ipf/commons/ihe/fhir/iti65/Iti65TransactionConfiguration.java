@@ -22,6 +22,7 @@ import org.openehealth.ipf.commons.ihe.fhir.BundleProfileSelector;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.openehealth.ipf.commons.ihe.fhir.iti65.Iti65Constants.ITI65_COMPREHENSIVE_METADATA_PROFILE;
@@ -47,7 +48,7 @@ public class Iti65TransactionConfiguration extends FhirTransactionConfiguration 
                 new Iti65ClientAuditStrategy(),
                 new Iti65ServerAuditStrategy(),
                 FhirVersionEnum.R4,
-                BatchTransactionResourceProvider.getInstance(),      // Consumer side. accept registrations
+                () -> List.of(new BatchTransactionResourceProvider()),      // Consumer side. accept registrations
                 BatchTransactionClientRequestFactory.getInstance(),  // Formulate requests
                 MhdValidator::new);
         setRequestValidationProfiles(Set.of(

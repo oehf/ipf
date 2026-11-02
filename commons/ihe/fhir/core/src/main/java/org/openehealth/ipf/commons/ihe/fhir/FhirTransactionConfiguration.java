@@ -42,7 +42,7 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
     @Getter
     private final FhirVersionEnum fhirVersion;
     private final FhirContextProvider fhirContextProvider;
-    private final List<? extends FhirProvider> staticResourceProviders;
+    private final Supplier<? extends List<? extends FhirProvider>> resourceProviderFactory;
     @Getter
     private final ClientRequestFactory staticClientRequestFactory;
     private final Supplier<FhirTransactionValidator> fhirValidatorSupplier;
@@ -58,6 +58,11 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
     @Getter @Setter
     private Set<String> responseValidationProfiles = Set.of();
 
+    /**
+     * @deprecated use the constructor taking a resource provider factory. Resource provider instances
+     * passed here are shared by all FHIR servlets in the JVM.
+     */
+    @Deprecated(since = "6.1")
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -72,6 +77,11 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
     }
 
+    /**
+     * @deprecated use the constructor taking a resource provider factory. Resource provider instances
+     * passed here are shared by all FHIR servlets in the JVM.
+     */
+    @Deprecated(since = "6.1")
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -85,11 +95,16 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirContext.getVersion().getVersion();
         this.fhirContextProvider = (fhirVersion) -> fhirContext;
-        this.staticResourceProviders = resourceProviders;
+        this.resourceProviderFactory = () -> resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
         this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(initializeFhirContext()) : null;
     }
 
+    /**
+     * @deprecated use the constructor taking a resource provider factory. Resource provider instances
+     * passed here are shared by all FHIR servlets in the JVM.
+     */
+    @Deprecated(since = "6.1")
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -104,6 +119,11 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
                 Collections.singletonList(resourceProvider), clientRequestFactory, fhirValidator);
     }
 
+    /**
+     * @deprecated use the constructor taking a resource provider factory. Resource provider instances
+     * passed here are shared by all FHIR servlets in the JVM.
+     */
+    @Deprecated(since = "6.1")
     public FhirTransactionConfiguration(
             String name,
             String description,
@@ -117,13 +137,79 @@ public class FhirTransactionConfiguration extends TransactionConfiguration {
         super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
         this.fhirVersion = fhirVersion;
         this.fhirContextProvider = fhirContextProvider();
-        this.staticResourceProviders = resourceProviders;
+        this.resourceProviderFactory = () -> resourceProviders;
         this.staticClientRequestFactory = clientRequestFactory;
         this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(initializeFhirContext()) : null;
     }
 
+    /**
+     * @param resourceProviderFactory creates new instances of the resource providers that are used on the
+     *                                consumer side. Each FHIR servlet (more precisely, each {@link FhirRegistry})
+     *                                uses one instance per resource provider class, so resource providers are not
+     *                                shared between servlets. The factory may be called more often than that.
+     * @since 6.1
+     */
+    public FhirTransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
+            FhirContext fhirContext,
+            Supplier<? extends List<? extends FhirProvider>> resourceProviderFactory,
+            ClientRequestFactory clientRequestFactory,
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
+        this.fhirVersion = fhirContext.getVersion().getVersion();
+        this.fhirContextProvider = (fhirVersion) -> fhirContext;
+        this.resourceProviderFactory = resourceProviderFactory;
+        this.staticClientRequestFactory = clientRequestFactory;
+        this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(initializeFhirContext()) : null;
+    }
+
+    /**
+     * @param resourceProviderFactory creates new instances of the resource providers that are used on the
+     *                                consumer side. Each FHIR servlet (more precisely, each {@link FhirRegistry})
+     *                                uses one instance per resource provider class, so resource providers are not
+     *                                shared between servlets. The factory may be called more often than that.
+     * @since 6.1
+     */
+    public FhirTransactionConfiguration(
+            String name,
+            String description,
+            boolean isQuery,
+            AuditStrategy<? extends FhirAuditDataset> clientAuditStrategy,
+            AuditStrategy<? extends FhirAuditDataset> serverAuditStrategy,
+            FhirVersionEnum fhirVersion,
+            Supplier<? extends List<? extends FhirProvider>> resourceProviderFactory,
+            ClientRequestFactory clientRequestFactory,
+            Function<FhirContext, FhirTransactionValidator> fhirValidator) {
+        super(name, description, isQuery, clientAuditStrategy, serverAuditStrategy);
+        this.fhirVersion = fhirVersion;
+        this.fhirContextProvider = fhirContextProvider();
+        this.resourceProviderFactory = resourceProviderFactory;
+        this.staticClientRequestFactory = clientRequestFactory;
+        this.fhirValidatorSupplier = fhirValidator != null ? () -> fhirValidator.apply(initializeFhirContext()) : null;
+    }
+
+    /**
+     * @return new instances of the resource providers for the consumer side of this transaction
+     * (unless the deprecated constructors taking provider instances were used).
+     * @since 6.1
+     */
+    public List<? extends FhirProvider> createResourceProviders() {
+        var providers = resourceProviderFactory != null ? resourceProviderFactory.get() : null;
+        return providers != null ? providers : List.of();
+    }
+
+    /**
+     * @return same as {@link #createResourceProviders()}, i.e. usually new instances, not the instances that
+     * consumers are connected to
+     * @deprecated use {@link #createResourceProviders()}
+     */
+    @Deprecated(since = "6.1")
     public List<? extends FhirProvider> getStaticResourceProvider() {
-        return staticResourceProviders;
+        return createResourceProviders();
     }
 
     /**

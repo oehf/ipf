@@ -20,6 +20,7 @@ import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmProfile;
 import org.openehealth.ipf.commons.ihe.fhir.pixpdq.PixmValidator;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,7 +41,7 @@ public class Iti83TransactionConfiguration extends FhirTransactionConfiguration 
                 new Iti83AuditStrategy(false),
                 new Iti83AuditStrategy(true),
                 FhirVersionEnum.R4,
-                new Iti83ResourceProvider(),        // Consumer side. accept $ihe-pix operation
+                () -> List.of(new Iti83ResourceProvider()),        // Consumer side. accept $ihe-pix operation
                 new Iti83ClientRequestFactory(),
                 PixmValidator::new);
         setRequestValidationProfiles(Set.of(
