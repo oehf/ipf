@@ -87,6 +87,19 @@ public class IpfFhirServlet extends RestfulServer {
 
     private FhirContext fhirContext;
 
+    /**
+     * Registry that connects this servlet with the FHIR consumers. If not set, the registry shared by
+     * name (see {@link DefaultFhirRegistry#getFhirRegistry(String)}) is used, which is required if the servlet
+     * is instantiated by the servlet container (web.xml). If set, FHIR endpoints must use the same registry, either
+     * by finding this servlet as bean with the configured servlet name, or by referencing the registry explicitly.
+     * Note that endpoints may look up the servlet bean before the servlet is initialized, so the servlet name must
+     * be set on the bean beforehand if it differs from the default.
+     *
+     * @since 6.1
+     */
+    @Getter @Setter
+    private FhirRegistry fhirRegistry;
+
     public IpfFhirServlet() {
         super();
     }
@@ -123,7 +136,9 @@ public class IpfFhirServlet extends RestfulServer {
     public void init(ServletConfig config) throws ServletException {
         this.servletName = config.getServletName();
 
-        var fhirRegistry = DefaultFhirRegistry.getFhirRegistry(servletName);
+        if (fhirRegistry == null) {
+            fhirRegistry = DefaultFhirRegistry.getFhirRegistry(servletName);
+        }
         if (fhirRegistry.hasServlet(servletName)) {
             throw new ServletException(String.format("Duplicate FHIR Servlet name %s. Use unique names per Camel application", servletName));
         }
@@ -172,10 +187,11 @@ public class IpfFhirServlet extends RestfulServer {
 
     @Override
     public void destroy() {
-        var registry = DefaultFhirRegistry.removeFhirRegistry(getServletName());
-        if (registry != null) {
+        // Only unregister the servlet, but keep the registry: it still knows the resource providers of
+        // running FHIR consumers, which are registered again if a servlet with this name is initialized again.
+        if (fhirRegistry != null) {
             try {
-                registry.unregister(this);
+                fhirRegistry.unregister(this);
             } catch (Exception e) {
                 log.warn("Problem while unregistering servlet {}", getServletName(), e);
             }

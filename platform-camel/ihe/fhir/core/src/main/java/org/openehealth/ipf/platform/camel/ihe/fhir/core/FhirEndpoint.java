@@ -26,7 +26,10 @@ import org.apache.camel.support.DefaultEndpoint;
 import org.openehealth.ipf.commons.audit.AuditContext;
 import org.openehealth.ipf.commons.ihe.core.atna.AuditStrategy;
 import org.openehealth.ipf.commons.ihe.fhir.ClientRequestFactory;
+import org.openehealth.ipf.commons.ihe.fhir.DefaultFhirRegistry;
 import org.openehealth.ipf.commons.ihe.fhir.FhirProvider;
+import org.openehealth.ipf.commons.ihe.fhir.FhirRegistry;
+import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.audit.FhirAuditDataset;
 import org.openehealth.ipf.platform.camel.ihe.atna.AuditableEndpoint;
 import org.openehealth.ipf.platform.camel.ihe.core.InterceptableEndpoint;
@@ -36,6 +39,9 @@ import org.openehealth.ipf.platform.camel.ihe.fhir.core.intercept.producer.Produ
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 /**
@@ -50,6 +56,9 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset>
 
     private final FhirEndpointConfiguration config;
     private final FhirComponent<AuditDatasetType> fhirComponent;
+    // Remembers which provider instances a consumer has been connected to, so that exactly those are disconnected again
+    private final Map<FhirConsumer<AuditDatasetType>, List<FhirProvider>> connectedProviders = new ConcurrentHashMap<>();
+    private volatile FhirRegistry fhirRegistry;
 
     public FhirEndpoint(String uri, FhirComponent<AuditDatasetType> fhirComponent, FhirEndpointConfiguration config) {
         super(uri, fhirComponent);
@@ -74,12 +83,18 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset>
      * @param consumer FhirConsumer
      */
     public void connect(FhirConsumer<AuditDatasetType> consumer) {
-        for (var provider : getResourceProviders()) {
-            // Make consumer known to provider
-            provider.setConsumer(consumer);
-            fhirComponent.connect(consumer, provider);
+        var fhirRegistry = getFhirRegistry();
+        var connected = new ArrayList<FhirProvider>();
+        try {
+            for (var provider : getResourceProviders()) {
+                provider.connect(consumer, fhirRegistry);
+                connected.add(provider);
+            }
+        } catch (RuntimeException e) {
+            disconnect(consumer, connected);
+            throw e;
         }
-
+        connectedProviders.put(consumer, connected);
     }
 
     /**
@@ -88,9 +103,16 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset>
      * @param consumer FhirConsumer
      */
     public void disconnect(FhirConsumer<AuditDatasetType> consumer) {
-        for (var provider : getResourceProviders()) {
-            provider.unsetConsumer(consumer);
-            fhirComponent.disconnect(consumer, provider);
+        var connected = connectedProviders.remove(consumer);
+        if (connected != null) {
+            disconnect(consumer, connected);
+        }
+    }
+
+    private void disconnect(FhirConsumer<AuditDatasetType> consumer, List<FhirProvider> providers) {
+        var fhirRegistry = getFhirRegistry();
+        for (var provider : providers) {
+            provider.disconnect(consumer, fhirRegistry);
         }
     }
 
@@ -160,12 +182,53 @@ public abstract class FhirEndpoint<AuditDatasetType extends FhirAuditDataset>
 
     // Private stuff
 
+    /**
+     * Returns the resource providers explicitly configured on the endpoint. If there are none, the
+     * transaction's default resource providers are used, whereby there is one instance per provider class
+     * and {@link FhirRegistry}.
+     */
     private List<? extends FhirProvider> getResourceProviders() {
         var providers = config.getResourceProvider();
         if (providers == null || providers.isEmpty()) {
-            providers = fhirComponent.getFhirTransactionConfiguration().getStaticResourceProvider();
+            var fhirRegistry = getFhirRegistry();
+            providers = fhirComponent.getFhirTransactionConfiguration().createResourceProviders().stream()
+                    .map(fhirRegistry::resolveProvider)
+                    .toList();
         }
         return providers;
+    }
+
+    /**
+     * Returns the {@link FhirRegistry} that connects consumers of this endpoint with the FHIR servlet, which is
+     * <ol>
+     *     <li>the registry configured on the endpoint, if any</li>
+     *     <li>the registry of the {@link IpfFhirServlet} bean with the configured servlet name, if any</li>
+     *     <li>the registry shared by servlet name otherwise, see {@link DefaultFhirRegistry#getFhirRegistry(String)}</li>
+     * </ol>
+     *
+     * @return the {@link FhirRegistry} that connects consumers of this endpoint with the FHIR servlet
+     * @since 6.1
+     */
+    public FhirRegistry getFhirRegistry() {
+        var registry = fhirRegistry;
+        if (registry == null) {
+            registry = resolveFhirRegistry();
+            fhirRegistry = registry;
+        }
+        return registry;
+    }
+
+    private FhirRegistry resolveFhirRegistry() {
+        if (config.getFhirRegistry() != null) {
+            return config.getFhirRegistry();
+        }
+        var servletName = config.getServletName();
+        return getCamelContext().getRegistry().findByType(IpfFhirServlet.class).stream()
+                .filter(servlet -> servletName.equals(servlet.getServletName()))
+                .map(IpfFhirServlet::getFhirRegistry)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElseGet(() -> DefaultFhirRegistry.getFhirRegistry(servletName));
     }
 
     public ClientRequestFactory getClientRequestFactory() {

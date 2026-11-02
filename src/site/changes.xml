@@ -45,6 +45,10 @@
             <action issue="526" dev="ohr" type="update">
                 Treat URI schemes and URN namespace identifiers as case-insensitive (RFC 3986, RFC 8141).
             </action>
+            <action issue="531" dev="ohr" type="fix">
+                FHIR: default resource providers are instantiated per FHIR servlet instead of JVM-wide, (dis)connecting
+                consumers is thread-safe, and FhirRegistry can be injected (IpfFhirServlet, endpoint parameter fhirRegistry).
+            </action>
         </release>
         <release version="6.0.0" description="IPF 6.0.0" date="13 Oct 2026">
             <action issue="527" dev="ohr" type="update">

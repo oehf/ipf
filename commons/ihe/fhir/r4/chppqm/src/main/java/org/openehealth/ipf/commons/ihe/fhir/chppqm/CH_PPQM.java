@@ -77,7 +77,7 @@ public class CH_PPQM implements IntegrationProfile {
                     new ChPpq3ClientAuditStrategy(),
                     new ChPpq3ServerAuditStrategy(),
                     ChPpqmUtils.FHIR_CONTEXT,
-                    new ChPpq3ResourceProvider(),
+                    () -> List.of(new ChPpq3ResourceProvider()),
                     new ChPpq3RequestFactory(),
                     ChPpq3Validator::new);
 
@@ -89,7 +89,7 @@ public class CH_PPQM implements IntegrationProfile {
                     new ChPpq4ClientAuditStrategy(),
                     new ChPpq4ServerAuditStrategy(),
                     ChPpqmUtils.FHIR_CONTEXT,
-                    BatchTransactionResourceProvider.getInstance(),
+                    () -> List.of(new BatchTransactionResourceProvider()),
                     BatchTransactionClientRequestFactory.getInstance(),
                     ChPpq4Validator::new);
 
@@ -101,7 +101,7 @@ public class CH_PPQM implements IntegrationProfile {
                     new ChPpq5AuditStrategy(false),
                     new ChPpq5AuditStrategy(true),
                     ChPpqmUtils.FHIR_CONTEXT,
-                    new ChPpq5ResourceProvider(),
+                    () -> List.of(new ChPpq5ResourceProvider()),
                     new ChPpq5ClientRequestFactory(),
                     ChPpq5Validator::new);
 

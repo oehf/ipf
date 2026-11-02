@@ -30,6 +30,7 @@ import org.openehealth.ipf.boot.atna.AuditContextCustomizer;
 import org.openehealth.ipf.boot.atna.IpfAtnaAutoConfiguration;
 import org.openehealth.ipf.boot.atna.IpfAtnaConfigurationProperties;
 import org.openehealth.ipf.commons.audit.DefaultAuditContext;
+import org.openehealth.ipf.commons.ihe.fhir.DefaultFhirRegistry;
 import org.openehealth.ipf.commons.ihe.fhir.IpfFhirServlet;
 import org.openehealth.ipf.commons.ihe.fhir.SpringCachePagingProvider;
 import org.openehealth.ipf.commons.ihe.fhir.support.DefaultNamingSystemServiceImpl;
@@ -161,6 +162,10 @@ public class IpfFhirAutoConfiguration {
             INarrativeGenerator narrativeGenerator) {
         var fhirServlet = new IpfBootFhirServlet(fhirContext, config.isCaching(), pagingProvider);
         var servletProperties = config.getServlet();
+        // FHIR endpoints find this servlet by its name and use its registry, so that FHIR servlets and
+        // consumers are not connected via JVM-wide state
+        fhirServlet.setServletName(servletProperties.getName());
+        fhirServlet.setFhirRegistry(new DefaultFhirRegistry());
         fhirServlet.setLogging(servletProperties.isLogging());
         fhirServlet.setPrettyPrint(servletProperties.isPrettyPrint());
         fhirServlet.setResponseHighlighting(servletProperties.isResponseHighlighting());

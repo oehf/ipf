@@ -19,6 +19,7 @@ import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 
+import java.util.List;
 import java.util.Set;
 
 import static org.openehealth.ipf.commons.ihe.fhir.mhd.MhdProfile.ITI65_PROVIDE_DOCUMENT_BUNDLE_RESPONSE_PROFILE;
@@ -39,7 +40,7 @@ public class Iti105TransactionConfiguration extends FhirTransactionConfiguration
                 new Iti105ClientAuditStrategy(),
                 new Iti105ServerAuditStrategy(),
                 FhirVersionEnum.R4,
-                new Iti105DocumentReferenceResourceProvider(),
+                () -> List.of(new Iti105DocumentReferenceResourceProvider()),
                 new Iti105RequestFactory(),
                 MhdValidator::new);
         setRequestValidationProfiles(Set.of(

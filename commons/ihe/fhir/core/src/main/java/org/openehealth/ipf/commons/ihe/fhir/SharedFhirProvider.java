@@ -25,10 +25,10 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Shared Resource provider, primarily (but not exclusively)  meant for batch/transaction requests.
@@ -48,8 +48,9 @@ public abstract class SharedFhirProvider extends FhirProvider {
 
     private static final Logger log = LoggerFactory.getLogger(SharedFhirProvider.class);
 
-    private FhirContext fhirContext;
-    private final List<RequestConsumer> consumers = new ArrayList<>();
+    private volatile FhirContext fhirContext;
+    // Request threads iterate over the consumers while consumers may be connected or disconnected
+    private final List<RequestConsumer> consumers = new CopyOnWriteArrayList<>();
 
     @Override
     protected FhirContext getFhirContext() {
@@ -110,7 +111,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
      *                               is different compared to the FhirContext of the other consumers.
      */
     @Override
-    public void setConsumer(RequestConsumer consumer) {
+    public synchronized void setConsumer(RequestConsumer consumer) {
         if (consumers.isEmpty()) {
             this.fhirContext = consumer.getFhirContext();
         } else if (consumers.contains(consumer)) {
@@ -132,7 +133,7 @@ public abstract class SharedFhirProvider extends FhirProvider {
      * @param consumer request consumer
      */
     @Override
-    public void unsetConsumer(RequestConsumer consumer) {
+    public synchronized void unsetConsumer(RequestConsumer consumer) {
         if (consumers.remove(consumer)) {
             log.info("Disconnected consumer {} from provider {}", consumer, this);
         }

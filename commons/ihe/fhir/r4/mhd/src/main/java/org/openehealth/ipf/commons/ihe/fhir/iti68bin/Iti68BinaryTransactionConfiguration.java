@@ -20,6 +20,8 @@ import ca.uhn.fhir.context.FhirVersionEnum;
 import org.openehealth.ipf.commons.ihe.fhir.FhirTransactionConfiguration;
 import org.openehealth.ipf.commons.ihe.fhir.mhd.MhdValidator;
 
+import java.util.List;
+
 /**
  * @author Christian Ohr
  * @since 3.6
@@ -34,7 +36,7 @@ public class Iti68BinaryTransactionConfiguration extends FhirTransactionConfigur
                 null,
                 new Iti68BinaryServerAuditStrategy(),
                 FhirVersionEnum.R4,
-            new Iti68BinaryResourceProvider(),
+            () -> List.of(new Iti68BinaryResourceProvider()),
             new Iti68BinaryRequestFactory(),
             MhdValidator::new);
     }

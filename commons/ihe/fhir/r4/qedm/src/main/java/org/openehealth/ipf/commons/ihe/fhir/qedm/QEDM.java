@@ -54,7 +54,7 @@ public class QEDM implements IntegrationProfile {
                     optionsProvider.getAuditStrategy(false),
                     optionsProvider.getAuditStrategy(true),
                     FhirVersionEnum.R4,
-                    FhirTransactionOptions.concatProviders(options),
+                    () -> FhirTransactionOptions.concatProviders(options),
                     new Pcc44ClientRequestFactory(),
                     FhirTransactionValidator.NO_VALIDATION);
         }
