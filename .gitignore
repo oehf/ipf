@@ -32,3 +32,4 @@ generated-stubs
 /local_history.patch
 /CLAUDE.md
 /.claude/settings.local.json
+/skills/system/run-workflow/SKILL.md
