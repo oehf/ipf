@@ -26,7 +26,8 @@
         <release version="" description="" date="">
             <action issue="529" dev="ohr" type="fix">
                 HL7v2 trace context propagation (nonstandard ZTR segment) on MLLP producers is now again opt-in
-                via the endpoint parameter propagateTraceContext.
+                via the endpoint parameter propagateTraceContext. MLLP consumers remove the segment after reading
+                the trace context, before validation, as IPF 5 did (endpoint parameter removeTraceContext, default true).
             </action>
             <action issue="528" dev="qligier" type="fix">
                 Reading XML with nested jar access was not possible anymore. Thanks to qligier for providing a PR.

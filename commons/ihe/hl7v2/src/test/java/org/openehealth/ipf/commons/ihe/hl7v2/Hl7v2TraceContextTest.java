@@ -25,6 +25,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -125,5 +126,24 @@ public class Hl7v2TraceContextTest {
     @Test
     public void testEmptyValueSurvives() {
         assertEquals(Map.of("traceparent", ""), Hl7v2TraceContext.read(MSH + "ZTR|traceparent^\r"));
+    }
+
+    @Test
+    public void testRemoveDeletesAllRepetitions() throws Exception {
+        var message = parse(MSH + "QPD|IHE PDQ Query|Q0001\r"
+                + "ZTR|traceparent^abc~tracestate^def\r" + "ZTR|other^ghi\r");
+        assertTrue(Hl7v2TraceContext.remove(message));
+
+        var encoded = CONTEXT.getPipeParser().encode(message);
+        assertFalse(encoded.contains("ZTR"), encoded);
+        assertTrue(encoded.contains("QPD|IHE PDQ Query|Q0001"), encoded);
+    }
+
+    @Test
+    public void testRemoveWithoutSegment() throws Exception {
+        var message = parse(MSH);
+        var before = CONTEXT.getPipeParser().encode(message);
+        assertFalse(Hl7v2TraceContext.remove(message));
+        assertEquals(before, CONTEXT.getPipeParser().encode(message));
     }
 }

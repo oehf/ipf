@@ -24,6 +24,7 @@ import org.apache.camel.telemetry.Span;
 import org.apache.camel.telemetry.SpanContextPropagationExtractor;
 import org.apache.camel.telemetry.SpanContextPropagationInjector;
 import org.openehealth.ipf.platform.camel.ihe.core.IpfSpanDecorator;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerTraceContextRemovalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTraceContextInterceptor;
 
 import java.util.LinkedHashMap;
@@ -39,8 +40,10 @@ import java.util.Set;
  * nonstandard segment, see {@link Hl7v2TraceContext}.
  * <ul>
  * <li>Reading happens here, in {@link #getExtractor}: when {@code camel-telemetry} creates the span for
- *     an incoming message the body is still the encoded message, which is exactly what can be read
- *     without parsing.</li>
+ *     an incoming message, the consumer interceptors have already run. The trace context is then taken
+ *     from the exchange property {@link #RECEIVED_TRACE_CONTEXT_PROPERTY}, where
+ *     {@link ConsumerTraceContextRemovalInterceptor} put it before removing the segment, or otherwise read
+ *     from the message body (the parsed message, converted back to its encoded form).</li>
  * <li>Writing cannot happen here, because at that moment the outgoing message does not exist yet. The
  *     context is therefore handed to {@link ProducerTraceContextInterceptor} through an exchange
  *     property, and that interceptor writes it into the message it has by then, provided the
@@ -59,6 +62,13 @@ public abstract class Hl7v2SpanDecorator extends IpfSpanDecorator {
      */
     public static final String TRACE_CONTEXT_PROPERTY = Hl7v2TraceContext.class.getName();
 
+    /**
+     * Exchange property under which the trace context of an incoming message is kept once
+     * {@code ConsumerTraceContextRemovalInterceptor} removed the segment from the message. Read here when
+     * the span is created.
+     */
+    public static final String RECEIVED_TRACE_CONTEXT_PROPERTY = Hl7v2TraceContext.class.getName() + ".received";
+
     /** Sending application, i.e. MSH-3. */
     public static final String TAG_SENDING_APPLICATION = "hl7v2.sending.application";
     /** Sending facility, i.e. MSH-4. */
@@ -73,12 +83,16 @@ public abstract class Hl7v2SpanDecorator extends IpfSpanDecorator {
     public static final String TAG_PROCESSING_ID = "hl7v2.processing.id";
 
     /**
-     * Reads the trace context out of the encoded message, so that the span of an incoming message joins
-     * the trace of the sender.
+     * Provides the trace context of an incoming message, so that its span joins the trace of the sender:
+     * the one kept by {@link ConsumerTraceContextRemovalInterceptor}, or otherwise the one in the message.
      */
     @Override
+    @SuppressWarnings("unchecked")
     public SpanContextPropagationExtractor getExtractor(Exchange exchange) {
-        var traceContext = Hl7v2TraceContext.read(exchange.getIn().getBody(String.class));
+        var received = (Map<String, String>) exchange.getProperty(RECEIVED_TRACE_CONTEXT_PROPERTY, Map.class);
+        var traceContext = received != null
+                ? received
+                : Hl7v2TraceContext.read(exchange.getIn().getBody(String.class));
         return new SpanContextPropagationExtractor() {
             @Override
             public Iterator<Map.Entry<String, Object>> iterator() {

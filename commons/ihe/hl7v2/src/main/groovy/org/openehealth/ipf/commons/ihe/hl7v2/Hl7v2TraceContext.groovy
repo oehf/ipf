@@ -118,6 +118,24 @@ class Hl7v2TraceContext {
         }
     }
 
+    /**
+     * Removes the trace context segment from a parsed message, e.g. after the trace context has been read
+     * from the encoded message, so that it does not reach validation or the application.
+     *
+     * @return true if a segment was removed
+     */
+    static boolean remove(Message message) {
+        if (message == null || !message.names.contains(SEGMENT_NAME)) {
+            return false
+        }
+        def removed = false
+        while (message.getAll(SEGMENT_NAME).length > 0) {
+            message.removeRepetition(SEGMENT_NAME, 0)
+            removed = true
+        }
+        removed
+    }
+
     private static def nextRepetition(Repeatable closure) {
         closure(closure().size())
     }

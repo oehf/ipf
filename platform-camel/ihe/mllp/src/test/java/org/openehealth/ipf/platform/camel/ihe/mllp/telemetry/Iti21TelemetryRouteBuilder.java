@@ -27,9 +27,14 @@ import org.openehealth.ipf.commons.ihe.hl7v2.Hl7v2TraceContext;
 public class Iti21TelemetryRouteBuilder extends RouteBuilder {
 
     public static final int PORT = 8899;
+    /** Consumer that keeps the trace context segment */
+    public static final int KEEPING_PORT = 8898;
 
     /** What the consumer received, before it was parsed. */
     public static volatile String receivedMessage;
+
+    /** What the consumer route got after parsing, encoded again. */
+    public static volatile String parsedMessage;
 
     /**
      * Left empty on purpose: the route is added by the test once the tracer is installed, because the
@@ -45,16 +50,21 @@ public class Iti21TelemetryRouteBuilder extends RouteBuilder {
             @Override
             public void configure() {
                 from("pdq-iti21://0.0.0.0:" + PORT + "?audit=false")
-                .process(exchange -> {
-                    receivedMessage = exchange.getIn().getHeader(
-                            org.openehealth.ipf.commons.ihe.hl7v2.Constants.ORIGINAL_MESSAGE_STRING_HEADER_NAME,
-                            String.class);
-                    var request = exchange.getIn().getBody(ca.uhn.hl7v2.model.Message.class);
-                    exchange.getMessage().setBody(
-                            org.openehealth.ipf.modules.hl7.message.MessageUtils.response(request, "RSP", "K22"));
-                });
+                .process(Iti21TelemetryRouteBuilder::respond);
+                from("pdq-iti21://0.0.0.0:" + KEEPING_PORT + "?audit=false&removeTraceContext=false")
+                .process(Iti21TelemetryRouteBuilder::respond);
             }
         };
+    }
+
+    private static void respond(org.apache.camel.Exchange exchange) throws Exception {
+        receivedMessage = exchange.getIn().getHeader(
+                org.openehealth.ipf.commons.ihe.hl7v2.Constants.ORIGINAL_MESSAGE_STRING_HEADER_NAME,
+                String.class);
+        var request = exchange.getIn().getBody(ca.uhn.hl7v2.model.Message.class);
+        parsedMessage = request.encode();
+        exchange.getMessage().setBody(
+                org.openehealth.ipf.modules.hl7.message.MessageUtils.response(request, "RSP", "K22"));
     }
 
     /** @return the trace context of the message the consumer received. */

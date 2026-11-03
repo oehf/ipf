@@ -29,6 +29,7 @@ import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerM
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestAcceptanceInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerRequestInteractionSetterInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerResponseAcceptanceInterceptor;
+import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.consumer.ConsumerTraceContextRemovalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerAdaptingInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerMarshalInterceptor;
 import org.openehealth.ipf.platform.camel.ihe.hl7v2.intercept.producer.ProducerTraceContextInterceptor;
@@ -80,6 +81,11 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
             initialChain.add(new ConsumerRequestDefragmenterInterceptor());
         }
         initialChain.add(new ConsumerMarshalInterceptor(getConfig().isCopyOriginalMessage()));
+        // the trace context has been read from the encoded message when the span was created; remove the
+        // nonstandard segment before the request is validated
+        if (isRemoveTraceContext()) {
+            initialChain.add(new ConsumerTraceContextRemovalInterceptor());
+        }
         initialChain.add(new ConsumerRequestAcceptanceInterceptor());
         if (isSupportInteractiveContinuation()) {
             initialChain.add(new ConsumerInteractiveResponseSenderInterceptor());
@@ -219,6 +225,15 @@ public class MllpTransactionEndpoint<AuditDatasetType extends MllpAuditDataset>
     @ManagedAttribute(description = "Propagate Trace Context Enabled")
     public boolean isPropagateTraceContext() {
         return getConfig().isPropagateTraceContext();
+    }
+
+    /**
+     * Returns <code>true</code> if the consumer removes the nonstandard trace context segment from
+     * incoming messages after the trace context has been read.
+     */
+    @ManagedAttribute(description = "Remove Trace Context Enabled")
+    public boolean isRemoveTraceContext() {
+        return getConfig().isRemoveTraceContext();
     }
 
     @ManagedAttribute(description = "Interactive Continuation Storage Cache Type")

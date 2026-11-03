@@ -62,6 +62,7 @@ public class Iti21TelemetryTest {
     @BeforeEach
     public void setUp() throws Exception {
         Iti21TelemetryRouteBuilder.receivedMessage = null;
+        Iti21TelemetryRouteBuilder.parsedMessage = null;
         if (tracer == null) {
             tracer = new TraceContextRecordingTracer();
             tracer.init(camelContext);
@@ -80,8 +81,11 @@ public class Iti21TelemetryTest {
     }
 
     private void sendQuery(String endpointOptions) {
-        producerTemplate.requestBody(
-                "pdq-iti21://localhost:" + Iti21TelemetryRouteBuilder.PORT + endpointOptions, REQUEST);
+        sendQuery(Iti21TelemetryRouteBuilder.PORT, endpointOptions);
+    }
+
+    private void sendQuery(int port, String endpointOptions) {
+        producerTemplate.requestBody("pdq-iti21://localhost:" + port + endpointOptions, REQUEST);
     }
 
     @Test
@@ -121,6 +125,23 @@ public class Iti21TelemetryTest {
         assertFalse(Iti21TelemetryRouteBuilder.receivedMessage.split("[\\r\\n]+").length > 5,
                 "unexpectedly many segments, the trace context may have been added more than once:\n"
                         + Iti21TelemetryRouteBuilder.receivedMessage);
+    }
+
+    /** The segment is read when the consumer span is created, and then removed before validation. */
+    @Test
+    void testConsumerRemovesTheTraceContextSegment() {
+        sendQuery();
+        assertThat(Iti21TelemetryRouteBuilder.receivedMessage,
+                containsString(Hl7v2TraceContext.SEGMENT_NAME + "|"));
+        assertThat(Iti21TelemetryRouteBuilder.parsedMessage,
+                not(containsString(Hl7v2TraceContext.SEGMENT_NAME + "|")));
+    }
+
+    @Test
+    void testConsumerKeepsTheTraceContextSegmentIfOptedOut() {
+        sendQuery(Iti21TelemetryRouteBuilder.KEEPING_PORT, "?audit=false&propagateTraceContext=true");
+        assertThat(Iti21TelemetryRouteBuilder.parsedMessage,
+                containsString(Hl7v2TraceContext.SEGMENT_NAME + "|"));
     }
 
     /** The segment is nonstandard, so it must only be written if the endpoint opts in. */
