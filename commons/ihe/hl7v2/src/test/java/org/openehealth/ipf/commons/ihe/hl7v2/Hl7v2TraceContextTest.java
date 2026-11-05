@@ -140,6 +140,18 @@ public class Hl7v2TraceContextTest {
     }
 
     @Test
+    void testRemoveFromTrailingGroup() throws Exception {
+        var message = parse("MSH|^~\\&|A|B|C|D|20260101||ADT^A40^ADT_A39|1|P|2.5\r"
+                + "EVN|A40|20260101\r" + "PID|||1^^^X||Doe^John\r" + "MRG|2^^^X\r"
+                + "ZTR|traceparent^abc\r");
+        assertTrue(Hl7v2TraceContext.remove(message));
+
+        var encoded = CONTEXT.getPipeParser().encode(message);
+        assertFalse(encoded.contains("ZTR"), encoded);
+        assertTrue(encoded.contains("MRG|2^^^X"), encoded);
+    }
+
+    @Test
     public void testRemoveWithoutSegment() throws Exception {
         var message = parse(MSH);
         var before = CONTEXT.getPipeParser().encode(message);

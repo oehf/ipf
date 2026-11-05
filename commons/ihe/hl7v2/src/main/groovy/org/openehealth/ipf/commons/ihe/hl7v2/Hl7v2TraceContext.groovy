@@ -16,6 +16,7 @@
 package org.openehealth.ipf.commons.ihe.hl7v2
 
 import ca.uhn.hl7v2.HL7Exception
+import ca.uhn.hl7v2.model.AbstractGroup
 import ca.uhn.hl7v2.model.Composite
 import ca.uhn.hl7v2.model.Message
 import ca.uhn.hl7v2.parser.EncodingCharacters
@@ -120,18 +121,29 @@ class Hl7v2TraceContext {
 
     /**
      * Removes the trace context segment from a parsed message, e.g. after the trace context has been read
-     * from the encoded message, so that it does not reach validation or the application.
+     * from the encoded message, so that it does not reach validation or the application. HAPI adds a
+     * trailing nonstandard segment to the group it is parsing (e.g. PATIENT of ADT_A39 or INSURANCE of
+     * ADT_A01), so all groups of the message are searched.
      *
      * @return true if a segment was removed
      */
     static boolean remove(Message message) {
-        if (message == null || !message.names.contains(SEGMENT_NAME)) {
-            return false
-        }
+        message != null && removeFrom((AbstractGroup) message)
+    }
+
+    private static boolean removeFrom(AbstractGroup group) {
         def removed = false
-        while (message.getAll(SEGMENT_NAME).length > 0) {
-            message.removeRepetition(SEGMENT_NAME, 0)
-            removed = true
+        for (name in group.names) {
+            if (name == SEGMENT_NAME) {
+                while (group.getAll(name).length > 0) {
+                    group.removeRepetition(name, 0)
+                    removed = true
+                }
+            } else if (group.isGroup(name)) {
+                for (child in group.getAll(name)) {
+                    removed |= removeFrom((AbstractGroup) child)
+                }
+            }
         }
         removed
     }
