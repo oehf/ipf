@@ -16,8 +16,6 @@
 package org.openehealth.ipf.commons.ihe.xds.core.metadata;
 
 import ca.uhn.hl7v2.model.Composite;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.jaxbadapters.NameAdapter;
 
@@ -57,26 +55,6 @@ public abstract class Name<T extends Composite> extends Hl7v2Based<T> {
         super(hapiObject);
     }
 
-    /**
-     * Dummy field for JSON deserialization using Jackson.
-     */
-    @JsonProperty
-    private String type;
-
-    /**
-     * Class name-aware instance creator for JSON deserialization using Jackson.
-     */
-    @JsonCreator
-    private static Name<?> createInstance(String type, String family, String given, String secondAndFurtherGiven, String suffix, String prefix, String degree) {
-        if (XcnName.class.getName().equals(type)) {
-            return new XcnName(family, given, secondAndFurtherGiven, suffix, prefix, degree);
-        }
-        if (XpnName.class.getName().equals(type)) {
-            return new XpnName(family, given, secondAndFurtherGiven, suffix, prefix, degree);
-        }
-        throw new ExceptionInInitializerError("Unknown name type " + type);
-    }
-    
     /**
      * Copy all name properties from the given name to this object.
      * 

@@ -87,7 +87,7 @@ Runnable examples for HL7v2, XDS, FHIR and IHE clients can be found in the [`tut
 
 | IPF   | Java | Apache Camel | Spring Boot | HAPI FHIR |
 |-------|------|--------------|-------------|-----------|
-| 6.x   | 17+  | 4.x          | 4.x         | 8.x       |
+| 6.x   | 17+  | 4.x          | 4.x         | 8.x / 9.x |
 | 5.x   | 17+  | 4.x          | 3.x         | 7.x       |
 | 4.x   | 11+  | 3.x          | 2.x         | 5.x / 6.x |
 
