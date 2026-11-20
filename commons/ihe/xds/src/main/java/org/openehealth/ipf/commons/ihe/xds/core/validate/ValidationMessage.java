@@ -92,6 +92,7 @@ public enum ValidationMessage {
     MISSING_REQUIRED_QUERY_PARAMETER("Missing required query parameter: %1s", ErrorCode.STORED_QUERY_MISSING_PARAM),
     INVALID_QUERY_PARAMETER_VALUE("Invalid value for query parameter: %1s"),
     QUERY_PARAMETERS_CANNOT_BE_SET_TOGETHER("Query contains parameters that are mutually exclusive to each other: %1s"),
+    EXCLUDED_QUERY_PARAMETER_CONFLICT("Query parameters %s and %s cannot be used together", ErrorCode.REGISTRY_ERROR),
     TOO_MANY_VALUES_FOR_QUERY_PARAMETER("Too many values for query parameter: %1s", ErrorCode.STORED_QUERY_PARAM_NUMBER),
     PARAMETER_VALUE_NOT_STRING("Query parameter value is not specified as a string: %1s"),
     PARAMETER_VALUE_NOT_STRING_LIST("Query parameter value is not specified as a list of strings: %1s"),

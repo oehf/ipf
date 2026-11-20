@@ -165,11 +165,9 @@ public class AdhocQueryRequestValidator implements Validator<EbXMLAdhocQueryRequ
                 .patientId(DOC_ENTRY_PATIENT_ID)
                 .documentMetadata(false)
                 .documentStatusAndType()
-                .stringList(DOC_ENTRY_REFERENCE_IDS)
                 .excludedParameters()
                 .homeCommunityId(optionality)
                 .allowingMultipleSlots(
-                    DOC_ENTRY_REFERENCE_IDS, DOC_ENTRY_REFERENCE_IDS_EXCLUDE,
                     DOC_ENTRY_EVENT_CODE, DOC_ENTRY_EVENT_CODE_EXCLUDE,
                     DOC_ENTRY_CONFIDENTIALITY_CODE, DOC_ENTRY_CONFIDENTIALITY_CODE_EXCLUDE);
 

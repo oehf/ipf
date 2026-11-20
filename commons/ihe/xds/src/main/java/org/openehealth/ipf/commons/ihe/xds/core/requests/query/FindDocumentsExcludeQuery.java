@@ -48,13 +48,13 @@ import java.util.List;
 @XmlType(name = "FindDocumentsExcludeQuery", propOrder = {
     "excludedTypeCodes", "excludedClassCodes", "excludedPracticeSettingCodes", "excludedHealthcareFacilityTypeCodes",
     "excludedEventCodes", "excludedConfidentialityCodes", "excludedFormatCodes", "excludedAuthorPersons",
-    "excludedDocumentEntryTypes", "referenceIds", "excludedReferenceIds"
+    "excludedDocumentEntryTypes"
 })
 @XmlRootElement(name = "findDocumentsExcludeQuery")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
 public class FindDocumentsExcludeQuery extends FindDocumentsQuery
-    implements DocumentEntryTypeAwareStoredQuery, DocumentReferenceIdAwareStoredQuery {
+    implements DocumentEntryTypeAwareStoredQuery {
 
     @Serial
     private static final long serialVersionUID = -3743133045134201787L;
@@ -77,10 +77,6 @@ public class FindDocumentsExcludeQuery extends FindDocumentsQuery
     @Getter @Setter private List<String> excludedAuthorPersons;
     @XmlElement(name = "excludedDocumentEntryType")
     @Getter @Setter private List<DocumentEntryType> excludedDocumentEntryTypes;
-    @XmlElement(name = "referenceId")
-    @Getter @Setter private QueryList<String> referenceIds;
-    @XmlElement(name = "excludedReferenceId")
-    @Getter @Setter private QueryList<String> excludedReferenceIds;
 
     /**
      * Constructs the query.

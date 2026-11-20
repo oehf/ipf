@@ -40,6 +40,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType.*;
 import static org.openehealth.ipf.commons.ihe.xds.XCA.Interactions.ITI_38;
@@ -418,14 +421,14 @@ public class AdhocQueryRequestValidatorTest {
     public void testFindDocumentsExcludeQueryWithConflictingClassCodes() {
         var query = (FindDocumentsExcludeQuery) SampleData.createFindDocumentsExcludeQuery().getQuery();
         query.setClassCodes(List.of(new Code("code1", null, "scheme1")));
-        expectMutuallyExclusive(query, "[$XDSDocumentEntryClassCode, $XDSDocumentEntryClassCodeExclude]");
+        expectMutuallyExclusive(query, "$XDSDocumentEntryClassCode and $XDSDocumentEntryClassCodeExclude");
     }
 
     @Test
     public void testFindDocumentsExcludeQueryWithConflictingDocumentEntryTypes() {
         var query = (FindDocumentsExcludeQuery) SampleData.createFindDocumentsExcludeQuery().getQuery();
         query.setDocumentEntryTypes(List.of(DocumentEntryType.STABLE));
-        expectMutuallyExclusive(query, "[$XDSDocumentEntryType, $XDSDocumentEntryTypeExclude]");
+        expectMutuallyExclusive(query, "$XDSDocumentEntryType and $XDSDocumentEntryTypeExclude");
     }
 
     @Test
@@ -434,29 +437,15 @@ public class AdhocQueryRequestValidatorTest {
         var eventCodes = new QueryList<Code>();
         eventCodes.getOuterList().add(List.of(new Code("code7", null, "scheme7")));
         query.setEventCodes(eventCodes);
-        expectMutuallyExclusive(query, "[$XDSDocumentEntryEventCodeList, $XDSDocumentEntryEventCodeListExclude]");
-    }
-
-    @Test
-    public void testFindDocumentsExcludeQueryWithConflictingReferenceIds() {
-        var query = (FindDocumentsExcludeQuery) SampleData.createFindDocumentsExcludeQuery().getQuery();
-        var referenceIds = new QueryList<String>();
-        referenceIds.getOuterList().add(List.of("ref-id-31"));
-        query.setReferenceIds(referenceIds);
-        expectMutuallyExclusive(query, "[$XDSDocumentEntryReferenceIdList, $XDSDocumentEntryReferenceIdListExclude]");
+        expectMutuallyExclusive(query, "$XDSDocumentEntryEventCodeList and $XDSDocumentEntryEventCodeListExclude");
     }
 
     private void expectMutuallyExclusive(FindDocumentsExcludeQuery query, String expectedSlotNames) {
         var ebXML = transformer.toEbXML(new QueryRegistry(query));
-        var exceptionOccurred = false;
-        try {
-            validator.validate(ebXML, ITI_18);
-        } catch (XdsRuntimeException e) {
-            exceptionOccurred = true;
-            assertEquals(ErrorCode.STORED_QUERY_PARAM_NUMBER, e.getErrorCode());
-            assertTrue(e.getMessage().contains(expectedSlotNames), e.getMessage());
-        }
-        assertTrue(exceptionOccurred);
+        var exception = assertThrows(XDSMetaDataException.class, () -> validator.validate(ebXML, ITI_18));
+        assertThat(exception.getValidationMessage(), is(EXCLUDED_QUERY_PARAMETER_CONFLICT));
+        assertThat(exception.getValidationMessage().getErrorCode(), is(ErrorCode.REGISTRY_ERROR));
+        assertThat(exception.getMessage(), containsString(expectedSlotNames));
     }
 
     @Test

@@ -179,9 +179,7 @@ public enum QueryParameter {
     /** Used to exclude {@link DocumentEntry#getFormatCode()}. */
     DOC_ENTRY_FORMAT_CODE_EXCLUDE(DOC_ENTRY_FORMAT_CODE.slotName + Constants.EXCLUDE),
     /** Used to exclude {@link DocumentEntry#getType()}. */
-    DOC_ENTRY_TYPE_EXCLUDE(DOC_ENTRY_TYPE.slotName + Constants.EXCLUDE),
-    /** Used to exclude {@link DocumentEntry#getReferenceIdList()}. */
-    DOC_ENTRY_REFERENCE_IDS_EXCLUDE(DOC_ENTRY_REFERENCE_IDS.slotName + Constants.EXCLUDE);
+    DOC_ENTRY_TYPE_EXCLUDE(DOC_ENTRY_TYPE.slotName + Constants.EXCLUDE);
 
     private final String slotName;
 

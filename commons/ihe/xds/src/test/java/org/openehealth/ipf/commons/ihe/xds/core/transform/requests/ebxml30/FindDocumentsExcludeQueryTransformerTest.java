@@ -22,7 +22,6 @@ import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.Code;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.DocumentEntryType;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.FindDocumentsExcludeQuery;
-import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryList;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.query.QueryType;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.query.AbstractQueryTransformerTest;
@@ -82,11 +81,6 @@ public class FindDocumentsExcludeQueryTransformerTest extends AbstractQueryTrans
         assertEquals(List.of("('code10^^scheme10')", "('code11^^scheme11')"),
                 excludedConfidentialityCodeSlots.get(0).getValueList());
         assertEquals(List.of("('code12^^scheme12')"), excludedConfidentialityCodeSlots.get(1).getValueList());
-
-        var excludedReferenceIdSlots = ebXML.getSlots(QueryParameter.DOC_ENTRY_REFERENCE_IDS_EXCLUDE.getSlotName());
-        assertEquals(2, excludedReferenceIdSlots.size());
-        assertEquals(List.of("('ref-id-11')", "('ref-id-12')"), excludedReferenceIdSlots.get(0).getValueList());
-        assertEquals(List.of("('ref-id-21')"), excludedReferenceIdSlots.get(1).getValueList());
     }
 
     /**
@@ -104,27 +98,6 @@ public class FindDocumentsExcludeQueryTransformerTest extends AbstractQueryTrans
 
         assertEquals(Collections.singletonList(new Code("codet1", null, "schemet1")), result.getExcludedTypeCodes());
         assertEquals(Collections.singletonList(DocumentEntryType.ON_DEMAND), result.getExcludedDocumentEntryTypes());
-    }
-
-    /**
-     * The non-excluding reference IDs are a parameter of this query as well, and are
-     * mutually exclusive with the excluding ones.
-     */
-    @Test
-    public void testReferenceIdsRoundTrip() {
-        var referenceIds = new QueryList<String>();
-        referenceIds.getOuterList().add(List.of("ref-id-31", "ref-id-32"));
-
-        query.setExcludedReferenceIds(null);
-        query.setReferenceIds(referenceIds);
-        transformer.toEbXML(query, ebXML);
-
-        assertEquals(List.of("('ref-id-31')", "('ref-id-32')"),
-                ebXML.getSlotValues(QueryParameter.DOC_ENTRY_REFERENCE_IDS.getSlotName()));
-
-        var result = emptyQuery();
-        transformer.fromEbXML(result, ebXML);
-        assertEquals(query, result);
     }
 
     @Override
