@@ -18,10 +18,12 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.openehealth.ipf.commons.ihe.xds.XDM;
+import org.openehealth.ipf.commons.ihe.xds.XDR;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.ebxml30.EbXMLFactory30;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.*;
 import org.openehealth.ipf.commons.ihe.xds.core.requests.RegisterDocumentSet;
 import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.RegisterDocumentSetTransformer;
+import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationProfile;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -98,6 +100,26 @@ public class LimitedMetadataTest {
 
         var validator = SubmitObjectsRequestValidator.getInstance();
         validator.validate(ebXmlRequest, XDM.Interactions.ITI_41);
+    }
+
+    @Test
+    void testXdmRequestWithSubmissionSetReferenceIdList() {
+        validateWithSubmissionSetReferenceId(XDM.Interactions.ITI_41);
+    }
+
+    @Test
+    void testXdrRequestWithSubmissionSetReferenceIdList() {
+        validateWithSubmissionSetReferenceId(XDR.Interactions.ITI_41);
+    }
+
+    private void validateWithSubmissionSetReferenceId(ValidationProfile profile) {
+        var request = createXdmRequest();
+        request.getSubmissionSet().getReferenceIdList().add(new ReferenceId(
+                "2013001", new CXiAssigningAuthority(null, "1.2.3.4.5.6", "ISO"),
+                ReferenceId.ID_TYPE_CODE_ACCESSION));
+        var ebXmlRequest = new RegisterDocumentSetTransformer(new EbXMLFactory30()).toEbXML(request);
+
+        SubmitObjectsRequestValidator.getInstance().validate(ebXmlRequest, profile);
     }
 
 }

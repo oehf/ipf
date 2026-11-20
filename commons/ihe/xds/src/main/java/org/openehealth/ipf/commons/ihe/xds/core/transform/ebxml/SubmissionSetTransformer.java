@@ -18,10 +18,13 @@ package org.openehealth.ipf.commons.ihe.xds.core.transform.ebxml;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLObjectLibrary;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLRegistryPackage;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.Hl7v2Based;
+import org.openehealth.ipf.commons.ihe.xds.core.metadata.ReferenceId;
 import org.openehealth.ipf.commons.ihe.xds.core.metadata.SubmissionSet;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Timestamp.toHL7;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_INTENDED_RECIPIENT;
+import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_REFERENCE_ID_LIST;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_TIME;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_AUTHOR_CLASS_SCHEME;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME;
@@ -92,6 +95,13 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
                 .toArray(String[]::new);
         ebXML.addSlot(SLOT_NAME_INTENDED_RECIPIENT, slotValues);
         ebXML.addSlot(SLOT_NAME_SUBMISSION_TIME, toHL7(metaData.getSubmissionTime()));
+
+        if (!metaData.getReferenceIdList().isEmpty()) {
+            var referenceIdValues = metaData.getReferenceIdList().stream()
+                    .map(Hl7v2Based::render)
+                    .toArray(String[]::new);
+            ebXML.addSlot(SLOT_NAME_REFERENCE_ID_LIST, referenceIdValues);
+        }
     }
 
     @Override
@@ -104,6 +114,10 @@ public class SubmissionSetTransformer extends XDSMetaClassTransformer<EbXMLRegis
                 .toList());
 
         metaData.setSubmissionTime(ebXML.getSingleSlotValue(SLOT_NAME_SUBMISSION_TIME));
+
+        for (var referenceIdValue : ebXML.getSlotValues(SLOT_NAME_REFERENCE_ID_LIST)) {
+            metaData.getReferenceIdList().add(ReferenceId.parse(referenceIdValue));
+        }
     }
 
     @Override
