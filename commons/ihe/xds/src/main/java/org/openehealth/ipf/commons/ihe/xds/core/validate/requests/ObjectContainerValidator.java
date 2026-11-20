@@ -155,11 +155,14 @@ public class ObjectContainerValidator implements Validator<EbXMLObjectContainer,
         var isContinuaHRN = (profile == CONTINUA_HRN.Interactions.ITI_41);
         var requiredOnlyForContinuaHRN = isContinuaHRN ? REQUIRED : OPTIONAL;
         var needPatientId = (! limitedMetadata) && (profile != XCDR.Interactions.ITI_80);
+        var referenceIdListAllowed = (profile == XDR.Interactions.ITI_41) || (profile == XDM.Interactions.ITI_41);
 
         var validators = new ArrayList<RegistryObjectValidator>();
         Collections.addAll(validators,
                 new SlotValidation(SLOT_NAME_INTENDED_RECIPIENT, recipientListValidator),
                 new SlotValueValidation(SLOT_NAME_SUBMISSION_TIME, timeValidator),
+                new SlotValueValidation(SLOT_NAME_REFERENCE_ID_LIST, cxiValidator,
+                        0, referenceIdListAllowed ? Integer.MAX_VALUE : 0),
                 new AuthorClassificationValidation(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, authorValidations),
                 new ClassificationValidation(SUBMISSION_SET_CONTENT_TYPE_CODE_CLASS_SCHEME,
                         limitedMetadata ? 0 : 1, 1, requiredOnlyForContinuaHRN, codingSchemeValidations),

@@ -18,6 +18,7 @@ package org.openehealth.ipf.commons.ihe.xds.core.validate.requests;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openehealth.ipf.commons.ihe.xds.XDS;
 import org.openehealth.ipf.commons.ihe.xds.core.SampleData;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLClassification;
 import org.openehealth.ipf.commons.ihe.xds.core.ebxml.EbXMLFactory;
@@ -34,6 +35,8 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
 import java.util.Arrays;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.openehealth.ipf.commons.ihe.xds.XDS.Interactions.ITI_42;
 import static org.openehealth.ipf.commons.ihe.xds.core.metadata.Vocabulary.SLOT_NAME_SUBMISSION_SET_STATUS;
@@ -529,6 +532,26 @@ public class SubmitObjectsRequestValidatorTest {
         docEntry.setUniqueId("1.2.3");
         docEntry.setEntryUuid("doc01");
         expectFailure(UNIQUE_ID_NOT_UNIQUE);
+    }
+
+    @Test
+    void testSubmissionSetReferenceIdListProhibitedForXdsIti41() {
+        expectSubmissionSetReferenceIdListRejected(XDS.Interactions.ITI_41);
+    }
+
+    @Test
+    void testSubmissionSetReferenceIdListProhibitedForXdsIti42() {
+        expectSubmissionSetReferenceIdListRejected(ITI_42);
+    }
+
+    private void expectSubmissionSetReferenceIdListRejected(ValidationProfile profile) {
+        request.getSubmissionSet().getReferenceIdList().add(new ReferenceId(
+                "2013001", new CXiAssigningAuthority(null, "1.2.3.4.5.6", "ISO"),
+                ReferenceId.ID_TYPE_CODE_ACCESSION));
+        var ebXML = transformer.toEbXML(request);
+
+        var exception = assertThrows(XDSMetaDataException.class, () -> validator.validate(ebXML, profile));
+        assertThat(exception.getValidationMessage(), is(WRONG_NUMBER_OF_SLOT_VALUES));
     }
 
     private void expectFailure(ValidationMessage expectedMessage) {

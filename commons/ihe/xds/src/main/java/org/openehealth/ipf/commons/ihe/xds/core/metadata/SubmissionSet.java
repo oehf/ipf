@@ -38,7 +38,7 @@ import java.util.List;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "SubmissionSet", propOrder = {
-        "sourceId", "submissionTime", "authors", "intendedRecipients", "contentTypeCode"})
+        "sourceId", "submissionTime", "authors", "intendedRecipients", "contentTypeCode", "referenceIdList"})
 @XmlRootElement(name = "submissionSet")
 @EqualsAndHashCode(callSuper = true, doNotUseGetters = true)
 @ToString(callSuper = true, doNotUseGetters = true)
@@ -53,6 +53,8 @@ public class SubmissionSet extends XDSMetaClass implements Serializable {
     @Getter private final List<Recipient> intendedRecipients = new ArrayList<>();
     @Getter @Setter private String sourceId;
     @Getter private Timestamp submissionTime;
+    @XmlElement(name = "referenceId")
+    @Getter private final List<ReferenceId> referenceIdList = new ArrayList<>();
 
     /**
      * @param author

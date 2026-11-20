@@ -104,6 +104,12 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         set.getIntendedRecipients().add(new Recipient(createOrganization(20), createPerson(22), null));
         set.getIntendedRecipients().add(new Recipient(createOrganization(21), null, null));
         set.getIntendedRecipients().add(new Recipient(null, createPerson(23), null));
+        set.getReferenceIdList().add(new ReferenceId(
+                "ref-id-11", new CXiAssigningAuthority("ABCD", "1.1.2.3", "ISO"),
+                ReferenceId.ID_TYPE_CODE_ORDER));
+        set.getReferenceIdList().add(new ReferenceId(
+                "ref-id-12", new CXiAssigningAuthority("DEFG", "2.1.2.3", "ISO"),
+                ReferenceId.ID_TYPE_CODE_ACCESSION));
 
         if (homeAware) {
             set.setHomeCommunityId("123.456");
@@ -131,6 +137,10 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
                 "orgName 20^^^^^&uni 20&uniType 20^^^^id 20|id 22^familyName 22^givenName 22^prefix 22^second 22^suffix 22^degree 22^^&uni 22&uniType 22",
                 "orgName 21^^^^^&uni 21&uniType 21^^^^id 21",
                 "|id 23^familyName 23^givenName 23^prefix 23^second 23^suffix 23^degree 23^^&uni 23&uniType 23");
+
+        assertSlot(SLOT_NAME_REFERENCE_ID_LIST, ebXML.getSlots(),
+                "ref-id-11^^^ABCD&1.1.2.3&ISO^urn:ihe:iti:xds:2013:order",
+                "ref-id-12^^^DEFG&2.1.2.3&ISO^urn:ihe:iti:xds:2013:accession");
 
 
         var classification = assertClassification(SUBMISSION_SET_AUTHOR_CLASS_SCHEME, ebXML, 0, "", -1);
@@ -162,7 +172,7 @@ public abstract class SubmissionSetTransformerTestBase implements FactoryCreator
         assertClassification(SUBMISSION_SET_LIMITED_METADATA_CLASS_NODE, ebXML, 0, null, 0);
 
         assertEquals(4, ebXML.getClassifications().size());
-        assertEquals(2, ebXML.getSlots().size());
+        assertEquals(3, ebXML.getSlots().size());
         assertEquals(3, ebXML.getExternalIdentifiers().size());
     }
 
