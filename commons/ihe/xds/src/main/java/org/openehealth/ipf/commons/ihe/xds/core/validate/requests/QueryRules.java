@@ -33,6 +33,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.*;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.EXCLUDED_QUERY_PARAMETER_CONFLICT;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
 
 /**
@@ -224,11 +225,17 @@ record QueryRules(
 
     /**
      * An excluding parameter of FindDocumentsExclude cannot be combined with its non-excluding
-     * counterpart (ITI TF-2: 3.18.4.1.2.3.7.15).
+     * counterpart. A Document Registry has to answer such a query with an XDSRegistryError
+     * (ITI TF-2: 3.18.4.1.2.3.7.15).
      */
     QueryRules mutuallyExclusiveExcludedParameters() {
         return with(EXCLUDED_PARAMETERS.stream()
-            .<QueryParameterValidation>map(param -> new ChoiceValidation(true, param.base(), param.excluded()))
+            .<QueryParameterValidation>map(param -> request -> {
+                if (!request.getSlotValues(param.base().getSlotName()).isEmpty()
+                        && !request.getSlotValues(param.excluded().getSlotName()).isEmpty()) {
+                    throw new XDSMetaDataException(EXCLUDED_QUERY_PARAMETER_CONFLICT, param.base(), param.excluded());
+                }
+            })
             .toList());
     }
 
@@ -330,9 +337,7 @@ record QueryRules(
         new ExcludedParameter(DOC_ENTRY_AUTHOR_PERSON, DOC_ENTRY_AUTHOR_PERSON_EXCLUDE,
             param -> new StringListValidation(param, nopValidator)),
         new ExcludedParameter(DOC_ENTRY_TYPE, DOC_ENTRY_TYPE_EXCLUDE,
-            DocumentEntryTypeValidation::new),
-        new ExcludedParameter(DOC_ENTRY_REFERENCE_IDS, DOC_ENTRY_REFERENCE_IDS_EXCLUDE,
-            param -> new StringListValidation(param, nopValidator)));
+            DocumentEntryTypeValidation::new));
 
 
     // ------------------------------------------------------------------------

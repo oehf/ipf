@@ -509,11 +509,6 @@ public abstract class SampleData {
                 Collections.singletonList(new Code("code12", null, "scheme12")));
         query.setExcludedConfidentialityCodes(excludedConfidentialityCodes);
 
-        var excludedReferenceIds = new QueryList<String>();
-        excludedReferenceIds.getOuterList().add(Arrays.asList("ref-id-11", "ref-id-12"));
-        excludedReferenceIds.getOuterList().add(Collections.singletonList("ref-id-21"));
-        query.setExcludedReferenceIds(excludedReferenceIds);
-
         return new QueryRegistry(query);
     }
 

@@ -28,8 +28,6 @@ import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryP
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_FORMAT_CODE_EXCLUDE;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_HEALTHCARE_FACILITY_TYPE_CODE_EXCLUDE;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_PRACTICE_SETTING_CODE_EXCLUDE;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_REFERENCE_IDS;
-import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_REFERENCE_IDS_EXCLUDE;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_TYPE_CODE_EXCLUDE;
 import static org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryParameter.DOC_ENTRY_TYPE_EXCLUDE;
 
@@ -50,8 +48,6 @@ public class FindDocumentsExcludeQueryTransformer extends AbstractFindDocumentsQ
     @Override
     protected void toEbXML(FindDocumentsExcludeQuery query, QuerySlotHelper slots) {
         super.toEbXML(query, slots);
-        slots.fromStringList(DOC_ENTRY_REFERENCE_IDS, query.getReferenceIds());
-        slots.fromStringList(DOC_ENTRY_REFERENCE_IDS_EXCLUDE, query.getExcludedReferenceIds());
         slots.fromCode(DOC_ENTRY_CLASS_CODE_EXCLUDE, query.getExcludedClassCodes());
         slots.fromCode(DOC_ENTRY_TYPE_CODE_EXCLUDE, query.getExcludedTypeCodes());
         slots.fromCode(DOC_ENTRY_PRACTICE_SETTING_CODE_EXCLUDE, query.getExcludedPracticeSettingCodes());
@@ -66,8 +62,6 @@ public class FindDocumentsExcludeQueryTransformer extends AbstractFindDocumentsQ
     @Override
     protected void fromEbXML(FindDocumentsExcludeQuery query, QuerySlotHelper slots) {
         super.fromEbXML(query, slots);
-        query.setReferenceIds(slots.toStringQueryList(DOC_ENTRY_REFERENCE_IDS));
-        query.setExcludedReferenceIds(slots.toStringQueryList(DOC_ENTRY_REFERENCE_IDS_EXCLUDE));
         query.setExcludedClassCodes(slots.toCodeList(DOC_ENTRY_CLASS_CODE_EXCLUDE));
         query.setExcludedTypeCodes(slots.toCodeList(DOC_ENTRY_TYPE_CODE_EXCLUDE));
         query.setExcludedPracticeSettingCodes(slots.toCodeList(DOC_ENTRY_PRACTICE_SETTING_CODE_EXCLUDE));
