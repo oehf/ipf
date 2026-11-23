@@ -68,9 +68,7 @@ class QueryMatcher {
         evalExcludedQueryList(query.excludedEventCodes, entry.eventCodeList) &&
         evalExcludedQueryList(query.excludedConfidentialityCodes, entry.confidentialityCodes) &&
         matchesNoAuthor(query.excludedAuthorPersons, entry.authors) &&
-        containsNot(query.excludedDocumentEntryTypes, entry.type) &&
-        evalReferenceIdList(query.referenceIds, entry.referenceIdList) &&
-        evalExcludedReferenceIdList(query.excludedReferenceIds, entry.referenceIdList)
+        containsNot(query.excludedDocumentEntryTypes, entry.type)
     }
 
     private static def matchesFindDocuments(DocumentEntry entry, FindDocumentsQuery query) {

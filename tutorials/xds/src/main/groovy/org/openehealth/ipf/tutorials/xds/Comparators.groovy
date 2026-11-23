@@ -42,26 +42,11 @@ class Comparators {
      }
 
      /**
-      * Reference ids are carried by the query as the rendered HL7 v2 CX strings
-      * (ITI TF-2: 3.18.4.1.2.3.7.7), so they are matched against the rendering of the entry's ones.
-      */
-     static def evalReferenceIdList(referenceIds, referenceIdList) {
-         evalList(referenceIds, referenceIdList) { expected, actual ->
-             expected == Hl7v2Based.render(actual)
-         }
-     }
-
-     /**
       * The excluding counterpart of {@link #evalQueryList}: an entry survives unless it matches the
       * excluded query list. An entry carrying no such codes at all matches nothing and hence survives.
       */
      static def evalExcludedQueryList(codes, codeList) {
          isEmpty(codes) || !evalQueryList(codes, codeList)
-     }
-
-     /** The excluding counterpart of {@link #evalReferenceIdList}. */
-     static def evalExcludedReferenceIdList(referenceIds, referenceIdList) {
-         isEmpty(referenceIds) || !evalReferenceIdList(referenceIds, referenceIdList)
      }
 
      /**
