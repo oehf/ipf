@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  */
 public class StringListValidation implements QueryParameterValidation {
     private static final Pattern PATTERN =
-            Pattern.compile("\\(\\s*'.*'(\\s*,\\s*'.*')*\\s*\\)");
+            Pattern.compile("\\(\\s*'.*'\\s*\\)", Pattern.DOTALL);
 
     private final QueryParameter param;
     private final ValueValidator validator;

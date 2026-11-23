@@ -25,10 +25,14 @@ import org.openehealth.ipf.commons.ihe.xds.core.transform.requests.QueryRegistry
 import org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage;
 import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.INVALID_QUERY_PARAMETER_VALUE;
 import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.MISSING_REQUIRED_QUERY_PARAMETER;
+import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidationMessage.PARAMETER_VALUE_NOT_STRING_LIST;
 
 public class StatusValidationTest {
     private static final StatusValidation validator = new StatusValidation(QueryParameter.DOC_ENTRY_STATUS);
@@ -52,6 +56,13 @@ public class StatusValidationTest {
     @Test
     public void noStatusIsPresent() {
         expectValidationError(MISSING_REQUIRED_QUERY_PARAMETER, invalidQueryRequestWithStatus(null));
+    }
+
+    @Test
+    public void malformedListIsRejectedQuickly() {
+        var request = invalidQueryRequestWithStatus("('" + "','".repeat(20_000));
+        assertTimeoutPreemptively(Duration.ofSeconds(2),
+                () -> expectValidationError(PARAMETER_VALUE_NOT_STRING_LIST, request));
     }
 
     private void expectValidationError(ValidationMessage expectedError, EbXMLAdhocQueryRequest<AdhocQueryRequest> request) {

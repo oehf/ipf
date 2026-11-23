@@ -25,10 +25,13 @@ import org.openehealth.ipf.commons.xml.svrl.SchematronOutput;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class XmlUtilsTest {
@@ -78,6 +81,20 @@ public class XmlUtilsTest {
         var xml = new String(XmlUtils.marshal(document), StandardCharsets.UTF_8);
         assertTrue(xml.contains("schematron-output"));
         assertFalse(xml.startsWith("<?xml"));
+    }
+
+    @Test
+    public void testRootElementName() {
+        assertEquals("PRPA_IN201305UV02", XmlUtils.rootElementName(
+                "<?xml version=\"1.0\"?>\n<!-- a -- b -->  <!---->\n<hl7:PRPA_IN201305UV02 xmlns:hl7=\"urn:hl7-org:v3\">"));
+        assertEquals("root", XmlUtils.rootElementName("<root/>"));
+        assertNull(XmlUtils.rootElementName("no xml"));
+    }
+
+    @Test
+    public void testRootElementNameDoesNotBacktrackExcessively() {
+        var attack = "<!--" + "--><!--".repeat(20_000);
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> assertNull(XmlUtils.rootElementName(attack)));
     }
 
     private static void assertDoctypeRejected(String xml) {

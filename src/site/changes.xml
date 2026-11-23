@@ -24,6 +24,11 @@
     </properties>
     <body>
         <release version="6.1.0" description="IPF 6.1.0" date="">
+            <action issue="533" dev="ohr" type="fix">
+                Fixed regular expressions prone to excessive backtracking (syslog structured data parsing in the audit
+                receiver, XmlUtils.rootElementName(), XDS stored query list validation) and upgraded Guava,
+                OpenTelemetry and snappy-java to address Dependabot alerts.
+            </action>
             <action issue="530" dev="ohr" type="add">
                 Added simplified models, transformers and Camel type converters for Patient Identity Feed HL7v3 (ITI-44),
                 PIX Update Notification HL7v3 (ITI-46), PDQv3 (ITI-47) and XCPD (ITI-55), analogous to the existing

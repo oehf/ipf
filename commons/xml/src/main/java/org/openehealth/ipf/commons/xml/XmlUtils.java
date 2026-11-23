@@ -46,7 +46,9 @@ abstract public class XmlUtils {
 
     private static final Pattern ROOT_ELEMENT_PATTERN = Pattern.compile(
             "(?:<\\?xml.+?\\?>)?" +                              // optional prolog
-            "(?:\\s*<!--.*?-->)*" +                              // optional comments
+            // optional comments; atomic, so that a comment can never be re-matched across its own end marker,
+            // which would cause excessive backtracking
+            "(?>\\s*<!--.*?-->)*" +
             "\\s*<(?:[\\w.-]+?:)?([\\w.-]+)(?:\\s|(?:/?>))",   // open tag of the root element
             Pattern.DOTALL
     );
@@ -78,7 +80,7 @@ abstract public class XmlUtils {
             return null;
         }
         var matcher = ROOT_ELEMENT_PATTERN.matcher(s);
-        return (matcher.find() && (matcher.start() == 0)) ? matcher.group(1) : null;
+        return matcher.lookingAt() ? matcher.group(1) : null;
     }
 
     /**

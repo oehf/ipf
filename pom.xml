@@ -57,10 +57,12 @@
         <!-- Dependency version properties -->
         <brave-version>6.3.1</brave-version>
         <easymock-version>5.7.0</easymock-version>
-        <guava-version>33.6.0-jre</guava-version>
+        <guava-version>33.8.0-jre</guava-version>
         <lombok-version>1.18.48</lombok-version>
         <mockserver-version>7.4.0</mockserver-version>
         <quickcheck-version>0.6</quickcheck-version>
+        <!-- pulled in by mockserver-core; overrides its 1.1.10.8 (GHSA-gwq9-9ffj-mvrv, GHSA-xqrx-qh46-34m7, GHSA-q233-g92q-qxp6) -->
+        <snappy-java-version>1.1.10.12</snappy-java-version>
         <!-- keep in sync with Spring Boot's managed tomcat.version -->
         <tomcat-version>11.0.27</tomcat-version>
         <!-- undertow-servlet is not published beyond 2.3.x; Undertow 2.4.x dropped the servlet module -->
@@ -277,6 +279,12 @@
                 <groupId>org.mock-server</groupId>
                 <artifactId>mockserver-client-java</artifactId>
                 <version>${mockserver-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+                <version>${snappy-java-version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>io.undertow</groupId>

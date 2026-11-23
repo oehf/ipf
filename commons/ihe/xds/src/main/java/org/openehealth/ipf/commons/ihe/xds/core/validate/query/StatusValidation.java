@@ -37,7 +37,7 @@ import org.openehealth.ipf.commons.ihe.xds.core.validate.XDSMetaDataException;
  */
 public class StatusValidation implements QueryParameterValidation {
     private static final Pattern PATTERN =
-            Pattern.compile("\\s*\\(\\s*'.*'(\\s*,\\s*'.*')*\\s*\\)\\s*");
+            Pattern.compile("\\s*\\(\\s*'.*'\\s*\\)\\s*", Pattern.DOTALL);
 
     private final QueryParameter param;
 

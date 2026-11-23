@@ -37,6 +37,9 @@
         <micrometer-tracing-version>1.7.3</micrometer-tracing-version>
         <methanol-version>1.9.0</methanol-version>
         <nimbus-jose-jwt-version>10.10</nimbus-jose-jwt-version>
+        <!-- overrides Spring Boot's managed opentelemetry.version (1.62.0 in Spring Boot 4.1.x, affected by
+             GHSA-ccrj-gw8r-854m); can be dropped once Spring Boot manages 1.67.0 or later -->
+        <opentelemetry-version>1.68.0</opentelemetry-version>
         <!-- Pinned to the 7.x/11.x line: HAPI FHIR's ca.uhn.fhir.validation.schematron.SchematronProvider
              links against com.helger.commons.id.IHasID, which ph-commons 12 removed. Upgrading to
              ph-schematron 10 / ph-commons 12 makes ITI-65 and ITI-105 fail with NoClassDefFoundError
@@ -79,6 +82,14 @@
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-bom</artifactId>
                 <version>${kotlin-version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <!-- Must precede spring-boot-dependencies for the same reason as kotlin-bom -->
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${opentelemetry-version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>

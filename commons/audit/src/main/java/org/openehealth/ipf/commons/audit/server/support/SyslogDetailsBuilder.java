@@ -19,12 +19,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static org.openehealth.ipf.commons.audit.server.support.SyslogConstants.*;
 
@@ -36,19 +33,6 @@ class SyslogDetailsBuilder {
     private static final int MIN_PRIORITY = 0;
     private static final int SEVERITY_MASK = 0x7;
     private static final String NIL = "-";
-
-    private static final Pattern paramPattern = Pattern.compile(
-        "([^\\s=]+)=\"([^\"]*)\""
-    );
-    private static final Pattern keyPattern = Pattern.compile(
-        "^[^\\s=\\[\\]]+$"
-    );
-    private static final Pattern sdIdPattern = Pattern.compile(
-        "^[^\\[\\]=\\s]+$"
-    );
-    private static final Pattern structuredDataPattern = Pattern.compile(
-        "\\[([^\\s=\\]]+)((?:\\s+[^\\s=]+=\"[^\"]*\")*)]"
-    );
 
     private final Map<String, Object> result = new LinkedHashMap<>();
 
@@ -98,8 +82,8 @@ class SyslogDetailsBuilder {
         return addField(msgId, HEADER_MSG_ID);
     }
 
-    public SyslogDetailsBuilder addStructuredData(String sd) {
-        result.put(STRUCTURED_DATA, parseStructuredData(sd));
+    public SyslogDetailsBuilder addStructuredData(List<Map<String, Object>> structuredData) {
+        result.put(STRUCTURED_DATA, structuredData);
         return this;
     }
 
@@ -120,50 +104,6 @@ class SyslogDetailsBuilder {
             result.put(header, value);
         }
         return this;
-    }
-
-    private static List<Map<String, Object>> parseStructuredData(String sdRaw) {
-        if (sdRaw == null || sdRaw.equals(NIL)) {
-            return List.of();
-        }
-        var sdList = new ArrayList<Map<String, Object>>();
-        var matcher = structuredDataPattern.matcher(sdRaw);
-        while (matcher.find()) {
-            var sdId = matcher.group(1);
-            var sdEntry = new LinkedHashMap<String, Object>();
-            sdEntry.put(STRUCTURED_DATA_ID, validateSdId(sdId));
-            sdEntry.put(STRUCTURED_DATA_PARAMS, getParams(matcher, sdId));
-            sdList.add(sdEntry);
-        }
-        return sdList;
-    }
-
-    private static LinkedHashMap<String, String> getParams(Matcher matcher, String sdId) {
-        var paramString = matcher.group(2);
-        var params = new LinkedHashMap<String, String>();
-        var paramMatcher = paramPattern.matcher(paramString);
-
-        while (paramMatcher.find()) {
-            var key = paramMatcher.group(1);
-            var value = paramMatcher.group(2);
-            var keyMatcher = keyPattern.matcher(key);
-            if (!keyMatcher.matches()) {
-                throw new IllegalArgumentException("Invalid parameter name: " + key);
-            }
-            if (params.containsKey(key)) {
-                throw new IllegalArgumentException("Duplicate parameter key: " + key + " in SD-ID: " + sdId);
-            }
-            params.put(key, value);
-        }
-        return params;
-    }
-
-    private static String validateSdId(String sdId) {
-        var sdIdMatcher = sdIdPattern.matcher(sdId);
-        if (!sdIdMatcher.matches()) {
-            throw new IllegalArgumentException("Invalid SD-ID: " + sdId);
-        }
-        return sdId;
     }
 
     public Map<String, Object> build() {

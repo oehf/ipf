@@ -24,16 +24,14 @@ import java.util.regex.Pattern;
 public class SyslogParser {
 
     private static final Logger log = LoggerFactory.getLogger(SyslogParser.class);
-    private static final Pattern syslogPattern = Pattern.compile(
-            "^<(\\d{1,3})>(\\d{1,3}) " + // PRI and VERSION
+    private static final Pattern headerPattern = Pattern.compile(
+            "<(\\d{1,3})>(\\d{1,3}) " + // PRI and VERSION
             "(\\S+) " +                  // TIMESTAMP
             "(\\S{1,255}) " +            // HOSTNAME
             "(\\S{1,48}) " +             // APP-NAME
             "(\\S{1,128}) " +            // PROCID
-            "(\\S{1,32}) " +             // MSGID
-            "(\\[.*?]|-) " +             // STRUCTURED-DATA
-            "(.*)$"                      // MESSAGE
-    , Pattern.DOTALL);
+            "(\\S{1,32}) "               // MSGID
+    );
 
     public static Map<String, Object> parse(String syslogMessage) {
         if (syslogMessage == null || syslogMessage.trim().isEmpty()) {
@@ -42,8 +40,19 @@ public class SyslogParser {
         log.debug("Parsing syslog message: {}", syslogMessage);
 
         try {
-            var matcher = syslogPattern.matcher(syslogMessage);
-            if (!matcher.matches()) {
+            var matcher = headerPattern.matcher(syslogMessage);
+            if (!matcher.lookingAt()) {
+                throw new IllegalArgumentException("Syslog message does not match RFC 5424 format");
+            }
+            // STRUCTURED-DATA is parsed by hand, as regular expressions for it are prone to excessive backtracking
+            var structuredData = StructuredDataParser.parse(syslogMessage, matcher.end());
+            var end = structuredData.end();
+            String message;
+            if (end == syslogMessage.length()) {
+                message = "";
+            } else if (syslogMessage.charAt(end) == ' ') {
+                message = syslogMessage.substring(end + 1);
+            } else {
                 throw new IllegalArgumentException("Syslog message does not match RFC 5424 format");
             }
             return new SyslogDetailsBuilder()
@@ -54,8 +63,8 @@ public class SyslogParser {
                 .addAppName(matcher.group(5))
                 .addProcId(matcher.group(6))
                 .addMsgId(matcher.group(7))
-                .addStructuredData(matcher.group(8))
-                .addMessage(matcher.group(9))
+                .addStructuredData(structuredData.elements())
+                .addMessage(message)
                 .build();
 
         } catch (Exception e) {

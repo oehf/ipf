@@ -33,7 +33,7 @@ import static org.openehealth.ipf.commons.ihe.xds.core.validate.ValidatorAsserti
  */
 public class AssociationValidation implements QueryParameterValidation {
     private static final Pattern PATTERN =
-            Pattern.compile("\\s*\\(\\s*'.*'(\\s*,\\s*'.*')*\\s*\\)\\s*");
+            Pattern.compile("\\s*\\(\\s*'.*'\\s*\\)\\s*", Pattern.DOTALL);
 
     private final QueryParameter param;
 

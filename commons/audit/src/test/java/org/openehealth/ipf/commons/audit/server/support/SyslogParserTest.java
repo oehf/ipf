@@ -17,14 +17,18 @@ package org.openehealth.ipf.commons.audit.server.support;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.openehealth.ipf.commons.audit.server.support.SyslogConstants.EXCEPTIONS;
 import static org.openehealth.ipf.commons.audit.server.support.SyslogConstants.RAW_MESSAGE;
+import static org.openehealth.ipf.commons.audit.server.support.SyslogConstants.STRUCTURED_DATA;
 import static org.openehealth.ipf.commons.audit.server.support.SyslogMatchers.hasAppName;
 import static org.openehealth.ipf.commons.audit.server.support.SyslogMatchers.hasHostname;
 import static org.openehealth.ipf.commons.audit.server.support.SyslogMatchers.hasMessage;
@@ -87,6 +91,53 @@ class SyslogParserTest {
         assertThat(result, hasMessage("First line\nSecond line\r\nThird line"));
     }
 
+    @Test
+    void shouldParseMultipleStructuredDataElements() {
+        var msg = "<165>1 2023-04-18T14:32:52Z host app 1 ID [a@1 x=\"1\"][b@2 y=\"2\" z=\"3\"] Done.";
+        var result = SyslogParser.parse(msg);
+
+        assertThat(result, hasStructuredDataEntry("a@1", Map.of("x", "1")));
+        assertThat(result, hasStructuredDataEntry("b@2", Map.of("y", "2", "z", "3")));
+        assertThat(result, hasMessage("Done."));
+    }
+
+    @Test
+    void shouldResolveEscapesInParameterValues() {
+        var msg = "<165>1 2023-04-18T14:32:52Z host app 1 ID [a@1 x=\"q\\\"b\\\\s\\] end\" y=\"\\n\"] Done.";
+        var result = SyslogParser.parse(msg);
+
+        assertThat(result, hasStructuredDataEntry("a@1", Map.of("x", "q\"b\\s] end", "y", "\\n")));
+        assertThat(result, hasMessage("Done."));
+    }
+
+    @Test
+    void shouldParseMessageWithoutMsg() {
+        var result = SyslogParser.parse("<165>1 2023-04-18T14:32:52Z host app 1 ID [a@1 x=\"1\"]");
+
+        assertThat(result, hasStructuredDataEntry("a@1", Map.of("x", "1")));
+        assertThat(result, hasMessage(""));
+    }
+
+    @Test
+    void shouldParseEmptyStructuredDataElement() {
+        var result = SyslogParser.parse("<165>1 2023-04-18T14:32:52Z host app 1 ID [a@1] Done.");
+
+        assertThat(result, hasStructuredDataEntry("a@1", Map.of()));
+        assertThat(result.get(STRUCTURED_DATA), is((Object) List.of(Map.of(
+                SyslogConstants.STRUCTURED_DATA_ID, "a@1", SyslogConstants.STRUCTURED_DATA_PARAMS, Map.of()))));
+    }
+
+    @Test
+    void shouldHandleMaliciousStructuredDataQuickly() {
+        var header = "<165>1 2023-04-18T14:32:52Z host app 1 ID ";
+        assertTimeoutPreemptively(Duration.ofSeconds(2), () -> {
+            assertSyslogParseFails(header + "[" + "[!".repeat(500_000));
+            assertSyslogParseFails(header + "[! " + "!=\"[\" ".repeat(200_000));
+            assertSyslogParseFails(header + "[a " + "!".repeat(1_000_000));
+            assertSyslogParseFails(header + "[" + "] a".repeat(300_000));
+        });
+    }
+
     // --- Invalid cases using helper ---
 
     @Test
@@ -117,6 +168,16 @@ class SyslogParserTest {
     @Test
     void shouldThrowForMalformedStructuredData() {
         assertSyslogParseFails("<165>1 2023-04-18T14:32:52Z host app 123 MSG [id broken=\"value\" missingEnd");
+    }
+
+    @Test
+    void shouldThrowForDuplicateParameter() {
+        assertSyslogParseFails("<165>1 2023-04-18T14:32:52Z host app 123 MSG [id a=\"1\" a=\"2\"] Message");
+    }
+
+    @Test
+    void shouldThrowForGarbageAfterStructuredData() {
+        assertSyslogParseFails("<165>1 2023-04-18T14:32:52Z host app 123 MSG [id a=\"1\"]Message");
     }
 
     @Test
