@@ -23,7 +23,7 @@
         <author email="christian.ohr@gmail.com">Christian Ohr</author>
     </properties>
     <body>
-        <release version="" description="" date="">
+        <release version="6.1.0" description="IPF 6.1.0" date="">
             <action issue="529" dev="ohr" type="fix">
                 HL7v2 trace context propagation (nonstandard ZTR segment) on MLLP producers is now again opt-in
                 via the endpoint parameter propagateTraceContext. MLLP consumers remove the segment after reading
@@ -32,8 +32,11 @@
             <action issue="528" dev="qligier" type="fix">
                 Reading XML with nested jar access was not possible anymore. Thanks to qligier for providing a PR.
             </action>
+            <action issue="526" dev="ohr" type="update">
+                Treat URI schemes and URN namespace identifiers as case-insensitive (RFC 3986, RFC 8141).
+            </action>
         </release>
-        <release version="6.0.0" description="IPF 6.0.0" date="">
+        <release version="6.0.0" description="IPF 6.0.0" date="13 Oct 2026">
             <action issue="527" dev="ohr" type="update">
                 A number of issues in the HL7v2 DSLs have been fixed, or behavior has been aligned
                 between Groovy and Kotlin implementations. See migration notes for details.
@@ -41,9 +44,6 @@
             <action issue="368" dev="ohr" type="add">
                 Support for PIXm Patient Identity Feed FHIR [ITI-104] (pixm-iti104) and translators
                 to/from PIX Feed V2 (ITI-8).
-            </action>
-            <action issue="526" dev="ohr" type="update">
-                Treat URI schemes and URN namespace identifiers as case-insensitive (RFC 3986, RFC 8141).
             </action>
             <action issue="524" dev="ohr" type="fix">
                 SslAwareApacheRestfulClient5Factory ignored a configured HostnameVerifier (e.g.
