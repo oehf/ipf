@@ -90,7 +90,7 @@ class TestIti8Validation extends AbstractMllpTest {
         def body = getMessageString('ADT^A01', '2.3.1', false)
         def msg = send(endpointUri, body)
         assertNAK(msg)
-        assertTrue(msg.toString().contains('PID must have at least  1 repetitions'))
+        assertTrue(msg.toString().contains('PID must have at least 1 repetitions (has 0)'))
     }
     
     @Test
