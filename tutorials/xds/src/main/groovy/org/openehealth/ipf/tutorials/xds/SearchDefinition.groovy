@@ -124,6 +124,10 @@ class SearchDefinition extends OutputDefinition<SearchDefinition> {
         by { entry, param -> any(get(param, field)) { matchesCode(it, entry.formatCode) } }
     }
 
+    def entryTypes(field) {
+        by { entry, param -> matchesEntryType(get(param, field), entry.type) }
+    }
+
     def byQuery(field) {
         by { entry, param ->
             new QueryMatcher().matches(entry, get(param, field))

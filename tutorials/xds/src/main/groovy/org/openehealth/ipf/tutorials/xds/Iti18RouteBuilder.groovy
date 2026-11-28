@@ -52,6 +52,7 @@ class Iti18RouteBuilder extends RouteBuilder {
     static final def UUIDS = 'req.query.uuids'
     static final def CONF_CODES = 'req.query.confidentialityCodes'
     static final def FORMAT_CODES = 'req.query.formatCodes'
+    static final def DOC_ENTRY_TYPES = 'req.query.documentEntryTypes'
     static final def ASSOC_TYPES = 'req.query.associationTypes'
     static final def PATIENT_ID = 'req.query.patientId'
 
@@ -187,14 +188,14 @@ class Iti18RouteBuilder extends RouteBuilder {
         from('direct:getFolderAndContents')
             .search(FOLDER).uniqueId(UNIQUE_ID).uuid(UUID).into(FOLDERS)
             .search(ASSOC_TARGET).hasMember().sources(FOLDERS).into('members')
-            .search(DOC_ENTRY).confCodes(CONF_CODES).formatCodes(FORMAT_CODES).uuids('members').into(DOCS)
+            .search(DOC_ENTRY).confCodes(CONF_CODES).formatCodes(FORMAT_CODES).entryTypes(DOC_ENTRY_TYPES).uuids('members').into(DOCS)
             .search(ASSOC).hasMember().sources(FOLDERS).targets(DOCS).into(ASSOCS)
             
         // GetSubmissionSetAndContentsQuery logic
         from('direct:getSetAndContents')
             .search(SUB_SET).uniqueId(UNIQUE_ID).uuid(UUID).into(SETS)
             .search(ASSOC_TARGET).hasMember().sources(SETS).into('members')
-            .search(DOC_ENTRY).confCodes(CONF_CODES).formatCodes(FORMAT_CODES).uuids('members').into(DOCS)
+            .search(DOC_ENTRY).confCodes(CONF_CODES).formatCodes(FORMAT_CODES).entryTypes(DOC_ENTRY_TYPES).uuids('members').into(DOCS)
             .search(FOLDER).uuids('members').into(FOLDERS)
             .search(ASSOC).hasMember().sources(SETS).targets(DOCS).into(ASSOCS)
             .search(ASSOC).hasMember().sources(SETS).targets(FOLDERS).into(ASSOCS)

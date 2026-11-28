@@ -92,17 +92,18 @@ class DataStore {
       * @return the matching entries.
       */
      def search(indexEvals, filters, param) {
-         def matches = indexEvals.collect { evalIndex(it.value(param), it.key) }
+         // Intersect the index lookups; null means no index constrained the search
+         def indexed = indexEvals.collect { evalIndex(it.value(param), it.key) }
              .findAll { it != null }
-             .inject(entries) { allMatches, indexMatches ->
+             .inject(null) { allMatches, indexMatches ->
                  allMatches != null ? allMatches.intersect(indexMatches) : indexMatches
              }
 
-         if (matches == null) 
-              matches = entries
-              
-         matches.findAll { entry -> 
-             filters.every { filter -> filter(entry, param) } 
+         // Keep the order in which the entries were stored
+         def candidates = indexed == null ? entries : entries.findAll { indexed.contains(it) }
+
+         candidates.findAll { entry ->
+             filters.every { filter -> filter(entry, param) }
          }
      }
 

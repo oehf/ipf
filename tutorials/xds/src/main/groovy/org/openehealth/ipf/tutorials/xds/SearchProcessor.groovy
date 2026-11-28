@@ -36,7 +36,10 @@ class SearchProcessor extends DelegateProcessor {
              resultTypes.find { it.isOfType(result) }?.extractFrom(result)
          }
 
-         get(exchange.in.body, resultField).addAll(results)
+         // Several searches may collect into the same field -- GetAssociations looks for associations by
+         // source and by target, for example. An object found twice must still be returned once.
+         def collected = get(exchange.in.body, resultField)
+         results.each { if (!collected.contains(it)) collected.add(it) }
 
          super.processNext(exchange)
      }

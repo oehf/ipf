@@ -75,8 +75,8 @@ class QueryMatcher {
         equals(query.patientId, entry.patientId) &&
         contains(query.status, entry.availabilityStatus) &&
         isInRange(query.creationTime, entry.creationTime) &&
-        isInRange(query.serviceStartTime, entry.serviceStartTime) &&
-        isInRange(query.serviceStopTime, entry.serviceStopTime) &&
+        isInRange(query.serviceStartTime, entry.serviceStartTime, true) &&
+        isInRange(query.serviceStopTime, entry.serviceStopTime, true) &&
         any(query.classCodes) { matchesCode(it, entry.classCode) } &&
         any(query.typeCodes) { matchesCode(it, entry.typeCode) } &&
         any(query.formatCodes) { matchesCode(it, entry.formatCode) } &&
@@ -85,6 +85,6 @@ class QueryMatcher {
         evalQueryList(query.eventCodes, entry.eventCodeList) &&
         evalQueryList(query.confidentialityCodes, entry.confidentialityCodes) &&
         matchesAuthors(query.authorPersons, entry.authors) &&
-        contains(query.documentEntryTypes, entry.type)
+        matchesEntryType(query.documentEntryTypes, entry.type)
     }
 }
