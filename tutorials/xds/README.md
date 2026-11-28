@@ -1,5 +1,3 @@
-See [XDS tutorial](https://oehf.github.io/ipf/ipf-tutorials-xds/index.html) for more information.
-
 Minimal example to build and run:
 
 1. run ``mvn clean install assembly:single``
