@@ -21,6 +21,8 @@ import org.apache.catalina.Wrapper;
 import org.apache.catalina.authenticator.jaspic.AuthConfigFactoryImpl;
 import org.apache.catalina.startup.Tomcat;
 import org.apache.catalina.webresources.StandardRoot;
+import org.apache.tomcat.util.net.SSLHostConfig;
+import org.apache.tomcat.util.net.SSLHostConfigCertificate;
 import org.openehealth.ipf.commons.ihe.core.ClientAuthType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,16 +88,21 @@ public class TomcatServer extends ServletServer {
             connector.setSecure(true);
             connector.setScheme("https");
             connector.setProperty("SSLEnabled", "true");
-            connector.setProperty("sslProtocol", "TLS");
-            connector.setProperty("keystoreFile", getKeystoreFile());
-            connector.setProperty("keystorePass", getKeystorePass());
-            connector.setProperty("truststoreFile", getTruststoreFile());
-            connector.setProperty("truststorePass", getTruststorePass());
+            // Tomcat no longer accepts keystoreFile & co. as connector attributes; TLS is configured
+            // per SSLHostConfig, and the connector refuses to start without one
+            var sslHostConfig = new SSLHostConfig();
+            sslHostConfig.setTruststoreFile(getTruststoreFile());
+            sslHostConfig.setTruststorePassword(getTruststorePass());
             if (getClientAuthType() == ClientAuthType.MUST) {
-                connector.setProperty("clientAuth", "true");
+                sslHostConfig.setCertificateVerification("required");
             } else if (getClientAuthType() == ClientAuthType.WANT) {
-                connector.setProperty("clientAuth", "want");
+                sslHostConfig.setCertificateVerification("optional");
             }
+            var certificate = new SSLHostConfigCertificate(sslHostConfig, SSLHostConfigCertificate.Type.UNDEFINED);
+            certificate.setCertificateKeystoreFile(getKeystoreFile());
+            certificate.setCertificateKeystorePassword(getKeystorePass());
+            sslHostConfig.addCertificate(certificate);
+            connector.addSslHostConfig(sslHostConfig);
         }
 
         try {
