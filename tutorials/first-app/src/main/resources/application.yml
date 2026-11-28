@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: first-app
+
+first-app:
+  mllp-port: 2575      # the registered port for HL7 over MLLP
+
+server:
+  port: 8080           # pulled in by ipf-spring-boot-starter; not used by this tutorial

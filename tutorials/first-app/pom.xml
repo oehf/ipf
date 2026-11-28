@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+        Code for the "Your first IPF application" tutorial in the IPF documentation.
+
+        Inherits from the IPF root POM rather than from ipf-tutorials: the latter adds Log4j2 as SLF4J backend,
+        which conflicts with Spring Boot's default logging. The tutorial text shows a standalone pom.xml
+        (spring-boot-starter-parent + ipf-dependencies import) with the same dependencies.
+    -->
+    <parent>
+        <groupId>org.openehealth.ipf</groupId>
+        <artifactId>ipf</artifactId>
+        <version>6.2-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
+
+    <groupId>org.openehealth.ipf.tutorials</groupId>
+    <artifactId>ipf-tutorials-first-app</artifactId>
+    <name>ipf-tutorials-first-app</name>
+    <description>Your first IPF application: an IHE PIX Patient Identity Feed (ITI-8) server with Spring Boot</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.openehealth.ipf.boot</groupId>
+            <artifactId>ipf-hl7-spring-boot-starter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <!-- banned by the IPF build (enforcer rule) -->
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring-boot-version}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

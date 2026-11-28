@@ -21,6 +21,7 @@
         <module>config</module>
         <module>iheclient</module>
         <module>fhir</module>
+        <module>first-app</module>
     </modules>
 
     <build>
